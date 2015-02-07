@@ -7,7 +7,7 @@ This is a vm that i will be developing for quite a while that is made using the 
 I will be developing a new language called **Scorpion. The high level part i will develope last because that is the hardest portion in this vm. Wtriting programs in the vm will operate at a low level allowing the simulation of programming a computer. 
 
 # Specifications
-The vm will have an organized process for executing code. Below is a simple representation of the process of writing programs in scorpion.
+The vm will have an organized process for executing code. Below is a simple representation of the process of writing programs in Scorpion.
 
               [source] ========> High level source code 'helloworld.sc'
                  ||
@@ -24,7 +24,11 @@ Th first part in the process is high level source code written in Scorpion. The 
 # Programs
 Based on the specifications defined, for everthing to work there are a total of 3 programs needed to run the vm.
 
-The first program is 'scpnc'(scorpion compiler) which is used to compile the high level source code down to assembly language. The next program is 'sasm'(scorpion assembler) which will translate the assembly code to binary object format. Finally the last program is the vm itself called 'svm' which runs the bo files.
+Name | Description
+---- | -----------
+scpnc | (scorpion compiler) is used to compile the high level source code down to assembly language.
+sasm | (scorpion assembler) translate the assembly code to binary object format.
+svm | the vm itself runs the generated .bo file(can only run one single file as the entire program).
 
 # How to use
 To use these programs you will have to folow the main() methid restriction I have provoded. So far I only have the specifications for the vm(currently i only write programs in direct 'machine code').

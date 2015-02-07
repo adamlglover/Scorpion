@@ -26,5 +26,13 @@ Based on the specifications defined, for everthing to work there are a total of 
 
 The first program is 'scpnc'(scorpion compiler) which is used to compile the high level source code down to assembly language. The next program is 'sasm'(scorpion assembler) which will translate the assembly code to binary object format. Finally the last program is the vm itself called 'svm' which runs the bo files.
 
+# How to use
+To use these programs you will have to folow the main() methid restriction I have provoded. So far I only have the specifications for the vm(currently i only write programs in direct 'machine code').
+In the console type:
+
+          ./svm file.bo
+The vm can only take a single object file that has all the instructions needed to run your program. In the future I plan to build a linker that will link multiple files together into a single file.  But for now you will only be able to have a single file as the full program to be run.
+
+
 # Notes
 I will program all these programs from the bottom up. i.e. first the vm, next the assembler, and finally the high level language compiler.

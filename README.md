@@ -28,15 +28,51 @@ Name | Description
 ---- | -----------
 scpnc | (scorpion compiler) is used to compile the high level source code down to assembly language.
 sasm | (scorpion assembler) translate the assembly code to binary object format.
-svm | the vm itself runs the generated .bo file(can only run one single file as the entire program).
+svm | (scorpion vm) the vm itself runs the generated .bo file(can only run one single file as the entire program).
+
+All programs reside in the programs directory.
 
 # How to use
 To use these programs you will have to folow the main() methid restriction I have provoded. So far I only have the specifications for the vm(currently i only write programs in direct 'machine code').
 In the console type:
 
       $  ./svm file.bo
-The vm can only take a single object file that has all the instructions needed to run your program. In the future I plan to build a linker that will link multiple files together into a single file.  But for now you will only be able to have a single file as the full program to be run.
+ 
+The vm can only take a single object file that has all the instructions needed to run your program. In the future I plan to build a linker that will link multiple files together into a single file.  But for now you will only be able to have a single file as the full program to be run. i.e. when using the compiler you will not be able to reference other files. 
 
+## Instruction set
+Syntax for sasm is explained in SYNTAX.md
+All registers are explained below
+
+Opcode | Arguments | Description
+------ | --------- | -----------
+halt   | bool      | Halts the vm. 'bool' wether or not to reboot the vm and empty all data in registers and reloads the program back onto the cpu.
+loadi  | r# value  | Load an integer to the specified register
+add    | eax[], r# r#:r# | Add the specified data sets and store it in a register
+sub    | eax[], r# r#:r# | Subtract the specified data sets and store it in a register
+dout   | r#        | Output the data in the register with decomal format
+scmnd  |           | Tells the cpu to show the next operation
+sregs  |           | Shows the special registers and the values that reside in them
+loadbl | r# bool   | Loads a boolean to the specified register
+same   | r# r#:r#  | Test if the data in both registers are the same and store the result in a register
+size   |           | Get the size if the current running program in bytes
+mv     | r#<-r#    | Move the value of one register in the specified register
+cp     | r#<-t#    | Copy the contents of a register into the specified register
+rm     | r#        | Wipe the data inside of a register
+mult   | eax[], r# r#:r# | Multiply the specified data sets and store it in a register
+div    | eax[], r# r#:r# | Divide the specified data sets and store it in a register
+func   | r#        | specify a register as a function
+push   | r#        | Initalize a function and fill the funtion with operations
+return |           | Tell the cpu to jump ahead to the specified instruction
+jp     | r#        | Tell the cpu where to jump ahead to from the specified register
+call   | r#        | Call a function 
+swp    | r#:r#     | Swap the contents that are inside the registers
+ssregs |           | Show the special registers and their contents
+sfregs |           | Show the flags stored for each register
+eof    | r#        | Dump the flags for the specified register
+loop   | r# r# (i) | Loop through a command for the specified ammount of iterations and store it in the specified register
+bout   | r#        | Output the data inside the specified register in boolean format
+rem    | eax[], r#  r#:r# | Get the remainder of the two operands and store them inside the specified register
 
 # Notes
 I will program all these programs from the bottom up. i.e. first the vm, next the assembler, and finally the high level language compiler.

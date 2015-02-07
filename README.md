@@ -30,7 +30,7 @@ The first program is 'scpnc'(scorpion compiler) which is used to compile the hig
 To use these programs you will have to folow the main() methid restriction I have provoded. So far I only have the specifications for the vm(currently i only write programs in direct 'machine code').
 In the console type:
 
-          ./svm file.bo
+      $  ./svm file.bo
 The vm can only take a single object file that has all the instructions needed to run your program. In the future I plan to build a linker that will link multiple files together into a single file.  But for now you will only be able to have a single file as the full program to be run.
 
 

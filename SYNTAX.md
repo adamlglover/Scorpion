@@ -2,12 +2,12 @@ The syntax looks like most ASM with instructions and arguments and whatnot.
 
 Subject to change:
 
-Special commands are pre-fixed with %, like so: %loop.
-Function calls must reference a register: call r2.
-Registers are prefixed with a 'r', like so: r12.
-Instruction arguments are separated by commas (thuogh actually they don't have to be).
-All comments start with a ';' and omith anything after it until the next line
-All sasm files must end with a blank line.
+1. Special commands are pre-fixed with %, like so: %loop.
+2. Function calls must reference a register: call r2.
+3. Registers are prefixed with a 'r', like so: r12.
+4. Instruction arguments are separated by commas (thuogh actually they don't have to be).
+5. All comments start with a ';' and omith anything after it until the next line
+6. All sasm files must end with a blank line.
 
 Example:
 

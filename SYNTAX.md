@@ -30,6 +30,7 @@ Low-Level version ===========>
           push _main
              call r1
           return
+          call _main     ; call the main function
           
           halt  0          ;   shutdown the vm and do not reboot
           

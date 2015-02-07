@@ -43,6 +43,7 @@ The vm can only take a single object file that has all the instructions needed t
 ## Instruction set
 Syntax for sasm is explained in SYNTAX.md
 All registers are explained below
+Special commands are marked with a *
 
 Opcode | Arguments | Description
 ------ | --------- | -----------
@@ -61,18 +62,27 @@ cp     | r#<-t#    | Copy the contents of a register into the specified register
 rm     | r#        | Wipe the data inside of a register
 mult   | eax[], r# r#:r# | Multiply the specified data sets and store it in a register
 div    | eax[], r# r#:r# | Divide the specified data sets and store it in a register
-func   | r#        | specify a register as a function
+*func  | r#        | specify a register as a function
 push   | r#        | Initalize a function and fill the funtion with operations
-return |           | Tell the cpu to jump ahead to the specified instruction
-jp     | r#        | Tell the cpu where to jump ahead to from the specified register
+*return |           | Tell the cpu to jump ahead to the specified instruction
 call   | r#        | Call a function 
 swp    | r#:r#     | Swap the contents that are inside the registers
 ssregs |           | Show the special registers and their contents
 sfregs |           | Show the flags stored for each register
 eof    | r#        | Dump the flags for the specified register
-loop   | r# r# (i) | Loop through a command for the specified ammount of iterations and store it in the specified register
+*loop  | r# r# (i) | Loop through a command for the specified ammount of iterations and store it in the specified register
 bout   | r#        | Output the data inside the specified register in boolean format
 rem    | eax[], r#  r#:r# | Get the remainder of the two operands and store them inside the specified register
+
+# Registers
+More registers will be added, the present registers are not final 
+
+Name   | Parameters | Description
+------ | ---------- | -----------
+r0-r29 |  any       | The basic registers from 0 to 29 that can hold any type of data
+eax    | [int,int]  | This is a special register used only for quick math arithmetic. The two values passed to this register will be evaluated directly and stored inside the register.
+tmp    |  any       | This is a register that is used to temporarily hold irrelivant data
+ip     |   [int]    | Tells the cpu where in the program to execute the next unstruction
 
 # Notes
 I will program all these programs from the bottom up. i.e. first the vm, next the assembler, and finally the high level language compiler.

@@ -2,7 +2,7 @@
 Raspberry Pi VM implementation in C++ (can run in any computer that can run c files)
 
 # Info
-This is a vm that i will be developing for quite a while that is made using the Raspberry Pi mofel B+.  The aim of this program it to make it easy to develope programs in assembly language  that solve problems alike a traditional vm would. NOTE : this vm is not is anyway like any specific computer architecture. NOTE: All commits pushed to this repository will be 90% or beter performance wise. i.e. I will not commit code that does not work properly. All code will be put through a series of trials and tests before committing.
+This is a vm that i will be developing for quite a while that is made using the Raspberry Pi mofel B+.  The aim of this program it to make it easy to develope programs in assembly language  that solve problems alike a traditional vm would. NOTE : this vm is not based on any specific computer architecture. NOTE: All commits pushed to this repository will be 90% or beter performance wise. i.e. I will not commit code that does not work properly. All code will be put through a series of trials and tests before committing.
  
 I will be developing a new language called **Scorpion. The high level part i will develope last because that is the hardest portion in this vm. Wtriting programs in the vm will operate at a low level allowing the simulation of programming a computer. 
 

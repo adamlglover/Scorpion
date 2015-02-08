@@ -1,6 +1,7 @@
 #include <iostream>
 #include "cpu.h"
 #include "cpuf.h"
+#include "../Log/Log.h"
 
 #define  NUM_REGS 29
 long EAX, TMP, IP;
@@ -12,6 +13,7 @@ using namespace std;
 int accessedReg;
 
 CPUFlags flagger;
+Log log;
 
 void inf(string);
 
@@ -37,8 +39,8 @@ long CPU::_IP()
 
 void CPU::Reset()
 {
-  inf("Arm I-4 CPU core boot");
-  inf("Wiping  Registers..");
+  log.v("System","Arm I-4 CPU core boot");
+  log.v("System","Wiping  Registers..");
  
   EAX = 0;
   TMP = 0;
@@ -46,7 +48,7 @@ void CPU::Reset()
 
   for(int i = 0; i < NUM_REGS; i++)
      reg[i] = 0;
-   inf("Wiping flags..");
+   log.v("System","Wiping flags..");
    for(int i = 0; i < NUM_REGS; i++)
      flag[i] = 0;
 

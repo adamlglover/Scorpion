@@ -1,8 +1,10 @@
 #include <string>
 #include <fstream>
 #include <sstream>
+#include "Log/Log.h"
 using namespace std;
 
+Log rules_log;
 void inf(string);
 void x86(string);
 bool isgenuine = false;
@@ -50,11 +52,11 @@ bool isgenuine = false;
 
    void authenticate(const char *file)
    {
-      inf("Checking authenticity...");
+      rules_log.v("System","Checking authenticity...");
       if(file_exists(file)){
            tostring(file);
         if(hassyntax(program)){
-            inf("Success! No errs detected. Starting System...");
+            rules_log.v("System","Success! No errs detected. Starting System...");
             isgenuine = true;
             x86(program);
         }
@@ -62,14 +64,14 @@ bool isgenuine = false;
           std::ostringstream stream;
           stream << "Fatal err occured. Unknown char in file char:" << _char << " *^" << uchar << ". Permitted <'1' : '0' : '.' : witespace>";
           string data = stream.str();
-          inf(data);
+          rules_log.v("System",data);
         }
       }
       else{
         std::ostringstream stream;
           stream << "Fatal err occured. File '" << file << "' does not exist!";
          string data = stream.str();
-         inf(data);
+         rules_log.v("System",data);
       }
    }
 
@@ -92,18 +94,18 @@ bool isgenuine = false;
 
    void verify( int argc, const char **file )
    {
-       inf("Verifying args...");
+       rules_log.v("System","Verifying args...");
        if(argc == 2){
-          inf("Checking Extention...");
+          rules_log.v("System","Checking Extention...");
           if(ext(file[1],".bo"))
               authenticate(file[1]);
           else
-            inf("Fatal err occured. File is not a binary object file '.bo'");
+            rules_log.v("System","Fatal err occured. File is not a binary object file '.bo'");
        }
        else if(argc < 2)
-         inf("Fatal err occured. No input files, System Halt!");
+         rules_log.v("System","Fatal err occured. No input files, System Halt!");
        else if(argc > 2)
-         inf("Fatal err occured. Too many argument inputs, System Halt!");
+         rules_log.v("System","Fatal err occured. Too many argument inputs, System Halt!");
    }
 
 bool OK( int argc, const char **file )

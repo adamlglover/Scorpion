@@ -1,0 +1,6 @@
+=======System Dev Log begin=======
+2015-02-09.04:05:00:v/System: Verifying args...
+2015-02-09.04:05:00:v/System: Err looking for .conf file..creating one..
+2015-02-09.04:05:00:v/System: System conf restore..
+2015-02-09.04:05:00:v/System: Arm I-4 CPU core boot
+2015-02-09.04:05:00:v/System: Setting up System...

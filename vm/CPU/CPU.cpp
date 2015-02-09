@@ -40,7 +40,7 @@ long CPU::_IP()
 void CPU::Reset()
 {
   log.v("System","Arm I-4 CPU core boot");
-  log.v("System","Wiping  Registers..");
+  log.i("System","Wiping  Registers..");
  
   EAX = 0;
   TMP = 0;
@@ -48,7 +48,7 @@ void CPU::Reset()
 
   for(int i = 0; i < NUM_REGS; i++)
      reg[i] = 0;
-   log.v("System","Wiping flags..");
+   log.i("System","Wiping flags..");
    for(int i = 0; i < NUM_REGS; i++)
      flag[i] = 0;
 

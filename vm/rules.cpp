@@ -1,6 +1,8 @@
 #include <string>
+#include <iostream>
 #include <fstream>
 #include <sstream>
+#include "Log/filter.h"
 #include "Log/Log.h"
 using namespace std;
 
@@ -50,15 +52,47 @@ bool isgenuine = false;
      return true;
   }
 
+   bool parsed(const char *conf)
+   {
+       cout << "parse conf file" << endl;
+       return true;
+   }
+
    void authenticate(const char *file)
    {
-      rules_log.v("System","Checking authenticity...");
+      rules_log.i("System","Checking authenticity...");
       if(file_exists(file)){
            tostring(file);
         if(hassyntax(program)){
-            rules_log.v("System","Success! No errs detected. Starting System...");
-            isgenuine = true;
-            x86(program);
+          const char *conf = "/usr/share/svm/system.conf";
+           if(file_exists(conf) && parsed(conf)){
+		rules_log.i("System","Success! No errs detected. Starting System...");
+                isgenuine = true;
+                x86(program);
+           }
+           else if(!file_exists(conf)){
+                rules_log.v("System","Err looking for .conf file..creating one..");
+                isgenuine = true;
+                x86(program);
+            string fact_reset = "# SYSTEM CONFIG file for all system configurations\n\n[Log]"
+            "\n\n# Determine wether logging is on or off\n\t-state=\"on\"\n"
+            "\n# This is for determining the stack level for logging\n"
+            "\t-stack=\"7\"   # range 2-7\n";
+            ofstream conf_file ("/usr/share/svm/system.conf");
+            if (conf_file.is_open())
+            {
+              conf_file << fact_reset;
+              conf_file.close();
+            }
+             rules_log.v("System","System conf restore..");
+             SetPriority(2);
+             rules_log.On();
+             rules_log.i("System","Success! No errs detected. Starting System...");
+           }
+           else if(!parsed(conf))
+                rules_log.v("System","Error parsing .conf file");
+           else
+                rules_log.v("System","Fatal err: something went wrong while checking .conf file");
         }
         else{
           std::ostringstream stream;
@@ -96,7 +130,7 @@ bool isgenuine = false;
    {
        rules_log.v("System","Verifying args...");
        if(argc == 2){
-          rules_log.v("System","Checking Extention...");
+          rules_log.i("System","Checking Extention...");
           if(ext(file[1],".bo"))
               authenticate(file[1]);
           else

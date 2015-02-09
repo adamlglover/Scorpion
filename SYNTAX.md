@@ -33,6 +33,9 @@ Low-Level version ===========>
           call _main     ; call the main function
           
           halt  0          ;   shutdown the vm and do not reboot
+output:
+
+          7
           
 High-Level version ===========>
 

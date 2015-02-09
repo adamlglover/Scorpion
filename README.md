@@ -36,9 +36,9 @@ All programs reside in the programs directory.
 To use these programs you will have to folow the main() methid restriction I have provoded. So far I only have the specifications for the vm(currently i only write programs in direct 'machine code').
 In the console type:
 
-      $  ./svm file.bo
+      $  sudo ./svm file.bo
  
-The vm can only take a single object file that has all the instructions needed to run your program. In the future I plan to build a linker that will link multiple files together into a single file.  But for now you will only be able to have a single file as the full program to be run. i.e. when using the compiler you will not be able to reference other files. 
+The vm can only take a single object file that has all the instructions needed to run your program. In the future I plan to build a linker that will link multiple files together into a single file.  But for now you will only be able to have a single file as the full program to be run. i.e. when using the compiler you will not be able to reference other files. The vm will also print out in real-time a log of data that represents what the system is doing at that point in time. this file will be located in '/usr/share/svm/log.txt'. NOTE: If you have superuser access to all your files and or is logged in as root you do not need to type sudo before the program. Any system configs you will be having will go under the file '/usr/share/svm/system.conf'. Once I get the system fully up and running with all the specs I will write a file that lists all the possible error messages that might occur.
 
 ## Instruction set
 Syntax for sasm is explained in SYNTAX.md

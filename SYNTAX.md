@@ -35,7 +35,7 @@ Low-Level version ===========>
           halt  0          ;   shutdown the vm and do not reboot
 output:
 
-          7
+          $    7
           
 High-Level version ===========>
 

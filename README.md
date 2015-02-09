@@ -79,7 +79,7 @@ More registers will be added, the present registers are not final
 
 Name   | Parameters | Description
 ------ | ---------- | -----------
-r1-r29 |  any       | The basic registers from 1 to 29 that can hold any type of data
+r1-r2048 |  any       | The basic registers from 1 to 2048 that can hold any type of data
 eax    | [int,int]  | This is a special register used only for quick math arithmetic. The two values passed to this register will be evaluated directly and stored inside the register.
 tmp    |  any       | This is a register that is used to temporarily hold irrelivant data
 ip     |   [int]    | (instruction pointer)Tells the cpu where in the program to execute the next instruction

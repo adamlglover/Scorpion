@@ -13,14 +13,11 @@ using namespace std;
 //using namespace CPU;
 
 int status;
-string PROG = "";
 int STACK_LEVEL = 2;
-void x86(string prog)
-{
-  PROG = prog;
-}
-Log vm_log;
+
+Log x86_log;
 Logger logger1;
+
 void Restart()
 {
     System::Running = false;
@@ -28,6 +25,16 @@ void Restart()
     mprocessor.Reset();
     System::Running = true;
     System::SetupSystem();
+}
+
+void x86Shutdown()
+{
+  System::Running = false;
+  CPU mprocessor;
+  mprocessor.Reset();
+  mprocessor.Halt();
+  Log lg;
+  lg.Shutdown();
 }
 
 void Start()
@@ -40,16 +47,16 @@ void Start()
 
 void help()
 {
-  cout << "Usage: svm [FILE]\n\n"<< "[FILE]\nThe file must be in .bo format containing " <<
+  cout << "Usage: svm [FILE]\n\n" << "[FILE]\nThe file must be in .bo format containing " <<
   "1's 0's and .'s this is considered an executable file define by the virtural machine." << endl;
 }
 
 int main( int argc, const char **file )
 {
   status = mkdir("/usr/share/svm", S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);
-  vm_log.prepare(VERBOSE,true);
+  x86_log.prepare(VERBOSE,true);
   string arg = "";
-  
+
   if(argc == 2)
     arg = file[1];
   if((argc == 2) && (arg == "--help"))

@@ -1,6 +1,7 @@
 #include <iostream>
 #include "cpu.h"
 #include "cpuf.h"
+#include "gate.h"
 #include <sstream>
 #include "../System.h"
 #include "../mem.h"
@@ -12,8 +13,12 @@
 long EAX, TMP, IP;
 long reg[ NUM_REGS ];
 long flag[ NUM_REGS ];
-	
+
 bool Halted;
+bool scmnd = false;
+bool ignore = false;
+bool if_ignore = false;
+bool waiting = false;
 using namespace std;
 int accessedReg;
 int fetch();
@@ -32,25 +37,25 @@ bool CPU::ACTIVE()
   return Halted;
 }
 
-long CPU::_EAX()
+void CPU::_EAX(long data)
 {
-  return EAX;
+   EAX = data;
 }
 
-long CPU::_TMP()
+void CPU::_TMP(long data)
 {
-   return TMP;
+   TMP = data;
 }
 
 /* Instruction Set 4 */
    int instruction = 0;
    int reg1 = 0;
    int reg2 = 0;
-   int reg3 = 0; 
+   int reg3 = 0;
 
-long CPU::_IP()
+void CPU::_IP(long addr)
 {
-   return IP;
+   IP = addr;
 }
 
 void CPU::Reset()
@@ -67,7 +72,6 @@ void CPU::Reset()
    log.i("System","Wiping flags..");
    for(int i = 0; i < NUM_REGS; i++)
      flag[i] = 0;
-
 }
 
 bool CPU::GetFlag(int _flag)
@@ -88,6 +92,18 @@ void CPU::SetReg(int REG)
 void CPU::Halt()
 {
   Halted = true;
+  log.v("System","Arm I-4 CPU halt");
+  log.i("System","Wiping  Registers..");
+
+  EAX = 0;
+  TMP = 0;
+  IP  = 0;
+
+  for(int i = 0; i < NUM_REGS; i++)
+     reg[i] = 0;
+   log.i("System","Wiping flags..");
+   for(int i = 0; i < NUM_REGS; i++)
+     flag[i] = 0;
 }
 
 long *ProcessedOperands()
@@ -118,12 +134,15 @@ void CPU::ExecuteInterrupt(long offset)
 
      IP = offset;
      fetch();
+     decode();
+     execute();
 }
 
 int ProcessOperands()
 {
    cout<< "processing operands {0:" << instruction << "} {1:" << reg1 << "} {2:" << reg2 << "} {3:" << reg3 << "}" << endl;
-   return 0;
+   Gate gate;
+   return gate.route(instruction, reg1, reg2, reg3);
 }
 
 int memstat;
@@ -134,7 +153,7 @@ int fetch()
    Memory mem;
    memstat = mem.status(IP);
    if(memstat == Memory::DONE)
-           x86Shutdown();
+           System::Running = false;
    else {
       instruction   = mem.prog(IP++);
       reg1          = mem.prog(IP++);
@@ -153,7 +172,7 @@ int decode()
    instruction = DisassemblerRead(instruction);
    reg1        = DisassemblerRead(reg1);
    reg2        = DisassemblerRead(reg2);
-   reg2        = DisassemblerRead(reg2);
+   reg3        = DisassemblerRead(reg3);
 }
 
 int execute()

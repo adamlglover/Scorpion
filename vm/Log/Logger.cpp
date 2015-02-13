@@ -37,6 +37,7 @@ int Logger::println(int priority,string tag,string message)
   else {
      stackmsg += currtime() + ":" + t_ch(priority) + "/" + tag + ": " + message + "\n";
      ofstream log_file ("/usr/share/svm/log.txt");
+     
      if (log_file.is_open())
     {
        log_file << stackmsg;

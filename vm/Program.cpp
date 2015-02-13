@@ -21,6 +21,7 @@ void Program::Run()
   CPU cpu;
  if(runnable)
      cpu.run();
+ runnable = false;
 }
 
 void Program::Main() // entry point of application

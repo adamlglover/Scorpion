@@ -31,7 +31,6 @@ void x86Shutdown()
 {
   System::Running = false;
   CPU mprocessor;
-  mprocessor.Reset();
   mprocessor.Halt();
   Log lg;
   lg.Shutdown();
@@ -66,6 +65,7 @@ int main( int argc, const char **file )
   }
   else
      cout << "svm: fatal err occured!...check '/usr/share/svm/log.txt' for error and system information or use svm --help for help on using this virtural machiene" << endl;
-   return 0;
+
+    return 0;
 }
 

@@ -3,13 +3,19 @@
 #include <string>
 using namespace std;
 extern bool Halted;
+extern bool scmnd;
+extern long reg[ 0x272C ];
+extern long EAX,TMP,IP;
+extern bool ignore;
+extern bool if_ignore;
+extern bool waiting;
    class CPU {
       public:
         void Reset();
         bool ACTIVE();
-        long _EAX();
-	long _TMP();
-	long _IP();
+        void _EAX(long);
+	void _TMP(long);
+	void _IP(long);
         void Halt();
         int GetVirturalAddress();
         void ExecuteInterrupt(long);

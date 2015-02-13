@@ -1,6 +1,8 @@
 #include <string>
 #include "Log/Log.h"
 #include "mem.h"
+#include <math.h>
+#include <cstdlib>
 #include "program.h"
 #include <sstream>
 #include <iostream>
@@ -19,6 +21,7 @@ void Memory::wipe()
 {
    for(int i = 0; i < SIZE; i++)
        program[ i ] = 0;
+   SIZE = 0;
 }
 
 long Memory::size()
@@ -40,7 +43,7 @@ void nextinstr(long instr) /* load the next instruction to the cpu*/
 { 
    Memory m;
 //  cout << "next instr "<< icount + 1 << " I$ " << instr << endl;
-  if(!(SIZE > 80000000)){
+  if(!(SIZE > MAX_SIZE)){
         program[ SIZE++ ] = instr;  // assign the next instr
   }
   else {
@@ -50,6 +53,14 @@ void nextinstr(long instr) /* load the next instruction to the cpu*/
   }
 }
 
+long parse_long(string str)
+{
+   std::istringstream ss(str);
+    long i;
+    ss >> i;
+   return i;
+}
+
 void Memory::load(string content)
 {
   string str = "";
@@ -57,10 +68,8 @@ void Memory::load(string content)
      {
     if(content.at(i) == '.'){
        if(str != ""){
-           int instr;
-           stringstream(str) >> instr;
            //cout << result << endl;
-           nextinstr(instr);
+           nextinstr(parse_long(str));
            str = "";
        }
     }

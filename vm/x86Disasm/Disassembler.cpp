@@ -1,15 +1,22 @@
-#include "disassembler.h"
+#include "disassembler.h" 
+#include <sstream> 
+#include <string> 
+#include <math.h> 
+#include <iostream>
+using namespace std;
 
-long binary_decimal(long n) /* Function to convert binary to dec */
+long binary_decimal(long num) /* Function to convert binary to dec */
 {
-  long dec = 0, rem, base = 1;
-     while (n > 0)
-     {
-        rem = n % 10;
-        dec = dec + rem * base;
-        base = base * 2;
-        n = n / 10;
-     }
+  long dec = 0, n = 1, exp = 0;
+  stringstream ss;
+  ss << num;
+  string bin = ss.str();
+  for(int i = bin.length() - 1; i > -1; i--)
+  {
+     n = pow(2,exp++);
+      if(bin.at(i) == '1')
+         dec += n;
+  }
     return dec;
 }
 

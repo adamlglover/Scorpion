@@ -11,7 +11,7 @@ void InputOutput::Write(int device, int format, int command, long *pkg)
        Ports ports;
        long data[6];
        for(int i = 0; i < 3; i++)
-        data[i] = reg[ pkg[i] ];
+          data[i] = pkg[i];
        data[3] = device;
        data[4] = format;
        data[5] = command;

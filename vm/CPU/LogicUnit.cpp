@@ -81,7 +81,7 @@ int ibool(long num)
 void nand_l(long *pckg)
 {
   if(!ignore){
-   if(pckg[0] == 11000)
+   if(pckg[0] == 21)
        EAX = _nand(ibool(pckg[1]),ibool(pckg[2]));
    else
    {
@@ -94,7 +94,7 @@ void nand_l(long *pckg)
 void nor_l(long *pckg)
 {
   if(!ignore){
-   if(pckg[0] == 11000)
+   if(pckg[0] == 21)
      EAX = _nor(ibool(pckg[1]),ibool(pckg[2]));
    else
    {
@@ -107,7 +107,7 @@ void nor_l(long *pckg)
 void xnor_l(long *pckg)
 {
  if(!ignore){
-   if(pckg[0] == 11000)
+   if(pckg[0] == 21)
        EAX = _xnor(ibool(pckg[1]),ibool(pckg[2]));
    else {
       _CPU.SetReg(pckg[0]);
@@ -119,7 +119,7 @@ void xnor_l(long *pckg)
 void and_l(long *pckg)
 {
  if(!ignore){
-   if(pckg[0] == 11000)
+   if(pckg[0] == 21)
        EAX = _and(ibool(pckg[1]),ibool(pckg[2]));
    else
    {
@@ -132,7 +132,7 @@ void and_l(long *pckg)
 void or_l(long *pckg)
 {
  if(!ignore){
-   if(pckg[0] == 11000)
+   if(pckg[0] == 21)
      EAX = _or(ibool(pckg[1]),ibool(pckg[2]));
    else
    {
@@ -145,7 +145,7 @@ void or_l(long *pckg)
 void xor_l(long *pckg)
 {
  if(ignore){
-   if(pckg[0] == 11000)
+   if(pckg[0] == 21)
        EAX = _xor(ibool(pckg[1]),ibool(pckg[2]));
    else {
       _CPU.SetReg(pckg[0]);
@@ -157,7 +157,11 @@ void xor_l(long *pckg)
 void not_l(long *pckg)
 {
   if(!ignore){
+     if(pckg[0] == 21)
+       EAX = _not(ibool(pckg[1]));
+   else {
       _CPU.SetReg(pckg[0]);
       reg[ pckg[0] ] = _not(ibool(reg[pckg[0]]));
+   }
   }
 }

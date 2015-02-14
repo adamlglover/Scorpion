@@ -10,7 +10,7 @@
 #include "../Log/Log.h"
 
 #define  NUM_REGS 0x272C  /* 10,028 */
-long EAX, TMP, IP;
+long EAX, TMP, IP, EBX, SDX, SFC, SCX, BP, EXC, PS, LG, LSL;
 long reg[ NUM_REGS ];
 long flag[ NUM_REGS ];
 
@@ -47,6 +47,42 @@ void CPU::_TMP(long data)
    TMP = data;
 }
 
+void CPU::_EBX(long data)
+{
+   EBX = data;
+}
+
+void CPU::_SDX(long data)
+{
+   SDX = data;
+}
+
+void CPU::_BP(long data)
+{
+  BP = data;
+}
+
+void CPU::_EXC(long data)
+{
+  EXC = data;
+}
+
+void CPU::_PS(long data)
+{
+  PS = data;
+}
+
+void CPU::_LG(long data)
+{
+  LG = data;
+}
+
+void CPU::_LSL(long data)
+{
+  LSL = data;
+}
+
+
 /* Instruction Set 4 */
    int instruction = 0;
    int reg1 = 0;
@@ -66,6 +102,12 @@ void CPU::Reset()
   EAX = 0;
   TMP = 0;
   IP  = 0;
+  EBX = 0;
+  SDX  = 0;
+  SFC = 0;
+  BP  = 0;
+  EXC = 0;
+  PS  = 0;
 
   for(int i = 0; i < NUM_REGS; i++)
      reg[i] = 0;
@@ -98,6 +140,14 @@ void CPU::Halt()
   EAX = 0;
   TMP = 0;
   IP  = 0;
+  EBX = 0;
+  SDX  = 0;
+  BP  = 0;
+  EXC = 0;
+  PS  = 0;
+  LG  = 0;
+  LSL = 0;
+  SCX = 0;
 
   for(int i = 0; i < NUM_REGS; i++)
      reg[i] = 0;

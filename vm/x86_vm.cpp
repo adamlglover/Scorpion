@@ -1,4 +1,5 @@
 #include <string>
+#include <algorithm>
 #include <iostream>
 #include "ctime.h"
 #include "CPU/cpu.h"
@@ -60,9 +61,8 @@ int main( int argc, const char **file )
     arg = file[1];
   if((argc == 2) && (arg == "--help"))
        help();
-  else if(OK(argc, file)){
+  else if(OK(argc, file))
       Start();
-  }
   else
      cout << "svm: fatal err occured!...check '/usr/share/svm/log.txt' for error and system information or use svm --help for help on using this virtural machiene" << endl;
 

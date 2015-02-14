@@ -31,14 +31,14 @@ int Console::Write(int addr, long *input)
        if(c_addrs[ addr ] == STATUS_OPEN)
        {
            if(input[3] == 0){ // dout
-            cout << input[0];
+            cout << input[0] << endl;
 	     return STATUS_OPEN;
            }
            else if(input[3] == 1){ // bout
              cout << i_tbl(input[0]) << endl;
              return STATUS_OPEN;
            }
-           else if(input[3] == 2){
+           else if(input[3] == 2){ // size
              Memory s;
              cout << s.size() << endl;
              return STATUS_OPEN;

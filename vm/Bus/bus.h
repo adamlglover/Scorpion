@@ -1,6 +1,6 @@
 #ifndef BUS
 #define BUS
-
+extern int pstatus;
 extern int STATUS_OPEN;
 extern int STATUS_BUSY;
 extern int STATUS_INPUT;

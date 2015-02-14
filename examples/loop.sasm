@@ -1,0 +1,25 @@
+; Beginning of program
+%func r0
+reg 3 _console
+
+%func _console
+
+push _console
+  rmov  sdx  eax           ; store the answer in sdx reg
+  mov   bp   50            ; access port 50 on the stdout
+  mov   sfc  0             ; tell the stdout to format the result as a number
+  mov   scx  0             ; tell the stdout not to perform a command
+  init  0                  ; pass params to the stdout
+return _console
+
+push r0
+  add eax[0,0]                ; store eax to the value of 0 outside of the loop
+   loop r1 r2 4
+     inc eax                  ; increment eax by 1
+     call _console            ; print the value stored in eax
+   endl r1 r2
+return r0
+
+call r0                       ; call the loop function
+
+halt

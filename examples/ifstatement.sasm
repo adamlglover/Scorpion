@@ -1,0 +1,35 @@
+: Beginning of program
+reg 0 i_like_cake
+loadbl i_like_cake true                    ; this will represent our condition
+
+reg 1 _mult
+reg 2 _check                      ;reference r2 as check func
+reg 3 _console
+
+%func _mult
+%func _check
+%func _console
+
+push _console
+  rmov  sdx  eax           o; store the answer in sdx reg
+  mov   bp   50            ; access port 50 on the stdout
+  mov   sfc  0             ; tell the stdout to format the result as a number
+  mov   scx  0             ; tell the stdout not to perform a command
+  init  0
+return _console 
+
+push _mult
+  mult eax[3,5]            ; solve 3 * 5 and store it directly in reg eax(usually the best way to go)
+                           ; i.e. no need for the extra processing power of loading 2 registers to evaluate the data
+  call _console            ; print answer
+return _mult
+
+push _check
+  do i_like_cake                     ; if r0 evaluates to true then do something
+    call _mult                       ; call mult finction  
+  end                                ; end if statement
+return _check
+
+call _check
+
+halt

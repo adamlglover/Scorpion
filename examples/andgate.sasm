@@ -1,0 +1,14 @@
+; Beginning of program
+loadi r0 1
+loadi r1 1
+
+and r3 r0,r1           ; test if values are the same
+
+; print to the standard out
+  rmov  sdx  r3            ; store the result in sdx reg
+  mov   bp   50            ; access port 50 on the stdout
+  mov   sfc  1             ; tell the stdout to format the result as a bool
+  mov   scx  0             ; tell the stdout not to perform a command
+  init  0
+
+halt

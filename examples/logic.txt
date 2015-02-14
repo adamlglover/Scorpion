@@ -1,0 +1,10 @@
+
+Scematic logic gate diagram
+
+     A         B
+     |         |
+     |         |---[      ]--->|		             [ output ]  output will be written to the console
+     |-------------[ nand ]    |-->|			         |
+     |         |                   |----->[     ]                |
+     |         |---[     ]--->|---------->[ xor ]----------------|
+     |-------------[ and ]

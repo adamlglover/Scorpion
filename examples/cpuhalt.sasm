@@ -1,0 +1,2 @@
+; beginning of the program
+chalt                      ; halt the cpu, but do not shutdown system

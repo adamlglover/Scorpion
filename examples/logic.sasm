@@ -1,0 +1,35 @@
+; Beginning of program
+reg 0 A
+reg 1 B  ; specify the two input registers
+
+; assign the inputs to the 'virtural circut'
+loadi A 0
+loadi B 1
+
+reg 2 _circut
+reg 3 c1                       ; the result after passed in nand circut
+reg 4 c2
+reg 5 result
+reg 6 _console
+
+%func _circut                   ; declare a function to run the 'v-circut'
+%func _console
+
+push _console              ; load the data to be pushed to the console and pri$
+  rmov  sdx  result        ; store the result in sdx reg
+  mov   bp   50            ; access port 50 on the stdout
+  mov   sfc  0             ; tell the stdout to format the result as a number
+  mov   scx  0             ; tell the stdout not to perform a command
+  init  0                  ; notify the system to perform a system call with g$
+return _console
+
+push _circut
+  nand c1 A,B                    ; store the result in r3
+  and c2 A,B
+  xor result c1,c2              ; calculate the result with an xor gate and store the result
+  call _console                 ; print the data to the console
+return _circut
+
+call _circut
+
+halt

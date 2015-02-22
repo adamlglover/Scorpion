@@ -1,0 +1,71 @@
+; This program is for the sole purpose of talking to the vm's virtural hardrive
+
+reg 1 _mount                                  ; this reg will be used as a func to mount hardrive
+reg 2 _boot                                   ; will be used to boot the hardrive
+reg 0 _main
+reg 7 _console                                ; print out wether or not the device has been mounted successfully
+reg 4 disk_status			      ; will represent he current disk status
+reg 5 exists                                  ; will represent a bool if the disk img exists
+reg 6 disk_discovered                         ; this is a direct value set inside the V-HD that signifies if the disk img has been discovered
+reg 9 img                                     ; this register will specify which image file we would like to mount
+
+%func _mount
+%func _boot
+%func _main
+%func _console
+
+loadi img 1                                   ; load the img reg with value 1(ooua1.img) 2 = ooua2.img 3 = ooua3.img etc.
+loadi disk_discovered 23                      ; the set value is 0x0000000017 or 23 in decimal
+
+push _boot
+  mov   sdx  0             ; simply set sdx to 0 because no input data is needed
+  mov   bp   128           ; access port 128
+  mov   scx  1             ; tell the virtural hardrive to boot 
+  init  1 
+return _boot
+
+push _console
+  rmov  sdx  disk_status   ; assign the data to be pushed to the console 
+  mov   sfc  4             ; format the data in system status format
+  mov   bp   50            ; access port 50 for the stdout
+  mov   scx  0             ; tell the stdout not to perform a command
+  init  0                  ; perform the system call to push the data to the console
+return _console
+
+push _mount
+  mov    sdx  1             ; request to load a disk img 
+  mov    i1   1             ; point towards image specified file
+  mov    bp   128           ; access port 128
+  mov    scx  3             ; tell the virtural hardrive to set the image file requested
+  init   1                  ; set the image file
+
+  mov   scx  4             ; tell the V-HD to search for the image
+  init  1                  ; search
+
+  mov   scx  6             ; send the status of the disk img to port 128
+  init  1                  ; send
+
+  port  disk_status 0      ; read status from current port and store the status inside r4
+
+  same exists disk_status disk_discovered  ; check if the disk has been discovered
+
+  do exists		   ; if the file has been discovered then load the file to the V-HD
+      mov   scx  5         ; load the disg img to the V-HD
+      init  1              ; load
+      call _console        ; print to the command line the current disk satus
+  end
+  ndo exists               ; else if the disk file has not been discovered log the err
+      mov   sdx  1         ; log the current disk status
+      mov   scx  8         ; tell the V-HD to log the requested status
+      init  1              ; log
+  end
+return _mount
+
+push _main
+  call _boot                                  ; boot the virtural hardrive
+  call mount                                  ; mount a disk img to the hardrive
+return _main
+
+call _main
+
+halt

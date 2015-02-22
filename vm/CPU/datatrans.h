@@ -16,6 +16,7 @@ void call(long *pkg);
 void swp(long *pkg);
 void eof(long *pkg);
 void loop(long *pkg);
+void rloop(long *pkg);
 void end();
 void endl(long *pkg);
 void _do(long *pkg);
@@ -28,5 +29,16 @@ void inlt(long *pkg);
 void ingt(long *pkg);
 void inltoeq(long *pkg);
 void ingtoeq(long *pkg);
+void neg(long *pkg);
+void mlock(long *pkg);
+void lock(long *pkg);
+void mulock(long *pkg);
+void ulock(long *pkg);
+void xreg(long *pkg);
+void clx(long *pkg);
+void wloop(long *pkg);
+void endwl(long *pkg);
+void _port(long *pkg);
+void same(long *pkg);
 
 #endif

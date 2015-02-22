@@ -5,6 +5,7 @@ reg 3 _console
 %func _console
 
 push _console
+  loadr r10  ip            ; store the instruction pointer
   rmov  sdx  eax           ; store the answer in sdx reg
   mov   bp   50            ; access port 50 on the stdout
   mov   sfc  0             ; tell the stdout to format the result as a number
@@ -17,6 +18,7 @@ push r0
    loop r1 r2 4
      inc eax                  ; increment eax by 1
      call _console            ; print the value stored in eax
+     loadr r3 r10             ; store the ip back into _console for bactrack
    endl r1 r2
 return r0
 

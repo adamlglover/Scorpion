@@ -3,34 +3,42 @@
 #include "cpuf.h"
 #include "gate.h"
 #include <sstream>
+#include "../Ports/ports.h"
 #include "../System.h"
 #include "../mem.h"
 #include "../Log/filter.h"
 #include "../x86Disasm/disassembler.h"
 #include "../Log/Log.h"
+#include <string>
+using namespace std;
 
 #define  NUM_REGS 0x272C  /* 10,028 */
-long EAX, TMP, IP, EBX, SDX, SFC, SCX, BP, EXC, PS, LG, LSL;
+long EAX, TMP, IP, EBX, SDX, SFC, SCX, BP, EXC, PS, LG, LSL, I1, I2;
+long REG_SIZE = NUM_REGS;
 long reg[ NUM_REGS ];
+long x_reg[ NUM_REGS ];
+long lreg[ NUM_REGS ];
 long flag[ NUM_REGS ];
+long lflag[ NUM_REGS ];
 
 bool Halted;
+bool pass = false;
 bool scmnd = false;
 bool ignore = false;
 bool if_ignore = false;
 bool waiting = false;
-using namespace std;
 int accessedReg;
+
 int fetch();
 int decode();
 int execute();
+
 void x86Shutdown();
 
 CPUFlags flagger;
 Disassembler disasm;
 Log log;
 
-void inf(string);
 
 bool CPU::ACTIVE()
 {
@@ -103,17 +111,23 @@ void CPU::Reset()
   TMP = 0;
   IP  = 0;
   EBX = 0;
-  SDX  = 0;
+  SDX = 0;
   SFC = 0;
   BP  = 0;
   EXC = 0;
   PS  = 0;
+  I1  = 0;
+  I2  = 0;
 
   for(int i = 0; i < NUM_REGS; i++)
-     reg[i] = 0;
-   log.i("System","Wiping flags..");
+     reg[i] = -21937856;
+  for(int i = 0; i < NUM_REGS; i++)
+     lreg[i] = -21937856;
+   log.i("System","Cleaning flags..");
    for(int i = 0; i < NUM_REGS; i++)
      flag[i] = 0;
+    for(int i = 0; i < NUM_REGS; i++)
+     lflag[i] = 0;
 }
 
 bool CPU::GetFlag(int _flag)
@@ -190,7 +204,7 @@ void CPU::ExecuteInterrupt(long offset)
 
 int ProcessOperands()
 {
-   cout<< "processing operands {0:" << instruction << "} {1:" << reg1 << "} {2:" << reg2 << "} {3:" << reg3 << "}" << endl;
+//  cout<< "processing operands {0:" << instruction << "} {1:" << reg1 << "} {2:" << reg2 << "} {3:" << reg3 << "}" << endl;
    Gate gate;
    return gate.route(instruction, reg1, reg2, reg3);
 }

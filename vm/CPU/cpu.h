@@ -4,8 +4,14 @@
 using namespace std;
 extern bool Halted;
 extern bool scmnd;
+extern bool pass;
+extern long REG_SIZE;
 extern long reg[ 0x272C ];
-extern long EAX,TMP,IP, EBX, SDX, SFC, SCX, BP, EXC, PS, LG, LSL;
+extern long lreg[ 0x272C ];
+extern long x_reg[ 0x272C ];
+extern long flag[ 0x272C ];
+extern long lflag[ 0x272C ];
+extern long EAX,TMP,IP, EBX, SDX, SFC, SCX, BP, EXC, PS, LG, LSL, I1, I2;
 extern bool ignore;
 extern bool if_ignore;
 extern bool waiting;

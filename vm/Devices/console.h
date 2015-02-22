@@ -1,5 +1,5 @@
-#ifndef VM_CONSOLE
-#define VM_CONSOLE
+#ifndef SVM_CONSOLE
+#define SVM_CONSOLE
 
 class Console {
 	public:

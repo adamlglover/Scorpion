@@ -19,11 +19,11 @@ void sub(long *pckg)
 {
  if(!ignore){
    if(pckg[0] == 21)
-       EAX = pckg[1] / pckg[2];
+       EAX = pckg[1] - pckg[2];
    else
    {
       c.SetReg(pckg[0]);
-      reg[ pckg[0] ] = reg[ pckg[1] ] / reg[ pckg[2] ];
+      reg[ pckg[0] ] = reg[ pckg[1] ] - reg[ pckg[2] ];
    }
  }
 }
@@ -93,3 +93,67 @@ void rem(long *pckg)
  }
 }
 
+void cadd(long *pckg)
+{
+ if(!ignore){
+  if(pckg[0] == 21)
+       EAX += pckg[1] + pckg[2];
+   else
+   {
+      c.SetReg(pckg[0]);
+      reg[ pckg[0] ] += reg[ pckg[1] ] + reg[ pckg[2] ];
+   }
+  }
+}
+
+void csub(long *pckg)
+{
+ if(!ignore){
+   if(pckg[0] == 21)
+       EAX -= pckg[1] - pckg[2];
+   else
+   {
+      c.SetReg(pckg[0]);
+      reg[ pckg[0] ] -= reg[ pckg[1] ] - reg[ pckg[2] ];
+   }
+ }
+}
+
+void cmult(long *pckg)
+{
+ if(!ignore){
+   if(pckg[0] == 21)
+       EAX *= pckg[1] * pckg[2];
+   else
+   {
+      c.SetReg(pckg[0]);
+      reg[ pckg[0] ] *= reg[ pckg[1] ] * reg[ pckg[2] ];
+   }
+  }
+}
+
+void cdiv(long *pckg)
+{
+ if(!ignore){
+   if(pckg[0] == 21)
+       EAX /= pckg[1] / pckg[2];
+   else
+   {
+      c.SetReg(pckg[0]);
+      reg[ pckg[0] ] /= reg[ pckg[1] ] / reg[ pckg[2] ];
+   }
+ }
+}
+
+void crem(long *pckg)
+{
+ if(!ignore){
+   if(pckg[0] == 21)
+       EAX %= pckg[1] % pckg[2];
+   else
+   {
+      c.SetReg(pckg[0]);
+      reg[ pckg[0] ] %= reg[ pckg[1] ] % reg[ pckg[2] ];
+   }
+ }
+}

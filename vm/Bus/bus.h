@@ -11,13 +11,16 @@ extern int DEVICE_BUSY;
 extern int PORT_ADDRESS_UNKNOWN;
 
 extern int STD_OUT;
-extern int VDISK;
+extern int _VHD;
 class Bus {
     public:
      void channel(int,long,long,long *input);
      int pt();
-     void accessport(int);   
- 
+     void accessport(int);
+     void output(int);
+     int status(); 
+
 };
 
 #endif
+

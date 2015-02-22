@@ -1,0 +1,13 @@
+; This program will introdise iteering the current value in a register
+
+add eax[2,3]         ; here we add 2 + 3
+cadd eax[10,5]       ; here we take the current value in eax and add 15 to it
+
+rmov  sdx eax
+mov   bp  50
+mov   scx 0
+mov   sfc 0
+init  0              ; print out the value in eax to the console
+
+halt
+

@@ -1,0 +1,13 @@
+; Beginning of program
+loadbl r0 true                   ; make this register hold true
+loadbl r3 false
+
+do r0                            ; if r0 eval to true exe code
+  ; nested if block
+  ndo r3
+     ; do something if r3 = false 
+  end
+end
+ndo r0                           ; else if it evaluates to false exe this code
+    ; do nothing
+end

@@ -1,0 +1,24 @@
+; This program exercises ram locking to prevent data collision
+; NOTE This program is very inefficent do not write it this way, use functions!
+loadi r0 1
+
+add r0 r0,r0 
+
+lock r0                 ; lock r0 into the ram
+loadi r0 5              ; override r0 value
+
+rmov  sdx r0
+mov   bp  50
+mov   scx 0
+mov   sfc 0
+init  0                  ; print out the overridden value in r0
+
+ulock r0                 ; unlock r0 from the ram
+
+rmov  sdx r0
+mov   bp  50
+mov   scx 0
+mov   sfc 0
+init  0                   ; print out the inital value of r0 
+      
+halt

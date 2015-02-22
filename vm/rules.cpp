@@ -95,10 +95,10 @@ bool isgenuine = false;
    {
        rules_log.v("System","Verifying args...");
        if(argc == 2){
-          if(ext(file[1],".bo"))
+          if(ext(file[1],".bexe"))
               authenticate(file[1]);
           else
-            rules_log.v("System","Fatal err occured. File is not a binary object file '.bo'");
+            rules_log.v("System","Fatal err occured. File is not a binary executable file '.bexe'");
        }
        else if(argc < 2)
          rules_log.v("System","Fatal err occured. No input files, System Halt!");

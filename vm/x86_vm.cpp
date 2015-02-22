@@ -47,13 +47,14 @@ void Start()
 
 void help()
 {
-  cout << "Usage: svm [FILE]\n\n" << "[FILE]\nThe file must be in .bo format containing " <<
-  "1's 0's and .'s this is considered an executable file define by the virtural machine." << endl;
+  cout << "Usage: svm [FILE]\n\n" << "[FILE]\nThe file must be in .bexe format containing " <<
+  "1's 0's and .'s this is considered an executable file defined by the virtural machine." << endl;
 }
 
 int main( int argc, const char **file )
 {
   status = mkdir("/usr/share/svm", S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);
+  status = mkdir("/usr/share/svm/disks", S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);
   x86_log.prepare(VERBOSE,true);
   string arg = "";
 

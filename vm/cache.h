@@ -1,10 +1,10 @@
-#ifndef MEMORY
-#define MEMORY
+#ifndef SYS_CACHE
+#define SYS_CACHE
 
 #include <string>
 using namespace std;
 
-   class Memory {
+   class Cache {
           public:
              void wipe();
              long size();

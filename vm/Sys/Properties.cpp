@@ -26,13 +26,13 @@ void c_names()
   names[ 10 ] = "Radio Addr";
 
   values[ 0 ] = "f3.109d7.x49l";
-  values[ 2 ] = "0.0.0.0.1";
+  values[ 2 ] = "0.0.1";
   values[ 3 ] = "1";
   values[ 4 ] = "Core";
-  values[ 5 ] = "Arm i1-400 CPU";
+  values[ 5 ] = "x86 Arm i1-400 CPU";
   values[ 6 ] = "VCT v1.0";
   values[ 7 ] = "Pi-C700";
-  values[ 8 ] = "Raspberry Pi";
+  values[ 8 ] = "Raspberry Pi VM";
   values[ 10 ] = "F51B2G6NS3";
 }
 
@@ -103,7 +103,7 @@ int Properties::SetProperty(string property, string value)
    else if(property == "RSID-Fingerprint")
         values[ 0 ] = value;
    else {
-       p_log.v("System","Err property [" + property + "] does not exist!");
+       p_log.v("System","Err cannot modify property [" + property + "]");
      return bad();
    }
      return good();
@@ -111,12 +111,12 @@ int Properties::SetProperty(string property, string value)
 
 void Properties::list()
 {
-   string _names = "";
+   string prop = "";
    for(int i = 0; i < NUM_PROPERTIES; i++){
        stringstream ss;
-       ss << ":\t" << names[i] << "\t" << values[i] << "\n";
-       _names = ss.str();
-       cout << _names;
+       ss << "   " << names[i] << "   " << values[i] << "\n";
+       prop = ss.str();
+       cout << prop;
    }
 }
 

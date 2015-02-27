@@ -3,7 +3,7 @@
 
    #include <string>
    using namespace std;
-
+void p_exit();
     class Program {
           public:
             void Save(string);

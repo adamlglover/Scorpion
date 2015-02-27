@@ -5,6 +5,7 @@
 #include "lu.h"
 #include "datatrans.h"
 #include "io.h"
+#include "../program.h"
 #include "../Ports/ports.h"
 #include <sstream>
 #include <iostream>
@@ -25,7 +26,7 @@ int Gate::route(long instr, long r1,long r2, long r3)
    {
   /*---System Control---*/
       case 0: // halt
-       x86Shutdown();
+       p_exit();
        if(scmnd)
       cout << "halt" << endl;
        break;
@@ -205,7 +206,7 @@ int Gate::route(long instr, long r1,long r2, long r3)
        if(scmnd)
        cout << "rmov" << endl;
         break;
-        case 35: // int 
+        case 35: // init 
          _init(pkg);
        if(scmnd)
        cout << "init" << endl;

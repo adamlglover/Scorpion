@@ -8,6 +8,7 @@
 using namespace std;
 
 Log rules_log;
+string prog_name = "";
 bool isgenuine = false;
 
      bool file_exists(const char *fileName)
@@ -52,12 +53,17 @@ bool isgenuine = false;
 
    void authenticate(const char *file)
    {
-        if(file_exists(file)){
-           tostring(file);
+        stringstream ss;
+        ss << file << ".bexe";
+        string bridge = ss.str();
+        const char *name = bridge.c_str();
+        if(file_exists(name)){
+           tostring(name);
         if(hassyntax(p)){
              Program App;
              App.Save(p);
              isgenuine = true;
+           prog_name = file;
         }
         else{
           std::ostringstream stream;
@@ -68,46 +74,31 @@ bool isgenuine = false;
       }
       else{
         std::ostringstream stream;
-          stream << "Fatal err occured. File '" << file << "' does not exist!";
+          stream << "Fatal err occured. Could not find or load binary executable " << file;
          string data = stream.str();
          rules_log.v("System",data);
       }
    }
 
-     bool ext(string filename, string extn)
-     {
-         // the actual extention if file
-         string aext = "";
-        for(int i = filename.length() - extn.length(); i < filename.length(); i++)
-       {
-         // verify if the file has an extention
-         if((filename.at(i) == '.') && (aext == ""))
-           aext = aext + filename.at(i);
-         else if((i > filename.length() - extn.length()))
-           aext = aext  + filename.at(i);
-         else
-           break;
-        }
-         return (aext == extn);
-      }
-
    void verify( int argc, const char **file )
    {
        rules_log.v("System","Verifying args...");
-       if(argc == 2){
-          if(ext(file[1],".bexe"))
-              authenticate(file[1]);
-          else
-            rules_log.v("System","Fatal err occured. File is not a binary executable file '.bexe'");
-       }
+       if(argc == 2)
+          authenticate(file[1]);
        else if(argc < 2)
          rules_log.v("System","Fatal err occured. No input files, System Halt!");
        else if(argc > 2)
          rules_log.v("System","Fatal err occured. Too many argument inputs, System Halt!");
    }
 
+string getname()
+{
+  return prog_name;
+}
+
 bool OK( int argc, const char **file )
 {
    verify(argc, file);
    return isgenuine;
 }
+

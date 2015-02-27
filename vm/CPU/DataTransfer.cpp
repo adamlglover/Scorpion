@@ -1,6 +1,7 @@
 #include "cpu.h"
 #include "../System.h"
 #include "../Bus/bus.h"
+#include "../var.h"
 #include "io.h"
 #include "../Log/filter.h"
 #include "../Ports/ports.h"
@@ -10,13 +11,15 @@
 #include <sstream>
 #include <iostream>
 using namespace std;
-CPUFlags flags;
+
 CPU C;
 Log d_log;
 void loadi(long *pkg)
 {
  if(!ignore){
       C.SetReg(pkg[0]);
+    //checkreg(pkg[0]);
+    //checktype(flag[ pkg[0] ],pkg[1]);
       reg[ pkg[0] ] = pkg[1];
  }
 }
@@ -25,6 +28,7 @@ void loadr(long *pkg)
 {
    if(!ignore){
       C.SetReg(pkg[0]);
+      
        if(pkg[1] == 21)
           reg[ pkg[0] ] = EAX;
        else if(pkg[1] == 22)
@@ -42,6 +46,8 @@ void loadbl(long *pkg)
   if(!ignore)
    {
       C.SetReg(pkg[0]);
+      //checkreg(pkg[0]);
+    //checktype(flag[ pkg[0] ],pkg[1]);
           reg[ pkg[0] ] = ibool(pkg[1]);
    }
 }
@@ -53,11 +59,11 @@ void mv(long *pkg)
       C.SetReg(pkg[0]);
        if(pkg[1] == 21){
           reg[ pkg[0] ] = EAX;
-          EAX = 0;
+          EAX = null;
        }
        else{
           reg[ pkg[0] ] = reg[ pkg[1] ];
-	  reg[ pkg[1] ] = 0;
+	  reg[ pkg[1] ] = null;
        }
    }
 }
@@ -211,12 +217,11 @@ void _init(long *pkg)
 
         SetPriority(LSL);
        break;
-       case 3:
-        Log _lg;
-        stringstream ss;
-        ss << "program exited with code " << EBX;
-        _lg.v("System",ss.str());
-        System::Running = false;
+       default:
+       stringstream ss;
+       ss << pkg[0];
+       Log ll;
+       ll.v("System","System call failure: code is not a system call *^" + ss.str());
        break;
 
      }
@@ -349,7 +354,7 @@ void rm(long *pkg)
   if(!ignore)
    {
       C.SetReg(pkg[0]);
-      reg[ pkg[0] ] = 0;
+      reg[ pkg[0] ] = null;
    }
 }
 
@@ -358,8 +363,8 @@ void func(long *pkg)
   if(!ignore)
    {
       C.SetReg(pkg[0]);
-          reg[ pkg[0] ] = 0;
-          C.SetFlag(flags.FN);
+          reg[ pkg[0] ] = null;
+          C.SetFlag(FN);
    }
 }
 
@@ -406,7 +411,7 @@ void eof(long *pkg)
   if(!ignore)
    {
       C.SetReg(pkg[0]);
-      C.SetFlag(flags.OI);
+      C.SetFlag(OI);
    }
 }
 
@@ -415,7 +420,7 @@ void loop(long *pkg)
   if(!ignore)
   {
       C.SetReg(pkg[0]);
-         C.SetFlag(flags.LP);
+         C.SetFlag(LP);
          reg[ pkg[0] ] = IP;
          reg[ pkg[1] ] = pkg[2];
          waiting = true;
@@ -450,7 +455,7 @@ void rloop(long *pkg)
   if(!ignore)
   {
       C.SetReg(pkg[0]);
-         C.SetFlag(flags.LP);
+         C.SetFlag(LP);
          reg[ pkg[0] ] = IP;
          reg[ pkg[1] ] = reg[ pkg[2] ];
          waiting = true;

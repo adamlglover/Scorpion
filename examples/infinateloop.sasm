@@ -1,0 +1,17 @@
+; This program will use a while loop
+reg 0 _main
+reg 1 alive
+
+%func _main
+loadi alive 1
+push _main
+loadi r3 5
+loadi r4 0
+  wloop alive r2
+     ; run forever
+  endwl alive r2
+return _main
+
+call _main
+
+halt

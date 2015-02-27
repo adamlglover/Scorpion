@@ -1,5 +1,5 @@
 #include "console.h"
-#include "../mem.h"
+#include "../cache.h"
 #include "../Bus/bus.h"
 #include <iostream>
 #include <string>
@@ -39,8 +39,8 @@ int Console::Write(int addr, long *input)
              return STATUS_OPEN;
            }
            else if(input[3] == 2){ // size
-             Memory s;
-             cout << s.size() << endl;
+             Cache c;
+             cout << c.size() << endl;
              return STATUS_OPEN;
            } // char
            else if(input[3] == 4) {

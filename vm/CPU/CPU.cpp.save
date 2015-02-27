@@ -1,20 +1,18 @@
 #include <iostream>
-#include "../var.h"
 #include "cpu.h"
 #include "cpuf.h"
 #include "gate.h"
 #include <sstream>
-#include "../program.h"
 #include "../Ports/ports.h"
 #include "../System.h"
-#include "../cache.h"
+#include "../mem.h"
 #include "../Log/filter.h"
 #include "../x86Disasm/disassembler.h"
 #include "../Log/Log.h"
 #include <string>
 using namespace std;
 
-#define  NUM_REGS 1200000  /* 1.2mb of ram */
+#define  NUM_REGS 1500000  /* 1.5mb of ram */
 long EAX, TMP, IP, EBX, SDX, SFC, SCX, BP, EXC, PS, LG, LSL, I1, I2;
 long REG_SIZE = NUM_REGS;
 long reg[ NUM_REGS ];
@@ -121,9 +119,9 @@ void CPU::Reset()
   I2  = 0;
 
   for(int i = 0; i < NUM_REGS; i++)
-     reg[i] = null;
+     reg[i] = -21937856;
   for(int i = 0; i < NUM_REGS; i++)
-     lreg[i] = null;
+     lreg[i] = -21937856;
    log.i("System","Cleaning flags..");
    for(int i = 0; i < NUM_REGS; i++)
      flag[i] = 0;
@@ -155,23 +153,25 @@ void CPU::Halt()
   EAX = 0;
   TMP = 0;
   IP  = 0;
+  EBX = 0;
   SDX  = 0;
   BP  = 0;
+  EXC = 0;
   PS  = 0;
   LG  = 0;
   LSL = 0;
   SCX = 0;
 
   for(int i = 0; i < NUM_REGS; i++)
-     reg[i] = null;
+     reg[i] = -21937856;
    log.i("System","Wiping flags..");
    for(int i = 0; i < NUM_REGS; i++)
-     flag[i] = null;
+     flag[i] = -21937856;
 }
 
 long *ProcessedOperands()
 {
-   Cache m;
+   Memory m;
    long *operands;
    operands = new long [ m.size() ];
   for(int i = 0; i < m.size(); i++)
@@ -213,18 +213,18 @@ int fetch()
 {
   if(Halted)
     return 0;
-   Cache cache;
-   memstat = cache.status(IP);
-   if(memstat == Cache::DONE)
-          p_exit();
+   Memory mem;
+   memstat = mem.status(IP);
+   if(memstat == Memory::DONE)
+           System::Running = false;
    else {
-      instruction   = cache.prog(IP++);
-      reg1          = cache.prog(IP++);
-      reg2          = cache.prog(IP++);
-      reg3          = cache.prog(IP++);
+      instruction   = mem.prog(IP++);
+      reg1          = mem.prog(IP++);
+      reg2          = mem.prog(IP++);
+      reg3          = mem.prog(IP++);
    }
 
-   return cache.status(IP);
+   return mem.status(IP);
 }
 
 int decode()

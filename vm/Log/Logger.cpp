@@ -36,7 +36,7 @@ int Logger::println(int priority,string tag,string message)
   }
   else {
      stackmsg += currtime() + ":" + t_ch(priority) + "/" + tag + ": " + message + "\n";
-     ofstream log_file ("/usr/share/svm/log.txt");
+     ofstream log_file ("/usr/share/scorpion/log.txt");
      
      if (log_file.is_open())
     {
@@ -59,7 +59,7 @@ void Logger::init(bool to_file)
      println(2,"System","System init..");
   }
   else {
-      ofstream log_file ("/usr/share/svm/log.txt");
+      ofstream log_file ("/usr/share/scorpion/log.txt");
      if (log_file.is_open())
     {
        stackmsg += "=======System Dev Log begin=======\n";
@@ -67,7 +67,7 @@ void Logger::init(bool to_file)
        log_file.close();
     }
      else 
-        cout << "svm: fatal err ocured unable to open log file!" << endl;
+        cout << "scorpion: fatal err ocured unable to open log file!" << endl;
   }
 }
 

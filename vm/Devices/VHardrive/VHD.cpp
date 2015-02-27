@@ -8,6 +8,8 @@
 using namespace std;
 
 int accport = 0x80;
+string sys_stat(long);
+
 bool file_exists(const char *file);
 
 /* States */
@@ -27,6 +29,7 @@ int HARDRIVE_STATUS = 0;
 #define dstatus 5 // send the current disk status(used when mountin$
 #define hstatus 6 // send the current hardrive status to the port
 #define log 7 // log either the dstat or the hstat
+#define dump 8
 
 // status codes
 #define DISK_NOT_MOUNTED 0x0000000014
@@ -37,6 +40,7 @@ int HARDRIVE_STATUS = 0;
 #define DISK_MOUNTED 0x0000000019
 #define DEVICE_BOOTED 0x0000000020
 #define DEVICE_SHUTDOWN 0x0000000021
+#define DISK_UNMOUNTED 0x0000000022
 
 int VHD::Write(int addr, long *input)
 {
@@ -201,6 +205,14 @@ void _limg()
   }
 }
 
+void _dump()
+{
+  mounted = false;
+  DISK_STATUS = DISK_UNMOUNTED;
+  //dumpMem();
+  //dumpEPMem();
+}
+
 void _log(long input)
 {
   switch( input ) {
@@ -210,7 +222,7 @@ void _log(long input)
        {
 	Log _log;
         std::ostringstream ss;
-        ss << "current disk status is " << DISK_STATUS;
+        ss << "current disk status is " << sys_stat(DISK_STATUS);
          _log.v("HardriveInfo",ss.str());
        }
       break;
@@ -218,7 +230,7 @@ void _log(long input)
        {
         Log _log2;
         std::ostringstream ss1;
-        ss1 << "current hardrive status is " << HARDRIVE_STATUS;
+        ss1 << "current hardrive status is " << sys_stat(HARDRIVE_STATUS);
          _log2.v("HardriveInfo",ss1.str());
        }
       break;
@@ -262,6 +274,21 @@ int VHD::Process(int addr, long command,long *input)
             else {
               Log ll;
               ll.v("HardriveInfo","Fatal err: hardrive is not running, please boot before loading disk img");
+           }
+           //cout << "limg" << endl;
+           break;
+          case dump:
+            if(IsRunning){
+            if(mounted)
+              _dump();
+            else {
+                 Log ll;
+              ll.v("HardriveInfo","Fatal err: disk not mounted, please mount a disk img before dumping");
+            }
+           }
+            else {
+              Log ll;
+              ll.v("HardriveInfo","Fatal err: hardrive is not running, please boot before dumping img");
            }
            //cout << "limg" << endl;
            break;

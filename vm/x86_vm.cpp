@@ -2,6 +2,8 @@
 #include <algorithm>
 #include <iostream>
 #include "ctime.h"
+#include "help.h"
+#include "program.h"
 #include "CPU/cpu.h"
 #include "rules.h"
 #include "System.h"
@@ -45,27 +47,31 @@ void Start()
    System::SetupSystem();
 }
 
-void help()
-{
-  cout << "Usage: svm [FILE]\n\n" << "[FILE]\nThe file must be in .bexe format containing " <<
-  "1's 0's and .'s this is considered an executable file defined by the virtural machine." << endl;
-}
-
 int main( int argc, const char **file )
 {
-  status = mkdir("/usr/share/svm", S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);
-  status = mkdir("/usr/share/svm/disks", S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);
-  x86_log.prepare(VERBOSE,true);
+  
+  prepargs();
   string arg = "";
-
-  if(argc == 2)
+  if(argc == 2){
     arg = file[1];
-  if((argc == 2) && (arg == "--help"))
-       help();
-  else if(OK(argc, file))
+  }
+  else if(argc == 1){
+    if(isarg("-help"))
+     handleargs();
+  }
+
+  status = mkdir("/usr/share/scorpion", S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);
+  status = mkdir("/usr/share/scorpion/disks", S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);
+  status = mkdir("/usr/share/scorpion/lib/src", S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);
+  if(isarg(arg))
+     handleargs();
+  else
+    x86_log.prepare(VERBOSE,true);
+
+  if(OK(argc, file))
       Start();
   else
-     cout << "svm: fatal err occured!...check '/usr/share/svm/log.txt' for error and system information or use svm --help for help on using this virtural machiene" << endl;
+     cout << "scorpion: fatal err occured!...check '/usr/share/svm/log.txt' for error and system information\nuse -help for a list of options." << endl;
 
     return 0;
 }

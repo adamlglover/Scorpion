@@ -1,0 +1,11 @@
+; This program will purposley break the vm by trying to call an uninitilized function
+
+reg 0 _break
+
+%func _break                ; refrence this reg as a function and assign it with the value of null(-21937856)
+
+call _break                 ; the vm will set the IP at the value inside of_break
+                            ; then attempt to access the meory location at -21937856 which dosent exists
+                            ; the vm will then throw a program_out_of_range err
+
+halt                        ; this command will never get reached

@@ -12,13 +12,13 @@ namespace System {
   bool Running;
   Log Sys_log;
   Properties prop;
-  Console vmconsole;
+  Console stdout;
   Program Application;
   void SetupSystem()
   {
     Sys_log.v("System","Setting up System...");
     prop.build();
-    vmconsole.Setup();
+    stdout.Setup();
     Application.Main();
   }
 }

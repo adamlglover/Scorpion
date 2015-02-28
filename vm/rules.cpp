@@ -41,7 +41,7 @@ bool isgenuine = false;
     for(int i = 0; i < prog.length(); i++){
 
         if((prog.at(i) == '1') || (prog.at(i) == '0') || (prog.at(i) == '.')
-             || (prog.at(i) == '\t') || (prog.at(i) == ' ') || (prog.at(i) == '\n'))
+             || (prog.at(i) == '\t') || (prog.at(i) == ' ') || (prog.at(i) == '\n') || (prog.at(i) == 10) || (prog.at(i) == 13) )
          _char++;
         else{
           uchar = prog.at(i);

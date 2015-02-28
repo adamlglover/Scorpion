@@ -1,3 +1,5 @@
+#include <stdio.h>
+#include <time.h>
 #include <iostream>
 #include "../var.h"
 #include "cpu.h"
@@ -23,6 +25,7 @@ long lreg[ NUM_REGS ];
 long flag[ NUM_REGS ];
 long lflag[ NUM_REGS ];
 
+//clock_t tStart;
 bool Halted;
 bool pass = false;
 bool scmnd = false;
@@ -215,8 +218,10 @@ int fetch()
     return 0;
    Cache cache;
    memstat = cache.status(IP);
-   if(memstat == Cache::DONE)
+   if(memstat == Cache::DONE){
+  //        printf("Time taken: %.2fs\n", (double)(clock() - tStart)/CLOCKS_PER_SEC);
           p_exit();
+  }
    else {
       instruction   = cache.prog(IP++);
       reg1          = cache.prog(IP++);
@@ -247,7 +252,8 @@ int execute()
 }
 
 void CPU::run()
-{
+{ 
+ //tStart = clock();
  while(System::Running){
        fetch();
        decode();

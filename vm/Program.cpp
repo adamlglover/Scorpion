@@ -30,12 +30,12 @@ void Program::Run()
 
 void p_exit()
 {
+  x86Shutdown();
   if(EXC == 1){
-    x86Shutdown();
     string pname = getname();
     printf("\nThe program %s exited with code %d\n", pname.c_str(), EBX);
-    exit(1);
   }
+  exit(EBX);
 }
 
 void Program::Main() // entry point of application

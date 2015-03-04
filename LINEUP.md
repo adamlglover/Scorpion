@@ -4,7 +4,7 @@ Note: All parts of computer and or components are a combination of fictonal and 
 
 # Systems
 
-  * [MMC4080(Multifunctional Micro Computer)][#mmc4080]
+ * [MMC4080(Multifunctional Micro Computer)][#mmc4080]
  
 # Micro processors
 

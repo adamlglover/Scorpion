@@ -14,11 +14,12 @@ Note: All parts of computer and or components are a combination of fictonal and 
 # MMC4080
 This computer is the first of its kind developed by RMD. It features a full set of hardware that allows you to run almost any program on the board without little restrictions. The board witholds a very low ammount of accessable ram w/ a high ammount of program ram. The extreemly slow CPU clock speed poses a problem for running big energy consuming programs. The microprocessor is manufactured with RMDv1 Architecture which is perfect for simple programs and beginner Algebra computational power.
 
-  Manufacturer: [RMD](#rmd)
-  CPU: [RMD 8208](#rmd-8208)
-  RAM: [DM3 101](#dm3-101)
-  SRam: [DM3 100(standard)](#dm3-100)
-  Additional Hardware: [Ix 2000](#ix-2000) 
+  * Manufacturer: [RMD](#rmd)
+  * CPU: [RMD 8208](#rmd-8208)
+  * RAM: [DM3 101](#dm3-101)
+  * SRam: [DM3 100(standard)](#dm3-100)
+  * Additional Hardware: [Ix 2000](#ix-2000) 
+  
 ---------------------------------------------------------------------
 
 X-1 Series

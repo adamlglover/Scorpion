@@ -42,7 +42,9 @@ The vm can only take a single object file that has all the instructions needed t
 
 ## Instruction set
 Syntax for sasm is explained in SYNTAX.md.
+
 All registers are explained below.
+
 Full specs are in LINEUP.md.
 
 # Notes

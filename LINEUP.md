@@ -29,6 +29,8 @@ The X-1 Series RMD 8208 CPU features all the nessicary instructions needed for d
 
 ...
 
+--------------------------------------------------------------------
+
 # RMD
 RMD(Remixed Micro Devices) is a makeshift company that I have created to represent a 'pretend' manufacturer of the computer
 

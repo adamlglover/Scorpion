@@ -9,7 +9,7 @@ Each virturalized hardware part of the machine is quantified into the groups bel
  
 ##### Micro processors
 
-  * [RMD 8208](#rmd-8280)
+  * [RMD 8208](#rmd-8208)
   
 ##### Random Access Memory Devices
 

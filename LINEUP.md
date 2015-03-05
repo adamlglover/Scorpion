@@ -1,7 +1,7 @@
 This file contails the full lineup of the the entire computer system 'Scorpion Virtural Machine'
 
-Note: All parts of computer and or components are a combination of fictonal and real concepts. Information, namea, etc. are all made up by the developer of the system and do not truly exist only for the sole purpose to be used as a reference point. 
-Each virturalized hardware part of the machine is quntified into the groups below
+Note: All parts of computer and or components are a combination of fictonal and real concepts. Information, names, etc. are all made up by the developer of the system and do not truly exist only for the sole purpose to be used as a reference point. 
+Each virturalized hardware part of the machine is quantified into the groups below
 
 ##### Systems
 

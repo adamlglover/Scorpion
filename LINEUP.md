@@ -29,7 +29,7 @@ This computer is the first of its kind developed by RMD. It features a full set 
   * CPU: [RMD 8208](#rmd-8208)
   * RAM: [DM3 101](#dm3-101)
   * SRam: [DM3 100(standard)](#dm3-100)
-  * Additional Hardware: [Lx 2000](#ix-2000) 
+  * Additional Hardware: [Lx 2000](#lx-2000) 
   
 ---------------------------------------------------------------------
 

@@ -33,7 +33,7 @@ This computer is the first of its kind developed by RMD. It features a full set 
   
 ---------------------------------------------------------------------
 
-X-1 Series
+##### X-1 Series
 
 # RMD 8208
 The X-1 Series RMD 8208 CPU features all the nessicary instructions needed for data manipulation and arithmatic proccessing. Below is a chart explaining the specs of the CPU .
@@ -61,7 +61,7 @@ Hyper Threading Technology                           | no
 [Security Key](#security-key)                        | no
 [Data Shift Technology](#number-shift-technology)    | no   |
 
-All information provided is subject to change at any time, without nnotice. Information provided is presented "as-is" and performance levels are but not limited to the raspberry pi model B+.
+All information provided is subject to change at any time, without notice. Information provided is presented "as-is" and performance levels are but not limited to the raspberry pi model B+.
 --------------------------------------------------------------------
 
 # DM3 100(Standard)
@@ -73,7 +73,9 @@ Below is a chart explaining the specs of the chip .
 | [# of Cells](#number-of-cells)                    | 1    |
 | [Max Program Size](#program-size)                 | 30mb |
 
-All information provided is subject to change at any time, without nnotice. Information provided is presented "as-is" and performance levels are but not limited to the raspberry pi model B+.
+
+All information provided is subject to change at any time, without notice. Information provided is presented "as-is" and performance levels are but not limited to the raspberry pi model B+.
+
 
 # DM3 101
 The DM3 101 Ram Chip features a very low ammout of ram and is the first of its kind to be engineered by RMD.
@@ -85,7 +87,7 @@ Below is a chart explaining the specs of the chip.
 | Max Size                                          | 4mb  |
 | [R\C ratio](#number-of-cells)                     | 1mb  |
 
-All information provided is subject to change at any time, without nnotice. Information provided is presented "as-is" and performance levels are but not limited to the raspberry pi model B+.
+All information provided is subject to change at any time, without notice. Information provided is presented "as-is" and performance levels are but not limited to the raspberry pi model B+.
 --------------------------------------------------------------------
 
 
@@ -95,7 +97,7 @@ All information below pertains to all the information provided above to clear an
 --------------------------------------------------------------------
 
 # Data Shift Technology 
-Data Shift Technology allows for shifting a data value to the left or right a certain ammount of bits by manipulationg the instructions inside the SRam.
+Data Shift Technology allows for shifting a data value to the left or right a certain ammount of bits by manipulationg the information inside the Ram.
 
 # Max Program SIze
 This represents the total ammount of machine instructions that the VM can take to execute. Each instruction is represented as 1 byte. A board with 30mb of SRam can execute a program with a total of 30000000 instructions.

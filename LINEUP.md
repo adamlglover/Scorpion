@@ -27,16 +27,15 @@ X-1 Series
 # RMD 8208
 The X-1 Series RMD 8208 CPU features all the nessicary instructions needed for data manipulation and arithmatic proccessing. Below is a chart explaining the specs of the CPU .
 
-##### Essentials
-| Specs            |  Value    | 
+| Essentials       |           | 
 | ---------------- | --------- |
 | Production Date  | 3.4.15    |
 | Processor Number | 8208      |
 | Cache            | none      |
 | Instruction Set  | 64-bit    |
 
-Performance |
---------- | ---------
+Performance           |        |
+--------------------- | ------ |
 # of Cores            | 1
 # of Threads          | 1
 Processor Frequency   | .030Mhz

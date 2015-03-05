@@ -1,15 +1,26 @@
 This file contails the full lineup of the the entire computer system 'Scorpion Virtural Machine'
 
 Note: All parts of computer and or components are a combination of fictonal and real concepts. Information, namea, etc. are all made up by the developer of the system and do not truly exist only for the sole purpose to be used as a reference point. 
+Each virturalized hardware part of the machine is quntified into the groups below
 
-# Systems
+##### Systems
 
  * [MMC4080(Multifunctional Micro Computer)](#mmc4080)
  
-# Micro processors
+##### Micro processors
 
   * [RMD 8208](#rmd-8280)
   
+##### Random Access Memory Devices
+
+  * [DM3 100](#dm3-100)
+  * [DM3 101](#dm3-101)
+  
+##### Disk Image Harvrives
+
+  * [Lx 2000](#lx-2000)
+  
+
 --------------------------------------------------------------------- 
 # MMC4080
 This computer is the first of its kind developed by RMD. It features a full set of hardware that allows you to run almost any program on the board without little restrictions. The board witholds a very low ammount of accessable ram w/ a high ammount of program ram. The extreemly slow CPU clock speed poses a problem for running big energy consuming programs. The microprocessor is manufactured with RMDv1 Architecture which is perfect for simple programs and beginner Algebra computational power.
@@ -18,7 +29,7 @@ This computer is the first of its kind developed by RMD. It features a full set 
   * CPU: [RMD 8208](#rmd-8208)
   * RAM: [DM3 101](#dm3-101)
   * SRam: [DM3 100(standard)](#dm3-100)
-  * Additional Hardware: [Ix 2000](#ix-2000) 
+  * Additional Hardware: [Lx 2000](#ix-2000) 
   
 ---------------------------------------------------------------------
 
@@ -27,28 +38,99 @@ X-1 Series
 # RMD 8208
 The X-1 Series RMD 8208 CPU features all the nessicary instructions needed for data manipulation and arithmatic proccessing. Below is a chart explaining the specs of the CPU .
 
-| Essentials              |           | 
+| Essentials              |            | 
 | ----------------------- | :--------- |
-| Production Date         | 3.4.15     |
+| Production Date         | 3-15       |
 | Processor Number        | 8208       |
 | Cache                   | none       |
 | Instruction Set         | 64-bit     |
-| # of Opcodes            | 62         |
-| [Instruction Filter Type](#instruction-filter-type) | 4          |
+| [IFT](#instruction-filter-type) | 4          |
+| Architecture            | [RMDv1](#rmdv1)    |
 
 Performance           |        |
---------------------- | ------ |
+--------------------- | :----- |
 # of Cores            | 1
 # of Threads          | 1
 Processor Frequency   | .030Mhz
 Max Frequency         | .033Mhz
 
-Advanced Technologies      |      |
--------------------------- | ---- |
-Hyper Threading Technology | no
-[Safe Guard Technology](#safe-guard-technology)      | yes
+Advanced Technologies                                |      |
+---------------------------------------------------- | :--- |
+Hyper Threading Technology                           | no
+[Safe Guard Technology](#safe-guard-technology)      | no
+[Security Key](#security-key)                        | no
+[Data Shift Technology](#number-shift-technology)    | no   |
+
+All information provided is subject to change at any time, without nnotice. Information provided is presented "as-is" and performance levels are but not limited to the raspberry pi model B+.
+--------------------------------------------------------------------
+
+# DM3 100(Standard)
+The DM3 100 Ram Chip is standard in all RMD distributions. It features a very high ammout of fast access ram w/ status reports of the current state of the program. This type of Ram Chip is the only chip that will be engineered to be used for the sole purpose of holding the entire program on it. i.e. This Chip will frequently be edited.
+Below is a chart explaining the specs of the chip .
+
+| Essentials                                        |      |
+| ------------------------------------------------- | :--- |
+| [# of Cells](#number-of-cells)                    | 1    |
+| [Max Program Size](#program-size)                 | 30mb |
+
+All information provided is subject to change at any time, without nnotice. Information provided is presented "as-is" and performance levels are but not limited to the raspberry pi model B+.
+
+# DM3 101
+The DM3 101 Ram Chip features a very low ammout of ram and is the first of its kind to be engineered by RMD.
+Below is a chart explaining the specs of the chip.
+
+| Essentials                                        |      |
+| ------------------------------------------------- | :--- |
+| [# of Cells](#number-of-cells)                    | 4    |
+| Max Size                                          | 4mb  |
+| [R\C ratio](#number-of-cells)                     | 1mb  |
+
+All information provided is subject to change at any time, without nnotice. Information provided is presented "as-is" and performance levels are but not limited to the raspberry pi model B+.
+--------------------------------------------------------------------
+
+
+All information below pertains to all the information provided above to clear any mis conceptions.
+--------------------------------------------------------------------
 
 --------------------------------------------------------------------
+
+# Data Shift Technology 
+Data Shift Technology allows for shifting a data value to the left or right a certain ammount of bits by manipulationg the instructions inside the SRam.
+
+# Max Program SIze
+This represents the total ammount of machine instructions that the VM can take to execute. Each instruction is represented as 1 byte. A board with 30mb of SRam can execute a program with a total of 30000000 instructions.
+
+# Number of Cells
+The Ram chips designed by RMD are designed to have multiple cells with each cell pertating to a specified use. A cell is computer chip that rests on the Ram chip  and holds a certain ammount of data( in mb). The more cells the ram chip holds, the slower the ram and the R\C(Ram per Cell) rate drops. For instance the very first Ram chip designed by RMD had 4 cells with a total memory of 4mb. The R\C rate is calculated by this formula ( R\C = T/C ). Where T represents the total ammount of Ram and C represents the total ammount of cells on the chip.
+
+# Security Key
+Security Key consists of a digital random number generator that creates truly random numbers to strengthen encryption algorithms.
+
+# Safe Guard Technology
+SGT provides safe code execution of embeded api's while running a program on the device. This is perfect for preventing Ram data collision when executing a program. For instance:
+
+              Load.sasm(Ex. API File)
+              0   loadi r1 #3
+              1
+              
+              Test.sasm(Ex. Program file)
+              0    include<Load>
+              1    loadi r1 #7
+              
+Altough this is a very simple example, you can see how data colision is a very big issue in a very big API running in apralell with a big program considering that they operate on the same Ram.
+
+# Instruction Filter Type
+IFT simply describes the ammount of instructions the CPU takes in as input to perform a full operation. For instance:
+
+      Instructions
+      10.100.1.0.10010.111111110.10111.0.0.0.0.0
+                ^-----------------------^ << the next 4 instructions
+                           |
+                           V
+                10010.111111110.10111.0
+                loadi r510 #23
+       
+When the CPU access the SRam, it requests the next 4 instructions to be executed and handled accordingly. In the example above we see a CPU with an IFT of 4. Those fout instructions can be interpreted as "loadi r510 #23". Considering that the load command only requires 2 operands, the fourth or last operand is simply ignored.
 
 # RMD
 RMD(Remixed Micro Devices) is a makeshift company that I have created to represent a 'pretend' manufacturer of the computer
@@ -57,7 +139,7 @@ RMD manufactures hybrid or technology that is soley limited to my imagination bu
 
         Products
           - Random Access Memory Chips
-          - Microprocessors(CPU's)
+          - Microprocessors
           - Disk Image Hardrives
     
 # SRAM

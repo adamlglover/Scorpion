@@ -59,9 +59,12 @@ Advanced Technologies                                |      |
 Hyper Threading Technology                           | no
 [Safe Guard Technology](#safe-guard-technology)      | no
 [Security Key](#security-key)                        | no
-[Data Shift Technology](#number-shift-technology)    | no   |
+[Data Shift Technology](#data-shift-technology)      | no   |
+
+
 
 All information provided is subject to change at any time, without notice. Information provided is presented "as-is" and performance levels are but not limited to the raspberry pi model B+.
+
 --------------------------------------------------------------------
 
 # DM3 100(Standard)
@@ -87,7 +90,10 @@ Below is a chart explaining the specs of the chip.
 | Max Size                                          | 4mb  |
 | [R\C ratio](#number-of-cells)                     | 1mb  |
 
+
+
 All information provided is subject to change at any time, without notice. Information provided is presented "as-is" and performance levels are but not limited to the raspberry pi model B+.
+
 --------------------------------------------------------------------
 
 

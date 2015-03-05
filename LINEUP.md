@@ -62,7 +62,7 @@ Hyper Threading Technology                           | no
 [Data Shift Technology](#data-shift-technology)      | no   |
 
 ###### Special Registers
-The cjhart below holds all the special registers that reside inside the CPU.
+The chart below holds all the special registers that reside inside the CPU.
 
 Name   | Parameters | Description
 ------ | ---------- | -----------
@@ -92,6 +92,7 @@ Below is a chart explaining the specs of the chip .
 
 | Essentials                                        |      |
 | ------------------------------------------------- | :--- |
+| Production Date                                   | 3-15 |
 | [# of Cells](#number-of-cells)                    | 1    |
 | [Max Program Size](#program-size)                 | 30mb |
 
@@ -105,6 +106,7 @@ Below is a chart explaining the specs of the chip.
 
 | Essentials                                        |      |
 | ------------------------------------------------- | :--- |
+| Production Date         | 3-15       |
 | [# of Cells](#number-of-cells)                    | 4    |
 | Max Size                                          | 4mb  |
 | [R\C ratio](#number-of-cells)                     | 1mb  |
@@ -115,6 +117,32 @@ All information provided is subject to change at any time, without notice. Infor
 
 --------------------------------------------------------------------
 
+###### Lx Series
+
+# Lx 2000
+The Lx Series 2000 is a virturalized hardrive manufactured bt RMD that provides the skelliton of the hardware. i.e. it dosent actually do much. The virtural hardrive can mount and unmount a disk image as well as be powered on and off. Below is a chart of the propertios as well as instruction codes to talk to the virtrual hardrive.
+
+| Essentials                                        |       |
+| ------------------------------------------------- | :---- |
+| Production Date                                   | 3-15  |
+| Max Img size                                      | 64 gb |
+
+
+| Instruction Code        |  sdx value | Description                                     |
+| ----------------------- | :--------- | :---------------------------------------------- |
+| boot                    | 0          | Boot the Virtural hardrive(It is not booted automatically because of overall execution time concerns)
+| vhalt                   | 1          | Power down the Virtural Hardrive
+| lr                      | 2          | Load data into a special memory location on the hardrive(usually which disk Img to search for)
+| find                    | 3          | Search for specified disk image
+| limg                    | 4          | Load the image to the drive
+| dstatus(disk status)    | 5          | Send the current disk status to the current accessed port(used when mounting an image)                 
+| hstatus(hardrive status) | 6         | Send the current disk status to the current accessed port
+| log                      | 7         | Send either hstatus or dstatus to the log
+| dump                     | 8         | Unmount the image and ep memory in hardrive
+
+All information provided is subject to change at any time, without notice. Information provided is presented "as-is" and performance levels are but not limited to the raspberry pi model B+.
+
+--------------------------------------------------------------------
 
 All information below pertains to the information provided above to clear any mis-conceptions.
 --------------------------------------------------------------------
@@ -128,7 +156,7 @@ Data Shift Technology allows for shifting a data value to the left or right a ce
 This represents the total ammount of machine instructions that the VM can take to execute. Each instruction is represented as 1 byte. A board with 30mb of SRam can execute a program with a total of 30000000 instructions.
 
 # Number of Cells
-The Ram chips designed by RMD are designed to have multiple cells with each cell pertating to a specified use. A cell is computer chip that rests on the Ram chip  and holds a certain ammount of data( in mb). The more cells the ram chip holds, the slower the ram and the R\C(Ram per Cell) rate drops. For instance the very first Ram chip designed by RMD had 4 cells with a total memory of 4mb. The R\C rate is calculated by this formula ( R\C = T/C ). Where T represents the total ammount of Ram and C represents the total ammount of cells on the chip.
+The Ram chips designed by RMD are designed to have multiple cells with each cell pertating to a specified use. A cell is computer chip that rests on the Ram chip  and holds a certain ammount of data( in mb). The more cells the ram chip holds, the slower the ram and the R\C(Ram per Cell) ratio drops. For instance the very first Ram chip designed by RMD had 4 cells with a total memory of 4mb. The R\C ratio is calculated by this formula ( R\C = T/C ). Where T represents the total ammount of Ram and C represents the total ammount of cells on the chip.
 
 # Security Key
 Security Key consists of a digital random number generator that creates truly random numbers to strengthen encryption algorithms.

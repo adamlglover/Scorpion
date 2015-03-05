@@ -1,4 +1,4 @@
-This file contails the full lineup of the the entire compuster system 'Scorpion Virtural Machine'
+This file contails the full lineup of the the entire computer system 'Scorpion Virtural Machine'
 
 Note: All parts of computer and or components are a combination of fictonal and real concepts. Information, namea, etc. are all made up by the developer of the system and do not truly exist only for the sole purpose to be used as a reference point. 
 
@@ -27,7 +27,24 @@ X-1 Series
 # RMD 8208
 The X-1 Series RMD 8208 CPU features all the nessicary instructions needed for data manipulation and arithmatic proccessing. Below is a chart explaining the specs of the CPU .
 
-...
+Essentials 
+--------- | ---------
+Production Date  | 3.4.15
+Processor Number | 8208
+Cache            | none
+Instruction Set  | 64-bit
+
+Performance 
+--------- | ---------
+# of Cores            | 1
+# of Threads          | 1
+Processor Frequency   | .030Mhz
+Max Frequency         | .033Mhz
+
+Advanced Technologies
+--------- | ---------
+Hyper Threading Technology | no
+Safe Guard Technology      | yes
 
 --------------------------------------------------------------------
 

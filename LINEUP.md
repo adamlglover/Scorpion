@@ -36,7 +36,7 @@ This computer is the first of its kind developed by RMD. It features a full set 
 ##### X-1 Series
 
 # RMD 8208
-The X-1 Series RMD 8208 CPU features all the nessicary instructions needed for data manipulation and arithmatic proccessing. Below is a chart explaining the specs of the CPU .
+The X-1 Series RMD 8208 CPU features all the nessicary instructions needed for data manipulation and arithmetic proccessing. Below is a chart explaining the specs of the CPU .
 
 | Essentials              |            | 
 | ----------------------- | :--------- |
@@ -61,6 +61,25 @@ Hyper Threading Technology                           | no
 [Security Key](#security-key)                        | no
 [Data Shift Technology](#data-shift-technology)      | no   |
 
+###### Special Registers
+The cjhart below holds all the special registers that reside inside the CPU.
+
+Name   | Parameters | Description
+------ | ---------- | -----------
+eax    | [int,int]  | This is a special register used only for quick math arithmetic. The two values passed to this register will be evaluated directly and stored inside the register.
+tmp    |   [int]    | This is a junk register that is used to temporarily hold irrelivant data(used by system)
+ip     |   [int]    | (instruction pointer)Tells the cpu where in the program to execute the next instruction
+ebx    |   [int]    | The program's potential exit code
+sdx    |   [int]    | Data to be used in a system call
+sfc    |   [int]    | Special code to determine the format of a system call i.e.(you may format a int to be a boolean)
+scx    |   [int]    | System command
+bp     |   [int]    | The current port to be accessed
+exc    |   [int]    | Wether or not to invoke a system exit call
+ps     |   [int]    | The current port status
+lg     |   [int]    | Wether or not logging is on
+lsl    |   [int]    | The current log stack lvl(verbose,debug,assert,etc.)
+i1     |   [int]    | Param 1 for I/O
+i2     |   [int]    | Param 2 for I/O
 
 
 All information provided is subject to change at any time, without notice. Information provided is presented "as-is" and performance levels are but not limited to the raspberry pi model B+.
@@ -97,7 +116,7 @@ All information provided is subject to change at any time, without notice. Infor
 --------------------------------------------------------------------
 
 
-All information below pertains to all the information provided above to clear any mis conceptions.
+All information below pertains to the information provided above to clear any mis-conceptions.
 --------------------------------------------------------------------
 
 --------------------------------------------------------------------
@@ -155,9 +174,12 @@ SRam(Secondary Ram) represents a piece of crucal memory on the computer that is 
 This componennt will also be the largest component(in terms of actual physical memory) in the system considering it will be controlling the computer.
 
 
+# RMDv1
+RMDv1 Architexture features 62 opcodes w/ all the nessicary commands for data manipulation and simple math arithmetic. This architecture is not based on any previous or current architecture. Below is a list of all opcodes.
+
 Opcode |Arguments | Description
 ------ | -------- | -----------
-halt   | bool     | Halts the vm. 'bool' wether or not to reboot the vm and empty all data in registers and reloads the program back onto the cpu.
+halt   |          | Halts the vm.
 rhalt  |          | Resets the cpu
 chalt  |          | Halts the cpu
 loadi  | r# value | Load an integer to the specified register
@@ -221,33 +243,3 @@ wloop    | r# r#      | While loop(while the data in the first reg is == 1 loop)
 endwl    | r# r#      | Either pass or loop through again(while the data in the first reg is == 1 loop)
 port     | r# (i)     | Read/Write data from the current accessed port(if read the data will be stored inside the specified register)
 nac      |            | Not a command(basically do nothing)
-
-
-
-
-
-
-
-
-
-
-# Registers
-More registers will be added, the present registers are not final 
-
-Name   | Parameters | Description
------- | ---------- | -----------
-r0-r10,028 |  any       | The basic registers from 0 to 10,028 that can hold any type of data
-eax    | [int,int]  | This is a special register used only for quick math arithmetic. The two values passed to this register will be evaluated directly and stored inside the register.
-tmp    |  any       | This is a register that is used to temporarily hold irrelivant data
-ip     |   [int]    | (instruction pointer)Tells the cpu where in the program to execute the next instruction
-ebx    |   [int]    | The program's potential exit code
-sdx    |   [int]    | Data to be used in a system call
-sfc    |   [int]    | Special code to determine the format of a system call i.e.(you may format a int to be a boolean)
-scx    |   [int]    | System command
-bp     |   [int]    | The current port to be accessed
-exc    |   [int]    | Wether or not to invoke a system exit call
-ps     |   [int]    | The current port status
-lg     |   [int]    | Wether or not logging is on
-lsl    |   [int]    | The current log stack lvl(verbose,debug,assert,etc.)
-i1     |   [int]    | Param 1 for I/O
-i2     |   [int]    | Param 2 for I/O

@@ -185,7 +185,7 @@ IFT simply describes the ammount of instructions the CPU takes in as input to pe
                 10010.111111110.10111.0
                 loadi r510 #23
        
-When the CPU access the SRam, it requests the next 4 instructions to be executed and handled accordingly. In the example above we see a CPU with an IFT of 4. Those fout instructions can be interpreted as "loadi r510 #23". Considering that the load command only requires 2 operands, the fourth or last operand is simply ignored.
+When the CPU access the SRam, it requests the next 4 instructions to be executed and handled accordingly. In the example above we see a CPU with an IFT of 4. Those four instructions can be interpreted as "loadi r510 #23". Considering that the loadi command only requires 2 operands, the fourth or last operand is simply ignored.
 
 # RMD
 RMD(Remixed Micro Devices) is a makeshift company that I have created to represent a 'pretend' manufacturer of the computer

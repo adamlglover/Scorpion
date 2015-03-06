@@ -107,8 +107,8 @@ Below is a chart explaining the specs of the chip.
 | Essentials                                        |      |
 | ------------------------------------------------- | :--- |
 | Production Date         | 3-15       |
-| [# of Cells](#number-of-cells)                    | 4    |
-| Max Size                                          | 4mb  |
+| [# of Cells](#number-of-cells)                    | 5    |
+| Max Size                                          | 5mb  |
 | [R\C ratio](#number-of-cells)                     | 1mb  |
 
 
@@ -156,7 +156,7 @@ Data Shift Technology allows for shifting a data value to the left or right a ce
 This represents the total ammount of machine instructions that the VM can take to execute. Each instruction is represented as 1 byte. A board with 30mb of SRam can execute a program with a total of 30000000 instructions.
 
 # Number of Cells
-The Ram chips designed by RMD are designed to have multiple cells with each cell pertating to a specified use. A cell is computer chip that rests on the Ram chip  and holds a certain ammount of data( in mb). The more cells the ram chip holds, the slower the ram and the R\C(Ram per Cell) ratio drops. For instance the very first Ram chip designed by RMD had 4 cells with a total memory of 4mb. The R\C ratio is calculated by this formula ( R\C = T/C ). Where T represents the total ammount of Ram and C represents the total ammount of cells on the chip.
+The Ram chips designed by RMD are designed to have multiple cells with each cell pertating to a specified use. A cell is computer chip that rests on the Ram chip  and holds a certain ammount of data( in mb). The more cells the ram chip holds, the slower the ram and the R\C(Ram per Cell) ratio drops. For instance the very first Ram chip designed by RMD had 5 cells with a total memory of 5mb. The R\C ratio is calculated by this formula ( R\C = T/C ). Where T represents the total ammount of Ram and C represents the total ammount of cells on the chip.
 
 # Security Key
 Security Key consists of a digital random number generator that creates truly random numbers to strengthen encryption algorithms.

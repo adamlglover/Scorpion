@@ -93,70 +93,70 @@ void _find()
 {
    switch(DISK_IMG){
      case 1:
-       dimg = "/usr/share/svm/disks/ooua1.img";
+       dimg = "/usr/share/scorpion/disks/ooua1.img";
        if(file_exists(dimg))
         DISK_STATUS = DISK_DISCOVERED;
        else
         DISK_STATUS = DISK_NOT_FOUND;
      break;
      case 2:
-	dimg = "/usr/share/svm/disks/ooua2.img";
+	dimg = "/usr/share/scorpion/disks/ooua2.img";
        if(file_exists(dimg))
         DISK_STATUS = DISK_DISCOVERED;
        else
         DISK_STATUS = DISK_NOT_FOUND;
      break;
      case 3:
-	dimg = "/usr/share/svm/disks/ooua3.img";
+	dimg = "/usr/share/scorpion/disks/ooua3.img";
        if(file_exists(dimg))
         DISK_STATUS = DISK_DISCOVERED;
        else
         DISK_STATUS = DISK_NOT_FOUND;
      break;
      case 4:
-	dimg = "/usr/share/svm/disks/ooua4.img";
+	dimg = "/usr/share/scorpion/disks/ooua4.img";
        if(file_exists(dimg))
         DISK_STATUS = DISK_DISCOVERED;
        else
         DISK_STATUS = DISK_NOT_FOUND;
      break;
      case 5:
-	dimg = "/usr/share/svm/disks/ooua5.img";
+	dimg = "/usr/share/scorpion/disks/ooua5.img";
        if(file_exists(dimg))
         DISK_STATUS = DISK_DISCOVERED;
        else
         DISK_STATUS = DISK_NOT_FOUND;
      break;
      case 6:
-	dimg = "/usr/share/svm/disks/ooua6.img";
+	dimg = "/usr/share/scorpion/disks/ooua6.img";
        if(file_exists(dimg))
         DISK_STATUS = DISK_DISCOVERED;
        else
         DISK_STATUS = DISK_NOT_FOUND;
      break;
      case 7:
-	dimg = "/usr/share/svm/disks/ooua7.img";
+	dimg = "/usr/share/scorpion/disks/ooua7.img";
        if(file_exists(dimg))
         DISK_STATUS = DISK_DISCOVERED;
        else
         DISK_STATUS = DISK_NOT_FOUND;
      break;
      case 8:
-	dimg = "/usr/share/svm/disks/ooua8.img";
+	dimg = "/usr/share/scorpion/disks/ooua8.img";
        if(file_exists(dimg))
         DISK_STATUS = DISK_DISCOVERED;
        else
         DISK_STATUS = DISK_NOT_FOUND;
      break;
      case 9:
-	dimg = "/usr/share/svm/disks/ooua9.img";
+	dimg = "/usr/share/scorpion/disks/ooua9.img";
        if(file_exists(dimg))
         DISK_STATUS = DISK_DISCOVERED;
        else
         DISK_STATUS = DISK_NOT_FOUND;
      break;
      case 10:
-	dimg = "/usr/share/svm/disks/ooua10.img";
+	dimg = "/usr/share/scorpion/disks/ooua10.img";
        if(file_exists(dimg))
         DISK_STATUS = DISK_DISCOVERED;
        else

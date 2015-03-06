@@ -5,12 +5,10 @@
 #include <iostream>
 using namespace std;
 
-long binary_decimal(long num) /* Function to convert binary to dec */
+long binary_decimal(string num) /* Function to convert binary to dec */
 {
   long dec = 0, n = 1, exp = 0;
-  stringstream ss;
-  ss << num;
-  string bin = ss.str();
+  string bin = num;
   for(int i = bin.length() - 1; i > -1; i--)
   {
      n = pow(2,exp++);
@@ -20,8 +18,8 @@ long binary_decimal(long num) /* Function to convert binary to dec */
     return dec;
 }
 
-long decimal_binary(long n)  /* Function to convert decimal to bin */
-{
+//long decimal_binary(long n)  /* Function to convert decimal to bin */
+/*{
     long rem, i=1, binary=0;
     while (n!=0)
     {
@@ -31,19 +29,19 @@ long decimal_binary(long n)  /* Function to convert decimal to bin */
         i*=10;
     }
     return binary;
-}
+}*/
 
 
 
-long Disassemble(long dataset, bool todecimal)
+long Disassemble(string dataset, bool todecimal)
 {
-  if(todecimal)
-      return decimal_binary(dataset);
+  if(todecimal){}
+//      return decimal_binary(dataset);
   else
-      return binary_decimal(dataset);
+        return binary_decimal(dataset);
 }
 
-long Disassembler::disassemble(long data)
+long Disassembler::disassemble(string data)
 {
    return Disassemble(data, false);
 }

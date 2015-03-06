@@ -1,4 +1,5 @@
 #include "Sys/properties.h"
+#include "Ram/ram.h"
 #include <stdlib.h>
 #include <stdio.h>
 #include <iostream>
@@ -47,9 +48,10 @@ void handleargs()
      cout << "\tCPU   RAM   HardDrive   System Cache" << endl;
   }
   else if(ARG == "-fspecs"){
+      Ram rm;
      cout << "Scorpion(TM) Full Virturalized System Specs\n\n";
      cout << "CPU\nx86 Arm CPU\ncore 1\nProgram instruction set 4(the amount of instructions read as 1)\n62 Opcodes(instructions)\n" << endl;
-     cout << "Ram\n6mb of total Ram\n1.2mb of accessable Ram\n14 dedicated memory locations(special registers)\n" << endl;
+     cout << "Ram\n" << rm.info(1) << "mb of total Ram\n" << rm.info(0) <<  "mb of accessable Ram\n14 dedicated memory locations(special registers)\n" << endl;
      cout << "Hardrive\nDisk img reader\nMax 64gb disk img size\n" << endl;
      cout << "System Cache\n30mb of total possible program size\nis inversly porportional to the Ram size\n" << endl;
      cout << "STD Out(standard out)\nsupported formats :\n  decimal\n  bool\n  char\n  system stat(any status code defined by the vm)\nno current supported console input\n" << endl;

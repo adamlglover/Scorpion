@@ -1,9 +1,10 @@
 #include <string>
 #include <stdlib.h>
 #include "program.h"
-#include "cache.h"
+#include "sram.h"
 #include "rules.h"
 #include "CPU/cpu.h"
+#include "CPU/core0/core0.h"
 #include <stdio.h>
 using namespace std;
 
@@ -24,7 +25,7 @@ void Program::Run()
 {
   CPU cpu;
  if(runnable)
-     cpu.run();
+     cpu.Run();
  runnable = false;
 }
 
@@ -40,7 +41,7 @@ void p_exit()
 
 void Program::Main() // entry point of application
 {
-  Cache Mem;
+  SRam Mem;
   Mem.wipe();
   Mem.load(PROG);
   Program Application;

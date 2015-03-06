@@ -1,5 +1,5 @@
 #include "console.h"
-#include "../cache.h"
+#include "../sram.h"
 #include "../Bus/bus.h"
 #include <iostream>
 #include <string>
@@ -39,7 +39,7 @@ int Console::Write(int addr, long *input)
              return STATUS_OPEN;
            }
            else if(input[3] == 2){ // size
-             Cache c;
+             SRam c;
              cout << c.size() << endl;
              return STATUS_OPEN;
            } // char

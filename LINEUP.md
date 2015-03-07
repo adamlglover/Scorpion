@@ -30,8 +30,12 @@ This computer is the first of its kind developed by RMD. It features a full set 
   * RAM: [DM3 101](#dm3-101)
   * SRam: [DM3 100(standard)](#dm3-100)
   * Additional Hardware: [Lx 2000](#lx-2000) 
+
+
   
 This computer has no type checking, no real rules, its open season and will do EXACTLY as you tell it. However ther are some small possible error and warning messages, but are very uncommon.
+
+
 ---------------------------------------------------------------------
 
 ##### X-1 Series

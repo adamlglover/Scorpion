@@ -115,9 +115,10 @@ Below is a chart explaining the specs of the chip.
 | [# of Cells](#number-of-cells)                    | 5    |
 | Max Size                                          | 5mb  |
 | [R\C ratio](#number-of-cells)                     | 1mb  |
+| Data Allocation                                   | no   |
 
 
-
+Data Allocation(coming soon) prevents data collision of any external programs running on the VM and allows each program or embedded API to run smoothly.
 All information provided is subject to change at any time, without notice. Information provided is presented "as-is" and performance levels are but not limited to the raspberry pi model B+.
 
 --------------------------------------------------------------------

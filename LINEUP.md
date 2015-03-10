@@ -56,8 +56,8 @@ Performance           |        |
 --------------------- | :----- |
 # of Cores            | 1
 # of Threads          | 1
-Processor Frequency   | .030Mhz
-Max Frequency         | .033Mhz
+Processor Frequency   | .133Mhz
+Max Frequency         | .138Mhz
 
 Advanced Technologies                                |      |
 ---------------------------------------------------- | :--- |

@@ -20,6 +20,7 @@
 #include "sram.h"
 #include "var.h"
 #include "CPU/core0/core0.h"
+#include "CPU/core0/runtime_exception.h"
 #include <math.h>
 #include <stdio.h>
 #include <cstdlib>
@@ -35,6 +36,12 @@ long SIZE = 0;
 int SRam::DONE = 4820;
 int SRam::RUNNING = 5038;
 int SRam::UNKNOWN = -20482;
+int SRam::CB = 0;
+
+int sr_state;
+long sr_addr = 0;
+extern int INDEX_OUT_OF_RANGE;
+extern int INDEX_OK;
 
 void SRam::wipe()
 {
@@ -58,15 +65,76 @@ int SRam::status(long instrptr)
     return SRam::UNKNOWN;
 }
 
-void nextinstr(string instr) /* load the next instruction to the secondary ram*/
-{ 
-   SRam m;
-//  cout << "next instr "<< icount + 1 << " I$ " << instr << endl;
-  if(!(SIZE > MAX_SIZE)){
-        program[ SIZE++ ] = instr;  // assign the next instr
+void SRam::s_e(int value)
+{
+  SRam::CB = value;
+}
+
+int SRam::addr(long index)
+{
+  if(index < 0 || index > MAX_SIZE){
+         sr_state = INDEX_OUT_OF_RANGE;
+     return INDEX_OUT_OF_RANGE;
+  }
+  else
+     sr_addr = index;
+  sr_state = INDEX_OK;
+  return INDEX_OK;
+}
+
+string SRam::modify(string data)
+{
+ if( sr_state == INDEX_OK ){
+   switch( SRam::CB )
+   {
+      case 1: //set
+        program[ sr_addr ] = data;
+      break;
+      case 2://enable
+        if(sr_addr < 0 || sr_addr > SIZE)
+        {
+            stringstream ss;
+            ss << sr_addr;
+            RuntimeException re;
+            re.introduce("SRamProgramOutOfRangeException", "cannot access program at index [" + ss.str() + "]");
+        }
+        return program[ sr_addr ];
+      break;
+      default:
+      // err
+       RuntimeException re;
+           re.introduce("SRamControlBusException","cannot access cell, invalid control bus input");
+      break;
+   }
+  }
+   else if(sr_state == INDEX_OUT_OF_RANGE) {
+     stringstream ss;
+     ss << sr_addr;
+     RuntimeException re;
+     re.introduce("SRamIndexOutOfRangeException","faliure to acccess ram at address #" + ss.str());
   }
   else {
-   printf("SRam: program_size_overload err \nsize > %d(%08x) --size[%d] bytes\n", MAX_SIZE, MAX_SIZE, m.size());
+    RuntimeException re;
+     re.introduce("SRamStateUnknownException","failure to get current ram state");
+  }
+  sr_state = 0; // dump addr state
+  SRam::CB = 0; // dump the control bus
+  sr_addr = 0; // dump address
+  return "";  
+}
+
+void nextinstr(string instr) /* load the next instruction to the secondary ram*/
+{ 
+   SRam sr;
+//  cout << "next instr "<< icount + 1 << " I$ " << instr << endl;
+  if(!(SIZE > MAX_SIZE)){
+        sr.s_e(1);
+        sr.addr(SIZE++);
+        sr.modify(instr);
+       // program[ SIZE++ ] = instr;   assign the next instr
+  }
+  else {
+   printf("SRam: program_size_overload err \nsize > %d(%08x) \n      --size[%d] bytes\n", MAX_SIZE, MAX_SIZE, sr.size());
     cout << "Shutting down...\n";
     EBX = null;
     p_exit();
@@ -98,13 +166,3 @@ void SRam::load(string content)
     	Applet.Runnable(true);
 }
 
-string SRam::prog(long index)
-{
-   if(index < 0 || index > SIZE)
-   {
-     cout << "SRam: program_out_of_range error" << endl;
-     EBX = null;
-     p_exit();
-   }
-   return program[ index ];
-}

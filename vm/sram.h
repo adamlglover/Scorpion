@@ -8,11 +8,14 @@ using namespace std;
           public:
              void wipe();
              long size();
-             string prog(long);
+             void s_e(int);
+             int addr(long index);
+             string modify(string);
 	     void load(string);
              static int DONE;
              static int RUNNING;
 	     static int UNKNOWN;
+             static int CB;
              int status(long);
 
    };

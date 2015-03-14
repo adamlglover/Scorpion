@@ -4,8 +4,10 @@
 class Ram {
      public:
        static long CB;
+       static short CS;
        int addr(long);
-       double data(int,double);
+       int cell(short);
+       double data(double);
        long info(int);
 
 };

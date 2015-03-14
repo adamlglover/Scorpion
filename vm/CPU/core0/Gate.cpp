@@ -5,6 +5,7 @@
 #include "lu.h"
 #include "datatrans.h"
 #include "io.h"
+#include "runtime_exception.h"
 #include "../../program.h"
 #include "../../Ports/ports.h"
 #include <sstream>
@@ -409,10 +410,9 @@ int Gate::route(long instr, long r1,long r2, long r3)
          Log lg;
          cout << "Segmentation Fault" << endl;
          stringstream ss;
-         ss << "cpu logic err: unknown command at {IP:" << _cpu.GetVirturalAddress() << "}. Shutting Down System...";
-         lg.v("System", ss.str());
-         EBX = 1;
-         p_exit();
+         ss << "unknown command at {IP:" << _cpu.GetVirturalAddress() << "}. Shutting Down System...";
+         RuntimeException re;
+         re.introduce("CPULogicException", ss.str());
         break;
    }
    return 0;

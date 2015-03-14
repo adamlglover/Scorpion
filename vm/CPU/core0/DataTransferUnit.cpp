@@ -1,6 +1,8 @@
 #include "core0.h"
+#include "runtime_exception.h"
 #include "../../System.h"
 #include "../../Bus/bus.h"
+#include "../../program.h"
 #include "../../var.h"
 #include "io.h"
 #include "../../Log/filter.h"
@@ -198,8 +200,8 @@ void _init(long *pkg)
        default:
        stringstream ss;
        ss << pkg[0];
-       Log ll;
-       ll.v("System","System call failure: code is not a system call *^" + ss.str());
+       RuntimeException re;
+       re.introduce("IllegalSystemCallExcpetion", "code is not a system call [" + ss.str() + "]");
        break;
 
      }
@@ -392,9 +394,9 @@ void endwl(long *pkg)
 
 void rloop(long *pkg)
 {
-         C.setr(0, pkg[0], LP);
+         C.setr(1, pkg[0], LP);
          C.setr(0, pkg[0], IP);
-         C.setr(0, pkg[0], C.getr(0, pkg[2]));
+         C.setr(0, pkg[1], C.getr(0, pkg[2]));
          waiting = true;
 }
 

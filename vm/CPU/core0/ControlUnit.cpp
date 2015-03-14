@@ -31,6 +31,7 @@
 #include "../../Ports/ports.h"
 #include "../../System.h"
 #include "../../sram.h"
+#include "runtime_exception.h"
 #include "../../Log/filter.h"
 #include "../../x86Disasm/disassembler.h"
 #include "../../Log/Log.h"
@@ -39,7 +40,7 @@ using namespace std;
 
 long EAX, TMP, IP, EBX, SDX, SFC, SCX, BP, EXC, PS, LG, LSL, I1, I2;
 
-//clock_t tStart;
+clock_t tStart;
 bool _0Halted;
 bool pass = false;
 bool scmnd = false;
@@ -116,34 +117,25 @@ void C0::Halt()
   SCX = 0;
 }
 
-string *ProcessedOperands()
-{
-   SRam m;
-   string *operands;
-   operands = new string [ m.size() ];
-  for(int i = 0; i < m.size(); i++)
-        operands[ i ] = m.prog(i);
-
-   return operands;
-}
-
 /* Methods used to easily talk to the ram */
-double C0::getr(long cell, long _addr)
+double C0::getr(short cell_switch, long _addr)
 {
   Ram ram;
   ram.CB = 2; // E
   ram.addr(_addr);
+  ram.cell(cell_switch);
 
-  return ram.data(cell,0.0); // get data from ram
+  return ram.data(0.0); // get data from ram
 }
 
-void C0::setr(int cell, long _addr, double data)
+void C0::setr(short cell_switch, long _addr, double data)
 {
   Ram ram;
   ram.CB = 1; // S
   ram.addr(_addr);
+  ram.cell(cell_switch);
 
-  ram.data(cell,data); // set data to ram
+  ram.data(data); // set data to ram
 }
 
 
@@ -176,6 +168,15 @@ int ProcessOperands()
    return gate.route(instruction, reg1, reg2, reg3);
 }
 
+string prog(int set_enable, long index, string data)
+{
+        SRam sr;
+        sr.s_e(set_enable);
+        sr.addr(index);
+
+        return sr.modify(data);
+}
+
 int memstat;
 int fetch()
 {
@@ -184,14 +185,18 @@ int fetch()
    SRam sram;
    memstat = sram.status(IP);
    if(memstat == SRam::DONE){
-  //        printf("Time taken: %.2fs\n", (double)(clock() - tStart)/CLOCKS_PER_SEC);
+          printf("Time taken: %.3fs\n", (double)(clock() - tStart)/CLOCKS_PER_SEC);
           p_exit();
-  }
+   }
+   else if(memstat == SRam::RUNNING){
+      i1          = prog(2, IP++, "");
+      i2          = prog(2, IP++, "");
+      i3          = prog(2, IP++, "");
+      i4          = prog(2, IP++, "");
+   }
    else {
-      i1          = sram.prog(IP++);
-      i2          = sram.prog(IP++);
-      i3          = sram.prog(IP++);
-      i4          = sram.prog(IP++);
+    RuntimeException re;
+    re.introduce("ProgramStateUndetectableException","hardware faliure: cannot determine the current state of the program");
    }
 
    return sram.status(IP);
@@ -218,7 +223,7 @@ int execute()
 
 void C0::run0()
 { 
- //tStart = clock();
+ tStart = clock();
  while(System::Running){
        fetch();
        decode();

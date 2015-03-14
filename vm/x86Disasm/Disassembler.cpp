@@ -1,6 +1,7 @@
 #include "disassembler.h" 
 #include <sstream> 
 #include <string> 
+#include "../CPU/core0/runtime_exception.h"
 #include <math.h> 
 #include <iostream>
 using namespace std;
@@ -9,11 +10,19 @@ long binary_decimal(string num) /* Function to convert binary to dec */
 {
   long dec = 0, n = 1, exp = 0;
   string bin = num;
-  for(int i = bin.length() - 1; i > -1; i--)
-  {
-     n = pow(2,exp++);
-      if(bin.at(i) == '1')
-         dec += n;
+  if(bin.length() > 32){
+    stringstream ss;
+    ss << bin.length();
+    RuntimeException re;
+    re.introduce("BinarySizeOverloadException","max allowable binary instruction is 32 bits size[" + ss.str() + "]");
+  }
+  else {
+     for(int i = bin.length() - 1; i > -1; i--)
+     {
+          n = pow(2,exp++);
+          if(bin.at(i) == '1')
+            dec += n;
+     }
   }
     return dec;
 }

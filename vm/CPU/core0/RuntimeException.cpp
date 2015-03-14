@@ -17,8 +17,8 @@ void create_stack(string excpn, string msg)
 {
   stringstream ss;
   ss << IP;
-  string exitmsg = "Excetion caused by:" + excpn + ": " + msg + "\n" +
-                   "Instruction pointer {" + ss.str() + "}\n";
+  string exitmsg = "Virtural Machine RuntimeException: caused by " + excpn + ":\n    " + msg + "\n" +
+                   "    Program Position {" + ss.str() + "}\n";
   cout << exitmsg;
   EBX = 1;
   p_exit();

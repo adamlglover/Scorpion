@@ -15,27 +15,30 @@
 */
 
 #include "../CPU/core0/core0.h"
+#include "../CPU/core0/runtime_exception.h"
 #include "../program.h"
 #include "ram.h"
 #include <iostream>
+#include <sstream>
 using namespace std;
 
 #define MAX 1000000 /* 1mb of R\c(ram per cell)*/
-#define NUM_CELLS 4
+#define NUM_CELLS 5
 double ram[ MAX ]; // cell 0
 double fram[ MAX ]; // cell 1
 double lram[ MAX ];// cell 2
 double xram[ MAX ];// cell 3
 double lfram[ MAX ];// cell 4
 
-int INDEX_OUT_OF_RANGE = 0x0025;
-int INDEX_OK = 0x0026;
+extern int INDEX_OUT_OF_RANGE;
+extern int INDEX_OK;
 int rsize;
 
    int state;
 
 long Ram::CB = 0;
-long address = 0; 
+short Ram::CS = 0;
+long address = 0;
 int Ram::addr(long index)
 {
   if(index < 0 || index > MAX){
@@ -48,10 +51,22 @@ int Ram::addr(long index)
   return INDEX_OK;
 }
 
-double Ram::data(int cell ,double dataBus)
+int Ram::cell(short index)
+{
+   if(index < 0 || index > NUM_CELLS){
+         state = INDEX_OUT_OF_RANGE;
+     return INDEX_OUT_OF_RANGE;
+  }
+  else
+     CS = index;
+  state = INDEX_OK;
+  return INDEX_OK;
+}
+
+double Ram::data(double dataBus)
 {
   if( state == INDEX_OK ){
-   if(cell == 0) {
+   if(Ram::CS == 0) {
       switch( Ram::CB ) {
          case 1: // S
         //   cout << "Saving " << dataBus<< "to ram CB " << Ram::CB << " address " << address << endl;
@@ -62,14 +77,13 @@ double Ram::data(int cell ,double dataBus)
            return ram[ address ];
          break;
          default:
-           cout << "Ram: control_bus_failure err" << endl;
-           EBX = 1;
-           p_exit();
+           RuntimeException re;
+           re.introduce("RamControlBusException","cannot access cell, invalid control bus input");
          break;
 
       }
    }
-   else if(cell == 1){
+   else if(Ram::CS == 1){
       switch( Ram::CB ) {
          case 1: // S
            fram[ address ] = dataBus;
@@ -78,14 +92,13 @@ double Ram::data(int cell ,double dataBus)
            return fram[ address ];
          break;
          default:
-           cout << "Ram: control_bus_failure err" << endl;
-           EBX = 1;
-           p_exit();
+           RuntimeException re;
+           re.introduce("RamControlBusException","cannot access cell, invalid control bus input");
          break;
 
       }
    }
-   else if(cell == 2){
+   else if(Ram::CS == 2){
       switch( Ram::CB ) {
          case 1: // S
            lram[ address ] = dataBus;
@@ -94,14 +107,13 @@ double Ram::data(int cell ,double dataBus)
            return lram[ address ];
          break;
          default:
-           cout << "Ram: control_bus_failure err" << endl;
-           EBX = 1;
-           p_exit();
+          RuntimeException re;
+           re.introduce("RamControlBusException","cannot access cell, invalid control bus input");
          break;
 
       }
    }
-   else if(cell == 3){
+   else if(Ram::CS == 3){
       switch( Ram::CB ) {
          case 1: // S
            xram[ address ] = dataBus;
@@ -110,14 +122,13 @@ double Ram::data(int cell ,double dataBus)
            return xram[ address ];
          break;
          default:
-           cout << "Ram: control_bus_failure err" << endl;
-           EBX = 1;
-           p_exit();
+           RuntimeException re;
+           re.introduce("RamControlBusException","cannot access cell, invalid control bus input");
          break;
 
       }
    }
-    else if(cell == 4){
+    else if(Ram::CS == 4){
       switch( Ram::CB ) {
          case 1: // S
            lfram[ address ] = dataBus;
@@ -126,9 +137,8 @@ double Ram::data(int cell ,double dataBus)
            return lfram[ address ];
          break;
          default:
-           cout << "Ram: control_bus_failure err" << endl;
-           EBX = 1;
-           p_exit();
+           RuntimeException re;
+           re.introduce("RamControlBusException","cannot access cell, invalid control bus input");
          break;
 
       }
@@ -144,20 +154,22 @@ double Ram::data(int cell ,double dataBus)
            return ram[ address ];
          break;
          default:
-           cout << "Ram: control_bus_failure err" << endl;
-           EBX = 1;
-           p_exit();
+           RuntimeException re;
+           re.introduce("RamControlBusException","cannot access cell, invalid control bus input");
          break;
       }
    }
   }
   else if(state == INDEX_OUT_OF_RANGE) {
-     cout << "Ram: index_out_of_range err" << endl;
-     EBX = 1;
-     p_exit();
+     stringstream ss;
+     ss << address;
+     RuntimeException re;
+     re.introduce("RamIndexOutOfRangeException","faliure to acccess ram at address #" + ss.str());
   }
-  else 
-    cout << "Ram: state_not_known err" << endl;
+  else {
+    RuntimeException re;
+     re.introduce("RamStateUnknownException","failure to get current ram state");
+  }
   state = 0; // dump addr state
   Ram::CB = 0; // dump the control bus
   address = 0; // dump address

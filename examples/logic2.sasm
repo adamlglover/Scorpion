@@ -1,0 +1,38 @@
+; Beginning of program
+reg 0 input1
+reg 1 input2
+reg 2 _led
+reg 3 _circut
+reg 20 result
+
+%func _led
+%func _circut
+
+loadi input1 1
+loadi input2 1
+
+push _led           ; Simulate the led being the console
+  rmov  sdx  result            ; store the result in sdx reg
+  mov   bp   50            ; access port 50 on the stdout
+  mov   sfc  1             ; tell the stdout to format the result as a bool
+  mov   scx  0             ; tell the stdout not to perform a command
+  init  0
+return _led
+
+push _circut
+  and r10 input1,input2
+  not input1
+  nand r11 input1,input2
+  not input1
+  or r12 input1,input2
+  
+  or r13 r10,r11
+  not input2
+  nand r16 r12,input2
+  and result r16,r13
+  call _led
+return _circut
+
+call _circut
+
+halt

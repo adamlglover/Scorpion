@@ -84,7 +84,7 @@ int main( int argc, const char **file )
   if(OK(argc, file))
       Start();
   else
-     cout << "scorpion: fatal err occured!...check '/usr/share/svm/log.txt' for error and system information\nuse -help for a list of options." << endl;
+     cout << "scorpion: fatal err occured!...check '/usr/share/scorpion/log.txt' for error and system information\nuse -help for a list of options." << endl;
 
     return 0;
 }

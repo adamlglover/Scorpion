@@ -286,7 +286,7 @@ rflush   |            | flush(clear) all ram addresses
 print    | strlength "txt"   | print text to the console(strlength must match string length) 
 rand_1   | r# max     | (Random # generator 1[simple])generate a random number from 0 to max and store value in ram address specified 
 rand_2   |  r# offset max     | (Random # generator 2[most complex])generate a random number from 0 to max and store value in ram address specified. Offset will offset the value of the random number to generate a more random result
-rand_3   |  r# max     | (Random # generator 3[semi cmoplex])generate a random number from 0 to max and store value in ram address specified 
+rand_3   |  r# max     | (Random # generator 3[semi complex])generate a random number from 0 to max and store value in ram address specified 
 rrand_1  |  r# r#(max)     | (Register Random # generator 1)generate a random number from 0 to r#{max}(value is retrieved from ran address specified) store value in ram address specified 
 rrand_2  |   r# r#(offset) r#(max)     | (Register Random # generator 2)generate a random number from 0 to r#{max}(value is retrieved from ran address specified) and store value in ram address specified. Offset{r#} will offset the value of the random number to generate a more random result
 rrand_3  |   r# r#(max)     | (Register Random # generator 3)generate a random number from 0 to r#{max}(value is retrieved from ran address specified) store value in ram address specified

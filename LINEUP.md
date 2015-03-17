@@ -209,7 +209,7 @@ This componennt will also be the largest component(in terms of actual physical m
 
 
 # RMDv1
-RMDv1 Architexture features 76 opcodes w/ all the nessicary commands for data manipulation and simple math arithmetic. This architecture is not based on any previous or current architecture. Below is a list of all opcodes.
+RMDv1 Architexture features 60+ opcodes w/ all the nessicary commands for data manipulation and simple math arithmetic. This architecture is not based on any previous or current architecture. Below is a list of all opcodes.
 
 Opcode |Arguments | Description
 ------ | -------- | -----------

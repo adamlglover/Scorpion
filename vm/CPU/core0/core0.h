@@ -6,8 +6,19 @@ extern bool _0Halted;
 extern bool scmnd;
 extern bool pass;
 extern long EAX,TMP,IP, EBX, SDX, SFC, SCX, BP, EXC, PS, LG, LSL, I1, I2;
+extern double *id;
+
+struct clock_s {
+   long ticks;
+   int nanos;
+   short sec;
+   short min;
+   int hrs;
+} ;
+extern clock_s t_clock;
 extern bool ignore;
 extern bool if_ignore;
+extern string prog(int set_enable, long index, string data);
 extern bool waiting;
    class C0 {
       public:

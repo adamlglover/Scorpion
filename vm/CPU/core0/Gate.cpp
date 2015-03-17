@@ -406,13 +406,100 @@ int Gate::route(long instr, long r1,long r2, long r3)
        if(scmnd && (!ignore))
         cout << "nac" << endl;
        break;
+       case 63:
+       if(!ignore)
+           sr(pkg);
+       if(scmnd && (!ignore))
+        cout << "sr" << endl;
+        break;
+       case 64:
+       if(!ignore)
+           sl(pkg);
+       if(scmnd && (!ignore))
+        cout << "sl" << endl;
+        break;
+        case 65:
+       if(!ignore)
+           r_mv(pkg);
+       if(scmnd && (!ignore))
+        cout << "r_mv" << endl;
+        break;
+        case 66:
+       if(!ignore)
+           cpuid();
+       if(scmnd && (!ignore))
+        cout << "cpuid" << endl;
+        break;
+        case 67:
+       if(!ignore)
+           rdtsc();
+       if(scmnd && (!ignore))
+        cout << "rdtsc" << endl;
+        break;
+        case 68:
+       if(!ignore)
+           rflush();
+       if(scmnd && (!ignore))
+        cout << "rflush" << endl;
+        break;
+       case 69:
+       if(!ignore)
+          _print(pkg);
+      else if(ignore){
+         if(pkg[0] > 2){
+           IP--;
+           IP--;
+           IP += pkg[0];
+         }
+      }
+       if(scmnd && (!ignore))
+        cout << "print" << endl;
+        break;
+        case 70:
+       if(!ignore)
+           rand_1(pkg);
+       if(scmnd && (!ignore))
+        cout << "rand_1" << endl;
+        break;
+        case 71:
+       if(!ignore)
+           rand_2(pkg);
+       if(scmnd && (!ignore))
+        cout << "rand_2" << endl;
+        break;
+        case 72:
+       if(!ignore)
+           rand_3(pkg);
+       if(scmnd && (!ignore))
+        cout << "rand_3" << endl;
+        break;
+        case 74:
+       if(!ignore)
+           rrand_1(pkg);
+       if(scmnd && (!ignore))
+        cout << "rrand_1" << endl;
+        break;
+        case 75:
+       if(!ignore)
+           rrand_2(pkg);
+       if(scmnd && (!ignore))
+        cout << "rrand_1" << endl;
+        break;
+        case 76:
+       if(!ignore)
+           rrand_3(pkg);
+       if(scmnd && (!ignore))
+        cout << "rrand_3" << endl;
+        break;
        default:
-         Log lg;
-         cout << "Segmentation Fault" << endl;
-         stringstream ss;
-         ss << "unknown command at {IP:" << _cpu.GetVirturalAddress() << "}. Shutting Down System...";
-         RuntimeException re;
-         re.introduce("CPULogicException", ss.str());
+         if(!ignore){
+             Log lg;
+             cout << "Segmentation Fault" << endl;
+             stringstream ss;
+             ss << "unknown command at {IP:" << _cpu.GetVirturalAddress() << "}. Shutting Down System...";
+             RuntimeException re;
+             re.introduce("CPULogicException", ss.str());
+         }
         break;
    }
    return 0;

@@ -5,6 +5,8 @@
 #include "../../program.h"
 #include "../../var.h"
 #include "io.h"
+#include "../../x86Disasm/disassembler.h"
+#include "../../sram.h"
 #include "../../Log/filter.h"
 #include "../../Ports/ports.h"
 #include "cpuf.h"
@@ -22,6 +24,63 @@ void loadi(long *pkg)
     //checkreg(pkg[0]);
     //checktype(flag[ pkg[0] ],pkg[1]);
       C.setr(0, pkg[0], pkg[1]);
+}
+
+void rflush()
+{
+  Ram ram;
+  for(int cell = 0; cell < ram.info(2); cell++){
+      stringstream ss;
+      ss << cell;
+      d_log.i("System","Flushing cell [" + ss.str() + "]");
+      for(int i = 0; i < ram.info(0); i++)
+          C.setr(cell, i, 0);
+  }
+}
+
+void c_print(long _char)
+{
+  if(_char == 256)
+    cout << "\n";
+  else if(_char == 257)
+    cout << "\t";
+  else if(_char == 258)
+    cout << " ";
+  else if((_char >= 0) && (_char <= 255)) {
+    char c = _char;
+    cout << c;
+  }
+  else{
+   cout << "system warning: value " << _char << " is not a char" << endl;
+   EBX = 2; 
+  }
+}
+
+void _print(long *pkg)
+{ 
+ if(pkg[0] <= 0){}
+ else if(pkg[0] == 1){
+   c_print(pkg[1]);
+ }
+ else if(pkg[0] == 2){
+   c_print(pkg[1]);
+   c_print(pkg[2]);
+ }
+ else if(pkg[0] > 2) {
+    IP--;
+    IP--;
+    Disassembler d;
+    for(int i = 0; i < pkg[0]; i++){
+       string str = prog(2, IP++, ""); // get char
+       long _str = d.disassemble(str); // dissasemble char
+       c_print(_str); // print char
+   }
+ }
+ else{
+  cout << "CPU print_length_logic err something went wrong while determing the length of the string to print" << endl;
+  EBX = 1;
+  p_exit();
+ }
 }
 
 void loadr(long *pkg)
@@ -93,6 +152,52 @@ void mov(long *pkg)
            case 10:
             I2 = pkg[1];
            break;
+           case 11:
+            TMP = pkg[1];
+           break;
+      }
+}
+
+void r_mv(long *pkg)
+{
+      switch( pkg[0] )
+      {
+          case 0:
+            C.setr(0, pkg[1], EBX);
+           break;
+           case 1:
+            C.setr(0, pkg[1], SDX);
+           break;
+           case 2:
+            C.setr(0, pkg[1], BP);
+           break;
+           case 3:
+            C.setr(0, pkg[1], EXC);
+           break;
+           case 4:
+            C.setr(0, pkg[1], PS);
+           break;
+           case 5:
+            C.setr(0, pkg[1], LG);
+           break;
+           case 6:
+            C.setr(0, pkg[1], LSL);
+           break;
+           case 7:
+            C.setr(0, pkg[1], SFC);
+           break;
+           case 8:
+            C.setr(0, pkg[1], SCX);
+           break;
+           case 9:
+            C.setr(0, pkg[1], I1);
+           break;
+           case 10:
+            C.setr(0, pkg[1], I2);
+           break;
+           case 11:
+            C.setr(0, pkg[1], TMP);
+           break;
       }
 }
 
@@ -159,6 +264,12 @@ void rmov(long *pkg)
                I2 = EAX;
             else
             I2 = C.getr(0, pkg[1]);
+           break;
+           case 11:
+             if(pkg[1] == 21)
+               TMP = EAX;
+            else
+            TMP = C.getr(0, pkg[1]);
            break;
      }
 }
@@ -411,7 +522,7 @@ void end() // for do
 void endl(long *pkg)
 {
    if(waiting){
-      C.setr(0, pkg[0], (C.getr(0, pkg[1]) - 1));
+      C.setr(0, pkg[1], (C.getr(0, pkg[1]) - 1));
     if(C.getr(0, pkg[1]) <= 0)
         waiting = false;
    else {

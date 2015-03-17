@@ -40,5 +40,8 @@ void wloop(long *pkg);
 void endwl(long *pkg);
 void _port(long *pkg);
 void same(long *pkg);
+void r_mv(long *pkg);
+void rflush();
+void _print(long *pkg);
 
 #endif

@@ -1,0 +1,15 @@
+; This program will be our first offical Hello World program
+
+reg 0 main
+ivar _length                                  ; Assembler(not vm) command for creating an integer variable
+
+%func main
+
+push main
+   str _length "Hello World!\n"              ; Assembler code for getting length of string
+   print _length "Hello World!\n"
+return main
+
+call main
+
+halt

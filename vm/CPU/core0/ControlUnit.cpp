@@ -41,6 +41,7 @@ using namespace std;
 long EAX, TMP, IP, EBX, SDX, SFC, SCX, BP, EXC, PS, LG, LSL, I1, I2;
 
 clock_t tStart;
+clock_s t_clock;
 bool _0Halted;
 bool pass = false;
 bool scmnd = false;
@@ -48,6 +49,7 @@ bool ignore = false;
 bool if_ignore = false;
 bool waiting = false;
 
+double *id;
 int fetch();
 int decode();
 int execute();
@@ -98,6 +100,18 @@ void C0::Reset()
   PS  = 0;
   I1  = 0;
   I2  = 0;
+
+  t_clock.ticks = 0;
+  t_clock.nanos = 0;
+  t_clock.sec = 0;
+  t_clock.min = 0;
+  t_clock.hrs = 0;
+
+  id =  new double[ 4 ];
+  id[0] = 8008; // processor id
+  id[1] = 0; // # of cores
+  id[2] = 4; // IFT
+  id[3] = 3.15; // Production date
 }
 
 void C0::Halt()
@@ -163,7 +177,7 @@ void C0::ExecuteInterrupt(long offset)
 
 int ProcessOperands()
 {
-//   cout<< "processing operands {0:" << instruction << "} {1:" << reg1 << "} {2:" << reg2 << "} {3:" << reg3 << "}" << endl;
+  // cout<< "processing operands {0:" << instruction << "} {1:" << reg1 << "} {2:" << reg2 << "} {3:" << reg3 << "}" << endl;
    Gate gate;
    return gate.route(instruction, reg1, reg2, reg3);
 }
@@ -217,7 +231,7 @@ int execute()
 {
   if(_0Halted)
      return 0;
-
+  t_clock.ticks++;
   return ProcessOperands();
 }
 

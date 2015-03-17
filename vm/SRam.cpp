@@ -40,14 +40,20 @@ int SRam::CB = 0;
 
 int sr_state;
 long sr_addr = 0;
+bool first_time = true;
 extern int INDEX_OUT_OF_RANGE;
 extern int INDEX_OK;
 
 void SRam::wipe()
 {
-   for(int i = 0; i < SIZE; i++)
-       program[ i ] = "0";
-   SIZE = 0;
+   if(!first_time){
+     for(int i = 0; i < SIZE; i++)
+          program[ i ] = "0";
+     SIZE = 0;
+   }
+   else {
+     first_time = false;
+   }
 }
 
 long SRam::size()

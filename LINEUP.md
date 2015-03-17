@@ -48,23 +48,23 @@ The X-1 Series RMD 8208 CPU features all the nessicary instructions needed for d
 | Production Date         | 3-15       |
 | Processor Number        | 8208       |
 | Cache                   | none       |
-| Instruction Set         | 64-bit     |
 | [IFT](#instruction-filter-type) | 4          |
+| Max instr size          | 32-bit |
 | Architecture            | [RMDv1](#rmdv1)    |
 
 Performance           |        |
 --------------------- | :----- |
 # of Cores            | 1
 # of Threads          | 1
-Processor Frequency   | .133Mhz
-Max Frequency         | .138Mhz
+Processor Frequency   | .117Mhz
+Max Frequency         | .119Mhz
 
 Advanced Technologies                                |      |
 ---------------------------------------------------- | :--- |
 Hyper Threading Technology                           | no
 [Safe Guard Technology](#safe-guard-technology)      | no
-[Security Key](#security-key)                        | no
-[Data Shift Technology](#data-shift-technology)      | no   |
+[Security Key](#security-key)                        | yes
+[Data Shift Technology](#data-shift-technology)      | yes   |
 
 ###### Special Registers
 The chart below holds all the special registers that reside inside the CPU.
@@ -277,3 +277,16 @@ wloop    | r# r#      | While loop(while the data in the first reg is == 1 loop)
 endwl    | r# r#      | Either pass or loop through again(while the data in the first reg is == 1 loop)
 port     | r# (i)     | Read/Write data from the current accessed port(if read the data will be stored inside the specified register)
 nac      |            | Not a command(basically do nothing)
+sr       | r# >> #    | right binary shift of data in ram address to specified units
+sl       | r# << #    | left binary shift of data in ram address to specified units
+r_mv     | r# -> r#   | pust the data in specified cpu register inside specified ram address
+cpuid    |            | assign the cpu regs(eax,sdx,sfc,scx) with cpu info[processor id, # of cores, IFT, production date]
+rdtsc    | r#         | (Read Time Stamp Counter)store total ammount of cpu clocks since last bootup
+rflush   |            | flush(clear) all ram addresses 
+print    | strlength "txt"   | print text to the console(strlength must match string length) 
+rand_1   | r# max     | (Random # generator 1[simple])generate a random number from 0 to max and store value in ram address specified 
+rand_2   |  r# offset max     | (Random # generator 2[most complex])generate a random number from 0 to max and store value in ram address specified. Offset will offset the value of the random number to generate a more random result
+rand_3   |  r# max     | (Random # generator 3[semi cmoplex])generate a random number from 0 to max and store value in ram address specified 
+rrand_1  |  r# r#(max)     | (Register Random # generator 1)generate a random number from 0 to r#{max}(value is retrieved from ran address specified) store value in ram address specified 
+rrand_2  |   r# r#(offset) r#(max)     | (Register Random # generator 2)generate a random number from 0 to r#{max}(value is retrieved from ran address specified) and store value in ram address specified. Offset{r#} will offset the value of the random number to generate a more random result
+rrand_3  |   r# r#(max)     | (Register Random # generator 3)generate a random number from 0 to r#{max}(value is retrieved from ran address specified) store value in ram address specified

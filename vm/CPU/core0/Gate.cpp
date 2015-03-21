@@ -508,6 +508,12 @@ int Gate::route(double instr, double r1,double r2, double r3)
        if(scmnd && (!ignore))
        cout << "dload" << endl;
        break;
+         case 80:
+       if(!ignore)
+         cast(pkg);
+       if(scmnd && (!ignore))
+       cout << "cast" << endl;
+       break;
        default:
          if(!ignore){
              Log lg;

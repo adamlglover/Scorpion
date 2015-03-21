@@ -46,5 +46,6 @@ void r_mv(double *pkg);
 void rflush();
 void _print(double *pkg);
 void _printf(double *pkg);
+void cast(double *pkg);
 
 #endif

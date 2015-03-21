@@ -1,16 +1,14 @@
 #ifndef CPUFLAGS
 #define CPUFLAGS
 
-   extern int OI;
-      extern int UFN;
-      extern int MN;
+      extern int OI;
+      extern int UFUNC;
+      extern int MAIN;
       extern int CU;
-      extern int FN;
-      extern int LP;
-      extern int IC;
-      extern int LC;
-      extern int BC;
-      extern int SC;
-      extern int CC;
+      extern int FUNC;
+      extern int INT;
+      extern int DOUBLE;
+      extern int CHAR;
+      extern int BOOL;
 
 #endif

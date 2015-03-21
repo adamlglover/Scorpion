@@ -18,6 +18,7 @@
 #include "../CPU/core0/runtime_exception.h"
 #include "../program.h"
 #include "ram.h"
+#include "../CPU/core0/cpuf.h"
 #include <iostream>
 #include <sstream>
 using namespace std;
@@ -63,6 +64,8 @@ int Ram::cell(short index)
   return INDEX_OK;
 }
 
+long _char(long _ch);
+int ibool(long);
 double Ram::data(double dataBus)
 {
   if( state == INDEX_OK ){
@@ -70,11 +73,21 @@ double Ram::data(double dataBus)
       switch( Ram::CB ) {
          case 1: // S
         //   cout << "Saving " << dataBus<< "to ram CB " << Ram::CB << " address " << address << endl;
-           ram[ address ] = dataBus;
+           if(fram[ address ] == INT)
+            ram[ address ] = (long) dataBus;
+           else if(fram[ address ] == CHAR)
+            ram[ address ] = _char(dataBus);
+           else if(fram[ address ] == BOOL)
+            ram[ address ] = ibool( (long) dataBus);
+           else // format as double
+            ram[ address ] = dataBus;
          break;
          case 2: // E
         //   cout << "Getting " << dataBus<< "from ram CB " << Ram::CB << " address " << address << endl;
-           return ram[ address ];
+            if(fram[ address ] == INT)
+            return (long) ram[ address ];
+           else // format as double
+            return ram[ address ];
          break;
          default:
            RuntimeException re;

@@ -6,7 +6,7 @@ using namespace std;
   
 class Disassembler {
      public:
-       long disassemble(string data);
+       double disassemble(string data);
 };
 
 #endif

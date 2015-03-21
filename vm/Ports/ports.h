@@ -3,10 +3,10 @@
 
 class Ports {
       public:
-        void feed(long *data);
+        void feed(double *data);
         void port(long);
-	void seto(int);
-        int geto();
+	void seto(long);
+        long geto();
 
 };
 

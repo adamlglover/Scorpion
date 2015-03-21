@@ -14,15 +14,15 @@
 #include "../../System.h"
 using namespace std;
 
-int Gate::route(long instr, long r1,long r2, long r3)
+int Gate::route(double instr, double r1,double r2, double r3)
 {
-   long pkg [3];
+   double pkg [3];
    pkg[0] = r1;
    pkg[1] = r2;
    pkg[2] = r3;
 
    C0 _cpu;
-   switch( instr )
+   switch( (long) instr )
    {
   /*---System Control---*/
       case 0: // halt
@@ -491,6 +491,23 @@ int Gate::route(long instr, long r1,long r2, long r3)
        if(scmnd && (!ignore))
         cout << "rrand_3" << endl;
         break;
+        case 77:
+          _printf(pkg);
+       if(scmnd && (!ignore))
+        cout << "printf" << endl;
+        break;
+        case 78:
+       if(!ignore)
+         loadc(pkg);
+       if(scmnd && (!ignore))
+       cout << "loadc" << endl;
+         break;
+         case 79:
+       if(!ignore)
+         dload(pkg);
+       if(scmnd && (!ignore))
+       cout << "dload" << endl;
+       break;
        default:
          if(!ignore){
              Log lg;

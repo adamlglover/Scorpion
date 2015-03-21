@@ -10,7 +10,7 @@ int c_addr[NUM_C_ADDRS] = {0x30, 0x32, 0x36, 0x39};
 int c_addrs[NUM_C_ADDRS];
 string sys_stat(long);
 
-string str_bool(int num)
+string str_bool(double num)
 {
    if(num >= 1)
 
@@ -25,7 +25,7 @@ void Console::Setup()
        c_addrs[i] = STATUS_OPEN;
 }
 
-int Console::Write(int addr, long *input)
+int Console::Write(int addr, double *input)
 {
  for(int i = 0; i < NUM_C_ADDRS; i++){
        if(addr  == c_addr[i]){
@@ -59,7 +59,7 @@ int Console::Write(int addr, long *input)
           return  PORT_ADDRESS_UNKNOWN;
 }
 
-int Console::Process(int addr, long command, long *input)
+int Console::Process(int addr, double command, double *input)
 {
     return STATUS_OPEN;
 }

@@ -78,7 +78,7 @@ int ibool(long num)
 }
 
 
-void nand_l(long *pkg)
+void nand_l(double *pkg)
 {
    if(pkg[0] == 21)
        EAX = _nand(ibool(pkg[1]),ibool(pkg[2]));
@@ -88,7 +88,7 @@ void nand_l(long *pkg)
    }
 }
 
-void nor_l(long *pkg)
+void nor_l(double *pkg)
 {
    if(pkg[0] == 21)
      EAX = _nor(ibool(pkg[1]),ibool(pkg[2]));
@@ -98,7 +98,7 @@ void nor_l(long *pkg)
    }
 }
 
-void xnor_l(long *pkg)
+void xnor_l(double *pkg)
 {
    if(pkg[0] == 21)
        EAX = _xnor(ibool(pkg[1]),ibool(pkg[2]));
@@ -107,7 +107,7 @@ void xnor_l(long *pkg)
    }
 }
 
-void and_l(long *pkg)
+void and_l(double *pkg)
 {
    if(pkg[0] == 21)
        EAX = _and(ibool(pkg[1]),ibool(pkg[2]));
@@ -117,7 +117,7 @@ void and_l(long *pkg)
    }
 }
 
-void or_l(long *pkg)
+void or_l(double *pkg)
 {
    if(pkg[0] == 21)
      EAX = _or(ibool(pkg[1]),ibool(pkg[2]));
@@ -127,7 +127,7 @@ void or_l(long *pkg)
    }
 }
 
-void xor_l(long *pkg)
+void xor_l(double *pkg)
 {
    if(pkg[0] == 21)
        EAX = _xor(ibool(pkg[1]),ibool(pkg[2]));
@@ -136,7 +136,7 @@ void xor_l(long *pkg)
    }
 }
 
-void not_l(long *pkg)
+void not_l(double *pkg)
 {
      if(pkg[0] == 21)
        EAX = _not(ibool(pkg[1]));

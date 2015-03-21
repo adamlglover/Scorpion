@@ -31,6 +31,7 @@
 #include "../../Ports/ports.h"
 #include "../../System.h"
 #include "../../sram.h"
+#include "cpuf.h"
 #include "runtime_exception.h"
 #include "../../Log/filter.h"
 #include "../../x86Disasm/disassembler.h"
@@ -44,12 +45,12 @@ clock_t tStart;
 clock_s t_clock;
 bool _0Halted;
 bool pass = false;
-bool scmnd = false;
+bool scmnd = true;
 bool ignore = false;
 bool if_ignore = false;
 bool waiting = false;
 
-double *id;
+long *id;
 int fetch();
 int decode();
 int execute();
@@ -61,10 +62,10 @@ Log log;
 
 
 /* Instruction Set 4 */
-   int instruction = 0;
-   int reg1 = 0;
-   int reg2 = 0;
-   int reg3 = 0;
+   double instruction = 0;
+   double reg1 = 0;
+   double reg2 = 0;
+   double reg3 = 0;
 
    string i1 = "";
    string i2 = "";
@@ -107,11 +108,15 @@ void C0::Reset()
   t_clock.min = 0;
   t_clock.hrs = 0;
 
-  id =  new double[ 4 ];
+  id =  new long[ 4 ];
   id[0] = 8008; // processor id
-  id[1] = 0; // # of cores
+  id[1] = 1; // # of cores
   id[2] = 4; // IFT
-  id[3] = 3.15; // Production date
+  id[3] = 315; // Production date
+  Ram rm;
+  C0 C;
+   for(long i = 0; i < rm.info(0); i++)
+         C.setr(1, i, OI); // allow all ram memory addresses to be open for input
 }
 
 void C0::Halt()
@@ -136,7 +141,7 @@ double C0::getr(short cell_switch, long _addr)
 {
   Ram ram;
   ram.CB = 2; // E
-  ram.addr(_addr);
+  ram.addr((long) _addr);
   ram.cell(cell_switch);
 
   return ram.data(0.0); // get data from ram
@@ -146,7 +151,7 @@ void C0::setr(short cell_switch, long _addr, double data)
 {
   Ram ram;
   ram.CB = 1; // S
-  ram.addr(_addr);
+  ram.addr((long) _addr);
   ram.cell(cell_switch);
 
   ram.data(data); // set data to ram
@@ -158,12 +163,12 @@ int C0::GetVirturalAddress()
   return IP;
 }
 
-int DisassemblerRead(string operand)
+double DisassemblerRead(string operand)
 {
    return disasm.disassemble(operand);
 }
 
-void C0::ExecuteInterrupt(long offset)
+void C0::ExecuteInterrupt(double offset)
 {
     if(_0Halted)
        _0Halted = false;
@@ -177,7 +182,7 @@ void C0::ExecuteInterrupt(long offset)
 
 int ProcessOperands()
 {
-  // cout<< "processing operands {0:" << instruction << "} {1:" << reg1 << "} {2:" << reg2 << "} {3:" << reg3 << "}" << endl;
+   cout<< "processing operands {0:" << instruction << "} {1:" << reg1 << "} {2:" << reg2 << "} {3:" << reg3 << "}" << endl;
    Gate gate;
    return gate.route(instruction, reg1, reg2, reg3);
 }

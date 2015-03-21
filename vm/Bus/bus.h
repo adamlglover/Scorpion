@@ -14,10 +14,10 @@ extern int STD_OUT;
 extern int _VHD;
 class Bus {
     public:
-     void channel(int,long,long,long *input);
-     int pt();
-     void accessport(int);
-     void output(int);
+     void channel(int,long,double,double *input);
+     long  pt();
+     void accessport(long);
+     void output(long);
      int status(); 
 
 };

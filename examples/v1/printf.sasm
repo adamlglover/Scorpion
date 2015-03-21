@@ -1,0 +1,9 @@
+; This program simply prints a register value to the console
+; I was being lazy, use functions for better readability!
+loadi r0 283829
+
+ivar _length
+str _length "r0 is " + (r,r0) + "\n"
+printf _length "r0 is " + (r,r0) + "\n"
+
+halt

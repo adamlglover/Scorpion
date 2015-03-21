@@ -43,13 +43,11 @@
    //int CPUFlags::LP   = 0x5; 
 
    int   OI  = 0x0;
-   int   UFN = 0x1;
-   int   MN  = 0x2;
+   int   UFUNC = 0x1;
+   int   MAIN  = 0x2;
    int   CU  = 0x3;
-   int   FN  = 0x4;
-   int   LP  = 0x5;
-   int   IC  = 0x6;
-   int   LC  = 0x7;
-   int   BC  = 0x8;
-   int   SC  = 0x9;
-   int   CC  = 0x10;
+   int   FUNC  = 0x4;
+   int   INT = 0x11;
+   int   DOUBLE = 0x12;
+   int   CHAR = 0x13;
+   int   BOOL = 0x14;

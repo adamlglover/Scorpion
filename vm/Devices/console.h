@@ -3,8 +3,8 @@
 
 class Console {
 	public:
- 	  int Write(int addr, long *input);
-          int Process(int,long,long *input);
+ 	  int Write(int addr, double *input);
+          int Process(int,double,double *input);
           void Setup();
 
 };

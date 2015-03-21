@@ -134,10 +134,7 @@ void nextinstr(string instr) /* load the next instruction to the secondary ram*/
    SRam sr;
 //  cout << "next instr "<< icount + 1 << " I$ " << instr << endl;
   if(!(SIZE > MAX_SIZE)){
-        sr.s_e(1);
-        sr.addr(SIZE++);
-        sr.modify(instr);
-       // program[ SIZE++ ] = instr;   assign the next instr
+        program[ SIZE++ ] = instr; //  assign the next instr
   }
   else {
    printf("SRam: program_size_overload err \nsize > %d(%08x) \n      --size[%d] bytes\n", MAX_SIZE, MAX_SIZE, sr.size());
@@ -152,7 +149,7 @@ void SRam::load(string content)
   string str = "";
      for(int i = 0; i < content.length(); i++)
      {
-    if(content.at(i) == '.'){
+    if(content.at(i) == '.' || content.at(i) == ' '){
        if(str != ""){
            //cout << result << endl;
            nextinstr(str);

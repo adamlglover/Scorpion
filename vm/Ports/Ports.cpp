@@ -3,7 +3,7 @@
 #include <iostream>
 using namespace std;
 
-int ports[10] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+long ports[10] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 
 /*
 * DATA
@@ -15,11 +15,11 @@ int ports[10] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 * 4 : format
 * 5 : command
 */
-void Ports::feed(long *data)
+void Ports::feed(double *data)
 {
   Bus sbus;
   int usedport = sbus.pt();
-  long input[4];
+  double input[4];
   input[0] = data[0];
   input[1] = data[1];
   input[2] = data[2];
@@ -27,7 +27,7 @@ void Ports::feed(long *data)
   sbus.channel(usedport, data[3], data[5],input);
 }
 
-void Ports::seto(int data)
+void Ports::seto(long data)
 {
  Bus _sbus;
  int port_n = _sbus.pt();
@@ -50,7 +50,7 @@ void Ports::seto(int data)
   }
 }
 
-int Ports::geto()
+long Ports::geto()
 {
   Bus sbus;
   switch( sbus.pt() ){

@@ -5,7 +5,7 @@
 #include "../Devices/console.h"
 using namespace std;
 
-int port = 0x0;
+long port = 0x0;
 int pstatus = 0;
 
 // ststus codes
@@ -21,15 +21,21 @@ int PORT_ADDRESS_UNKNOWN = 0x000000006;
 int STD_OUT = 0x0000000059;
 int _VHD = 0x0000000068;
 
-void Bus::channel(int addr, long device, long command, long *input)
+void Bus::channel(int addr, long device, double command, double *input)
 {
   Console console;
   VHD vhd;
  if(command == 0){
       if(device == STD_OUT)  // std out
           pstatus = console.Write(addr,input);
-      else if(device == _VHD) // Virtural Hardrive
-          pstatus = vhd.Write(addr,input);
+      else if(device == _VHD){ // Virtural Hardrive
+          long linput[4];
+          linput[0] = (long) input[0];
+          linput[1] = (long) input[1];
+          linput[2] = (long) input[2];
+          linput[3] = (long) input[3];
+          pstatus = vhd.Write(addr,linput);
+      }
       else
           pstatus = DEVICE_UNKNOWN;
  }
@@ -37,8 +43,14 @@ void Bus::channel(int addr, long device, long command, long *input)
     command--;
     if(device == STD_OUT)  // std out
           pstatus = console.Process(addr,command,input);
-      else if(device == _VHD) // Virtural Hardrive
-          pstatus = vhd.Process(addr,command,input);
+      else if(device == _VHD){ // Virtural Hardrive
+          long linput[4];
+          linput[0] = (long) input[0];
+          linput[1] = (long) input[1];
+          linput[2] = (long) input[2];
+          linput[3] = (long) input[3];
+          pstatus = vhd.Process(addr,(long) command,linput);
+      }
       else
           pstatus = DEVICE_UNKNOWN;
  }
@@ -51,18 +63,18 @@ int Bus::status()
   return pstatus;
 }
 
-void Bus::output(int data)
+void Bus::output(long data)
 {
   Ports pt;
   pt.seto(data);
 }
 
-int Bus::pt()
+long Bus::pt()
 {
   return port; 
 }
 
-void Bus::accessport(int dest)
+void Bus::accessport(long dest)
 {
    port = dest;
 }

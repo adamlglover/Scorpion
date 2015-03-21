@@ -5,6 +5,5 @@
 using namespace std;
 
 void checkreg(long _register);
-void checktype(string type, int value);
 
 #endif

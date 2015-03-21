@@ -53,8 +53,8 @@ bool isgenuine = false;
 
    void authenticate(const char *file)
    {
-        stringstream ss;
-        ss << file << ".bexe";
+        stringstream ss, ss2;
+        ss << file << ".b";
         string bridge = ss.str();
         const char *name = bridge.c_str();
         if(file_exists(name)){

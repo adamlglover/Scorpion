@@ -1,0 +1,23 @@
+; This program will calculate the total tax of a candybar
+; i will not include <stdio> bcause I am lazy
+reg 0 main
+reg 1 candybar
+reg 2 tax
+reg 3 total
+reg 4 length
+
+%func main
+
+push main
+   dload candybar 0.99
+   dload tax 0.12
+   dload total 0.0
+
+   add total candybar,tax
+   str length "The total ammount of the candy bar is " + total
+   printf length "The total ammount of the candy bar is " + total
+return main
+
+call main
+
+halt

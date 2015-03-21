@@ -6,7 +6,7 @@ extern bool _0Halted;
 extern bool scmnd;
 extern bool pass;
 extern long EAX,TMP,IP, EBX, SDX, SFC, SCX, BP, EXC, PS, LG, LSL, I1, I2;
-extern double *id;
+extern long *id;
 
 struct clock_s {
    long ticks;
@@ -28,7 +28,7 @@ extern bool waiting;
         void setr(short cell, long _addr, double data);
         double getr(short cell, long _addr);
         int GetVirturalAddress();
-        void ExecuteInterrupt(long);
+        void ExecuteInterrupt(double);
         void run0();
    };
 

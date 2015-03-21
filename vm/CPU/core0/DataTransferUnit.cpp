@@ -1,4 +1,5 @@
 #include "core0.h"
+#include <stdlib.h>
 #include "runtime_exception.h"
 #include "../../System.h"
 #include "../../Bus/bus.h"
@@ -13,17 +14,26 @@
 #include "../../Bus/bus.h"
 #include "../../Log/Log.h"
 #include "../../Ram/ram.h"
+#include <string>
 #include <sstream>
 #include <iostream>
 using namespace std;
 
 C0 C;
 Log d_log;
-void loadi(long *pkg)
+void loadi(double *pkg)
 {
     //checkreg(pkg[0]);
     //checktype(flag[ pkg[0] ],pkg[1]);
-      C.setr(0, pkg[0], pkg[1]);
+      if( C.getr(1, pkg[0]) == OI){
+          C.setr(1, pkg[0], INT);
+          C.setr(0, pkg[0], pkg[1]);
+      }
+      else if( C.getr(1, pkg[0]) == INT )
+          C.setr(0, pkg[0], pkg[1]);
+      else
+        cout << "invalid type assignment type int cannot be assigned to type " << C.getr(1, pkg[0]) << endl;
+       // log invalid type assignment
 }
 
 void rflush()
@@ -38,14 +48,14 @@ void rflush()
   }
 }
 
-void c_print(long _char)
+void c_print(double _char)
 {
   if(_char == 256)
     cout << "\n";
   else if(_char == 257)
     cout << "\t";
   else if(_char == 258)
-    cout << " ";
+    cout << "";
   else if((_char >= 0) && (_char <= 255)) {
     char c = _char;
     cout << c;
@@ -56,7 +66,7 @@ void c_print(long _char)
   }
 }
 
-void _print(long *pkg)
+void _print(double *pkg)
 { 
  if(pkg[0] <= 0){}
  else if(pkg[0] == 1){
@@ -82,8 +92,60 @@ void _print(long *pkg)
   p_exit();
  }
 }
+bool reg = false;
+void c_printf(double _char)
+{
+  if(_char == 256 && !ignore)
+    cout << "\n";
+  else if(_char == 257  && !ignore)
+    cout << "\t";
+  else if(_char == 258  && !ignore)
+    cout << "";
+  else if(_char == 0){ // reg r#
+    reg = true;
+    Disassembler d;
+    string str = prog(2, IP++, ""); // get char
+    long _str = d.disassemble(str); // dissasemble char
+    //cout << "pinting from reg " << _str  << " -1: " << (_str - 1) << " +1: " << (_str + 1)<< endl;
+    if(!ignore)
+      cout << C.getr(0, _str);
+  }
+  else if((_char >= 5) && (_char <= 255)  && (!ignore)) {
+    char c = _char;
+    cout << c;
+  }
+  else {
+   if(!ignore){
+      cout << "system warning: value " << _char << " is not a char" << endl;
+      EBX = 2;
+   }
+  }
+}
 
-void loadr(long *pkg)
+void _printf(double *pkg)
+{
+ if(pkg[0] <= 0){}
+ else if(pkg[0] >= 1) {
+    IP--;
+    IP--;
+    Disassembler d;
+    for(int i = 0; i < pkg[0]; i++){
+       string str = prog(2, IP++, ""); // get char
+       long _str = d.disassemble(str); // dissasemble char
+       c_printf(_str); // print char
+   }
+   if((pkg[0] == 1) && !(reg))
+    IP++;
+   reg = false;
+ }
+ else{
+  cout << "CPU print_length_logic err something went wrong while determing the length of the string to print" << endl;
+  EBX = 1;
+  p_exit();
+ }
+}
+
+void loadr(double *pkg)
 {
        if(pkg[1] == 21)
           C.setr(0, pkg[0], EAX);
@@ -96,14 +158,63 @@ void loadr(long *pkg)
 }
 
 int ibool(long);
-void loadbl(long *pkg)
+void loadbl(double *pkg)
 {
       //checkreg(pkg[0]);
     //checktype(flag[ pkg[0] ],pkg[1]);
-          C.setr(0, pkg[0], ibool(pkg[1]));
+       if( C.getr(1, pkg[0]) == OI){
+          C.setr(1, pkg[0], BOOL);
+          C.setr(0, pkg[0], ibool( (long) pkg[1] ));
+      }
+      else if( C.getr(1, pkg[0]) == BOOL )
+          C.setr(0, pkg[0], ibool( (long) pkg[1]));
+      else
+        cout << "invalid type assignment type bool cannot be assigned to type " << endl;
+       // log invalid type assignment
 }
 
-void mv(long *pkg)
+long _char(long _ch)
+{
+  if(_ch >= 5 && _ch <= 258)
+     return _ch;
+  else 
+     return 5;
+}
+
+void loadc(double *pkg)
+{
+     if( C.getr(1, pkg[0]) == OI){
+          C.setr(1, pkg[0], CHAR);
+          C.setr(0, pkg[0],(long)  _char((long) pkg[1]));
+      }
+      else if( C.getr(1, pkg[0]) == CHAR)
+          C.setr(0, pkg[0],(long) _char((long) pkg[1]));
+      else
+        cout << "invalid type assignment type bool cannot be assigned to type " << endl;
+       // log invalid type assignment
+}
+
+void dload(double *pkg)
+{
+  if( C.getr(1, pkg[0]) == OI){
+          C.setr(1, pkg[0], DOUBLE);
+          stringstream ss;
+          ss << pkg[1] << "." << pkg[2];
+          string dec = ss.str();
+          C.setr(0, pkg[0], atof(dec.c_str()));
+      }
+      else if( C.getr(1, pkg[0]) == DOUBLE ){
+          stringstream ss;
+          ss << pkg[1] << "." << pkg[2];
+          string dec = ss.str();
+          C.setr(0, pkg[0], atof(dec.c_str()));
+      }
+      else
+        cout << "invalid type assignment type double cannot be assigned to type " << endl;
+       // log invalid type assignment
+}
+
+void mv(double *pkg)
 {
        if(pkg[1] == 21){
           C.setr(0, pkg[0], EAX);
@@ -112,12 +223,14 @@ void mv(long *pkg)
        else{
           C.setr(0, pkg[0], C.getr(0, pkg[1]));
           C.setr(0, pkg[1], null);
+          C.setr(1, pkg[0], C.getr(1, pkg[1]));
+          C.setr(1, pkg[1], OI);
        }
 }
 
-void mov(long *pkg)
+void mov(double *pkg)
 {
-      switch( pkg[0] )
+      switch( (long) pkg[0] )
       {
           case 0:
 	    EBX = pkg[1];
@@ -158,129 +271,209 @@ void mov(long *pkg)
       }
 }
 
-void r_mv(long *pkg)
+void r_mv(double *pkg)
 {
-      switch( pkg[0] )
+      switch( (long) pkg[0] )
       {
           case 0:
-            C.setr(0, pkg[1], EBX);
+            if(C.getr(1, pkg[1]) == INT)
+                 C.setr(0, pkg[1], EBX);
+            else
+              cout << "UnsatisfiedTypeException: warning; type must be of type int" << endl;
            break;
            case 1:
-            C.setr(0, pkg[1], SDX);
+            if(C.getr(1, pkg[1]) == INT)
+                 C.setr(0, pkg[1], SDX);
+             else
+              cout << "UnsatisfiedTypeException: warning; type must be of type int" << endl;
            break;
            case 2:
-            C.setr(0, pkg[1], BP);
+             if(C.getr(1, pkg[1]) == INT)
+                 C.setr(0, pkg[1], BP);
+             else
+              cout << "UnsatisfiedTypeException: warning; type must be of type int" << endl;
            break;
            case 3:
-            C.setr(0, pkg[1], EXC);
+             if(C.getr(1, pkg[1]) == INT)
+                C.setr(0, pkg[1], EXC);
+             else
+              cout << "UnsatisfiedTypeException: warning; type must be of type int" << endl;
            break;
            case 4:
-            C.setr(0, pkg[1], PS);
+            if(C.getr(1, pkg[1]) == INT)
+                C.setr(0, pkg[1], PS);
+            else
+              cout << "UnsatisfiedTypeException: warning; type must be of type int" << endl;
            break;
            case 5:
-            C.setr(0, pkg[1], LG);
+            if(C.getr(1, pkg[1]) == INT)
+                C.setr(0, pkg[1], LG);
+            else
+              cout << "UnsatisfiedTypeException: warning; type must be of type int" << endl;
            break;
            case 6:
-            C.setr(0, pkg[1], LSL);
+            if(C.getr(1, pkg[1]) == INT)
+                C.setr(0, pkg[1], LSL);
+            else
+              cout << "UnsatisfiedTypeException: warning; type must be of type int" << endl;
            break;
            case 7:
-            C.setr(0, pkg[1], SFC);
+            if(C.getr(1, pkg[1]) == INT)
+                C.setr(0, pkg[1], SFC);
+            else
+              cout << "UnsatisfiedTypeException: warning; type must be of type int" << endl;
            break;
            case 8:
-            C.setr(0, pkg[1], SCX);
+            if(C.getr(1, pkg[1]) == INT)
+                C.setr(0, pkg[1], SCX);
+            else
+              cout << "UnsatisfiedTypeException: warning; type must be of type int" << endl;
            break;
            case 9:
-            C.setr(0, pkg[1], I1);
+            if(C.getr(1, pkg[1]) == INT)
+                C.setr(0, pkg[1], I1);
+            else
+              cout << "UnsatisfiedTypeException: warning; type must be of type int" << endl;
            break;
            case 10:
-            C.setr(0, pkg[1], I2);
+            if(C.getr(1, pkg[1]) == INT)
+                C.setr(0, pkg[1], I2);
+            else
+              cout << "UnsatisfiedTypeException: warning; type must be of type int" << endl;
            break;
            case 11:
-            C.setr(0, pkg[1], TMP);
+             if(C.getr(1, pkg[1]) == INT)
+                C.setr(0, pkg[1], TMP);
+             else
+              cout << "UnsatisfiedTypeException: warning; type must be of type int" << endl;
            break;
       }
 }
 
-void rmov(long *pkg)
+void rmov(double *pkg)
 {
-     switch( pkg[0] )
+     switch( (long) pkg[0] )
      {
           case 0:
              if(pkg[1] == 21)
                EBX = EAX;
-            else
-            EBX = C.getr(0, pkg[1]);
+            else{
+              if(C.getr(1, pkg[1]) == INT)
+                 EBX = C.getr(0, pkg[1]);
+              else
+                cout << "UnsatisfiedTypeException: warning; type must be of type int" << endl;
+            }
            break;
            case 1:
             if(pkg[1] == 21)
                SDX = EAX;
-            else
-              SDX = C.getr(0, pkg[1]);
+            else{
+              if(C.getr(1, pkg[1]) == INT)
+                 SDX = C.getr(0, pkg[1]);
+              else
+                cout << "UnsatisfiedTypeException: warning; type must be of type int" << endl;
+            }
            break;
            case 2:
              if(pkg[1] == 21)
                BP = EAX;
-            else
-            BP = C.getr(0, pkg[1]);
+            else{
+             if(C.getr(1, pkg[1]) == INT)
+               BP = C.getr(0, pkg[1]);
+             else
+                cout << "UnsatisfiedTypeException: warning; type must be of type int" << endl;
+            }
            break;
            case 3:
 	     if(pkg[1] == 21)
                EXC = EAX;
-            else
-            EXC = C.getr(0, pkg[1]);
+            else{
+             if(C.getr(1, pkg[1]) == INT)
+                EXC = C.getr(0, pkg[1]);
+             else
+                cout << "UnsatisfiedTypeException: warning; type must be of type int" << endl;
+            }
            break;
            case 5:
 	     if(pkg[1] == 21)
                LG = EAX;
-            else
-            LG = C.getr(0, pkg[1]);
+            else{
+              if(C.getr(1, pkg[1]) == INT)
+               LG = C.getr(0, pkg[1]);
+              else
+                cout << "UnsatisfiedTypeException: warning; type must be of type int" << endl;
+            }
            break;
            case 6:
              if(pkg[1] == 21)
                LSL = EAX;
-            else
-            LSL =  C.getr(0, pkg[1]);
-           break;
+            else{
+               if(C.getr(1, pkg[1]) == INT)
+                   LSL =  C.getr(0, pkg[1]);
+               else
+                cout << "UnsatisfiedTypeException: warning; type must be of type int" << endl;
+            }
+            break;
            case 7:
  	     if(pkg[1] == 21)
                SFC = EAX;
-            else
-            SFC = C.getr(0, pkg[1]);
+            else{
+             if(C.getr(1, pkg[1]) == INT)
+               SFC = C.getr(0, pkg[1]);
+             else
+                cout << "UnsatisfiedTypeException: warning; type must be of type int" << endl; 
+           }
            break;
            case 8:
 	     if(pkg[1] == 21)
                SCX = EAX;
-            else
-            SCX = C.getr(0, pkg[1]);
+            else{
+              if(C.getr(1, pkg[1]) == INT)
+                SCX = C.getr(0, pkg[1]);
+              else
+                cout << "UnsatisfiedTypeException: warning; type must be of type int" << endl;
+            }
            break;
            case 9:
              if(pkg[1] == 21)
                I1 = EAX;
-            else
-            I1 = C.getr(0, pkg[1]);
+            else{
+             if(C.getr(1, pkg[1]) == INT)
+               I1 = C.getr(0, pkg[1]);
+	     else
+                cout << "UnsatisfiedTypeException: warning; type must be of type int" << endl;
+            }
            break;
            case 10:
              if(pkg[1] == 21)
                I2 = EAX;
-            else
-            I2 = C.getr(0, pkg[1]);
+            else{
+             if(C.getr(1, pkg[1]) == INT)
+               I2 = C.getr(0, pkg[1]);
+	     else
+                cout << "UnsatisfiedTypeException: warning; type must be of type int" << endl;
+            }
            break;
            case 11:
              if(pkg[1] == 21)
                TMP = EAX;
-            else
-            TMP = C.getr(0, pkg[1]);
-           break;
+            else{
+             if(C.getr(1, pkg[1]) == INT)
+                TMP = C.getr(0, pkg[1]); 
+             else
+                cout << "UnsatisfiedTypeException: warning; type must be of type int" << endl;
+            }
+            break;
      }
 }
 
-void _init(long *pkg)
+void _init(double *pkg)
 {
-     switch( pkg[0] )
+     switch((long) pkg[0] )
      {
        case 0: // std out
        	 InputOutput io;
-        long data[3];
+        double data[3];
         data[0] = SDX;
         data[1] = 0;
         data[2] = 0;
@@ -291,7 +484,7 @@ void _init(long *pkg)
        break;
        case 1: // VHD write
          InputOutput _io;
-        long idata[3];
+        double idata[3];
         idata[0] = SDX;
         idata[1] = I1;
         idata[2] = I2;
@@ -318,34 +511,46 @@ void _init(long *pkg)
      }
 }
 
-void _port(long *pkg)
+void _port(double *pkg)
 {
    Ports p;
-     switch( pkg[1] ) {
+     switch( (long) pkg[1] ) {
         case 0:
          if(pkg[0] == 22)
            EAX = p.geto();
-         else
-           C.setr(0, pkg[0], p.geto());
+         else{
+          if(C.getr(1, pkg[0]) == INT)
+             C.setr(0, pkg[0], p.geto());
+          else
+             cout << "UnsatisfiedTypeException: warning; type must be of type int" << endl;
+         }
         break;
         case 1:
            if(pkg[0] == 22)
               p.seto(EAX);
-         else
-           p.seto(C.getr(0, pkg[0]));
+         else{
+          if(C.getr(1, pkg[0]) == INT)
+             p.seto(C.getr(0, pkg[0]));
+          else
+             cout << "UnsatisfiedTypeException: warning; type must be of type int" << endl;
+         }
         break;
        case 2:
       Bus b;
          if(pkg[0] == 22)
            EAX = b.status();
-         else
-           C.setr(0, pkg[0], b.status());
-        break;
+         else{
+           if(C.getr(1, pkg[0]) == INT)
+             C.setr(0, pkg[0], b.status());
+           else
+             cout << "UnsatisfiedTypeException: warning; type must be of type int" << endl;
+         }
+         break;
      }
 }
 
 Ram r;
-void mlock(long *pkg)
+void mlock(double *pkg)
 {
       for(int i = 0; i < r.info(0); i++){
             if(C.getr(3, i) == 0){
@@ -362,7 +567,7 @@ void mlock(long *pkg)
 
 }
 
-void lock(long *pkg)
+void lock(double *pkg)
 {
       if(C.getr(3, pkg[0]) == 0) {
           C.setr(2, pkg[0], C.getr(0, pkg[0]));
@@ -378,7 +583,7 @@ void lock(long *pkg)
       }
 }
 
-void xreg(long *pkg)
+void xreg(double *pkg)
 {
      if(C.getr(3, pkg[0]) == 0)
         C.setr(2, pkg[0], 1);
@@ -386,7 +591,7 @@ void xreg(long *pkg)
         C.setr(0, pkg[0], 0);
 }
 
-void mulock(long *pkg)
+void mulock(double *pkg)
 {
       for(int i = 0; i < r.info(0); i++){
             if(C.getr(3, i) == 0)
@@ -399,7 +604,7 @@ void mulock(long *pkg)
       }
 }
 
-void clx(long *pkg)
+void clx(double *pkg)
 {
      for(int i = 0; i < r.info(0); i++)
            C.setr(3, i, 0);
@@ -413,7 +618,7 @@ int tibool(bool val)
       return 0;
 }
 
-void same(long *pkg)
+void same(double *pkg)
 {
        if(C.getr(0, pkg[1]) == 21)
          C.setr(0, pkg[0], tibool(EAX == C.getr(0, pkg[2])));
@@ -423,7 +628,7 @@ void same(long *pkg)
          C.setr(0, pkg[0], tibool(C.getr(0, pkg[1]) == C.getr(0, pkg[2])));
 }
 
-void ulock(long *pkg)
+void ulock(double *pkg)
 {
       if(C.getr(3, pkg[0]) == 0) {
          C.setr(0, pkg[0], C.getr(2, pkg[0]));
@@ -431,59 +636,89 @@ void ulock(long *pkg)
       }
 }
 
-void rm(long *pkg)
+void rm(double *pkg)
 {
       C.setr(0, pkg[0], null);
+      C.setr(1, pkg[0], OI);
 }
 
-void func(long *pkg)
+void func(double *pkg)
 {
-          C.setr(0, pkg[0], null);
-          C.setr(1, pkg[0], FN);
+          if(C.getr(1, pkg[0]) == OI){
+            C.setr(0, pkg[0], null);
+            C.setr(1, pkg[0], UFUNC);
+          }
+          else
+           cout << "TypeNotSatisfiedException: cannot create func at addr " << pkg[0] << endl;
 }
 
-void push(long *pkg)
+void push(double *pkg)
 {
+   RuntimeException exception;
+       if(C.getr(1, pkg[0]) == UFUNC){
           C.setr(0, pkg[0], IP);
+          C.setr(1, pkg[0], FUNC);
           ignore = true;
+      }
+      else if(C.getr(1, pkg[0]) == FUNC){
+            stringstream ss;
+            ss << pkg[0];
+            exception.introduce("FunctionInitializationException", "multiple definition of func " + ss.str());
+     } 
+     else
+        cout << "NotAFuncException: addr " << pkg[0] << " is not a func" << endl;
 }
 
-void _return(long *pkg)
+void _return(double *pkg)
 {
         if(ignore)
             ignore = false;
-        else
-         IP = (long) C.getr(0, pkg[0]);
+        else {
+         if(C.getr(1, pkg[0]) == FUNC)
+            IP = (long) C.getr(0, pkg[0]);
+         else if(C.getr(1, pkg[0]) == UFUNC)
+           cout << "FunctionCallException: cannot return non func addr " << pkg[0] << endl;
+         else
+           cout << "NotAFuncException: addr " << pkg[0] << " is not a func" << endl;
+        }
 }
 
-void call(long *pkg)
+void call(double *pkg)
 {
+       if(C.getr(1, pkg[0]) == UFUNC) 
+             cout << "FunctionCallException: unidentified refrence to func " << pkg[0] << endl;
+       else if(C.getr(1, pkg[0]) == FUNC){
           TMP = IP;
           IP = (long) C.getr(0, pkg[0]);
           C.setr(0, pkg[0], TMP);
+       }
+       else
+        cout << "NotAFuncException: addr " << pkg[0] << " is not a func" << endl;
 }
 
-void swp(long *pkg)
+void swp(double *pkg)
 {
           TMP = C.getr(0, pkg[0]);
           C.setr(0, pkg[0], C.getr(0, pkg[1]));
           C.setr(0, pkg[1], TMP);
+
+         TMP = C.getr(1, pkg[0]);
+          C.setr(1, pkg[0], C.getr(1, pkg[1]));
+          C.setr(1, pkg[1], TMP);
 }
 
-void eof(long *pkg)
+void eof(double *pkg)
 {
       C.setr(1, pkg[0], OI);
 }
 
-void loop(long *pkg)
+void loop(double *pkg)
 {
-         C.setr(1, pkg[0], LP);
-         C.setr(0, pkg[0], IP);
          C.setr(0, pkg[1], pkg[2]);
          waiting = true;
 }
 
-void wloop(long *pkg)
+void wloop(double *pkg)
 {
       if(C.getr(0, pkg[0]) == 1)
          C.setr(0, pkg[1], IP);
@@ -493,7 +728,7 @@ void wloop(long *pkg)
       }
 }
 
-void endwl(long *pkg)
+void endwl(double *pkg)
 {
   if(pass){
      ignore = false;
@@ -503,10 +738,8 @@ void endwl(long *pkg)
        IP = C.getr(0, pkg[1]);
 }
 
-void rloop(long *pkg)
+void rloop(double *pkg)
 {
-         C.setr(1, pkg[0], LP);
-         C.setr(0, pkg[0], IP);
          C.setr(0, pkg[1], C.getr(0, pkg[2]));
          waiting = true;
 }
@@ -519,7 +752,7 @@ void end() // for do
       }
 }
 
-void endl(long *pkg)
+void endl(double *pkg)
 {
    if(waiting){
       C.setr(0, pkg[1], (C.getr(0, pkg[1]) - 1));
@@ -531,7 +764,7 @@ void endl(long *pkg)
   }
 }
 
-void _do(long *pkg)
+void _do(double *pkg)
 {
     if(C.getr(0, pkg[0]) == 1){}
     else {
@@ -540,7 +773,7 @@ void _do(long *pkg)
     }
 }
 
-void ilt(long *pkg)
+void ilt(double *pkg)
 {
     if(C.getr(0, pkg[0]) < C.getr(0, pkg[1])){}
     else {
@@ -549,7 +782,7 @@ void ilt(long *pkg)
     }
 }
 
-void igt(long *pkg)
+void igt(double *pkg)
 {
     if(C.getr(0, pkg[0]) > C.getr(0, pkg[1])){}
     else {
@@ -558,7 +791,7 @@ void igt(long *pkg)
     }
 }
 
-void iltoeq(long *pkg)
+void iltoeq(double *pkg)
 {
     if(C.getr(0, pkg[0]) <= C.getr(0, pkg[1])){}
     else {
@@ -567,7 +800,7 @@ void iltoeq(long *pkg)
     }
 }
 
-void igtoeq(long *pkg)
+void igtoeq(double *pkg)
 {
     if(C.getr(0, pkg[0]) >= C.getr(0, pkg[1])){}
     else {
@@ -576,7 +809,7 @@ void igtoeq(long *pkg)
     }
 }
 
-void ndo(long *pkg)
+void ndo(double *pkg)
 {
     if(C.getr(0, pkg[0]) == 0){}
     else {
@@ -585,7 +818,7 @@ void ndo(long *pkg)
     }
 }
 
-void inlt(long *pkg)
+void inlt(double *pkg)
 {
     if(!(C.getr(0, pkg[0]) < C.getr(0, pkg[1]))){}
     else {
@@ -594,7 +827,7 @@ void inlt(long *pkg)
     }
 }
 
-void ingt(long *pkg)
+void ingt(double *pkg)
 {
     if(!(C.getr(0, pkg[0]) > C.getr(0, pkg[1]))){}
     else {
@@ -603,7 +836,7 @@ void ingt(long *pkg)
     }
 }
 
-void inltoeq(long *pkg)
+void inltoeq(double *pkg)
 {
     if(!(C.getr(0, pkg[0]) <= C.getr(0, pkg[1]))){}
     else {
@@ -612,7 +845,7 @@ void inltoeq(long *pkg)
     }
 }
 
-void ingtoeq(long *pkg)
+void ingtoeq(double *pkg)
 {
     if((C.getr(0, pkg[0]) >= C.getr(0, pkg[1])) == false){}
     else {
@@ -621,7 +854,9 @@ void ingtoeq(long *pkg)
     }
 }
 
-void neg(long *pkg)
-{
-    C.setr(0, pkg[0], (C.getr(0, pkg[0]) * -1));
+void neg(double *pkg){
+    if(C.getr(1, pkg[0]) == INT || C.getr(1, pkg[0]) == DOUBLE)
+      C.setr(0, pkg[0], (C.getr(0, pkg[0]) * -1));
+    else
+      cout << "TypeNotatisfiedException: only types of int and double can be converted to negative" << endl;
 }

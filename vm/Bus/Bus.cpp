@@ -2,7 +2,6 @@
 #include <iostream>
 #include "../Ports/ports.h"
 #include "../Devices/VHardrive/vhd.h"
-#include "../Devices/console.h"
 using namespace std;
 
 long port = 0x0;
@@ -23,12 +22,9 @@ int _VHD = 0x0000000068;
 
 void Bus::channel(int addr, long device, double command, double *input)
 {
-  Console console;
   VHD vhd;
  if(command == 0){
-      if(device == STD_OUT)  // std out
-          pstatus = console.Write(addr,input);
-      else if(device == _VHD){ // Virtural Hardrive
+      if(device == _VHD){ // Virtural Hardrive
           long linput[4];
           linput[0] = (long) input[0];
           linput[1] = (long) input[1];
@@ -41,9 +37,7 @@ void Bus::channel(int addr, long device, double command, double *input)
  }
  else {
     command--;
-    if(device == STD_OUT)  // std out
-          pstatus = console.Process(addr,command,input);
-      else if(device == _VHD){ // Virtural Hardrive
+      if(device == _VHD){ // Virtural Hardrive
           long linput[4];
           linput[0] = (long) input[0];
           linput[1] = (long) input[1];

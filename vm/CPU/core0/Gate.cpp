@@ -514,6 +514,23 @@ int Gate::route(double instr, double r1,double r2, double r3)
        if(scmnd && (!ignore))
        cout << "t_cast" << endl;
        break;
+        case 81:
+       if(!ignore)
+         sload(pkg);
+       if(scmnd && (!ignore))
+       cout << "sload" << endl;
+       break;
+        case 82:
+       if(!ignore)
+         loadf(pkg);
+       if(scmnd && (!ignore))
+       cout << "loadf" << endl;
+       break;
+       case 83:
+         _throw(pkg);
+       if(scmnd && (!ignore))
+       cout << "throw" << endl;
+       break;
        default:
          if(!ignore){
              Log lg;

@@ -75,6 +75,10 @@ double Ram::data(double dataBus)
         //   cout << "Saving " << dataBus<< "to ram CB " << Ram::CB << " address " << address << endl;
            if(fram[ address ] == INT)
             ram[ address ] = (long) dataBus;
+           else if(fram[ address ] == SHORT)
+            ram[ address ] = (int) dataBus;
+           else if(fram[ address ] == FLOAT)
+            ram[ address ] = (float) dataBus;
            else if(fram[ address ] == CHAR)
             ram[ address ] = _char(dataBus);
            else if(fram[ address ] == BOOL)
@@ -85,9 +89,13 @@ double Ram::data(double dataBus)
          case 2: // E
         //   cout << "Getting " << dataBus<< "from ram CB " << Ram::CB << " address " << address << endl;
             if(fram[ address ] == INT)
-            return (long) ram[ address ];
-           else // format as double
-            return ram[ address ];
+              return (long) ram[ address ];
+            else if(fram[ address ] == SHORT)
+              return (int) ram[ address ];
+            else if(fram[ address ] == FLOAT)
+              return (float) ram[ address ];
+            else // format as double
+              return ram[ address ];
          break;
          default:
            RuntimeException re;

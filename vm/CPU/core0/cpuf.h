@@ -10,5 +10,7 @@
       extern int DOUBLE;
       extern int CHAR;
       extern int BOOL;
+      extern int SHORT;
+      extern int FLOAT;
 
 #endif

@@ -1,4 +1,6 @@
 #include "core0.h"
+#include "cpuf.h"
+#include "runtime_exception.h"
 #include <sstream>
 
 C0 c;
@@ -80,66 +82,98 @@ int ibool(long num)
 
 void nand_l(double *pkg)
 {
+  RuntimeException re;
    if(pkg[0] == 21)
        EAX = _nand(ibool(pkg[1]),ibool(pkg[2]));
    else
    {
-      c.setr(0, pkg[0], _nand(ibool(c.getr(0, pkg[1])),ibool(c.getr(0, pkg[2]))));
+      if( c.getr(1, pkg[0]) == BOOL )
+           c.setr(0, pkg[0], _nand(ibool(c.getr(0, pkg[1])),ibool(c.getr(0, pkg[2]))));
+      else
+        re.introduce("UnsatisfiedTypeException","the type reciving the input must be of type bool");
    }
 }
 
 void nor_l(double *pkg)
 {
+  RuntimeException re;
    if(pkg[0] == 21)
      EAX = _nor(ibool(pkg[1]),ibool(pkg[2]));
    else
    {
-       c.setr(0, pkg[0], _nor(ibool(c.getr(0, pkg[1])),ibool(c.getr(0, pkg[2]))));
+      if( c.getr(1, pkg[0]) == BOOL )
+           c.setr(0, pkg[0], _nor(ibool(c.getr(0, pkg[1])),ibool(c.getr(0, pkg[2]))));
+      else
+        re.introduce("UnsatisfiedTypeException","the type reciving the input must be of type bool");
    }
 }
 
 void xnor_l(double *pkg)
 {
+  RuntimeException re;
    if(pkg[0] == 21)
        EAX = _xnor(ibool(pkg[1]),ibool(pkg[2]));
-   else {
-       c.setr(0, pkg[0], _xnor(ibool(c.getr(0, pkg[1])),ibool(c.getr(0, pkg[2]))));
+   else 
+   {
+      if( c.getr(1, pkg[0]) == BOOL )
+           c.setr(0, pkg[0], _xnor(ibool(c.getr(0, pkg[1])),ibool(c.getr(0, pkg[2]))));
+      else
+        re.introduce("UnsatisfiedTypeException","the type reciving the input must be of type bool");
    }
 }
 
 void and_l(double *pkg)
 {
+  RuntimeException re;
    if(pkg[0] == 21)
        EAX = _and(ibool(pkg[1]),ibool(pkg[2]));
    else
    {
-       c.setr(0, pkg[0], _and(ibool(c.getr(0, pkg[1])),ibool(c.getr(0, pkg[2]))));
+      if( c.getr(1, pkg[0]) == BOOL )
+           c.setr(0, pkg[0], _and(ibool(c.getr(0, pkg[1])),ibool(c.getr(0, pkg[2]))));
+      else
+        re.introduce("UnsatisfiedTypeException","the type reciving the input must be of type bool");
    }
 }
 
 void or_l(double *pkg)
 {
+  RuntimeException re;
    if(pkg[0] == 21)
      EAX = _or(ibool(pkg[1]),ibool(pkg[2]));
    else
    {
-       c.setr(0, pkg[0], _or(ibool(c.getr(0, pkg[1])),ibool(c.getr(0, pkg[2]))));
+      if( c.getr(1, pkg[0]) == BOOL )
+          c.setr(0, pkg[0], _or(ibool(c.getr(0, pkg[1])),ibool(c.getr(0, pkg[2]))));
+      else
+        re.introduce("UnsatisfiedTypeException","the type reciving the input must be of type bool");
    }
 }
 
 void xor_l(double *pkg)
 {
+  RuntimeException re;
    if(pkg[0] == 21)
        EAX = _xor(ibool(pkg[1]),ibool(pkg[2]));
-   else {
-        c.setr(0, pkg[0], _xor(ibool(c.getr(0, pkg[1])),ibool(c.getr(0, pkg[2]))));
+   else 
+   {
+      if( c.getr(1, pkg[0]) == BOOL )
+           c.setr(0, pkg[0], _xor(ibool(c.getr(0, pkg[1])),ibool(c.getr(0, pkg[2]))));
+      else
+        re.introduce("UnsatisfiedTypeException","the type reciving the input must be of type bool");
    }
 }
 
 void not_l(double *pkg)
 {
+  RuntimeException re;
      if(pkg[0] == 21)
        EAX = _not(ibool(pkg[1]));
    else
-       c.setr(0, pkg[0], _not(ibool(c.getr(0, pkg[1]))));
+   {
+      if( c.getr(1, pkg[0]) == BOOL )
+            c.setr(0, pkg[0], _not(ibool(c.getr(0, pkg[1]))));
+      else
+        re.introduce("UnsatisfiedTypeException","the type reciving the input must be of type bool");
+   }
 }

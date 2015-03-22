@@ -51,3 +51,5 @@
    int   DOUBLE = 0x12;
    int   CHAR = 0x13;
    int   BOOL = 0x14;
+   int   SHORT = 0x15;
+   int   FLOAT = 0x16;

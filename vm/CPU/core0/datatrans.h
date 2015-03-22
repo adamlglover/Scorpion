@@ -47,5 +47,9 @@ void rflush();
 void _print(double *pkg);
 void _printf(double *pkg);
 void t_cast(double *pkg);
+void cin(double *pkg);
+void sload(double *pkg);
+void loadf(double *pkg);
+void _throw(double *pkg);
 
 #endif

@@ -36,12 +36,19 @@ void loadi(double *pkg)
 	RuntimeException re;
       if( C.getr(1, pkg[0]) == OI){
           C.setr(1, pkg[0], INT);
-          C.setr(0, pkg[0], pkg[1]);
+          if(pkg[1] == 21937856)
+            C.setr(0, pkg[0], null);
+          else
+            C.setr(0, pkg[0], pkg[1]);
       }
-      else if( C.getr(1, pkg[0]) == INT )
-          C.setr(0, pkg[0], pkg[1]);
+      else if( C.getr(1, pkg[0]) == INT ){
+           if(pkg[1] == 21937856)
+            C.setr(0, pkg[0], null);
+          else
+            C.setr(0, pkg[0], pkg[1]);
+      }
       else
-        re.inttoduce("UnsatisfiedTypeException","invalid type assignment, type is not of type int");
+        re.introduce("UnsatisfiedTypeException","invalid type assignment, type is not of type int");
        // log invalid type assignment
 }
 
@@ -103,7 +110,16 @@ void _print(double *pkg)
   p_exit();
  }
 }
+
 bool reg = false;
+string str_bool(long a)
+{
+  if(a == 1)
+    return "true";
+  else
+    return "false";
+}
+
 void c_printf(double _char)
 {
   if(_char == 256 && !ignore)
@@ -118,8 +134,14 @@ void c_printf(double _char)
     string str = prog(2, IP++, ""); // get char
     long _str = d.disassemble(str); // dissasemble char
     //cout << "pinting from reg " << _str  << " -1: " << (_str - 1) << " +1: " << (_str + 1)<< endl;
-    if(!ignore)
-      cout << C.getr(0, _str);
+    if(!ignore){
+      if(C.getr(0, _str) == null)
+        cout << "null";
+      else if(C.getr(1, _str) == BOOL)
+        cout << str_bool((long) C.getr(0, _str));
+      else
+         cout << C.getr(0, _str);
+    }
   }
   else if((_char >= 5) && (_char <= 255)  && (!ignore)) {
     char c = _char;
@@ -161,28 +183,35 @@ void loadr(double *pkg)
        if(pkg[1] == 21){
            if(C.getr(1, pkg[1]) == INT)
                C.setr(0, pkg[0], EAX);
-		   else{
-			   EBX = 2;
-			   d_log.w("System", "warning: type must be of type int to obtain cpu register info");
-		      }
-	   }
+           else{
+             EBX =  2;
+             d_log.w("System", "warning: type must be of type int to obtain cpu register info");
+           }
+       }
        else if(pkg[1] == 22){
            if(C.getr(1, pkg[1]) == INT)
                C.setr(0, pkg[0], IP);
-		   else{
-			   EBX = 2;
-			   d_log.w("System", "warning: type must be of type int to obtain cpu register info");
-		   }
+	   else{
+             EBX = 2;
+             d_log.w("System", "warning: type must be of type int to obtain cpu register info");
+           } 
+      }
       else if((pkg[0] == 22)){
-		  if(C.getr(1, pkg[1]) == INT)
+           if(C.getr(1, pkg[1]) == INT)
               IP = C.getr(0, pkg[1]);
-		  else{
-			   EBX = 2;
-			   d_log.w("System", "warning: type must be of type int to modify cpu registers");
-		  }
-	  }
-       else
-          C.setr(0, pkg[0], C.getr(0, pkg[1]));
+           else{  
+             EBX = 2;
+             d_log.w("System", "warning: type must be of type int to modify cpu registers");
+           }
+      }
+      else{
+         if(C.getr(1, pkg[0]) == C.getr(1, pkg[1])) // same flag 
+             C.setr(0, pkg[0], C.getr(0, pkg[1]));
+         else{
+           EBX = 2;
+           d_log.w("System","warning: loadr err! both addresses must have same flag");
+         }
+      }
 }
 
 int ibool(long);
@@ -194,11 +223,11 @@ void loadbl(double *pkg)
        if( C.getr(1, pkg[0]) == OI){
           C.setr(1, pkg[0], BOOL);
           C.setr(0, pkg[0], ibool( (long) pkg[1] ));
-      }
-      else if( C.getr(1, pkg[0]) == BOOL )
-          C.setr(0, pkg[0], ibool( (long) pkg[1]));
-      else
-        re.inttoduce("UnsatisfiedTypeException","invalid type assignment, type is not of type bool");
+       }
+       else if( C.getr(1, pkg[0]) == BOOL )
+           C.setr(0, pkg[0], ibool( (long) pkg[1]));
+       else
+         re.introduce("UnsatisfiedTypeException","invalid type assignment, type is not of type bool");
        // log invalid type assignment
 }
 
@@ -220,7 +249,7 @@ void loadc(double *pkg)
       else if( C.getr(1, pkg[0]) == CHAR)
           C.setr(0, pkg[0],(long) _char((long) pkg[1]));
       else
-        re.inttoduce("UnsatisfiedTypeException","invalid type assignment, type is not of type char");
+        re.introduce("UnsatisfiedTypeException","invalid type assignment, type is not of type char");
        // log invalid type assignment
 }
 
@@ -232,13 +261,19 @@ void dload(double *pkg)
           stringstream ss;
           ss << pkg[1] << "." << pkg[2];
           string dec = ss.str();
-          C.setr(0, pkg[0], atof(dec.c_str()));
+          if(atof(dec.c_str()) == 21937856)
+             C.setr(0, pkg[0], null);
+          else
+             C.setr(0, pkg[0], atof(dec.c_str()));
       }
       else if( C.getr(1, pkg[0]) == DOUBLE ){
           stringstream ss;
           ss << pkg[1] << "." << pkg[2];
           string dec = ss.str();
-          C.setr(0, pkg[0], atof(dec.c_str()));
+          if(atof(dec.c_str()) == 21937856)
+             C.setr(0, pkg[0], null);
+          else
+             C.setr(0, pkg[0], atof(dec.c_str()));
       }
       else
         re.introduce("UnsatisfiedTypeException","invalid type assignment, type is not of type double");
@@ -251,16 +286,16 @@ void mv(double *pkg)
         if(C.getr(1, pkg[1]) == INT){
           C.setr(0, pkg[0], EAX);
           EAX = null;
-		}
+	}
         else
-		   d_log.w("System", "warning: type must be of type int to obtain eax w/ mv ");
+	   d_log.w("System", "warning: type must be of type int to obtain eax w/ mv ");
        }
        else{
           C.setr(0, pkg[0], C.getr(0, pkg[1]));
           C.setr(0, pkg[1], null);
           C.setr(1, pkg[0], C.getr(1, pkg[1]));
           C.setr(1, pkg[1], OI);
-       }
+      }
 }
 
 void mov(double *pkg)
@@ -314,73 +349,73 @@ void r_mv(double *pkg)
             if(C.getr(1, pkg[1]) == INT)
                  C.setr(0, pkg[1], EBX);
             else
-			   d_log.w("System", "warning: type must be of type int to obtain cpu register info");
+	       d_log.w("System", "warning: type must be of type int to obtain cpu register info");
            break;
            case 1:
             if(C.getr(1, pkg[1]) == INT)
                  C.setr(0, pkg[1], SDX);
-             else
-			   d_log.w("System", "warning: type must be of type int to obtain cpu register info");
+            else
+	       d_log.w("System", "warning: type must be of type int to obtain cpu register info");
            break;
            case 2:
              if(C.getr(1, pkg[1]) == INT)
                  C.setr(0, pkg[1], BP);
              else
-			   d_log.w("System", "warning: type must be of type int to obtain cpu register info");
+	        d_log.w("System", "warning: type must be of type int to obtain cpu register info");
            break;
            case 3:
              if(C.getr(1, pkg[1]) == INT)
                 C.setr(0, pkg[1], EXC);
              else
-			   d_log.w("System", "warning: type must be of type int to obtain cpu register info");
+		d_log.w("System", "warning: type must be of type int to obtain cpu register info");
            break;
            case 4:
             if(C.getr(1, pkg[1]) == INT)
                 C.setr(0, pkg[1], PS);
             else
-			   d_log.w("System", "warning: type must be of type int to obtain cpu register info");
+	       d_log.w("System", "warning: type must be of type int to obtain cpu register info");
            break;
            case 5:
             if(C.getr(1, pkg[1]) == INT)
                 C.setr(0, pkg[1], LG);
             else
-			   d_log.w("System", "warning: type must be of type int to obtain cpu register info");
+	       d_log.w("System", "warning: type must be of type int to obtain cpu register info");
            break;
            case 6:
             if(C.getr(1, pkg[1]) == INT)
                 C.setr(0, pkg[1], LSL);
             else
-			   d_log.w("System", "warning: type must be of type int to obtain cpu register info");
+               d_log.w("System", "warning: type must be of type int to obtain cpu register info");
            break;
            case 7:
             if(C.getr(1, pkg[1]) == INT)
                 C.setr(0, pkg[1], SFC);
             else
-			   d_log.w("System", "warning: type must be of type int to obtain cpu register info");
+               d_log.w("System", "warning: type must be of type int to obtain cpu register info");
            break;
            case 8:
             if(C.getr(1, pkg[1]) == INT)
                 C.setr(0, pkg[1], SCX);
             else
-			   d_log.w("System", "warning: type must be of type int to obtain cpu register info");
+	       d_log.w("System", "warning: type must be of type int to obtain cpu register info");
            break;
            case 9:
             if(C.getr(1, pkg[1]) == INT)
                 C.setr(0, pkg[1], I1);
             else
-			   d_log.w("System", "warning: type must be of type int to obtain cpu register info");
+	       d_log.w("System", "warning: type must be of type int to obtain cpu register info");
            break;
            case 10:
             if(C.getr(1, pkg[1]) == INT)
                 C.setr(0, pkg[1], I2);
             else
-			   d_log.w("System", "warning: type must be of type int to obtain cpu register info");
+               d_log.w("System", "warning: type must be of type int to obtain cpu register info");
            break;
            case 11:
              if(C.getr(1, pkg[1]) == INT)
                 C.setr(0, pkg[1], TMP);
              else
-			   d_log.w("System", "warning: type must be of type int to obtain cpu register info");
+                d_log.w("System", "warning: type must be of type int to obtain cpu register info");
            break;
       }
 }
@@ -396,9 +431,9 @@ void rmov(double *pkg)
               if(C.getr(1, pkg[1]) == INT)
                  EBX = C.getr(0, pkg[1]);
               else{
-			   EBX = 2;
-			   d_log.w("System", "warning: type must be of type int to modify cpu registers");
-		     }
+		EBX = 2;
+	        d_log.w("System", "warning: type must be of type int to modify cpu registers");
+     	      }
             }
            break;
            case 1:
@@ -408,9 +443,9 @@ void rmov(double *pkg)
               if(C.getr(1, pkg[1]) == INT)
                  SDX = C.getr(0, pkg[1]);
               else{
-			   EBX = 2;
-			   d_log.w("System", "warning: type must be of type int to modify cpu registers");
-		     }
+	        EBX = 2;
+	        d_log.w("System", "warning: type must be of type int to modify cpu registers");
+              }
             }
            break;
            case 2:
@@ -420,9 +455,9 @@ void rmov(double *pkg)
              if(C.getr(1, pkg[1]) == INT)
                BP = C.getr(0, pkg[1]);
              else{
-			   EBX = 2;
-			   d_log.w("System", "warning: type must be of type int to modify cpu registers");
-		     }
+	        EBX = 2;
+                d_log.w("System", "warning: type must be of type int to modify cpu registers");
+	     }
             }
            break;
            case 3:
@@ -432,9 +467,9 @@ void rmov(double *pkg)
              if(C.getr(1, pkg[1]) == INT)
                 EXC = C.getr(0, pkg[1]);
              else{
-			   EBX = 2;
-			   d_log.w("System", "warning: type must be of type int to modify cpu registers");
-		     }
+	        EBX = 2;
+		d_log.w("System", "warning: type must be of type int to modify cpu registers");
+	     }
             }
            break;
            case 5:
@@ -444,9 +479,9 @@ void rmov(double *pkg)
               if(C.getr(1, pkg[1]) == INT)
                LG = C.getr(0, pkg[1]);
               else{
-			   EBX = 2;
-			   d_log.w("System", "warning: type must be of type int to modify cpu registers");
-		     }
+	        EBX = 2;
+                d_log.w("System", "warning: type must be of type int to modify cpu registers");
+	      }
             }
            break;
            case 6:
@@ -456,9 +491,9 @@ void rmov(double *pkg)
                if(C.getr(1, pkg[1]) == INT)
                    LSL =  C.getr(0, pkg[1]);
                else{
-			     EBX = 2;
-			   d_log.w("System", "warning: type must be of type int to modify cpu registers");
-		       }
+	         EBX = 2;
+                 d_log.w("System", "warning: type must be of type int to modify cpu registers");
+               }
             }
             break;
            case 7:
@@ -468,9 +503,9 @@ void rmov(double *pkg)
              if(C.getr(1, pkg[1]) == INT)
                SFC = C.getr(0, pkg[1]);
              else{
-			   EBX = 2;
-			   d_log.w("System", "warning: type must be of type int to modify cpu registers");
-		     } 
+	       EBX = 2;
+	       d_log.w("System", "warning: type must be of type int to modify cpu registers");
+             } 
            }
            break;
            case 8:
@@ -480,9 +515,9 @@ void rmov(double *pkg)
               if(C.getr(1, pkg[1]) == INT)
                 SCX = C.getr(0, pkg[1]);
               else{
-			    EBX = 2;
-			   d_log.w("System", "warning: type must be of type int to modify cpu registers");
-		      }
+	         EBX = 2;
+	         d_log.w("System", "warning: type must be of type int to modify cpu registers");
+	      }
             }
            break;
            case 9:
@@ -492,9 +527,9 @@ void rmov(double *pkg)
              if(C.getr(1, pkg[1]) == INT)
                I1 = C.getr(0, pkg[1]);
 	        else{
-			   EBX = 2;
-			   d_log.w("System", "warning: type must be of type int to modify cpu registers");
-		     }
+	          EBX = 2;
+                  d_log.w("System", "warning: type must be of type int to modify cpu registers");
+	        }
             }
            break;
            case 10:
@@ -504,9 +539,9 @@ void rmov(double *pkg)
              if(C.getr(1, pkg[1]) == INT)
                I2 = C.getr(0, pkg[1]);
 	        else{
-			   EBX = 2;
-			   d_log.w("System", "warning: type must be of type int to modify cpu registers");
-		     }
+	           EBX = 2;
+		   d_log.w("System", "warning: type must be of type int to modify cpu registers");
+	        }
             }
            break;
            case 11:
@@ -516,9 +551,9 @@ void rmov(double *pkg)
              if(C.getr(1, pkg[1]) == INT)
                 TMP = C.getr(0, pkg[1]); 
              else{
-			   EBX = 2;
-			   d_log.w("System", "warning: type must be of type int to modify cpu registers");
-		     }
+	        EBX = 2;
+                d_log.w("System", "warning: type must be of type int to modify cpu registers");
+             }
             }
             break;
      }
@@ -579,11 +614,11 @@ void _port(double *pkg)
           if(C.getr(1, pkg[0]) == INT)
              C.setr(0, pkg[0], p.geto());
           else{
-			 EBX = 2;
+	     EBX = 2;
              stringstream ss;
              ss << "warning: type must be of type int to recieve port info";
-			 d_log.w("System", ss.str());
-		  }
+	     d_log.w("System", ss.str());
+          }
          }
         break;
         case 1:
@@ -593,11 +628,11 @@ void _port(double *pkg)
           if(C.getr(1, pkg[0]) == INT)
              p.seto(C.getr(0, pkg[0]));
           else{
-			 EBX = 2;
+	     EBX = 2;
              stringstream ss;
              ss << "warning: type must be of type int to recieve port info";
-			 d_log.w("System", ss.str());
-		  }
+	     d_log.w("System", ss.str());
+          }
          }
         break;
        case 2:
@@ -608,11 +643,11 @@ void _port(double *pkg)
            if(C.getr(1, pkg[0]) == INT)
              C.setr(0, pkg[0], b.status());
            else{
-			 EBX = 2;
-			 stringstream ss;
-             ss << "warning: type must be of type int to recieve port info";
-			 d_log.w("System", ss.str());
-		  }
+	      EBX = 2;
+	      stringstream ss;
+              ss << "warning: type must be of type int to recieve port info";
+	      d_log.w("System", ss.str());
+           }
          }
          break;
      }
@@ -689,18 +724,17 @@ int tibool(bool val)
 
 void same(double *pkg)
 {
-	
 	RuntimeException re;
 	if(C.getr(1, pkg[0]) == BOOL){
-       if(C.getr(0, pkg[1]) == 21)
-         C.setr(0, pkg[0], tibool(EAX == C.getr(0, pkg[2])));
-       else if(C.getr(0, pkg[2]) == 21)
-         C.setr(0, pkg[0], tibool(C.getr(0, pkg[1]) == EAX));
-       else
-         C.setr(0, pkg[0], tibool(C.getr(0, pkg[1]) == C.getr(0, pkg[2])));
+           if(C.getr(0, pkg[1]) == 21)
+               C.setr(0, pkg[0], tibool(EAX == C.getr(0, pkg[2])));
+           else if(C.getr(0, pkg[2]) == 21)
+               C.setr(0, pkg[0], tibool(C.getr(0, pkg[1]) == EAX));
+           else
+               C.setr(0, pkg[0], tibool(C.getr(0, pkg[1]) == C.getr(0, pkg[2])));
 	}
 	else
-	  re.inttoduce("UnsatisfiedTypeException","the type reciving the input must be of type bool");
+	  re.introduce("UnsatisfiedTypeException","the type reciving the input must be of type bool");
 
 }
 
@@ -725,11 +759,11 @@ void func(double *pkg)
             C.setr(1, pkg[0], UFUNC);
           }
           else{
-			EBX = 2;
-		    stringstresam ss;
-			ss << "warning: cannot create func at addr " << pkg[0];
-			d_log.w("System",ss.str());
-		  }
+	    EBX = 2;
+	    stringstream ss;
+	    ss << "warning: cannot create func at addr " << pkg[0];
+	    d_log.w("System",ss.str());
+          }
 }
 
 void push(double *pkg)
@@ -746,9 +780,9 @@ void push(double *pkg)
             exception.introduce("FunctionInitializationException", "multiple definition of func " + ss.str());
      } 
      else{
-	    stringstrean ss;
-	    ss << "addr " << pkg[0] << " is not a func";
-        exception.introduce("NotAFuncException", ss.str());
+         stringstream ss;
+         ss << "addr " << pkg[0] << " is not a func";
+         exception.introduce("NotAFuncException", ss.str());
      }
 }
 
@@ -761,15 +795,15 @@ void _return(double *pkg)
          if(C.getr(1, pkg[0]) == FUNC)
             IP = (long) C.getr(0, pkg[0]);
          else if(C.getr(1, pkg[0]) == UFUNC){
-		   stringstrean ss;
-		   ss << "fatal err;" << " cannot return an unreferenced func at addr " << pkg[0];
-           re.introduce("FunctionCallException", ss.str());
-		 }
+             stringstream ss;
+             ss << "fatal err;" << " cannot return an unreferenced func at addr " << pkg[0];
+             re.introduce("FunctionCallException", ss.str());
+         }
          else{
-		   stringstrean ss;
-		   ss << "addr " << pkg[0] << " is not a func";
-           re.introduce("NotAFuncException", ss.str());
-		 }
+            stringstream ss;
+            ss << "addr " << pkg[0] << " is not a func";
+            re.introduce("NotAFuncException", ss.str());
+         }
         }
 }
 
@@ -777,20 +811,20 @@ void call(double *pkg)
 {
 	RuntimeException re;
        if(C.getr(1, pkg[0]) == UFUNC){ 
-		     stringstream ss;
-			 ss << "unidentified refrence to func " << pkg[0] ;
+             stringstream ss;
+	     ss << "unidentified refrence to func " << pkg[0] ;
              re.introduce("FunctionCallException", ss.str());
-	   }
-	   else if(C.getr(1, pkg[0]) == FUNC){
+       }
+       else if(C.getr(1, pkg[0]) == FUNC){
           TMP = IP;
           IP = (long) C.getr(0, pkg[0]);
           C.setr(0, pkg[0], TMP);
        }
        else{
-	    stringstream ss;
-	    ss << "addr " << pkg[0] << " is not a func";
-        re.introduce("NotAFunctionException", ss.str());
-	   }
+	 stringstream ss;
+	 ss << "addr " << pkg[0] << " is not a func";
+         re.introduce("NotAFunctionException", ss.str());
+       }
 }
 
 void swp(double *pkg)
@@ -865,25 +899,25 @@ void _do(double *pkg)
 {
 	RuntimeException re;
 	if(C.getr(1, pkg[0]) == BOOL){
-		if(C.getr(0, pkg[0]) == 1){}
-		else {
-		  if_ignore = true;
-		  ignore = true;
-		}
+	    if(C.getr(0, pkg[0]) == 1){}
+            else {
+	       if_ignore = true;
+	       ignore = true;
+            }
 	}
 	else
-	  re.inttoduce("UnsatisfiedTypeException","the type inputed must be of type bool");
+	  re.introduce("UnsatisfiedTypeException","the type inputed must be of type bool");
 }
 
 void ilt(double *pkg)
 {
 	RuntimeException re;
 	if(is_integer(C.getr(1, pkg[0]), C.getr(1, pkg[0]))){
-		if(C.getr(0, pkg[0]) < C.getr(0, pkg[1])){}
-		else {
-		  if_ignore = true;
-		  ignore = true;
-		}
+	    if(C.getr(0, pkg[0]) < C.getr(0, pkg[1])){}
+            else {
+	       if_ignore = true;
+               ignore = true;
+	    }
 	}
 	else
 	   re.introduce("UnsatisfiedTypeException","the types inputed must be of integer types[double,int]");
@@ -898,7 +932,7 @@ void igt(double *pkg)
 		  if_ignore = true;
 		  ignore = true;
 		}
-    }
+        }
 	else
 	   re.introduce("UnsatisfiedTypeException","the types inputed must be of integer types[double,int]");
 }
@@ -912,7 +946,7 @@ void iltoeq(double *pkg)
 		  if_ignore = true;
 		  ignore = true;
 		}
-    }
+        }
 	else
 	   re.introduce("UnsatisfiedTypeException","the types inputed must be of integer types[double,int]");
 }
@@ -926,7 +960,7 @@ void igtoeq(double *pkg)
 		  if_ignore = true;
 		  ignore = true;
 		}
-    }
+        }
 	else
 	   re.introduce("UnsatisfiedTypeException","the types inputed must be of integer types[double,int]");
 }
@@ -942,7 +976,7 @@ void ndo(double *pkg)
 		}
 	}
 	else
-	  re.inttoduce("UnsatisfiedTypeException","the type inputed must be of type bool");
+	  re.introduce("UnsatisfiedTypeException","the type inputed must be of type bool");
 }
 
 void inlt(double *pkg)
@@ -954,7 +988,7 @@ void inlt(double *pkg)
 		  if_ignore = true;
 		  ignore = true;
 		}
-    }
+        }
 	else
 	   re.introduce("UnsatisfiedTypeException","the types inputed must be of integer types[double,int]");
 }
@@ -968,25 +1002,26 @@ void ingt(double *pkg)
 		  if_ignore = true;
 		  ignore = true;
 		}
-    }
+        }
 	else
 	   re.introduce("UnsatisfiedTypeException","the types inputed must be of integer types[double,int]");
 }
 
-void cast(double *pkg)
+void t_cast(double *pkg)
 {
+     RuntimeException re;
 	if(is_integer(C.getr(1, pkg[0]), C.getr(1, pkg[0]))){
-		switch( pkg[1] ){
+		switch( (long) pkg[1] ){
 		    case 0: // int
-				C.setr(1, pkg[0], INT);
+		       C.setr(1, pkg[0], INT);
 		    break;
-			case 1: // double
-				C.setr(1, pkg[0], DOUBLE);
+		    case 1: // double
+	               C.setr(1, pkg[0], DOUBLE);
 		    break;
-			default: // err
-				stringstream ss;
-				ss << "the specified cast value [" << pkg[1] << "] is not a valid arg[double(1),int(0)]";
-				re.introduce("UnknownCastException", ss.str());
+	            default: // err
+		        stringstream ss;
+		        ss << "the specified cast value [" << pkg[1] << "] is not a valid arg[double(1),int(0)]";
+			re.introduce("UnknownCastException", ss.str());
 		    break;
 		}
 	}
@@ -1017,7 +1052,7 @@ void ingtoeq(double *pkg)
 		  if_ignore = true;
 		  ignore = true;
 		}
-    }
+        }
 	else
 	   re.introduce("UnsatisfiedTypeException","the types inputed must be of integer types[double,int]");
 }

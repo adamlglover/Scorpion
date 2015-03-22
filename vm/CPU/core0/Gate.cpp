@@ -510,9 +510,9 @@ int Gate::route(double instr, double r1,double r2, double r3)
        break;
          case 80:
        if(!ignore)
-         cast(pkg);
+         t_cast(pkg);
        if(scmnd && (!ignore))
-       cout << "cast" << endl;
+       cout << "t_cast" << endl;
        break;
        default:
          if(!ignore){

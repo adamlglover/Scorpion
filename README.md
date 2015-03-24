@@ -37,7 +37,7 @@ In the console type:
       $  sudo ./scorpion file
  
 You do not have to type the .b extention of the file(program) to run the program(if you do, an error will be thrown).
-The vm can only take a single object file that has all the instructions needed to run your program. In the future I plan to build a linker that will link multiple files together into a single file.  But for now you will only be able to have a single file as the full program to be run. i.e. when using the compiler you will not be able to reference other files. The vm will also print out in real-time a log of data that represents what the system is doing at that point in time. this file will be located in '/usr/share/scorpion/log.txt'. NOTE: If you have superuser access to all your files and or is logged in as root you do not need to type sudo before the program. Any system configs you will be having will go under the file '/usr/share/svm/system.conf'(not yet implemented).
+The vm can only take a single object file that has all the instructions needed to run your program. The vm will also print out in real-time a log of data that represents what the system is doing at that point in time. this file will be located in '/usr/share/scorpion/log.txt'. NOTE: If you have superuser access to all your files and or is logged in as root you do not need to type sudo before the program. Any system configs you will be having will go under the file '/usr/share/svm/system.conf'(not yet implemented).
 
 ## Instruction set
 Read LINEUP.md for information on system.

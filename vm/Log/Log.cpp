@@ -14,6 +14,7 @@ void Log::On()
 {
   Logging = true;
 }
+
 const int VERBOSE = 2;
 
 const int DEBUG = 3;

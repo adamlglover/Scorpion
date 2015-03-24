@@ -85,6 +85,8 @@ double Ram::data(double dataBus)
             ram[ address ] = ibool( (long) dataBus);
            else // format as double
             ram[ address ] = dataBus;
+      //     if((address >= 30) && (address <= 33))
+        //     cout << "ram " << ram[ address ];
          break;
          case 2: // E
         //   cout << "Getting " << dataBus<< "from ram CB " << Ram::CB << " address " << address << endl;

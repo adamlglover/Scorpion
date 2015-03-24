@@ -45,7 +45,7 @@ clock_t tStart;
 clock_s t_clock;
 bool _0Halted;
 bool pass = false;
-bool scmnd = true;
+bool scmnd = false;
 bool ignore = false;
 bool if_ignore = false;
 bool waiting = false;
@@ -99,6 +99,8 @@ void C0::Reset()
   BP  = 0;
   EXC = 1;  // standard program close
   PS  = 0;
+  LG  = 1; // logging
+  LSL = 2; // verbose
   I1  = 0;
   I2  = 0;
 
@@ -182,7 +184,7 @@ void C0::ExecuteInterrupt(double offset)
 
 int ProcessOperands()
 {
-   cout<< "processing operands {0:" << instruction << "} {1:" << reg1 << "} {2:" << reg2 << "} {3:" << reg3 << "}" << endl;
+  // cout << "processing operands {0:" << instruction << "} {1:" << reg1 << "} {2:" << reg2 << "} {3:" << reg3 << "}" << endl;
    Gate gate;
    return gate.route(instruction, reg1, reg2, reg3);
 }

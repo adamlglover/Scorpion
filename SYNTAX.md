@@ -15,21 +15,20 @@ Low-Level version ===========>
 
           ; Brginning of the program
           loadi r3 #5   ; fill the parameter with value 5 and 2
-          loadi r4 #2
+          loadi r4 #2   ; create an integer variable
           
           ; here we declare 2 functions
-          %func r1
+          %func r1      ; create a func obj
           %func _main   ; main is a special register r0 
           
-          push r1       
+          push r1           ; initalize function
              add r5 r3,r4   ; add the 2 specified values
-             dout r5
-             ip _main       ; tell the cpu to jump back to main
-          return      
+             printf 1 (r,r5) ; print answer
+          return r1
           
           push _main
-             call r1
-          return
+             call r1     
+          return _main
           call _main     ; call the main function
           
           halt  0          ;   shutdown the vm and do not reboot

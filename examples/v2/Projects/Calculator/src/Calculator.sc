@@ -17,7 +17,7 @@
 void bueatify
 {
         o_stream << "=========================================" << endl;
-	o_stream << "              C++ CALCULATOR" << endl;
+	o_stream << "              Scorpion CALCULATOR" << endl;
 	o_stream << "=========================================" << endl;
 }
 

@@ -45,16 +45,13 @@ void handleargs()
   }
   else if(ARG == "-hardware"){
      cout << "Scorpion(TM) Virtural Hardware\n" << endl;
-     cout << "\tCPU   RAM   HardDrive   System Cache" << endl;
+     cout << "\tCPU   RAM  " << endl;
   }
   else if(ARG == "-fspecs"){
       Ram rm;
      cout << "Scorpion(TM) Full Virturalized System Specs\n\n";
-     cout << "CPU\nType: x86 Arm Core i1 CPU\nClock speed: .133Mhz\nProgram instruction set: 4(the amount of instructions read as 1)\nInstructions: 62 Opcodes\n" << endl;
-     cout << "Ram\nTotal Size: " << rm.info(1) << "mb of Ram\nAccess Size: " << rm.info(3) << "mb of Ram\nSpecial Regiaters: 14 dedicated memory locations\n" << endl;
-     cout << "Hardrive\nType: Disk img reader\nSize Limit: Max 64gb disk img size\n" << endl;
-     cout << "System Cache\nTotal Size: 30mb of total possible program size\nis inversly porportional to the Ram size\n" << endl;
-     cout << "STD Out(standard out)\nsupported formats :\n  decimal\n  bool\n  char\n  system stat(any status code defined by the vm)\nno current supported console input\n" << endl;
+     cout << "CPU\nType: x86 Arm Core i1 CPU\nClock speed: .110Mhz\nProgram instruction set: 4(the amount of instructions read as 1)\nInstructions: 62 Opcodes\nSpecial Regiaters: 14 dedicated memory locations\n" << endl;
+     cout << "Ram\nTotal Size: " << rm.info(1) << "mb of Ram\nAccess Size: " << rm.info(3) << "mb of Ram\nTotal Size: 30mb of total possible program size\n" << endl;
      cout << "GPIO(General Purpose Input Output)\nnot yet supported\n" << endl;
   }
   else if(ARG == "-properties"){

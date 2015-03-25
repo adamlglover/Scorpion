@@ -1,13 +1,11 @@
 #include "core0.h"
 #include "alu.h"
 #include "gate.h"
-#include "../../Bus/bus.h"
 #include "lu.h"
 #include "datatrans.h"
 #include "io.h"
 #include "runtime_exception.h"
 #include "../../program.h"
-#include "../../Ports/ports.h"
 #include <sstream>
 #include <iostream>
 #include "../../Log/Log.h"
@@ -242,7 +240,7 @@ int Gate::route(double instr, double r1,double r2, double r3)
         break;
         case 35: // init
        if(!ignore) 
-         _init(pkg);
+         invoke(pkg);
        if(scmnd && (!ignore))
        cout << "init" << endl;
         break;
@@ -390,12 +388,6 @@ int Gate::route(double instr, double r1,double r2, double r3)
        if(scmnd && (!ignore))
 	cout << "endwl" << endl;
 	break;
-       case 60:
-       if(!ignore)
-           _port(pkg);
-       if(scmnd && (!ignore))
-	cout << "port" << endl;
-        break;
        case 61:
        if(!ignore)
            same(pkg);

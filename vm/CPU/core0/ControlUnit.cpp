@@ -28,13 +28,12 @@
 #include "gate.h"
 #include <sstream>
 #include "../../program.h"
-#include "../../Ports/ports.h"
 #include "../../System.h"
 #include "../../sram.h"
 #include "cpuf.h"
 #include "runtime_exception.h"
 #include "../../Log/filter.h"
-#include "../../x86Disasm/disassembler.h"
+#include "../x86Disassm/disassembler.h"
 #include "../../Log/Log.h"
 #include <string>
 using namespace std;

@@ -9,9 +9,9 @@ using namespace std;
 #define NUM_PROPERTIES 11
 string names [ NUM_PROPERTIES ];
 string values [ NUM_PROPERTIES ];
-extern long rand1(long lim)
-extern long rand2(long seed, long lim);
-extern long rand3(long lim)
+long rand1(long lim);
+long rand2(long seed, long lim);
+long rand3(long lim);
 
 Log p_log;
 void c_names()
@@ -58,7 +58,6 @@ long genRand(long range)
   return num;
 }
 
-}
 void genVls()
 {
   stringstream ss;
@@ -66,11 +65,13 @@ void genVls()
   ss << "fe." << rand2(6, genRand(120)) << "d7." << "x" << rand1(genRand(10)) << rand2(genRand(8), genRand(100));
   values[ 0 ] = ss.str();
   
-  ss << rand2(genRand(8), genRand(1000000)) << "-" << rand2(genRand(8), genRand(1000000)) << "-" << rand2(genRand(8), genRand(1000000)) << "-" << rand2(genRand(8), genRand(1000000)) << "-" << rand2(genRand(8), genRand(1000000));
-  values[ 1 ] = ss.str();
-  
-  ss << "192.168.1." << rand2(genRand(10), genRand(100));
-  values[ 9 ] = ss.str();
+  stringstream ss1;
+  ss1 << rand2(genRand(8), genRand(1000000)) << "-" << rand2(genRand(8), genRand(1000000)) << "-" << rand2(genRand(8), genRand(1000000)) << "-" << rand2(genRand(8), genRand(1000000)) << "-" << rand2(genRand(8), genRand(1000000));
+  values[ 1 ] = ss1.str();
+
+  stringstream ss2;
+  ss2 << "192.168.1." << rand2(genRand(10), genRand(100));
+  values[ 9 ] = ss2.str();
 }
 
 void Properties::build()

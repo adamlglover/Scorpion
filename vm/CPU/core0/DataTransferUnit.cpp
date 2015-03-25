@@ -2,16 +2,13 @@
 #include <stdlib.h>
 #include "runtime_exception.h"
 #include "../../System.h"
-#include "../../Bus/bus.h"
 #include "../../program.h"
 #include "../../var.h"
 #include "io.h"
-#include "../../x86Disasm/disassembler.h"
+#include "../x86Disassm/disassembler.h"
 #include "../../sram.h"
 #include "../../Log/filter.h"
-#include "../../Ports/ports.h"
 #include "cpuf.h"
-#include "../../Bus/bus.h"
 #include "../../Log/Log.h"
 #include "../../Ram/ram.h"
 #include <string>
@@ -671,7 +668,7 @@ void mov(double *pkg)
 	    EXC = pkg[1];
            break;
 	   case 4:
-	    PS = pstatus;
+	    PS = 0;
            break;
 	   case 5:
 	    LG = pkg[1];
@@ -915,19 +912,12 @@ void rmov(double *pkg)
      }
 }
 
-void _init(double *pkg)
+void invoke(double *pkg)
 {
      switch((long) pkg[0] )
      {
-       case 0: // VHD write
-         InputOutput _io;
-        double idata[3];
-        idata[0] = SDX;
-        idata[1] = I1;
-        idata[2] = I2;
-        Bus buss;
-        buss.accessport(BP);
-        _io.Write(_VHD,SFC,SCX,idata);
+       case 0: // IO write
+         
        break;
        case 1: // log
         Log _l;
@@ -945,56 +935,6 @@ void _init(double *pkg)
        re.introduce("IllegalSystemCallExcpetion", "code is not a system call [" + ss.str() + "]");
        break;
 
-     }
-}
-
-void _port(double *pkg)
-{
-   Ports p;
-     switch( (long) pkg[1] ) {
-        case 0:
-         if(pkg[0] == 22)
-           EAX = p.geto();
-         else{
-          if(C.getr(1, pkg[0]) == INT || C.getr(1, pkg[1]) == SHORT)
-             C.setr(0, pkg[0], p.geto());
-          else{
-	     EBX = 2;
-             stringstream ss;
-             ss << "warning: type must be an integer type to recieve port info";
-	     d_log.w("System", ss.str());
-          }
-         }
-        break;
-        case 1:
-           if(pkg[0] == 22)
-              p.seto(EAX);
-         else{
-          if(C.getr(1, pkg[0]) == INT || C.getr(1, pkg[1]) == SHORT)
-             p.seto(C.getr(0, pkg[0]));
-          else{
-	     EBX = 2;
-             stringstream ss;
-             ss << "warning: type must be an integer type to recieve port info";
-	     d_log.w("System", ss.str());
-          }
-         }
-        break;
-       case 2:
-      Bus b;
-         if(pkg[0] == 22)
-           EAX = b.status();
-         else{
-           if(C.getr(1, pkg[0]) == INT || C.getr(1, pkg[1]) == SHORT)
-             C.setr(0, pkg[0], b.status());
-           else{
-	      EBX = 2;
-	      stringstream ss;
-              ss << "warning: type must be an integer type to recieve port info";
-	      d_log.w("System", ss.str());
-           }
-         }
-         break;
      }
 }
 

@@ -23,7 +23,7 @@
 #include <sstream>
 using namespace std;
 
-#define MAX 1000000 /* 1mb of R\c(ram per cell)*/
+#define MAX 2000000 /* 1mb of R\c(ram per cell)*/
 #define NUM_CELLS 5
 double ram[ MAX ]; // cell 0
 double fram[ MAX ]; // cell 1

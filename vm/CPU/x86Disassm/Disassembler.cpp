@@ -1,7 +1,7 @@
 #include "disassembler.h" 
 #include <sstream> 
 #include <string> 
-#include "../CPU/core0/runtime_exception.h"
+#include "../core0/runtime_exception.h"
 #include <math.h> 
 #include <iostream>
 using namespace std;

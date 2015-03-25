@@ -4,7 +4,7 @@ Native Raspberry Pi VM implementation in C++
 # Info
 I will be developing a new Computer language called Scorpion. Scorpion, alike java is a platform independant language. Scorpion will have a VM that works as the middle layer between the Operating System and the source code.The high level language rules and syntax will be developed after the VM. Writing programs in the vm will operate at a low level allowing the simulation of programming a computer. Below is a diagram of how it is platform independant(alot like java):
 
-![alt tag](https://github.com/AndroDevcd/RPVM/blob/master/Diagrams/system_representation_1.png)
+![alt tag](https://github.com/AndroDevcd/RPVM/blob/master/Diagrams/system_representation.png)
 
 # Specifications
 The vm will have an organized process for executing code. Below is a simple representation of the process of writing programs in Scorpion.

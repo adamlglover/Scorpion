@@ -34,6 +34,7 @@ push _print
 return _print
 ;----------------
 
+; Prog.ss
 reg 1031 response
 reg 1032 end_prog
 
@@ -83,7 +84,6 @@ push end_prog
     rm r100001    ; destroy bool variable
 return end_prog
 
-; Prog.ss
 push ck_p
    loadr ck_p_b ip
    reg 100000 r

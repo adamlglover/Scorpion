@@ -102,6 +102,62 @@ void sload(double *pkg)
        // log invalid type assignment
 }
 
+void ct_int(double *pkg)
+{
+  RuntimeException re;
+  if((C.getr(1, pkg[0]) == SHORT) || (C.getr(1, pkg[0]) == INT)){
+     char a = C.getr(0, pkg[0]);
+     int val = a - '0';
+     C.setr(0, pkg[0], val);
+  }
+  else
+     re.introduce("UnsatisfiedTypeException","invalid type assignment, inputed type is not of type int");
+}
+
+void ct_float(double *pkg)
+{
+  Disassembler d;
+  string str = prog(2, IP++, ""); // get char
+  long _str = d.disassemble(str); // dissasemble char
+  RuntimeException re;
+  if((((C.getr(1, pkg[0]) == DOUBLE) || (C.getr(1, pkg[0]) == FLOAT)) && ((C.getr(1, pkg[1] == CHAR) && (C.getr(1, _str) == CHAR)))) && (!ignore)){ 
+     char a = C.getr(0, pkg[2]);
+     if(a == '.'){
+         char b = C.getr(0, pkg[1]);
+         char c = C.getr(0, _str);
+         stringstream ss;
+         ss << b << "." << c;
+         string dec = ss.str();
+         C.setr(0, pkg[0], atof(dec.c_str()));
+     }
+     else
+       re.introduce("FloatingPointException", "could not find dec seperator");
+  }
+   else
+       re.introduce("UnsatifiedTypeException", "the inputed types did not meet the required types");
+}
+
+void anum(double *pkg)
+{
+    RuntimeException re;
+   if(is_integer(C.getr(1, pkg[0]), C.getr(1, pkg[0]) && (C.getr(1, pkg[1]) == CHAR))){
+         stringstream ss;
+         ss << C.getr(0, pkg[0]) << C.getr(0, pkg[1]);
+         string num = ss.str();
+         
+         if((C.getr(1, pkg[0]) == SHORT) || (C.getr(1, pkg[0]) == INT))
+           C.setr(0, pkg[0], atoi(num.c_str()));
+         else if((C.getr(1, pkg[0]) == DOUBLE) || (C.getr(1, pkg[0]) == FLOAT))
+           C.setr(0, pkg[0], atof(num.c_str()));
+         else {
+           EBX = 2;
+           d_log.w("System", "warning: canot assignn decimal value to char");
+         }
+   }
+   else
+      re.introduce("UnsatifiedTypeException", "the inputed types did not meet the required types");
+}
+
 void sload_r(double *pkg)
 {
     //checkreg(pkg[0]);
@@ -1047,6 +1103,7 @@ void func(double *pkg)
             C.setr(0, pkg[0], null);
             C.setr(1, pkg[0], UFUNC);
           }
+          else if((C.getr(1, pkg[0]) == FUNC) || (C.getr(1, pkg[0]) == UFUNC)){ }
           else{
 	    EBX = 2;
 	    stringstream ss;
@@ -1084,8 +1141,11 @@ void _return(double *pkg)
 {
         inFunc = false;
 	RuntimeException re;
-        if(ignore)
+        if(ignore && pkg[1] == 0)
             ignore = false;
+        else if(ignore && pkg[1] == 1) { 
+               // skip
+        }
         else {
          if(C.getr(1, pkg[0]) == FUNC)
             IP = (long) C.getr(0, pkg[0]);

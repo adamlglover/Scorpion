@@ -1,11 +1,13 @@
 #include "math.h"
 #include "core0.h"
 #include "cpuf.h"
+#include "../../Log/Log.h"
 #include <stdlib.h>
 #include <sstream>
 #include <iostream>
 using namespace std;
 
+Log LOGG;
 long _char(long);
 bool calc(int assign_flag, int flag_1, int flag_2)
 {
@@ -41,12 +43,58 @@ void add(double *pkg)
 
 void sr(double *pkg)
 {
-       EAX = EAX >> (long) pkg[0];
+       if(pkg[2] == 0)
+           EAX = EAX >> (long) pkg[0];
+       else {
+          if(c0.getr(1, pkg[1]) == INT){
+               long right = (long) c0.getr(1, pkg[1]) >> (long) pkg[0];
+               c0.setr(0, pkg[1], right);
+          }
+          else if(c0.getr(1, pkg[1]) == DOUBLE){
+                EBX = 2;
+                LOGG.w("System", "warning: cannot right shift floating point number");
+          }
+          else if(c0.getr(1, pkg[1]) == FLOAT){
+                EBX = 2;
+                LOGG.w("System", "warning: cannot right shift floating point number");
+          }
+          else if(c0.getr(1, pkg[1]) == SHORT){
+               int right = (int) c0.getr(1, pkg[1]) >> (long) pkg[0];
+               c0.setr(0, pkg[1], right);
+          }
+          else if(c0.getr(1, pkg[1]) == CHAR){
+               int right = (int) c0.getr(1, pkg[1]) >> (long) pkg[0];
+               c0.setr(0, pkg[1], right);
+          }
+       }
 }
 
 void sl(double *pkg)
 {
+     if(pkg[2] == 0)
        EAX = EAX << (long) pkg[0];
+     else {
+          if(c0.getr(1, pkg[1]) == INT){
+               long right = (long) c0.getr(1, pkg[1]) << (long) pkg[0];
+               c0.setr(0, pkg[1], right);
+          }
+          else if(c0.getr(1, pkg[1]) == DOUBLE){
+                EBX = 2;
+                LOGG.w("System", "warning: cannot right shift floating point number");
+          }
+          else if(c0.getr(1, pkg[1]) == FLOAT){
+                EBX = 2;
+                LOGG.w("System", "warning: cannot right shift floating point number");
+          }
+          else if(c0.getr(1, pkg[1]) == SHORT){
+               int right = (int) c0.getr(1, pkg[1]) << (long) pkg[0];
+               c0.setr(0, pkg[1], right);
+          }
+          else if(c0.getr(1, pkg[1]) == CHAR){
+               int right = (int) c0.getr(1, pkg[1]) << (long) pkg[0];
+               c0.setr(0, pkg[1], right);
+          }
+       }
 }
 
 void rdtsc() // Read Time Stamp Counter

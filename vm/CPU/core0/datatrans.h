@@ -56,5 +56,8 @@ void sload_r(double *pkg);
 void loadf_r(double *pkg);
 void dload_r(double *pkg);
 void bck_t(double *pkg);
+void ct_int(double *pkg);
+void ct_float(double *pkg);
+void anum(double *pkg);
 
 #endif

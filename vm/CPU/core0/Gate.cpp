@@ -567,6 +567,23 @@ int Gate::route(double instr, double r1,double r2, double r3)
        if(scmnd && (!ignore))
        cout << "bck_t" << endl;
        break;
+       case 90:
+         ct_int(pkg);
+       if(scmnd && (!ignore))
+       cout << "ct_int" << endl;
+       break;
+       case 91:
+       if(!ignore)
+         ct_float(pkg);
+       if(scmnd && (!ignore))
+       cout << "ct_float" << endl;
+       break;
+       case 92:
+       if(!ignore)
+         anum(pkg);
+       if(scmnd && (!ignore))
+       cout << "anum" << endl;
+       break;
        default:
          if(!ignore){
              Log lg;

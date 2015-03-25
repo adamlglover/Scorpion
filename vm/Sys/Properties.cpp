@@ -9,6 +9,9 @@ using namespace std;
 #define NUM_PROPERTIES 11
 string names [ NUM_PROPERTIES ];
 string values [ NUM_PROPERTIES ];
+extern long rand1(long lim)
+extern long rand2(long seed, long lim);
+extern long rand3(long lim)
 
 Log p_log;
 void c_names()
@@ -25,7 +28,6 @@ void c_names()
   names[ 9 ] = "IP"; // set at startup
   names[ 10 ] = "Radio Addr";
 
-  values[ 0 ] = "f3.109d7.x49l";
   values[ 2 ] = "0.0.1";
   values[ 3 ] = "1";
   values[ 4 ] = "Core";
@@ -36,32 +38,39 @@ void c_names()
   values[ 10 ] = "F51B2G6NS3";
 }
 
+long genRand(long range)
+{
+  long seed,n1,n2,n3,num;
+  
+  for (int i = 0; i < 10; i++)
+      seed = rand2(8, range);
+  
+  for (int i = 0; i < 10; i++)
+      n1 = rand2(seed, range);
+      
+  for(int i = 0; i < 10; i++)
+      n2 = rand2(n1, range);
+  
+  for(int i = 0; i < 10; i++)
+      n3 = rand2(n2, range);
+      
+  num = n3;
+  return num;
+}
+
+}
 void genVls()
 {
-  int n;
-  char c;
-  string text = "";
-
-  for(int i = 0; i < 18; i++)
-  {
-    n = rand() % 100;
-     if((i == 3) || (i == 7) || (i == 11) || (i == 15))
-          text.append("-");
-     else{
-       std::stringstream ss;
-       ss << n;
-          text.append(ss.str());
-     }
-  }
-   values[ 1 ] = text;
-   text ="";
-
-    int n1 = rand() % 10;
-    int n2 = rand() % 10;
-    int n3 = rand() % 10;
-    std::stringstream ss;
-    ss << "192.168." << n1 << "." << n2 << "" << n3;
-    values[ 9 ] = ss.str();
+  stringstream ss;
+  
+  ss << "fe." << rand2(6, genRand(120)) << "d7." << "x" << rand1(genRand(10)) << rand2(genRand(8), genRand(100));
+  values[ 0 ] = ss.str();
+  
+  ss << rand2(genRand(8), genRand(1000000)) << "-" << rand2(genRand(8), genRand(1000000)) << "-" << rand2(genRand(8), genRand(1000000)) << "-" << rand2(genRand(8), genRand(1000000)) << "-" << rand2(genRand(8), genRand(1000000));
+  values[ 1 ] = ss.str();
+  
+  ss << "192.168.1." << rand2(genRand(10), genRand(100));
+  values[ 9 ] = ss.str();
 }
 
 void Properties::build()

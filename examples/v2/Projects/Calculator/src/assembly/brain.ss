@@ -34,7 +34,7 @@ push CalculateResult
    same tmpb op,tmpc
 
    do tmpb
-    sub CalculateResult_return input1,input2
+    sub CalculateResult_return inpt1,inpt2
     rm tmpb
     rm tmpc
     rm op
@@ -47,7 +47,7 @@ push CalculateResult
    same tmpb op,tmpc
 
    do tmpb
-    add CalculateResult_return input1,input2
+    add CalculateResult_return inpt1,inpt2
     rm tmpb
     rm tmpc
     rm op
@@ -60,7 +60,7 @@ push CalculateResult
    same tmpb op,tmpc
 
    do tmpb
-    div CalculateResult_return input1,input2
+    div CalculateResult_return inpt1,inpt2
     rm tmpb
     rm tmpc
     rm op
@@ -73,7 +73,7 @@ push CalculateResult
    same tmpb op,tmpc
 
    do tmpb
-    rem CalculateResult_return input1,input2
+    rem CalculateResult_return inpt1,inpt2
     rm tmpb
     rm tmpc
     rm op

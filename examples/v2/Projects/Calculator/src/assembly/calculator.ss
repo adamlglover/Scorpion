@@ -5,8 +5,6 @@ reg 200002 GetUserInput
 reg 200003 GetUserInput_b
 reg 200004 GetMatmaticialOpr
 reg 200005 GetMatmaticialOpr_b
-reg 200006 GetUserInput
-reg 200007 GetUserInput_b
 reg 200008 CalculateResult
 reg 200009 CalculateResult_b
 

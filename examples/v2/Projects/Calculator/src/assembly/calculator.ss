@@ -593,25 +593,25 @@ push GetUserInput
         rm index
         rm tmp
         rm handle_txt
+        
+           reg 100006 inpt1
+	   reg 100007 inpt2
+	   reg 100008 op
+	   loadi inpt1 0
+	   loadi inpt2 0
+	   loadr inpt1 inp1
+	   loadr inpt2 inp2
+	   loadc op '-'
+	   loadr op chOp
+	   loadr CalculateResult  CalculateResult_b
+	   call CalculateResult
+	
+	   reg 100008 txt
+	   loadi txt 0
+	   loadr txt CalculateResult_return
+	   loadr _print _print_b
+	   call _print
    end
-
-   reg 100006 inpt1
-   reg 100007 inpt2
-   reg 100008 op
-   loadi inpt1 0
-   loadi inpt2 0
-   loadr inpt1 inp1
-   loadr inpt2 inp2
-   loadc op '-'
-   loadr op chOp
-   loadr CalculateResult  CalculateResult_b
-   call CalculateResult
-
-   reg 100008 txt
-   loadi txt 0
-   loadr txt CalculateResult_return
-   loadr _print _print_b
-   call _print
 return GetUserInput
 
 push check

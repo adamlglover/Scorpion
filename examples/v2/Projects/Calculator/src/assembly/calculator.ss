@@ -56,15 +56,16 @@ push end_prog
      reg 100000 limit
      loadi limit 1
      iltoeq response limit
-        loadi limit 1
-        loadbl r100001 limit,response
+        loadbl r100001 false
+        same r100001 limit,response
         do r100001
          loadi end_prog_return 1
          return end_prog 1
         end
 
         loadi limit 0
-        loadbl r100001 limit,response
+        loadbl r100001 false
+        same r100001 limit,response
         do r100001
          loadi end_prog_return 0
          return end_prog 1

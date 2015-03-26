@@ -11,7 +11,6 @@ reg 200009 CalculateResult_b
 %func _print
 $func GetUserInput
 %func GetMatmaticialOpr
-%func GetUserInput
 %func CalculateResult
 
 loadi _print_b 0

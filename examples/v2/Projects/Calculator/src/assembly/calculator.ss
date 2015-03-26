@@ -16,7 +16,6 @@ $func GetUserInput
 loadi _print_b 0
 loadi GetUserInput_b 0
 loadi GetMatmaticialOpr_b 0
-loadi GetUserInput_b 0
 loadi CalculateResult_b 0
 ;----------------
 

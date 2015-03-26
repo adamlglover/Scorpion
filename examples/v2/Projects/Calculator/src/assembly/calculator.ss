@@ -695,6 +695,7 @@ push bueatify
    print 41 "========================================="
 return bueatify
 
+reg 1053 main
 %func main
 reg 1052 main_b
 loadi main_b 0

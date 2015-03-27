@@ -7,6 +7,7 @@ extern bool scmnd;
 extern bool pass;
 extern long EAX,TMP,IP, EBX, SDX, SFC, SCX, BP, EXC, PS, LG, LSL, I1, I2;
 extern long *id;
+extern string prog_data;
 
 struct clock_s {
    long ticks;

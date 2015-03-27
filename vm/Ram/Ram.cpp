@@ -185,8 +185,8 @@ double Ram::data(double dataBus)
       }
    }
    else if(Ram::CS == 5){
-	   switch( Ram::CB ) {
-		   case 1: //set
+     switch( Ram::CB ) {
+      case 1: //set
               program[ address ] = prog_data;
       break;
       case 2://enable
@@ -204,7 +204,7 @@ double Ram::data(double dataBus)
        RuntimeException re;
            re.introduce("RamControlBusException","cannot access cell, invalid control bus input");
       break;
-	   }
+     }
    }
    else{
      cout << "Ram: warning cell_not_found err" << endl;
@@ -274,11 +274,11 @@ long Ram::info(int info)
    else if(info == 3)
     return b_tmb(MAX); // return r/c formatted
    else if(info == 1)
-    return b_tmb((MAX * (NUM_CELLS - 1)) + MAX_ZIZE); // return total ram size
+    return b_tmb((MAX * (NUM_CELLS - 1)) + MAX_SIZE); // return total ram size
    else if(info == 2)
     return NUM_CELLS; // return the total num of ram cells
    else if (info == 4)
-	return MAX_ZIZE; // return total program mem
+	return MAX_SIZE; // return total program mem
    else if(info == 5)
 	return SIZE; // return current occupied prog mem
   else 
@@ -287,18 +287,16 @@ long Ram::info(int info)
 
 // ---------------------------------------------------------------------------
 
+bool overload = false;
 void nextinstr(string instr) /* load the next instruction to ram*/
 { 
-   Ram ramm;
 //  cout << "next instr "<< icount + 1 << " I$ " << instr << endl;
-  if(!(SIZE > MAX_SIZE)){
-        program[ SIZE++ ] = instr; //  assign the next instr
-  }
-  else {
-   printf("Ram: program_size_overload err \nsize > %d(%08x) \n      --size[%d] bytes\n", MAX_SIZE, MAX_SIZE, ramm.size());
-    cout << "Shutting down...\n";
-    EBX = null;
-    p_exit();
+   if(!(SIZE > MAX_SIZE)){
+        program[ SIZE++ ] = instr; //  assign the next  instr(I was being lazy)
+   }
+   else {
+     overload = true;
+     SIZE++;
   }
 }
 
@@ -319,11 +317,20 @@ void Ram::prog_load(string content)
     else if(content.at(i) == '0')
        str.append("0");
   }
+    if(!overload){
     	Log l;
     	stringstream ss;
      	ss << SIZE;
     	l.v("System","Program finished loading to memory with size [" + ss.str() + "] bytes");
     	Program Applet;
     	Applet.Runnable(true);
+    }
+    else {
+      Ram ramm;
+      printf("Ram: program_size_overload err \nsize > %d(%08x) \n      --size[%d] bytes\n", MAX_SIZE, MAX_SIZE, ramm.info(5));
+      cout << "Shutting down...\n";
+      EBX = null;
+      p_exit();
+    }
 }
 

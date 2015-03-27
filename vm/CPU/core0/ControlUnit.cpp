@@ -193,15 +193,12 @@ int ProcessOperands()
 
 string prog(int set_enable, long index, string data)
 {
-        SRam sr;
-        sr.s_e(set_enable);
-        sr.addr(index);
-
-		Ram ram;
+        Ram ram;
         ram.CB = set_enable; // E
         ram.addr((long) index);
-		prog_data = data;
-        ram.cell(cell_switch);
+        prog_data = data;
+        ram.cell(5);
+        ram.data(0.0);
 
         return prog_data;
 }
@@ -212,7 +209,7 @@ int fetch()
   if(_0Halted)
     return 0;
    Ram ramm;
-   memstat = ramm.status(IP);
+   memstat = ramm.prog_status(IP);
    if(memstat == Ram::DONE){
           printf("Time taken: %.3fs\n", (double)(clock() - tStart)/CLOCKS_PER_SEC);
           p_exit();
@@ -228,7 +225,7 @@ int fetch()
     re.introduce("ProgramStateUndetectableException","hardware faliure: cannot determine the current state of the program");
    }
 
-   return ramm.status(IP);
+   return ramm.prog_status(IP);
 }
 
 int decode()

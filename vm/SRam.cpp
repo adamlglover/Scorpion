@@ -29,7 +29,7 @@
 #include <iostream>
 using namespace std;
 
-#define MAX_SIZE 30000000 /* 30mb of secondary Ram */
+#define MAX_SIZE 24000000 /* 24mb of secondary Ram */
 string program[ MAX_SIZE ];
 long SIZE = 0;
 

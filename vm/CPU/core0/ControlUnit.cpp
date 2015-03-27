@@ -59,6 +59,10 @@ void x86Shutdown();
 Disassembler disasm;
 Log log;
 
+#define L1_Cache_Size 512000 // 512kb L1 Cache (1024kb L2 Cache)
+string L1_ICache[ L1_Cache_Size ];
+double L1_Cache[ L1_Cache_Size ];
+double L1_fCache[ L1_Cache_Size ];
 
 /* Instruction Set 4 */
    double instruction = 0;

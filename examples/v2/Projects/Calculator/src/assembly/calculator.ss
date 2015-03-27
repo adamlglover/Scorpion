@@ -5,21 +5,17 @@ reg 200002 GetUserInput
 reg 200003 GetUserInput_b
 reg 200004 GetMatmaticialOpr
 reg 200005 GetMatmaticialOpr_b
-reg 200006 GetUserInput
-reg 200007 GetUserInput_b
 reg 200008 CalculateResult
 reg 200009 CalculateResult_b
 
 %func _print
 $func GetUserInput
 %func GetMatmaticialOpr
-%func GetUserInput
 %func CalculateResult
 
 loadi _print_b 0
 loadi GetUserInput_b 0
 loadi GetMatmaticialOpr_b 0
-loadi GetUserInput_b 0
 loadi CalculateResult_b 0
 ;----------------
 
@@ -60,15 +56,16 @@ push end_prog
      reg 100000 limit
      loadi limit 1
      iltoeq response limit
-        loadi limit 1
-        loadbl r100001 limit,response
+        loadbl r100001 false
+        same r100001 limit,response
         do r100001
          loadi end_prog_return 1
          return end_prog 1
         end
 
         loadi limit 0
-        loadbl r100001 limit,response
+        loadbl r100001 false
+        same r100001 limit,response
         do r100001
          loadi end_prog_return 0
          return end_prog 1
@@ -597,25 +594,25 @@ push GetUserInput
         rm index
         rm tmp
         rm handle_txt
+        
+           reg 100006 inpt1
+	   reg 100007 inpt2
+	   reg 100008 op
+	   loadi inpt1 0
+	   loadi inpt2 0
+	   loadr inpt1 inp1
+	   loadr inpt2 inp2
+	   loadc op '-'
+	   loadr op chOp
+	   loadr CalculateResult  CalculateResult_b
+	   call CalculateResult
+	
+	   reg 100008 txt
+	   loadi txt 0
+	   loadr txt CalculateResult_return
+	   loadr _print _print_b
+	   call _print
    end
-
-   reg 100006 inpt1
-   reg 100007 inpt2
-   reg 100008 op
-   loadi inpt1 0
-   loadi inpt2 0
-   loadr inpt1 inp1
-   loadr inpt2 inp2
-   loadc op '-'
-   loadr op chOp
-   loadr CalculateResult  CalculateResult_b
-   call CalculateResult
-
-   reg 100008 txt
-   loadi txt 0
-   loadr txt CalculateResult_return
-   loadr _print _print_b
-   call _print
 return GetUserInput
 
 push check
@@ -699,6 +696,7 @@ push bueatify
    print 41 "========================================="
 return bueatify
 
+reg 1053 main
 %func main
 reg 1052 main_b
 loadi main_b 0

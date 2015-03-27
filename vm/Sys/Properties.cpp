@@ -42,16 +42,16 @@ long genRand(long range)
 {
   long seed,n1,n2,n3,num;
   
-  for (int i = 0; i < 10; i++)
+  for (int i = 0; i < rand2(rand2(rand(9), rand1(100)), rand1(100); i++)
       seed = rand2(8, range);
   
-  for (int i = 0; i < 10; i++)
+  for (int i = 0; i < rand2(rand2(rand(9), rand1(100)), rand1(100); i++)
       n1 = rand2(seed, range);
       
-  for(int i = 0; i < 10; i++)
+  for(int i = 0; i < rand2(rand2(rand(9), rand1(100)), rand1(100); i++)
       n2 = rand2(n1, range);
   
-  for(int i = 0; i < 10; i++)
+  for(int i = 0; i < rand2(rand2(rand(9), rand1(100)), rand1(100); i++)
       n3 = rand2(n2, range);
       
   num = n3;

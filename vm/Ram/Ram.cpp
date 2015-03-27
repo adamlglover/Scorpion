@@ -13,7 +13,13 @@
 *
 * For full info visit "https://github.com/AndroDevcd/RPVM/blob/master/LINEUP.md"
 */
-
+#include "../CPU/cpu.h"
+#include "../System.h"
+#include "../Log/Log.h"
+#include "../var.h"
+#include <math.h>
+#include <stdio.h>
+#include <cstdlib>
 #include "../CPU/core0/core0.h"
 #include "../CPU/core0/runtime_exception.h"
 #include "../program.h"
@@ -21,22 +27,33 @@
 #include "../CPU/core0/cpuf.h"
 #include <iostream>
 #include <sstream>
+#include <string>
 using namespace std;
 
 #define MAX 2000000 /* 1mb of R\c(ram per cell)*/
-#define NUM_CELLS 5
+#define MAX_SIZE 24000000 /* 24mb of program memory */
+#define NUM_CELLS 6
 double ram[ MAX ]; // cell 0
 double fram[ MAX ]; // cell 1
 double lram[ MAX ];// cell 2
 double xram[ MAX ];// cell 3
 double lfram[ MAX ];// cell 4
+string program[ MAX_SIZE ]; // cell 5
 
-extern int INDEX_OUT_OF_RANGE;
-extern int INDEX_OK;
 int rsize;
 
    int state;
 
+long SIZE = 0;
+int Ram::DONE = 4820;
+int Ram::RUNNING = 5038;
+int Ram::UNKNOWN = -20482;
+
+int sr_state;
+long sr_addr = 0;
+bool first_time = true;
+extern int INDEX_OUT_OF_RANGE;
+extern int INDEX_OK;
 long Ram::CB = 0;
 short Ram::CS = 0;
 long address = 0;
@@ -64,6 +81,7 @@ int Ram::cell(short index)
   return INDEX_OK;
 }
 
+string prog_data = "";
 long _char(long _ch);
 int ibool(long);
 double Ram::data(double dataBus)
@@ -166,6 +184,28 @@ double Ram::data(double dataBus)
 
       }
    }
+   else if(Ram::CS == 5){
+	   switch( Ram::CB ) {
+		   case 1: //set
+              program[ address ] = prog_data;
+      break;
+      case 2://enable
+        if(address < 0 || address > SIZE)
+        {
+            stringstream ss;
+            ss << address;
+            RuntimeException re;
+            re.introduce("RamProgramOutOfRangeException", "cannot access program at index [" + ss.str() + "]");
+        }
+        prog_data = program[ address ];
+      break;
+      default:
+      // err
+       RuntimeException re;
+           re.introduce("RamControlBusException","cannot access cell, invalid control bus input");
+      break;
+	   }
+   }
    else{
      cout << "Ram: warning cell_not_found err" << endl;
      cout << "Ram: reverting to cell 0" << endl;
@@ -199,6 +239,29 @@ double Ram::data(double dataBus)
   return 0;
 }
 
+
+void Ram::prog_wipe()
+{
+   if(!first_time){
+     for(int i = 0; i < SIZE; i++)
+          program[ i ] = "0";
+     SIZE = 0;
+   }
+   else {
+     first_time = false;
+   }
+}
+
+int Ram::prog_status(long instrptr)
+{
+  if((instrptr + 1) > SIZE)
+    return Ram::DONE;
+  else if((instrptr + 1) < SIZE)
+    return Ram::RUNNING;
+  else 
+    return Ram::UNKNOWN;
+}
+
 long b_tmb(long bytes)
 {
    return (bytes / 1000000);
@@ -211,9 +274,56 @@ long Ram::info(int info)
    else if(info == 3)
     return b_tmb(MAX); // return r/c formatted
    else if(info == 1)
-    return b_tmb(MAX * NUM_CELLS); // return total ram size
+    return b_tmb((MAX * (NUM_CELLS - 1)) + MAX_ZIZE); // return total ram size
    else if(info == 2)
     return NUM_CELLS; // return the total num of ram cells
+   else if (info == 4)
+	return MAX_ZIZE; // return total program mem
+   else if(info == 5)
+	return SIZE; // return current occupied prog mem
   else 
     return 0;
 }
+
+// ---------------------------------------------------------------------------
+
+void nextinstr(string instr) /* load the next instruction to ram*/
+{ 
+   Ram ramm;
+//  cout << "next instr "<< icount + 1 << " I$ " << instr << endl;
+  if(!(SIZE > MAX_SIZE)){
+        program[ SIZE++ ] = instr; //  assign the next instr
+  }
+  else {
+   printf("Ram: program_size_overload err \nsize > %d(%08x) \n      --size[%d] bytes\n", MAX_SIZE, MAX_SIZE, ramm.size());
+    cout << "Shutting down...\n";
+    EBX = null;
+    p_exit();
+  }
+}
+
+void Ram::prog_load(string content)
+{
+  string str = "";
+     for(int i = 0; i < content.length(); i++)
+     {
+    if(content.at(i) == '.' || content.at(i) == ' '){
+       if(str != ""){
+           //cout << result << endl;
+           nextinstr(str);
+           str = "";
+       }
+    }
+    else if((content.at(i) == '1'))
+       str.append("1");
+    else if(content.at(i) == '0')
+       str.append("0");
+  }
+    	Log l;
+    	stringstream ss;
+     	ss << SIZE;
+    	l.v("System","Program finished loading to memory with size [" + ss.str() + "] bytes");
+    	Program Applet;
+    	Applet.Runnable(true);
+}
+

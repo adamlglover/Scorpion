@@ -29,7 +29,6 @@
 #include <sstream>
 #include "../../program.h"
 #include "../../System.h"
-#include "../../sram.h"
 #include "cpuf.h"
 #include "runtime_exception.h"
 #include "../../Log/filter.h"
@@ -61,7 +60,7 @@ Log log;
 
 #define L1_Cache_Size 512000 // 512kb L1 Cache (1024kb L2 Cache)
 string L1_ICache[ L1_Cache_Size ];
-double L1_Cache[ L1_Cache_Size ];
+double L1_DCache[ L1_Cache_Size ];
 double L1_fCache[ L1_Cache_Size ];
 
 /* Instruction Set 4 */
@@ -198,7 +197,13 @@ string prog(int set_enable, long index, string data)
         sr.s_e(set_enable);
         sr.addr(index);
 
-        return sr.modify(data);
+		Ram ram;
+        ram.CB = set_enable; // E
+        ram.addr((long) index);
+		prog_data = data;
+        ram.cell(cell_switch);
+
+        return prog_data;
 }
 
 int memstat;
@@ -206,13 +211,13 @@ int fetch()
 {
   if(_0Halted)
     return 0;
-   SRam sram;
-   memstat = sram.status(IP);
-   if(memstat == SRam::DONE){
+   Ram ramm;
+   memstat = ramm.status(IP);
+   if(memstat == Ram::DONE){
           printf("Time taken: %.3fs\n", (double)(clock() - tStart)/CLOCKS_PER_SEC);
           p_exit();
    }
-   else if(memstat == SRam::RUNNING){
+   else if(memstat == Ram::RUNNING){
       i1          = prog(2, IP++, "");
       i2          = prog(2, IP++, "");
       i3          = prog(2, IP++, "");
@@ -223,7 +228,7 @@ int fetch()
     re.introduce("ProgramStateUndetectableException","hardware faliure: cannot determine the current state of the program");
    }
 
-   return sram.status(IP);
+   return ramm.status(IP);
 }
 
 int decode()

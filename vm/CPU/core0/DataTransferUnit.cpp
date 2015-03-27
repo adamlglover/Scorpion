@@ -6,7 +6,6 @@
 #include "../../var.h"
 #include "io.h"
 #include "../x86Disassm/disassembler.h"
-#include "../../sram.h"
 #include "../../Log/filter.h"
 #include "cpuf.h"
 #include "../../Log/Log.h"

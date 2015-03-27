@@ -1,7 +1,7 @@
 #include <string>
 #include <stdlib.h>
 #include "program.h"
-#include "sram.h"
+#include "Ram/ram.h"
 #include "rules.h"
 #include "CPU/cpu.h"
 #include "CPU/core0/core0.h"
@@ -41,9 +41,9 @@ void p_exit()
 
 void Program::Main() // entry point of application
 {
-  SRam Mem;
-  Mem.wipe();
-  Mem.load(PROG);
+  Ram Mem;
+  Mem.prog_wipe();
+  Mem.prog_load(PROG);
   Program Application;
   Application.Run();
 }

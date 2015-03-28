@@ -58,7 +58,8 @@ void x86Shutdown();
 Disassembler disasm;
 Log log;
 
-#define L1_Cache_Size 512000 // 512kb L1 Cache (1024kb L2 Cache)
+long L1_ICache_length = 1024000;// to be used else where
+#define L1_Cache_Size 1024000 // 1024kb L1 Cache
 string L1_ICache[ L1_Cache_Size ];
 double L1_DCache[ L1_Cache_Size ];
 double L1_fCache[ L1_Cache_Size ];
@@ -121,6 +122,9 @@ void C0::Reset()
   C0 C;
    for(long i = 0; i < rm.info(0); i++)
          C.setr(1, i, OI); // allow all ram memory addresses to be open for input
+
+   for(long i = 0; i < L1_Cache_Size; i++)
+        L1_fCache[ i ] = OI;
 }
 
 void C0::Halt()
@@ -143,22 +147,38 @@ void C0::Halt()
 /* Methods used to easily talk to the ram */
 double C0::getr(short cell_switch, long _addr)
 {
-  Ram ram;
-  ram.CB = 2; // E
-  ram.addr((long) _addr);
-  ram.cell(cell_switch);
-
-  return ram.data(0.0); // get data from ram
+  if((_addr < L1_Cache_Size) && ((cell_switch == 0) || (cell_switch == 1))){
+      if(cell_switch == 0)
+          return L1_DCache[ _addr ];
+      else
+          return L1_fCache[ _addr ];
+  }
+  else {
+     Ram ram;
+     ram.CB = 2; // E
+     ram.addr((long) _addr);
+     ram.cell(cell_switch);
+  
+     return ram.data(0.0); // get data from ram
+  }
 }
 
 void C0::setr(short cell_switch, long _addr, double data)
 {
-  Ram ram;
-  ram.CB = 1; // S
-  ram.addr((long) _addr);
-  ram.cell(cell_switch);
+  if((_addr < L1_Cache_Size) && ((cell_switch == 0) || (cell_switch == 1))){
+        if(cell_switch == 0)
+           L1_DCache[ _addr ] = data;
+        else
+          L1_fCache[ _addr ] = data;
+  }
+  else {
+    Ram ram;
+    ram.CB = 1; // S
+    ram.addr((long) _addr);
+    ram.cell(cell_switch);
 
-  ram.data(data); // set data to ram
+    ram.data(data); // set data to ram
+  }
 }
 
 
@@ -186,21 +206,24 @@ void C0::ExecuteInterrupt(double offset)
 
 int ProcessOperands()
 {
-  // cout << "processing operands {0:" << instruction << "} {1:" << reg1 << "} {2:" << reg2 << "} {3:" << reg3 << "}" << endl;
+   //cout << "processing operands {0:" << instruction << "} {1:" << reg1 << "} {2:" << reg2 << "} {3:" << reg3 << "}" << endl;
    Gate gate;
    return gate.route(instruction, reg1, reg2, reg3);
 }
 
 string prog(int set_enable, long index, string data)
 {
-        Ram ram;
-        ram.CB = set_enable; // E
-        ram.addr((long) index);
-        prog_data = data;
-        ram.cell(5);
-        ram.data(0.0);
-
-        return prog_data;
+        if(index < L1_Cache_Size)
+           return L1_ICache[ index ]; // super fast instruction fetching
+        else {
+           Ram ram;
+           ram.CB = set_enable; // E
+           ram.addr((long) index);
+           prog_data = data;
+           ram.cell(5);
+           ram.data(0.0);
+           return prog_data;
+        }
 }
 
 int memstat;
@@ -255,4 +278,5 @@ void C0::run0()
        decode();
        execute();
  }
+ printf("Time taken: %.3fs\n", (double)(clock() - tStart)/CLOCKS_PER_SEC);
 }

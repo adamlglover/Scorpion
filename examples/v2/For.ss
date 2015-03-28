@@ -7,7 +7,7 @@ reg 3 max
 
 push main
    mov lsl 7
-   init 1
+   invoke 1
    loadi i 0
    loadi for 0
    loadi max 10

@@ -31,7 +31,7 @@
 using namespace std;
 
 #define MAX 2000000 /* 1mb of R\c(ram per cell)*/
-#define MAX_SIZE 24000000 /* 24mb of program memory */
+#define MAX_SIZE 16000000 /* 16mb of program memory */
 #define NUM_CELLS 6
 double ram[ MAX ]; // cell 0
 double fram[ MAX ]; // cell 1
@@ -278,7 +278,9 @@ long Ram::info(int info)
    else if(info == 2)
     return NUM_CELLS; // return the total num of ram cells
    else if (info == 4)
-	return MAX_SIZE; // return total program mem
+	return b_tmb(MAX_SIZE); // return total program mem formatted
+   else if (info == 6)
+        return MAX_SIZE; // return total program mem unformatted
    else if(info == 5)
 	return SIZE; // return current occupied prog mem
   else 
@@ -293,6 +295,8 @@ void nextinstr(string instr) /* load the next instruction to ram*/
 //  cout << "next instr "<< icount + 1 << " I$ " << instr << endl;
    if(!(SIZE > MAX_SIZE)){
         program[ SIZE++ ] = instr; //  assign the next  instr(I was being lazy)
+        if((SIZE -1) < L1_ICache_length)
+          L1_ICache[SIZE - 1] = instr; // this was the best I could do at the moment
    }
    else {
      overload = true;

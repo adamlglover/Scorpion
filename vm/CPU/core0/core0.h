@@ -1,5 +1,5 @@
-#ifndef VCPU
-#define VCPU
+#ifndef VCPU 
+#define VCPU 
 #include <string>
 using namespace std;
 extern bool _0Halted;
@@ -8,6 +8,10 @@ extern bool pass;
 extern long EAX,TMP,IP, EBX, SDX, SFC, SCX, BP, EXC, PS, LG, LSL, I1, I2;
 extern long *id;
 extern string prog_data;
+extern long L1_ICache_length;
+extern string L1_ICache[ 1024000 ];
+extern double L1_DCache[ 1024000 ];
+extern double L1_fCache[ 1024000 ];
 
 struct clock_s {
    long ticks;

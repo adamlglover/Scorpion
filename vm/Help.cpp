@@ -51,7 +51,7 @@ void handleargs()
       Ram rm;
      cout << "Scorpion(TM) Full Virturalized System Specs\n\n";
      cout << "CPU\nType: x86 Arm Core i1 CPU\nClock speed: .110Mhz\nProgram instruction set: 4(the amount of instructions read as 1)\nInstructions: 62 Opcodes\nSpecial Regiaters: 14 dedicated memory locations\n" << endl;
-     cout << "Ram\nTotal Size: " << rm.info(1) << "mb of Ram\nAccess Size: " << rm.info(3) << "mb of Ram\nTotal Size: 30mb of total possible program size\n" << endl;
+     cout << "Ram\nTotal Size: " << rm.info(1) << "mb of Ram\nAccess Size: " << rm.info(3) << "mb of Ram\nTotal Size: " << rm.info(3) << "mb of total possible program size\n" << endl;
      cout << "GPIO(General Purpose Input Output)\nnot yet supported\n" << endl;
   }
   else if(ARG == "-properties"){

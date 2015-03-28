@@ -67,7 +67,7 @@ bool isgenuine = false;
         }
         else{
           std::ostringstream stream;
-          stream << "Fatal err occured. Unknown char in file char:" << _char << " *^" << uchar << ". Permitted <'1' : '0' : '.' : witespace>";
+          stream << "Fatal err occured. Unexpected char in file char:" << _char << " *^" << uchar << ". Permitted <'1' : '0' : '.' : witespace>";
           string data = stream.str();
           rules_log.v("System",data);
         }

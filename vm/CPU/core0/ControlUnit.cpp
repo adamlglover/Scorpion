@@ -58,9 +58,9 @@ void x86Shutdown();
 Disassembler disasm;
 Log log;
 
-long L1_ICache_length = 1024000;// to be used else where
-#define L1_Cache_Size 1024000 // 1024kb L1 Cache
-string L1_ICache[ L1_Cache_Size ];
+long L1_ICache_length = 32000;// to be used else where
+#define L1_Cache_Size 16000 // 16kb L1 Data Cache
+string L1_ICache[ 32000 ]; // 32 kb of L1 instruction cache
 double L1_DCache[ L1_Cache_Size ];
 double L1_fCache[ L1_Cache_Size ];
 
@@ -147,38 +147,38 @@ void C0::Halt()
 /* Methods used to easily talk to the ram */
 double C0::getr(short cell_switch, long _addr)
 {
-  if((_addr < L1_Cache_Size) && ((cell_switch == 0) || (cell_switch == 1))){
+/*  if((_addr < L1_Cache_Size) && ((cell_switch == 0) || (cell_switch == 1))){
       if(cell_switch == 0)
           return L1_DCache[ _addr ];
       else
           return L1_fCache[ _addr ];
   }
   else {
-     Ram ram;
+*/     Ram ram;
      ram.CB = 2; // E
      ram.addr((long) _addr);
      ram.cell(cell_switch);
-  
+
      return ram.data(0.0); // get data from ram
-  }
+//  }
 }
 
 void C0::setr(short cell_switch, long _addr, double data)
 {
-  if((_addr < L1_Cache_Size) && ((cell_switch == 0) || (cell_switch == 1))){
+/*  if((_addr < L1_Cache_Size) && ((cell_switch == 0) || (cell_switch == 1))){
         if(cell_switch == 0)
            L1_DCache[ _addr ] = data;
         else
           L1_fCache[ _addr ] = data;
   }
   else {
-    Ram ram;
+*/    Ram ram;
     ram.CB = 1; // S
     ram.addr((long) _addr);
     ram.cell(cell_switch);
 
     ram.data(data); // set data to ram
-  }
+//  }
 }
 
 

@@ -6,12 +6,10 @@ extern bool _0Halted;
 extern bool scmnd;
 extern bool pass;
 extern long EAX,TMP,IP, EBX, SDX, SFC, SCX, BP, EXC, PS, LG, LSL, I1, I2;
-extern long *id;
+extern long *id; 
 extern string prog_data;
 extern long L1_ICache_length;
-extern string L1_ICache[ 32000 ];
-extern double L1_DCache[ 16000 ];
-extern double L1_fCache[ 16000 ];
+extern string L1_ICache[ 128000 ];
 
 struct clock_s {
    long ticks;

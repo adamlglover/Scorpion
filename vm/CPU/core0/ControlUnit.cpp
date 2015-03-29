@@ -58,8 +58,8 @@ void x86Shutdown();
 Disassembler disasm;
 Log log;
 
-long L1_ICache_length = 32000;// to be used else where
-#define L1_Cache_Size 32000 // 32kb L1 Cache
+long L1_ICache_length = 128000;// to be used else where
+#define L1_Cache_Size 128000 // 128kb L1 Instruction Cache
 string L1_ICache[ L1_Cache_Size ];
 
 /* Instruction Set 4 */
@@ -116,6 +116,7 @@ void C0::Reset()
   id[1] = 1; // # of cores
   id[2] = 4; // IFT
   id[3] = 315; // Production date
+
   Ram rm;
   C0 C;
    for(long i = 0; i < rm.info(0); i++)

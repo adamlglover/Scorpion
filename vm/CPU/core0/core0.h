@@ -5,7 +5,7 @@ using namespace std;
 extern bool _0Halted;
 extern bool scmnd;
 extern bool pass;
-extern long EAX,TMP,IP, EBX, SDX, SFC, SCX, BP, EXC, PS, LG, LSL, I1, I2;
+extern long EAX,TMP,IP, EBX, SDX, SFC, SCX, BP, EXC, PS, LG, LSL, I1, I2, SCR;
 extern long *id; 
 extern string prog_data;
 extern long L1_ICache_length;
@@ -31,7 +31,7 @@ extern bool waiting;
         void setr(short cell, long _addr, double data);
         double getr(short cell, long _addr);
         int GetVirturalAddress();
-        void ExecuteInterrupt(double);
+        void Interrupt(double);
         void run0();
    };
 

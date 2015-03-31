@@ -10,6 +10,7 @@
 #include "cpuf.h"
 #include "../../Log/Log.h"
 #include "../../Ram/ram.h"
+#include "gpio.h"
 #include <string>
 #include <sstream>
 #include <iostream>
@@ -525,6 +526,11 @@ void loadc(double *pkg)
        // log invalid type assignment
 }
 
+void _sleep()
+{
+   sleep(abs(SDX)); // sleep curr thread for specified mills
+}
+
 void dload(double *pkg)
 {
 	RuntimeException re;
@@ -769,6 +775,12 @@ void r_mv(double *pkg)
              else
                 d_log.w("System", "warning: type must be an integer type to obtain cpu register info");
            break;
+		   case 12:
+             if(C.getr(1, pkg[1]) == INT || C.getr(1, pkg[1]) == SHORT)
+                C.setr(0, pkg[1], SCR);
+             else
+                d_log.w("System", "warning: type must be an integer type to obtain cpu register info");
+           break;
       }
 }
 
@@ -926,7 +938,32 @@ void invoke(double *pkg)
           _l.Shutdown();
 
         SetPriority(LSL);
+		SCR = 0;
        break;
+	   case 5: // GPIO Access
+		   // invoke system call to talk to gpio pins
+		   switch( SFC ) {
+		       case 0: // read
+				   SCR = GPIORead(SDX);
+			   break;
+			   case 1: // write
+				   SCR = GPIOWrite(SDX, TMP);
+			   break;
+			   case 2:// set dir
+				   SCR = GPIODirection(SDX, TMP);
+			   break;
+			   case 3: // unexport
+				   SCR = GPIOUnexport(SDX);
+			   break;
+			   case 4: // export
+				   SCR = GPIOExport(SDX);
+			   break;
+		   }
+	   break;
+	   case 10: // goto (could be used for multitasking)
+	    C.Interrupt(SDX);
+		SCR = 0;
+	   break;
        default:
        stringstream ss;
        ss << pkg[0];

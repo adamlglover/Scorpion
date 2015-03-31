@@ -37,7 +37,7 @@
 #include <string>
 using namespace std;
 
-long EAX, TMP, IP, EBX, SDX, SFC, SCX, BP, EXC, PS, LG, LSL, I1, I2;
+long EAX, TMP, IP, EBX, SDX, SFC, SCX, BP, EXC, PS, LG, LSL, I1, I2, SCR;
 
 clock_t tStart;
 clock_s t_clock;
@@ -104,6 +104,7 @@ void C0::Reset()
   LSL = 2; // verbose
   I1  = 0;
   I2  = 0;
+  SCR = 0; // system call i/o response code
 
   t_clock.ticks = 0;
   t_clock.nanos = 0;
@@ -116,11 +117,6 @@ void C0::Reset()
   id[1] = 1; // # of cores
   id[2] = 4; // IFT
   id[3] = 315; // Production date
-
-  Ram rm;
-  C0 C;
-   for(long i = 0; i < rm.info(0); i++)
-         C.setr(1, i, OI); // allow all ram memory addresses to be open for input
 }
 
 void C0::Halt()
@@ -138,6 +134,7 @@ void C0::Halt()
   LG  = 0;
   LSL = 0;
   SCX = 0;
+  SCR = 0;
 }
 
 /* Methods used to easily talk to the ram */
@@ -172,16 +169,17 @@ double DisassemblerRead(string operand)
    return disasm.disassemble(operand);
 }
 
-void C0::ExecuteInterrupt(double offset)
+void C0::Interrupt(double offset)
 {
-    if(_0Halted)
+    if(_0Halted){
        _0Halted = false;
-     long tmp = IP;
-     IP = offset;
+	   C0 cpu;
+	   cpu.Reset();
+    }
+     IP = (long) offset;
      fetch();
      decode();
      execute();
-     IP = tmp;
 }
 
 int ProcessOperands()
@@ -209,8 +207,6 @@ string prog(int set_enable, long index, string data)
 int memstat;
 int fetch()
 {
-  if(_0Halted)
-    return 0;
    Ram ramm;
    memstat = ramm.prog_status(IP);
    if(memstat == Ram::DONE){
@@ -233,9 +229,6 @@ int fetch()
 
 int decode()
 {
-   if(_0Halted)
-      return 0;
-
    instruction = DisassemblerRead(i1);
    reg1        = DisassemblerRead(i2);
    reg2        = DisassemblerRead(i3);
@@ -244,8 +237,9 @@ int decode()
 
 int execute()
 {
-  if(_0Halted)
-     return 0;
+	if(_0Halted && ((instruction >= 0 && instruction <= 3) || instruction == 35)) { }
+    else if(_0Halted)
+       return 0;
   t_clock.ticks++;
   return ProcessOperands();
 }
@@ -258,5 +252,4 @@ void C0::run0()
        decode();
        execute();
  }
- printf("Time taken: %.3fs\n", (double)(clock() - tStart)/CLOCKS_PER_SEC);
 }

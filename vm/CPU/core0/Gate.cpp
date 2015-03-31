@@ -242,7 +242,7 @@ int Gate::route(double instr, double r1,double r2, double r3)
        if(!ignore) 
          invoke(pkg);
        if(scmnd && (!ignore))
-       cout << "init" << endl;
+       cout << "invoke" << endl;
         break;
         case 36:
        if(!ignore)
@@ -576,6 +576,12 @@ int Gate::route(double instr, double r1,double r2, double r3)
        if(scmnd && (!ignore))
        cout << "anum" << endl;
        break;
+	   case 93:
+		if(!ignore)
+         _sleep();
+       if(scmnd && (!ignore))
+       cout << "sleep" << endl;
+	   break;
        default:
          if(!ignore){
              Log lg;

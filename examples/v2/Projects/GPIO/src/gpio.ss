@@ -1,3 +1,10 @@
+; The program will simply read a signal input via raspberry pi's GPIO
+reg 26 GPIO_IN ; these two will represent our GPIO i/o pins
+reg 4 GPIO_OUT
+reg 62 _export_pins
+reg 160 _unexport_pins
+reg 39 _main
+
 ; control gpio pins
 
 reg 1000 _export_b
@@ -84,15 +91,6 @@ push _gpio_read
 
    r_mv scr gpio_data     ; store read pin data
 return _gpio_read
-
-; The program will simply read a signal input via raspberry pi's GPIO
-reg 26 GPIO_IN ; these two will represent our GPIO i/o pins
-reg 4 GPIO_OUT
-reg 62 _export_pins
-reg 160 _unexport_pins
-reg 39 _main
-
-include "GPIOController.ss"
 
 loadi GPIO_IN 26               ; Here we assign the ram locations the physical GPIO(s)
 loadi GPIO_OUT 4

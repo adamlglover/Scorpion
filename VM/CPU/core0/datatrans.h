@@ -58,6 +58,6 @@ void bck_t(double *pkg);
 void ct_int(double *pkg);
 void ct_float(double *pkg);
 void anum(double *pkg);
-void sleep();
+void _sleep();
 
 #endif

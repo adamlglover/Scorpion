@@ -17,7 +17,7 @@ void CPU::Halt()
 
 void CPU::Run()
 {
-  cout << "Running core 0" << endl;
+ // cout << "Running core 0" << endl;
   core0.run0();
 }
 

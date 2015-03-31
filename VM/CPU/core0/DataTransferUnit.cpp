@@ -428,24 +428,24 @@ string e_throw(long _char)
 
 void _throw(double *pkg)
 {
-  long L1 = (long) pkg[0];
-  long L2 = (long) pkg[1];
-  string excpn = "", msg = "";
-  
+  string excpn = "", msg = "", str;
+
+  long _str;
   IP--;
   Disassembler d;
   RuntimeException re;
-    for(int i = 0; i < L1; i++){ // Exception
-       string str = prog(2, IP++, ""); // get char
-       long _str = d.disassemble(str); // dissasemble char
+    for(int i = 0; i < pkg[0]; i++){ // Exception
+       _str = (long) d.disassemble(prog(2, IP++, "")); // dissasemble char
+       cout << _str << endl;
        excpn.append(e_throw(_str)); // print char
-   }
+    }
 
-    for(int i = 0; i < L2; i++){ // E_Message
-       string str = prog(2, IP++, ""); // get char
-       long _str = d.disassemble(str); // dissasemble char
+    for(int i = 0; i < pkg[1]; i++){ // E_Message
+       _str = (long) d.disassemble(prog(2, IP++, "")); // dissasemble char
+       cout << _str << endl;
        msg.append(e_throw(_str)); // print char
-   }
+    }
+
     if(!ignore)
         re.introduce(excpn,  msg);
 }
@@ -467,23 +467,18 @@ void loadr(double *pkg)
 	   else{
              EBX = 2;
              d_log.w("System", "warning: type must be an integer type to obtain cpu register info");
-           } 
+           }
       }
       else if((pkg[0] == 22)){
            if(C.getr(1, pkg[1]) == INT || C.getr(1, pkg[1]) == SHORT)
               IP = C.getr(0, pkg[1]);
-           else{  
+           else{
              EBX = 2;
              d_log.w("System", "warning: type must be an integer type to modify cpu registers");
            }
       }
       else{
-         if(C.getr(1, pkg[0]) == C.getr(1, pkg[1])) // same flag
              C.setr(0, pkg[0], C.getr(0, pkg[1]));
-         else{
-           EBX = 2;
-           d_log.w("System","warning: loadr err! both addresses must have same flag");
-         }
       }
 }
 
@@ -775,7 +770,7 @@ void r_mv(double *pkg)
              else
                 d_log.w("System", "warning: type must be an integer type to obtain cpu register info");
            break;
-		   case 12:
+           case 12:
              if(C.getr(1, pkg[1]) == INT || C.getr(1, pkg[1]) == SHORT)
                 C.setr(0, pkg[1], SCR);
              else
@@ -928,7 +923,7 @@ void invoke(double *pkg)
      switch((long) pkg[0] )
      {
        case 0: // IO write
-         
+
        break;
        case 1: // log
         Log _l;
@@ -940,30 +935,30 @@ void invoke(double *pkg)
         SetPriority(LSL);
 		SCR = 0;
        break;
-	   case 5: // GPIO Access
-		   // invoke system call to talk to gpio pins
-		   switch( SFC ) {
-		       case 0: // read
-				   SCR = GPIORead(SDX);
-			   break;
-			   case 1: // write
-				   SCR = GPIOWrite(SDX, TMP);
-			   break;
-			   case 2:// set dir
-				   SCR = GPIODirection(SDX, TMP);
-			   break;
-			   case 3: // unexport
-				   SCR = GPIOUnexport(SDX);
-			   break;
-			   case 4: // export
-				   SCR = GPIOExport(SDX);
-			   break;
-		   }
-	   break;
-	   case 10: // goto (could be used for multitasking)
+       case 5: // GPIO Access
+         // invoke system call to talk to gpio pins
+         switch( SFC ) {
+            case 0: // read
+	      SCR = GPIORead(SDX);
+	    break;
+            case 1: // write
+              SCR = GPIOWrite(SDX, TMP);
+	    break;
+            case 2:// set dir
+              SCR = GPIODirection(SDX, TMP);
+	    break;
+            case 3: // unexport
+              SCR = GPIOUnexport(SDX);
+	    break;
+	    case 4: // export
+	      SCR = GPIOExport(SDX);
+	    break;
+	  }
+       break;
+       case 10: // goto (could be used for multitasking)
 	    C.Interrupt(SDX);
 		SCR = 0;
-	   break;
+       break;
        default:
        stringstream ss;
        ss << pkg[0];

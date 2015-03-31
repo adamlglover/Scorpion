@@ -1,3 +1,5 @@
+#include <stdlib.h>
+#include <stdio.h>
 #include <iostream>
 #include <string>
 using namespace std;
@@ -6,24 +8,25 @@ using namespace std;
 * Scorpion VM Info
 */
 
-string Version = "0.0.19";
+string Version = "0.0.19_1";
 string v_stage = "beta";
 
 // ----------------------------------
 
-#define NUM_OPTIONS 1
+#define NUM_OPTIONS 2
 string args[ NUM_OPTIONS ];
 
 string OPTION = "";
 
 void prepargs()
 {
-   args[0] = "-version";
+   args[0] = "-help";
+   args[1] = "-version";
 }
 
 bool isarg(string arg)
 {
-  for(int i = 0; i < OPTION; i++)
+  for(int i = 0; i < NUM_OPTIONS; i++)
   {
      if(arg == args[i]){
         OPTION = arg;

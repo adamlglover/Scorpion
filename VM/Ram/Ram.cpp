@@ -37,7 +37,7 @@ double ram[ MAX ]; // cell 0
 double fram[ MAX ]; // cell 1
 double lram[ MAX ];// cell 2
 double xram[ MAX ];// cell 3
-double lfam[ MAX ]; // cell 4
+double lfram[ MAX ]; // cell 4
 string program[ MAX_SIZE ]; // cell 5
 
 int rsize;
@@ -329,6 +329,7 @@ void Ram::prog_load(string content)
     	Program Applet;
     	Applet.Runnable(true);
 		C0 C;
+        Ram rm;
         for(long i = 0; i < rm.info(0); i++)
               C.setr(1, i, OI); // allow all ram memory addresses to be open for input
     }

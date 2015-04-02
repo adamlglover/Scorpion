@@ -38,14 +38,24 @@ loadi _io_read 0
 %func _gpio_write
 %func _gpio_read
 
-push _export
+; *********************************************************** 
+; * GPIO SUBROUTINES -------------------------------------- *
+; * EXPORT    :  Tell Os to export specified pin to be used *
+; * UNEXPORT  :  Unexport specified pin when finished       *
+; * DIRECTION :  Set the desired direction for pin in/out   *
+; * WRITE     :  Write to pin(direction sensative)          *
+; * READ      :  Read value from a pin(direction sensative) *
+; ***********************************************************
+
+
+~_export:                                         ; a new and simpler and nicer way to call a function(the ~ signifies the beginning of a func call) 
   loadr _export_b ip
   rmov sdx pin
   mov sfc 4
   invoke 0x5
 
   r_mv scr status       ; store status code
-return _export
+  ret                                             ; end of func
 
 push _unexport
   loadr _unexport_b ip

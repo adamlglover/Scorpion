@@ -3,7 +3,8 @@
 
  class InputOutput {
           public:
-	    void Write(int,int,int,double *pkg);
+	    long Write(int, long *data);
+            long Read(int, long *data);
  };
 
 #endif

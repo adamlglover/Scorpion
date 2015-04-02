@@ -10,7 +10,8 @@
 #include "cpuf.h"
 #include "../../Log/Log.h"
 #include "../../Ram/ram.h"
-#include "gpio.h"
+#include "../../GPIO/gpio.h"
+#include "io.h"
 #include <string>
 #include <sstream>
 #include <iostream>
@@ -922,8 +923,8 @@ void invoke(double *pkg)
 {
      switch((long) pkg[0] )
      {
-       case 0: // IO write
-
+       case 0:
+        // will be used soon
        break;
        case 1: // log
         Log _l;
@@ -933,27 +934,46 @@ void invoke(double *pkg)
           _l.Shutdown();
 
         SetPriority(LSL);
-		SCR = 0;
        break;
-       case 5: // GPIO Access
-         // invoke system call to talk to gpio pins
+       case 5:// I/O for GPIO pins
+         InputOutput io;
+         long data[2];
          switch( SFC ) {
-            case 0: // read
-	      SCR = GPIORead(SDX);
+            case 0:
+              {
+                data[0] = SDX;
+                SCR = io.Read(0,data);
+                if(SCR == -1)
+                   EBX = 3;
+              }
 	    break;
-            case 1: // write
-              SCR = GPIOWrite(SDX, TMP);
-	    break;
-            case 2:// set dir
-              SCR = GPIODirection(SDX, TMP);
-	    break;
-            case 3: // unexport
-              SCR = GPIOUnexport(SDX);
-	    break;
-	    case 4: // export
-	      SCR = GPIOExport(SDX);
-	    break;
+            case 1:
+              data[0] = SDX;
+              data[1] =  TMP;
+              SCR = io.Write(0,data);
+              if(SCR == -1)
+                 EBX = 3;
+      	    break;
 	  }
+       break;
+       case 6: // Os Calls for GPIO
+           switch( SFC ) {
+            case 0:// set dir
+              SCR = GPIODirection(SDX, TMP);
+              if(SCR == -1)
+                 EBX = 3;
+            break;
+            case 1: // unexport
+              SCR = GPIOUnexport(SDX);
+              if(SCR == -1)
+                 EBX = 3;
+            break;
+            case 2: // export
+              SCR = GPIOExport(SDX);
+              if(SCR == -1)
+                 EBX = 3;
+            break;
+          }
        break;
        case 10: // goto (could be used for multitasking)
 	    C.Interrupt(SDX);

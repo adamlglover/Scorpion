@@ -1,16 +1,20 @@
+#include "../Log/Log.h"
 #include <sys/stat.h>
 #include <sys/types.h>
 #include <fcntl.h>
 #include <stdio.h>
+#include <sstream>
 #include <stdlib.h>
 #include <unistd.h>
- 
+using namespace std; 
+
 #define IN  0
 #define OUT 1
  
 #define LOW  0
 #define HIGH 1
- 
+Log g_log; 
+
 int
 GPIOExport(int pin)
 {
@@ -21,7 +25,9 @@ GPIOExport(int pin)
  
 	fd = open("/sys/class/gpio/export", O_WRONLY);
 	if (-1 == fd) {
-		fprintf(stderr, "Failed to open export for writing!\n");
+		stringstream ss;
+                ss << "Failed to open export for writing! GPIO pin #" << pin;
+                g_log.v("System", ss.str());
 		return(-1);
 	}
  
@@ -40,7 +46,9 @@ GPIOUnexport(int pin)
  
 	fd = open("/sys/class/gpio/unexport", O_WRONLY);
 	if (-1 == fd) {
-		fprintf(stderr, "Failed to open unexport for writing!\n");
+		stringstream ss;
+                ss << "Failed to open unexport for writing! GPIO pin #" << pin;
+                g_log.v("System", ss.str());
 		return(-1);
 	}
  
@@ -62,12 +70,16 @@ GPIODirection(int pin, int dir)
 	snprintf(path, DIRECTION_MAX, "/sys/class/gpio/gpio%d/direction", pin);
 	fd = open(path, O_WRONLY);
 	if (-1 == fd) {
-		fprintf(stderr, "Failed to open gpio direction for writing!\n");
+		stringstream ss;
+                ss << "Failed to access gpio direction for writing! GPIO pin#" << pin << " direction#" << dir;
+                g_log.v("System", ss.str());
 		return(-1);
 	}
  
 	if (-1 == write(fd, &s_directions_str[IN == dir ? 0 : 3], IN == dir ? 2 : 3)) {
-		fprintf(stderr, "Failed to set direction!\n");
+		stringstream ss;
+                ss << "Failed to set gpio direction! GPIO pin#" << pin << " direction#" << dir;
+                g_log.v("System", ss.str());
 		return(-1);
 	}
  
@@ -86,12 +98,16 @@ GPIORead(int pin)
 	snprintf(path, VALUE_MAX, "/sys/class/gpio/gpio%d/value", pin);
 	fd = open(path, O_RDONLY);
 	if (-1 == fd) {
-		fprintf(stderr, "Failed to open gpio value for reading!\n");
+		stringstream ss;
+                ss << "Failed to access gpio for readng! GPIO pin#" << pin;
+                g_log.v("System", ss.str());
 		return(-1);
 	}
  
 	if (-1 == read(fd, value_str, 3)) {
-		fprintf(stderr, "Failed to read value!\n");
+                stringstream ss;
+		ss << "Failed to read value! GPIO pin#" << pin;
+                g_log.v("System", ss.str());
 		return(-1);
 	}
  
@@ -111,12 +127,16 @@ GPIOWrite(int pin, int value)
 	snprintf(path, VALUE_MAX, "/sys/class/gpio/gpio%d/value", pin);
 	fd = open(path, O_WRONLY);
 	if (-1 == fd) {
-		fprintf(stderr, "Failed to open gpio value for writing!\n");
+		stringstream ss;
+                ss << "Failed to access gpio value for writing! GPIO pin#" << pin;
+                g_log.v("System", ss.str());
 		return(-1);
 	}
  
 	if (1 != write(fd, &s_values_str[LOW == value ? 0 : 1], 1)) {
-		fprintf(stderr, "Failed to write value!\n");
+		stringstream ss;
+                ss << "Failed to write value! GPIO pin#" << pin;
+                g_log.v("System", ss.str());
 		return(-1);
 	}
  

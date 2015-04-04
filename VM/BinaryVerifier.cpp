@@ -62,6 +62,7 @@ bool isgenuine = false;
         if(hassyntax(p)){
              Program App;
              App.Save(p);
+             p = "";
              isgenuine = true;
            prog_name = file;
         }

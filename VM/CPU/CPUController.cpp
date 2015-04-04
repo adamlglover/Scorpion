@@ -4,7 +4,6 @@
 using namespace std;
 
 C0 core0;
-
 void CPU::Reset()
 {
   core0.Reset();

@@ -33,6 +33,7 @@
 #include "runtime_exception.h"
 #include "../../Log/filter.h"
 #include "../x86Disassm/disassembler.h"
+#include "../../Thread/thread.h"
 #include "../../Log/Log.h"
 #include <string>
 using namespace std;
@@ -86,6 +87,7 @@ bool C0::ACTIVE()
   return reverse(_0Halted);
 }
 
+bool f_thread = true;
 void C0::Reset()
 {
   log.v("System","Arm I-4 CPU core boot");
@@ -117,6 +119,17 @@ void C0::Reset()
   id[1] = 1; // # of cores
   id[2] = 4; // IFT
   id[3] = 315; // Production date
+  
+  if(f_thread){
+      Thread t;
+	  t.add();
+	  t.start(0); // run main thread
+  }
+  else {
+      Thread t;
+	  t.remove(2302719); // remove all threads
+     f_thread = false;
+  }
 }
 
 void C0::Halt()
@@ -135,6 +148,8 @@ void C0::Halt()
   LSL = 0;
   SCX = 0;
   SCR = 0;
+  Thread t;
+  t.remove(2302719); // remove all threads
 }
 
 /* Methods used to easily talk to the ram */
@@ -207,6 +222,8 @@ string prog(int set_enable, long index, string data)
 int memstat;
 int fetch()
 {
+   Thread t;
+   t.notify(); // notify ThreadManager about current thread status
    Ram ramm;
    memstat = ramm.prog_status(IP);
    if(memstat == Ram::DONE){

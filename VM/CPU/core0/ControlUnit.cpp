@@ -122,12 +122,12 @@ void C0::Reset()
   
   if(f_thread){
       Thread t;
-	  t.add();
-	  t.start(0); // run main thread
+	  t.t_create();
+	  t.t_start(0); // run main thread
   }
   else {
       Thread t;
-	  t.remove(2302719); // remove all threads
+	  t.t_remove(2302719); // remove all threads
      f_thread = false;
   }
 }
@@ -149,7 +149,7 @@ void C0::Halt()
   SCX = 0;
   SCR = 0;
   Thread t;
-  t.remove(2302719); // remove all threads
+  t.t_remove(2302719); // remove all threads
 }
 
 /* Methods used to easily talk to the ram */
@@ -199,7 +199,7 @@ void C0::Interrupt(double offset)
 
 int ProcessOperands()
 {
-   //cout << "processing operands {0:" << instruction << "} {1:" << reg1 << "} {2:" << reg2 << "} {3:" << reg3 << "}" << endl;
+   cout << "processing operands {0:" << instruction << "} {1:" << reg1 << "} {2:" << reg2 << "} {3:" << reg3 << "}" << endl;
    Gate gate;
    return gate.route(instruction, reg1, reg2, reg3);
 }

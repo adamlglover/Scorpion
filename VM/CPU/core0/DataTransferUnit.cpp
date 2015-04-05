@@ -12,6 +12,7 @@
 #include "../../Ram/ram.h"
 #include "../../GPIO/gpio.h"
 #include "io.h"
+#include "../../Thread/thread.h"
 #include <string>
 #include <sstream>
 #include <iostream>
@@ -110,6 +111,31 @@ void ct_int(double *pkg)
   }
   else
      re.introduce("UnsatisfiedTypeException","invalid type assignment, inputed type is not of type int");
+}
+
+void thread_t(double *pkg)
+{
+    Thread t;
+    switch( (long) pkg[0] ){
+       case 0:
+         SDX = t.t_create();
+       break;
+       case 1:
+         t.t_start(SDX);
+       break;
+       case 2:
+         t.t_pause(SDX);
+       break;
+       case 3:
+         t.t_wait(SDX);
+       break;
+       case 4:
+         t.t_remove(SDX);
+       break;
+       case 5:
+         SDX = t.t_status(SFC, SDX);
+       break;
+    }
 }
 
 void ct_float(double *pkg)
@@ -706,7 +732,7 @@ void r_mv(double *pkg)
 	       d_log.w("System", "warning: type must be an integer type to obtain cpu register info");
            break;
            case 1:
-            if(C.getr(1, pkg[1]) == INT || C.getr(1, pkg[1]) == SHORT)
+            if(I1 == INT || I1 == SHORT)
                  C.setr(0, pkg[1], SDX);
             else
 	       d_log.w("System", "warning: type must be an integer type to obtain cpu register info");
@@ -774,6 +800,12 @@ void r_mv(double *pkg)
            case 12:
              if(C.getr(1, pkg[1]) == INT || C.getr(1, pkg[1]) == SHORT)
                 C.setr(0, pkg[1], SCR);
+             else
+                d_log.w("System", "warning: type must be an integer type to obtain cpu register info");
+           break;
+           case 13:
+             if(I1 == INT || I1 == SHORT)
+                C.setr(0, pkg[1], EAX);
              else
                 d_log.w("System", "warning: type must be an integer type to obtain cpu register info");
            break;

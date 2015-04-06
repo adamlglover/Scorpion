@@ -550,7 +550,12 @@ void loadc(double *pkg)
 
 void _sleep()
 {
-   sleep(abs(SDX)); // sleep curr thread for specified mills
+   if(SCX < 0)
+     SCX *= -1;
+   if((long) pkg[0] == 0)
+       sleep(SCX); // sleep curr thread for specified secs
+   else
+      delayMicroseconds(SCX); // sleep for mills
 }
 
 void dload(double *pkg)
@@ -1247,6 +1252,7 @@ void eof(double *pkg)
 void loop(double *pkg)
 {
          C.setr(0, pkg[1], pkg[2]);
+         C.setr(0, pkg[0], IP);
          waiting = true;
 }
 

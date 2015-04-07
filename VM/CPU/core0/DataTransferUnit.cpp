@@ -12,100 +12,45 @@
 #include "../../Ram/ram.h"
 #include "../../GPIO/gpio.h"
 #include "io.h"
-#include "../../Thread/thread.h"
 #include <string>
 #include <sstream>
 #include <iostream>
+#include <unistd.h>
 using namespace std;
-
-
-bool is_integer(long f1, long f2)
-{
-   if(((f1 == INT) || (f1 == DOUBLE) || (f1 == SHORT) || (f1 == FLOAT) || (f1 == CHAR)) &&
-            ((f2 == INT) || (f2 == DOUBLE) || (f2 == SHORT) || (f2 == FLOAT) || (f2 == CHAR)))
-	      return true;
-   return false;
-}
 
 bool inFunc = false;
 C0 C;
 Log d_log;
 void loadi(double *pkg)
 {
-    //checkreg(pkg[0]);
-    //checktype(flag[ pkg[0] ],pkg[1]);
-	RuntimeException re;
-      if( C.getr(1, pkg[0]) == OI){
-          C.setr(1, pkg[0], INT);
-          if(pkg[1] == 21937856)
-            C.setr(0, pkg[0], null);
-          else
-            C.setr(0, pkg[0], pkg[1]);
-      }
-      else if( C.getr(1, pkg[0]) == INT ){
-           if(pkg[1] == 21937856)
-            C.setr(0, pkg[0], null);
-          else
-            C.setr(0, pkg[0], pkg[1]);
-      }
+      if(pkg[1] == 21937856)
+         C.setr(0, pkg[0], null);
       else
-        re.introduce("UnsatisfiedTypeException","invalid type assignment, type is not of type int");
+         C.setr(0, pkg[0], (long) pkg[1]);
        // log invalid type assignment
 }
 
-void loadi_r(double *pkg)
+void rload(double *pkg)
 {
-    //checkreg(pkg[0]);
-    //checktype(flag[ pkg[0] ],pkg[1]);
-        RuntimeException re;
-      if( C.getr(1, pkg[0]) == OI){
-          EBX = 2;
-          d_log.w("System", "warning: variable must be inititalized before loading int data");
-      }
-      else if( C.getr(1, pkg[0]) == INT ){
-           if(pkg[1] == 21937856)
-            C.setr(0, pkg[0], null);
-          else{
-            long reg = C.getr(0, pkg[1]);
-            if(is_integer(C.getr(1, reg), C.getr(1, reg)))
-                 C.setr(0, pkg[0], C.getr(0, pkg[0]) + C.getr(0, reg));
-             else
-               re.introduce("UnsatisfiedTypeException","invalid type assignment, inputed type is not of type int");
-          }
-     }
-     else
-        re.introduce("UnsatisfiedTypeException","invalid type assignment, inpuyed type is not of type int");
-       // log invalid type assignment
+    long ref = C.getr(0, pkg[1]);
+    double reg = C.getr(0, ref);
+    C.setr(0, pkg[0], reg);
 }
 
 void sload(double *pkg)
 {
-    //checkreg(pkg[0]);
-    //checktype(flag[ pkg[0] ],pkg[1]);
-        RuntimeException re;
-      if( C.getr(1, pkg[0]) == OI){
-          C.setr(1, pkg[0], SHORT);
-          if(pkg[1] == 21937856)
-            C.setr(0, pkg[0], null);
-          else
-            C.setr(0, pkg[0], pkg[1]);
-      }
-      else if( C.getr(1, pkg[0]) == SHORT ){
-           if(pkg[1] == 21937856)
-            C.setr(0, pkg[0], null);
-          else
-             C.setr(0, pkg[0], pkg[1]);
-      }
-      else
-        re.introduce("UnsatisfiedTypeException","invalid type assignment, inputed type is not of type int");
+     if(pkg[1] == 21937856)
+        C.setr(0, pkg[0], null);
+     else
+        C.setr(0, pkg[0], (int) pkg[1]);
        // log invalid type assignment
 }
 
 void ct_int(double *pkg)
 {
   RuntimeException re;
-  if((C.getr(1, pkg[0]) == SHORT) || (C.getr(1, pkg[0]) == INT)){
-     char a = C.getr(0, pkg[0]);
+  if(I1 == SHORT) || (I1== INT)){
+     char a = C.getr(0, pkg[1]);
      int val = a - '0';
      C.setr(0, pkg[0], val);
   }
@@ -113,98 +58,20 @@ void ct_int(double *pkg)
      re.introduce("UnsatisfiedTypeException","invalid type assignment, inputed type is not of type int");
 }
 
-void thread_t(double *pkg)
-{
-    Thread t;
-    switch( (long) pkg[0] ){
-       case 0:
-         SDX = t.t_create();
-       break;
-       case 1:
-         t.t_start(SDX);
-       break;
-       case 2:
-         t.t_pause(SDX);
-       break;
-       case 3:
-         t.t_wait(SDX);
-       break;
-       case 4:
-         t.t_remove(SDX);
-       break;
-       case 5:
-         SDX = t.t_status(SFC, SDX);
-       break;
-    }
-}
-
-void ct_float(double *pkg)
-{
-  Disassembler d;
-  string str = prog(2, IP++, ""); // get char
-  long _str = d.disassemble(str); // dissasemble char
-  RuntimeException re;
-  if((((C.getr(1, pkg[0]) == DOUBLE) || (C.getr(1, pkg[0]) == FLOAT)) && ((C.getr(1, pkg[1] == CHAR) && (C.getr(1, _str) == CHAR)))) && (!ignore)){ 
-     char a = C.getr(0, pkg[2]);
-     if(a == '.'){
-         char b = C.getr(0, pkg[1]);
-         char c = C.getr(0, _str);
-         stringstream ss;
-         ss << b << "." << c;
-         string dec = ss.str();
-         C.setr(0, pkg[0], atof(dec.c_str()));
-     }
-     else
-       re.introduce("FloatingPointException", "could not find dec seperator");
-  }
-   else
-       re.introduce("UnsatifiedTypeException", "the inputed types did not meet the required types");
-}
-
 void anum(double *pkg)
 {
-    RuntimeException re;
-   if(is_integer(C.getr(1, pkg[0]), C.getr(1, pkg[0]) && (C.getr(1, pkg[1]) == CHAR))){
          stringstream ss;
          ss << C.getr(0, pkg[0]) << C.getr(0, pkg[1]);
          string num = ss.str();
          
-         if((C.getr(1, pkg[0]) == SHORT) || (C.getr(1, pkg[0]) == INT))
+         if(I1 == SHORT) || (I1 == INT))
            C.setr(0, pkg[0], atoi(num.c_str()));
-         else if((C.getr(1, pkg[0]) == DOUBLE) || (C.getr(1, pkg[0]) == FLOAT))
+         else if(I1 == DOUBLE) || (I1 == FLOAT))
            C.setr(0, pkg[0], atof(num.c_str()));
          else {
            EBX = 2;
-           d_log.w("System", "warning: canot assignn decimal value to char");
+           d_log.w("System", "warning: canot assignn decimal value to not integer and or float data types");
          }
-   }
-   else
-      re.introduce("UnsatifiedTypeException", "the inputed types did not meet the required types");
-}
-
-void sload_r(double *pkg)
-{
-    //checkreg(pkg[0]);
-    //checktype(flag[ pkg[0] ],pkg[1]);
-        RuntimeException re;
-      if( C.getr(1, pkg[0]) == OI){
-          EBX = 2;
-          d_log.w("System", "warning: variable must be inititalized before loading int data");
-      }
-      else if( C.getr(1, pkg[0]) == SHORT ){
-           if(pkg[1] == 21937856)
-             C.setr(0, pkg[0], null);
-           else{
-            long reg = C.getr(0, pkg[1]);
-            if(is_integer(C.getr(1, reg), C.getr(1, reg)))
-                 C.setr(0, pkg[0], C.getr(0, pkg[0]) + C.getr(0, reg));
-             else
-               re.introduce("UnsatisfiedTypeException","invalid type assignment, inputed type is not of type int");
-          }
-      }
-      else
-        re.introduce("UnsatisfiedTypeException","invalid type assignment, inputed type is not of type int");
-       // log invalid type assignment
 }
 
 void rln(double *pkg)//  length, start addr, excape  char, 
@@ -237,7 +104,7 @@ void rln(double *pkg)//  length, start addr, excape  char,
 void rflush()
 {
   Ram ram;
-  for(int cell = 0; cell < ram.info(2); cell++){
+  for(int cell = 0; cell < ram.info(2) - 1; cell++){
       stringstream ss;
       ss << cell;
       d_log.i("System","Flushing cell [" + ss.str() + "]");
@@ -325,23 +192,7 @@ void c_printf(double _char)
          cout << C.getr(0, _str);
     }
    }
-   else if(_char == 1){ // reg reg->r#
-    reg = true;
-    Disassembler d;
-    string str = prog(2, IP++, ""); // get char
-    long _str = d.disassemble(str); // dissasemble char
-    //cout << "pinting from reg " << _str  << " -1: " << (_str - 1) << " +1: " $
-    long reg = C.getr(0, _str); // get register refrenced in this reg
-    if(!ignore){
-      if(C.getr(0, reg) == null)
-        cout << "null";
-      else if(C.getr(1, reg) == BOOL)
-        cout << str_bool((long) C.getr(0, reg));
-      else
-         cout << C.getr(0, reg);
-    }
-  }
-  else if(_char == 2){ // %c reg r#
+  else if(_char == 1){ // %c reg r#
     reg = true;
     Disassembler d;
     string str = prog(2, IP++, ""); // get char
@@ -358,24 +209,6 @@ void c_printf(double _char)
       }
     }
    }
-   else if(_char == 3){ // %c reg reg->r#
-    reg = true;
-    Disassembler d;
-    string str = prog(2, IP++, ""); // get char
-    long _str = d.disassemble(str); // dissasemble char
-    //cout << "pinting from reg " << _str  << " -1: " << (_str - 1) << " +1$
-    long reg = C.getr(0, _str); // get register refrenced in this reg
-    if(!ignore){
-      if(C.getr(0, reg) == null)
-        cout << "null";
-      else if(C.getr(1, reg) == BOOL)
-        cout << str_bool((long) C.getr(0, reg));
-      else{
-         char c = C.getr(0, reg);
-         cout << c;
-      }
-    }
-  }
   else if((_char >= 5) && (_char <= 255)  && (!ignore)) {
     char c = _char;
     cout << c;
@@ -446,7 +279,7 @@ string e_throw(long _char)
   else {
    if(!ignore){
       stringstream ss;
-      ss << "system warning: value " << _char << " is not a char" << endl;
+      ss << "warning: value " << _char << " is not a char" << endl;
       d_log.w("System", ss.str());
       EBX = 2;
    }
@@ -479,50 +312,13 @@ void _throw(double *pkg)
 
 void loadr(double *pkg)
 {
-       if(pkg[1] == 21){
-           if(C.getr(1, pkg[0]) == INT || C.getr(1, pkg[0]) == SHORT)
-               C.setr(0, pkg[0], EAX);
-           else{
-             EBX =  2;
-             d_log.w("System", "warning: type must be an integer type to obtain cpu register info");
-           }
-       }
-       else if(pkg[1] == 22){
-     //      cout << "loading addr " << pkg[0] << " w/ ip " << IP << endl;
-           if((C.getr(1, pkg[0]) == INT) || (C.getr(1, pkg[0]) == SHORT))
-               C.setr(0, pkg[0], IP);
-	   else{
-             EBX = 2;
-             d_log.w("System", "warning: type must be an integer type to obtain cpu register info");
-           }
-      }
-      else if((pkg[0] == 22)){
-           if(C.getr(1, pkg[1]) == INT || C.getr(1, pkg[1]) == SHORT)
-              IP = C.getr(0, pkg[1]);
-           else{
-             EBX = 2;
-             d_log.w("System", "warning: type must be an integer type to modify cpu registers");
-           }
-      }
-      else{
-             C.setr(0, pkg[0], C.getr(0, pkg[1]));
-      }
+      C.setr(0, pkg[0], C.getr(0, pkg[1]));
 }
 
 int ibool(long);
 void loadbl(double *pkg)
 {
-      //checkreg(pkg[0]);
-    //checktype(flag[ pkg[0] ],pkg[1]);
-	RuntimeException re;
-       if( C.getr(1, pkg[0]) == OI){
-          C.setr(1, pkg[0], BOOL);
-          C.setr(0, pkg[0], ibool( (long) pkg[1] ));
-       }
-       else if( C.getr(1, pkg[0]) == BOOL )
-           C.setr(0, pkg[0], ibool( (long) pkg[1]));
-       else
-         re.introduce("UnsatisfiedTypeException","invalid type assignment, type is not of type bool");
+     C.setr(0, pkg[0], ibool( (long) pkg[1]));
        // log invalid type assignment
 }
 
@@ -536,86 +332,33 @@ long _char(long _ch)
 
 void loadc(double *pkg)
 {
-	RuntimeException re;
-     if( C.getr(1, pkg[0]) == OI){
-          C.setr(1, pkg[0], CHAR);
-          C.setr(0, pkg[0],(long)  _char((long) pkg[1]));
-      }
-      else if( C.getr(1, pkg[0]) == CHAR)
-          C.setr(0, pkg[0],(long) _char((long) pkg[1]));
-      else
-        re.introduce("UnsatisfiedTypeException","invalid type assignment, type is not of type char");
-       // log invalid type assignment
+    C.setr(0, pkg[0],(long) _char((long) pkg[1]));
 }
 
-void _sleep()
+void _sleep(double *pkg)
 {
    if(SCX < 0)
      SCX *= -1;
    if((long) pkg[0] == 0)
        sleep(SCX); // sleep curr thread for specified secs
    else
-      delayMicroseconds(SCX); // sleep for mills
+      usleep(SCX); // sleep for mills
 }
 
 void dload(double *pkg)
 {
-	RuntimeException re;
-      if( C.getr(1, pkg[0]) == OI){
-          C.setr(1, pkg[0], DOUBLE);
           stringstream ss;
           ss << pkg[1] << "." << pkg[2];
           string dec = ss.str();
-          if(atof(dec.c_str()) == 21937856)
+          if(atof(dec.c_str()) == 21937856.0)
              C.setr(0, pkg[0], null);
           else
              C.setr(0, pkg[0], atof(dec.c_str()));
-      }
-      else if( C.getr(1, pkg[0]) == DOUBLE ){
-          stringstream ss;
-          ss << pkg[1] << "." << pkg[2];
-          string dec = ss.str();
-          if(atof(dec.c_str()) == 21937856)
-             C.setr(0, pkg[0], null);
-          else
-             C.setr(0, pkg[0], atof(dec.c_str()));
-      }
-      else
-        re.introduce("UnsatisfiedTypeException","invalid type assignment, type is not of type double");
-       // log invalid type assignmen
-}
-
-void dload_r(double *pkg)
-{
-        RuntimeException re;
-      if( C.getr(1, pkg[0]) == OI){
-          EBX = 2;
-          d_log.w("System", "warning: variable must be inititalized before loading int data");
-      }
-      else if( C.getr(1, pkg[0]) == DOUBLE ){
-          stringstream ss;
-          ss << pkg[1] << "." << pkg[2];
-          string dec = ss.str();
-          if(atof(dec.c_str()) == 21937856)
-             C.setr(0, pkg[0], null);
-          else{
-            long reg = C.getr(0, pkg[1]);
-            if(is_integer(C.getr(1, reg), C.getr(1, reg)))
-                 C.setr(0, pkg[0], C.getr(0, pkg[0]) + C.getr(0, reg));
-            else
-               re.introduce("UnsatisfiedTypeException","invalid type assignment, inputed type is not of type int");
-          }
-      }
-      else
-        re.introduce("UnsatisfiedTypeException","invalid type assignment, type is not of type double");
        // log invalid type assignmen
 }
 
 void loadf(double *pkg)
 {
-        RuntimeException re;
-      if( C.getr(1, pkg[0]) == OI){
-          C.setr(1, pkg[0], FLOAT);
           stringstream ss;
           ss << pkg[1] << "." << pkg[2];
           string dec = ss.str();
@@ -623,64 +366,7 @@ void loadf(double *pkg)
              C.setr(0, pkg[0], null);
           else
              C.setr(0, pkg[0], atof(dec.c_str()));
-      }
-      else if( C.getr(1, pkg[0]) == FLOAT ){
-          stringstream ss;
-          ss << pkg[1] << "." << pkg[2];
-          string dec = ss.str();
-          if(atof(dec.c_str()) == 21937856)
-             C.setr(0, pkg[0], null);
-          else
-             C.setr(0, pkg[0], atof(dec.c_str()));
-      }   
-      else
-        re.introduce("UnsatisfiedTypeException","invalid type assignment, type is not of type double");
        // log invalid type assignment
-}
-
-void loadf_r(double *pkg)
-{
-        RuntimeException re;
-      if( C.getr(1, pkg[0]) == OI){
-          EBX = 2;
-          d_log.w("System", "warning: variable must be inititalized before loading int data");
-      }
-      else if( C.getr(1, pkg[0]) == FLOAT ){
-          stringstream ss;
-          ss << pkg[1] << "." << pkg[2];
-          string dec = ss.str();
-          if(atof(dec.c_str()) == 21937856)
-             C.setr(0, pkg[0], null);
-          else{
-            long reg = C.getr(0, pkg[1]);
-            if(is_integer(C.getr(1, reg), C.getr(1, reg)))
-                 C.setr(0, pkg[0], C.getr(0, pkg[0]) + C.getr(0, reg));
-            else
-               re.introduce("UnsatisfiedTypeException","invalid type assignment, inputed type is not of type int");
-         }
-
-      }
-      else
-        re.introduce("UnsatisfiedTypeException","invalid type assignment, type is not of type double");
-       // log invalid type assignment
-}
-
-void mv(double *pkg)
-{
-       if(pkg[1] == 21){
-        if(C.getr(1, pkg[1]) == INT || C.getr(1, pkg[1]) == SHORT){
-          C.setr(0, pkg[0], EAX);
-          EAX = null;
-	}
-        else
-	   d_log.w("System", "warning: type must be of type int to obtain eax w/ mv ");
-       }
-       else{
-          C.setr(0, pkg[0], C.getr(0, pkg[1]));
-          C.setr(0, pkg[1], null);
-          C.setr(1, pkg[0], C.getr(1, pkg[1]));
-          C.setr(1, pkg[1], OI);
-      }
 }
 
 void mov(double *pkg)
@@ -731,7 +417,7 @@ void r_mv(double *pkg)
       switch( (long) pkg[0] )
       {
           case 0:
-            if(C.getr(1, pkg[1]) == INT || C.getr(1, pkg[1]) == SHORT)
+            if(I1 == INT || I1 == SHORT)
                  C.setr(0, pkg[1], EBX);
             else
 	       d_log.w("System", "warning: type must be an integer type to obtain cpu register info");
@@ -743,67 +429,67 @@ void r_mv(double *pkg)
 	       d_log.w("System", "warning: type must be an integer type to obtain cpu register info");
            break;
            case 2:
-             if(C.getr(1, pkg[1]) == INT || C.getr(1, pkg[1]) == SHORT)
+             if(I1 == INT || I1 == SHORT)
                  C.setr(0, pkg[1], BP);
              else
 	        d_log.w("System", "warning: type must be an integer type to obtain cpu register info");
            break;
            case 3:
-             if(C.getr(1, pkg[1]) == INT || C.getr(1, pkg[1]) == SHORT)
+             if(I1 == INT || I1 == SHORT)
                 C.setr(0, pkg[1], EXC);
              else
 		d_log.w("System", "warning: type must be an integer type to obtain cpu register info");
            break;
            case 4:
-            if(C.getr(1, pkg[1]) == INT || C.getr(1, pkg[1]) == SHORT)
+            if(I1 == INT || I1 == SHORT)
                 C.setr(0, pkg[1], PS);
             else
 	       d_log.w("System", "warning: type must be an integer type to obtain cpu register info");
            break;
            case 5:
-            if(C.getr(1, pkg[1]) == INT || C.getr(1, pkg[1]) == SHORT)
+            if(I1 == INT || I1 == SHORT)
                 C.setr(0, pkg[1], LG);
             else
 	       d_log.w("System", "warning: type must be an integer type to obtain cpu register info");
            break;
            case 6:
-            if(C.getr(1, pkg[1]) == INT || C.getr(1, pkg[1]) == SHORT)
+            if(I1 == INT || I1 == SHORT)
                 C.setr(0, pkg[1], LSL);
             else
                d_log.w("System", "warning: type must be an integer type to obtain cpu register info");
            break;
            case 7:
-            if(C.getr(1, pkg[1]) == INT || C.getr(1, pkg[1]) == SHORT)
+            if(I1 == INT || I1 == SHORT)
                 C.setr(0, pkg[1], SFC);
             else
                d_log.w("System", "warning: type must be an integer type to obtain cpu register info");
            break;
            case 8:
-            if(C.getr(1, pkg[1]) == INT || C.getr(1, pkg[1]) == SHORT)
+            if(I1 == INT || I1 == SHORT)
                 C.setr(0, pkg[1], SCX);
             else
 	       d_log.w("System", "warning: type must be an integer type to obtain cpu register info");
            break;
            case 9:
-            if(C.getr(1, pkg[1]) == INT || C.getr(1, pkg[1]) == SHORT)
+            if(I1 == INT || I1 == SHORT)
                 C.setr(0, pkg[1], I1);
             else
 	       d_log.w("System", "warning: type must be an integer type to obtain cpu register info");
            break;
            case 10:
-            if(C.getr(1, pkg[1]) == INT || C.getr(1, pkg[1]) == SHORT)
+            if(I1 == INT || I1 == SHORT)
                 C.setr(0, pkg[1], I2);
             else
                d_log.w("System", "warning: type must be an integer type to obtain cpu register info");
            break;
            case 11:
-             if(C.getr(1, pkg[1]) == INT || C.getr(1, pkg[1]) == SHORT)
+             if(I1 == INT || I1 == SHORT)
                 C.setr(0, pkg[1], TMP);
              else
                 d_log.w("System", "warning: type must be an integer type to obtain cpu register info");
            break;
            case 12:
-             if(C.getr(1, pkg[1]) == INT || C.getr(1, pkg[1]) == SHORT)
+             if(I1 == INT || I1 == SHORT)
                 C.setr(0, pkg[1], SCR);
              else
                 d_log.w("System", "warning: type must be an integer type to obtain cpu register info");
@@ -817,7 +503,7 @@ void r_mv(double *pkg)
       }
 }
 
-void rmov(double *pkg)
+void rmov(double *pkg) // ----------------------------------------------------------------------------
 {
      switch( (long) pkg[0] )
      {

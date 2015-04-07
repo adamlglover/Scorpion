@@ -20,8 +20,5 @@ void rdtsc();
 void rand_1(double *pckg);
 void rand_2(double *pckg);
 void rand_3(double *pckg);
-void rrand_1(double *pckg);
-void rrand_2(double *pckg);
-void rrand_3(double *pckg);
 
 #endif

@@ -578,15 +578,9 @@ int Gate::route(double instr, double r1,double r2, double r3)
        break;
        case 93:
        if(!ignore)
-         _sleep();
+         _sleep(pkg);
        if(scmnd && (!ignore))
        cout << ".addr:" << IP << " " <<  "sleep" << endl;
-       break;
-       case 94:
-       if(!ignore)
-         thread_t(pkg);
-       if(scmnd && (!ignore))
-       cout << ".addr:" << IP << " " <<  "thread_t" << endl;
        break;
        default:
          if(!ignore){

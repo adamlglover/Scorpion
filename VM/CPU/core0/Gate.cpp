@@ -150,30 +150,7 @@ int Gate::route(double instr, double r1,double r2, double r3)
        if(scmnd && (!ignore))
        cout << ".addr:" << IP << " " <<  "loadbl" << endl;
        break;
-	 case 20:
-       if(!ignore)
-         loadr(pkg);
-       if(scmnd && (!ignore))
-       cout << ".addr:" << IP << " " <<  "loadr" << endl;
-       break;
-         case 21:
-       if(!ignore)
-         mv(pkg);
-       if(scmnd && (!ignore))
-       cout << ".addr:" << IP << " " <<  "mv" << endl;
-       break;
 	 case 22:
-       if(!ignore)
-         rm(pkg);
-       if(scmnd && (!ignore))
-       cout << ".addr:" << IP << " " <<  "rm" << endl;
-       break;
-	 case 23:
-       if(!ignore)
-         func(pkg);
-       if(scmnd && (!ignore))
-       cout << ".addr:" << IP << " " <<  "func" << endl;
-       break;
        case 24:
          push(pkg);
        if(scmnd && (!ignore))
@@ -195,12 +172,6 @@ int Gate::route(double instr, double r1,double r2, double r3)
          swp(pkg);
        if(scmnd && (!ignore))
        cout << ".addr:" << IP << " " <<  "swp" << endl;
-       break;
-	 case 28:
-       if(!ignore)
-         eof(pkg);
-       if(scmnd && (!ignore))
-       cout << ".addr:" << IP << " " <<  "eof" << endl;
        break;
 	 case 29:
        if(!ignore)
@@ -258,15 +229,15 @@ int Gate::route(double instr, double r1,double r2, double r3)
         break;
         case 38:
        if(!ignore)
-	 iltoeq(pkg);
+	 ile(pkg);
        if(scmnd && (!ignore))
-       cout << ".addr:" << IP << " " <<  "iltoeq" << endl;
+       cout << ".addr:" << IP << " " <<  "ile" << endl;
         break;
         case 39:
        if(!ignore)
-	igtoeq(pkg);
+	ige(pkg);
        if(scmnd && (!ignore))
-       cout << ".addr:" << IP << " " <<  "igtoeq" << endl;
+       cout << ".addr:" << IP << " " <<  "ige" << endl;
         break;
         case 40:
        if(!ignore)
@@ -288,15 +259,15 @@ int Gate::route(double instr, double r1,double r2, double r3)
 	break;
  	case 43:
        if(!ignore)
-	inltoeq(pkg);
+	inle(pkg);
        if(scmnd && (!ignore))
- 	cout << ".addr:" << IP << " " <<  "inltoeq" << endl;
+ 	cout << ".addr:" << IP << " " <<  "inle" << endl;
 	break;
 	case 44:
        if(!ignore)
- 	ingtoeq(pkg);
+ 	inge(pkg);
        if(scmnd && (!ignore))
-	cout << ".addr:" << IP << " " <<  "ingtoeq" << endl;
+	cout << ".addr:" << IP << " " <<  "inge" << endl;
 	break;
         case 45:
        if(!ignore)
@@ -465,24 +436,6 @@ int Gate::route(double instr, double r1,double r2, double r3)
        if(scmnd && (!ignore))
         cout << ".addr:" << IP << " " <<  "rand_3" << endl;
         break;
-        case 74:
-       if(!ignore)
-           rrand_1(pkg);
-       if(scmnd && (!ignore))
-        cout << ".addr:" << IP << " " <<  "rrand_1" << endl;
-        break;
-        case 75:
-       if(!ignore)
-           rrand_2(pkg);
-       if(scmnd && (!ignore))
-        cout << ".addr:" << IP << " " <<  "rrand_1" << endl;
-        break;
-        case 76:
-       if(!ignore)
-           rrand_3(pkg);
-       if(scmnd && (!ignore))
-        cout << ".addr:" << IP << " " <<  "rrand_3" << endl;
-        break;
         case 77:
           _printf(pkg);
        if(scmnd && (!ignore))
@@ -531,27 +484,9 @@ int Gate::route(double instr, double r1,double r2, double r3)
        break;
        case 85:
        if(!ignore)
-         loadi_r(pkg);
+         rload(pkg);
        if(scmnd && (!ignore))
        cout << ".addr:" << IP << " " <<  "loadi_r" << endl;
-       break;
-       case 86:
-       if(!ignore)
-         loadf_r(pkg);
-       if(scmnd && (!ignore))
-       cout << ".addr:" << IP << " " <<  "loadf_r" << endl;
-       break;
-       case 87:
-       if(!ignore)
-         sload_r(pkg);
-       if(scmnd && (!ignore))
-       cout << ".addr:" << IP << " " <<  "sload_r" << endl;
-       break;
-       case 88:
-       if(!ignore)
-         dload_r(pkg);
-       if(scmnd && (!ignore))
-       cout << ".addr:" << IP << " " <<  "dload_r" << endl;
        break;
        case 89:
        if(!ignore)
@@ -563,12 +498,6 @@ int Gate::route(double instr, double r1,double r2, double r3)
          ct_int(pkg);
        if(scmnd && (!ignore))
        cout << ".addr:" << IP << " " <<  "ct_int" << endl;
-       break;
-       case 91:
-       if(!ignore)
-         ct_float(pkg);
-       if(scmnd && (!ignore))
-       cout << ".addr:" << IP << " " <<  "ct_float" << endl;
        break;
        case 92:
        if(!ignore)

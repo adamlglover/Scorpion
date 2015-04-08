@@ -104,13 +104,18 @@ void rln(double *pkg)//  length, start addr, excape  char,
 void rflush()
 {
   Ram ram;
-  for(int cell = 0; cell < ram.info(2) - 1; cell++){
-      stringstream ss;
-      ss << cell;
-      d_log.i("System","Flushing cell [" + ss.str() + "]");
+      d_log.i("System","Flushing cell [0]");
       for(int i = 0; i < ram.info(0); i++)
-          C.setr(cell, i, 0);
-  }
+          C.setr(0, i, 0);
+	
+	  d_log.i("System","Flushing cell [2]");
+      for(int i = 0; i < ram.info(0); i++)
+          C.setr(2, i, 0);
+		  
+      d_log.i("System","Flushing cell [3]");
+      for(int i = 0; i < ram.info(0); i++)
+          C.setr(3, i, 0);
+	  
 }
 
 void c_print(double _char)
@@ -503,7 +508,7 @@ void r_mv(double *pkg)
       }
 }
 
-void rmov(double *pkg) // ----------------------------------------------------------------------------
+void rmov(double *pkg)
 {
      switch( (long) pkg[0] )
      {
@@ -511,8 +516,8 @@ void rmov(double *pkg) // ------------------------------------------------------
              if(pkg[1] == 21)
                EBX = EAX;
             else{
-              if(C.getr(1, pkg[1]) == INT || C.getr(1, pkg[1]) == SHORT)
-                 EBX = C.getr(0, pkg[1]);
+              if(I1 == INT || I1 == SHORT)
+                 EBX = (long) C.getr(0, pkg[1]);
               else{
 		EBX = 2;
 	        d_log.w("System", "warning: type must be an integer type to modify cpu registers");
@@ -523,8 +528,8 @@ void rmov(double *pkg) // ------------------------------------------------------
             if(pkg[1] == 21)
                SDX = EAX;
             else{
-              if(C.getr(1, pkg[1]) == INT || C.getr(1, pkg[1]) == SHORT)
-                 SDX = C.getr(0, pkg[1]);
+              if(I1 == INT || I1 == SHORT)
+                 SDX = (long) C.getr(0, pkg[1]);
               else{
 	        EBX = 2;
 	        d_log.w("System", "warning: type must be an integer type to modify cpu registers");
@@ -535,8 +540,8 @@ void rmov(double *pkg) // ------------------------------------------------------
              if(pkg[1] == 21)
                BP = EAX;
             else{
-             if(C.getr(1, pkg[1]) == INT || C.getr(1, pkg[1]) == SHORT)
-               BP = C.getr(0, pkg[1]);
+             if(I1 == INT || I1 == SHORT)
+               BP = (long) C.getr(0, pkg[1]);
              else{
 	        EBX = 2;
                 d_log.w("System", "warning: type must be an integer type to modify cpu registers");
@@ -547,8 +552,8 @@ void rmov(double *pkg) // ------------------------------------------------------
 	     if(pkg[1] == 21)
                EXC = EAX;
             else{
-             if(C.getr(1, pkg[1]) == INT || C.getr(1, pkg[1]) == SHORT)
-                EXC = C.getr(0, pkg[1]);
+             if(I1 == INT || I1 == SHORT)
+                EXC = (long) C.getr(0, pkg[1]);
              else{
 	        EBX = 2;
 		d_log.w("System", "warning: type must be an integer type to modify cpu registers");
@@ -559,8 +564,8 @@ void rmov(double *pkg) // ------------------------------------------------------
 	     if(pkg[1] == 21)
                LG = EAX;
             else{
-              if(C.getr(1, pkg[1]) == INT || C.getr(1, pkg[1]) == SHORT)
-               LG = C.getr(0, pkg[1]);
+              if(I1 == INT || I1 == SHORT)
+               LG = (long) C.getr(0, pkg[1]);
               else{
 	        EBX = 2;
                 d_log.w("System", "warning: type must be an integer type to modify cpu registers");
@@ -571,8 +576,8 @@ void rmov(double *pkg) // ------------------------------------------------------
              if(pkg[1] == 21)
                LSL = EAX;
             else{
-               if(C.getr(1, pkg[1]) == INT || C.getr(1, pkg[1]) == SHORT)
-                   LSL =  C.getr(0, pkg[1]);
+               if(I1 == INT || I1 == SHORT)
+                   LSL =  (long) C.getr(0, pkg[1]);
                else{
 	         EBX = 2;
                  d_log.w("System", "warning: type must be an integer type to modify cpu registers");
@@ -583,8 +588,8 @@ void rmov(double *pkg) // ------------------------------------------------------
  	     if(pkg[1] == 21)
                SFC = EAX;
             else{
-             if(C.getr(1, pkg[1]) == INT || C.getr(1, pkg[1]) == SHORT)
-               SFC = C.getr(0, pkg[1]);
+             if(I1 == INT || I1 == SHORT)
+               SFC = (long) C.getr(0, pkg[1]);
              else{
 	       EBX = 2;
 	       d_log.w("System", "warning: type must be an integer type to modify cpu registers");
@@ -595,8 +600,8 @@ void rmov(double *pkg) // ------------------------------------------------------
 	     if(pkg[1] == 21)
                SCX = EAX;
             else{
-              if(C.getr(1, pkg[1]) == INT || C.getr(1, pkg[1]) == SHORT)
-                SCX = C.getr(0, pkg[1]);
+              if(I1 == INT || I1 == SHORT)
+                SCX = (long) C.getr(0, pkg[1]);
               else{
 	         EBX = 2;
 	         d_log.w("System", "warning: type must be an integer type to modify cpu registers");
@@ -607,8 +612,8 @@ void rmov(double *pkg) // ------------------------------------------------------
              if(pkg[1] == 21)
                I1 = EAX;
             else{
-             if(C.getr(1, pkg[1]) == INT || C.getr(1, pkg[1]) == SHORT)
-               I1 = C.getr(0, pkg[1]);
+             if(I1 == INT || I1 == SHORT)
+               I1 = (long) C.getr(0, pkg[1]);
 	        else{
 	          EBX = 2;
                   d_log.w("System", "warning: type must be an integer type to modify cpu registers");
@@ -619,8 +624,8 @@ void rmov(double *pkg) // ------------------------------------------------------
              if(pkg[1] == 21)
                I2 = EAX;
             else{
-             if(C.getr(1, pkg[1]) == INT || C.getr(1, pkg[1]) == SHORT)
-               I2 = C.getr(0, pkg[1]);
+             if(I1 == INT || I1 == SHORT)
+               I2 = (long) C.getr(0, pkg[1]);
 	        else{
 	           EBX = 2;
 		   d_log.w("System", "warning: type must be an integer type to modify cpu registers");
@@ -631,8 +636,8 @@ void rmov(double *pkg) // ------------------------------------------------------
              if(pkg[1] == 21)
                TMP = EAX;
             else{
-             if(C.getr(1, pkg[1]) == INT || C.getr(1, pkg[1]) == SHORT)
-                TMP = C.getr(0, pkg[1]); 
+             if(I1 == INT || I1 == SHORT)
+                TMP = (long) C.getr(0, pkg[1]); 
              else{
 	        EBX = 2;
                 d_log.w("System", "warning: type must be an integer type to modify cpu registers");
@@ -698,7 +703,7 @@ void invoke(double *pkg)
             break;
           }
        break;
-       case 10: // goto (could be used for multitasking)
+       case 10: // goto <address>(could be used for multitasking)
 	    C.Interrupt(SDX);
 		SCR = 0;
        break;
@@ -721,23 +726,12 @@ void mlock(double *pkg)
                 C.setr(2, i, C.getr(0, i));
             }
       }
-      for(int i = 0; i < r.info(0); i++){
-            if(C.getr(3, i) == 0){
-          //      lflag[ i ] = flag[ i ];
-                C.setr(4, i, C.getr(1, i));
-            }
-      }
-
 }
 
 void lock(double *pkg)
 {
-	 if(C.getr(3, pkg[0]) == 0) {
+	 if(C.getr(3, pkg[0]) == 0)
           C.setr(2, pkg[0], C.getr(0, pkg[0]));
-          C.setr(2, pkg[0], C.getr(0, pkg[0]));
-         // lreg[ pkg[0] ] = reg[ pkg[0] ];
-         // lflag[ pkg[0] ] = flag[ pkg[0] ];
-      } // else log cannot lock excluded register #{r}
       else {
        stringstream ss;
        ss << pkg[0];
@@ -754,23 +748,18 @@ void xreg(double *pkg)
         C.setr(3, pkg[0], 0);
 }
 
-void mulock(double *pkg)
+void mulock(double *pkg
 {
       for(int i = 0; i < r.info(0); i++){
             if(C.getr(3, i) == 0)
                  C.setr(0, i, C.getr(2, i));
-      }
-
-      for(int i = 0; i < r.info(0); i++){
-            if(C.getr(3, i) == 0)
-                 C.setr(1, i, C.getr(4, i));
       }
 }
 
 void clx(double *pkg)
 {
      for(int i = 0; i < r.info(0); i++)
-           C.setr(3, i, 0);
+          C.setr(3, i, 0);
 }
 
 int tibool(bool val)
@@ -784,10 +773,10 @@ int tibool(bool val)
 void same(double *pkg)
 {
 	RuntimeException re;
-	if(C.getr(1, pkg[0]) == BOOL){
-           if(C.getr(0, pkg[1]) == 21)
+	if(I1 == BOOL){
+           if( pkg[1] == 21)
                C.setr(0, pkg[0], tibool(EAX == C.getr(0, pkg[2])));
-           else if(C.getr(0, pkg[2]) == 21)
+           else if(pkg[2] == 21)
                C.setr(0, pkg[0], tibool(C.getr(0, pkg[1]) == EAX));
            else
                C.setr(0, pkg[0], tibool(C.getr(0, pkg[1]) == C.getr(0, pkg[2])));
@@ -799,31 +788,8 @@ void same(double *pkg)
 
 void ulock(double *pkg)
 {
-      if(C.getr(3, pkg[0]) == 0) {
+      if(C.getr(3, pkg[0]) == 0)
          C.setr(0, pkg[0], C.getr(2, pkg[0]));
-         C.setr(1, pkg[0], C.getr(4, pkg[0]));
-      }
-}
-
-void rm(double *pkg)
-{
-      C.setr(0, pkg[0], null);
-      C.setr(1, pkg[0], OI);
-}
-
-void func(double *pkg)
-{
-          if(C.getr(1, pkg[0]) == OI){
-            C.setr(0, pkg[0], null);
-            C.setr(1, pkg[0], UFUNC);
-          }
-          else if((C.getr(1, pkg[0]) == FUNC) || (C.getr(1, pkg[0]) == UFUNC)){ }
-          else{
-	    EBX = 2;
-	    stringstream ss;
-	    ss << "warning: cannot create func at addr " << pkg[0];
-	    d_log.w("System",ss.str());
-          }
 }
 
 void push(double *pkg)
@@ -831,108 +797,39 @@ void push(double *pkg)
   RuntimeException x;
    if(!inFunc){
     inFunc = true;
-       if(C.getr(1, pkg[0]) == UFUNC){
           C.setr(0, pkg[0], IP);
-          C.setr(1, pkg[0], FUNC);
           ignore = true;
-       }
-       else if(C.getr(1, pkg[0]) == FUNC){
-            stringstream ss;
-            ss << pkg[0];
-            x.introduce("FunctionInitializationException", "multiple definition of func " + ss.str());
-       } 
-       else{
-         stringstream ss;
-         ss << "addr " << pkg[0] << " is not a func";
-         x.introduce("NotAFuncException", ss.str());
-       }
    }
    else
-      x.introduce("FuncCallException", "cannot run a function inside another function!");
+      x.introduce("FuncCallException", "cannot initalize a function inside another function!");
 }
 
 void _return(double *pkg)
 {
-        inFunc = false;
+    inFunc = false;
 	RuntimeException re;
         if(ignore && pkg[1] == 0)
             ignore = false;
         else if(ignore && pkg[1] == 1) { 
                // skip
+			   inFunc = true;
         }
-        else {
-         if(C.getr(1, pkg[0]) == FUNC)
+        else
             IP = (long) C.getr(0, pkg[0]);
-         else if(C.getr(1, pkg[0]) == UFUNC){
-             stringstream ss;
-             ss << "fatal err;" << " cannot return an unreferenced func at addr " << pkg[0];
-             re.introduce("FunctionCallException", ss.str());
-         }
-         else{
-            stringstream ss;
-            ss << "addr " << pkg[0] << " is not a func";
-            re.introduce("NotAFuncException", ss.str());
-         }
-        }
 }
 
 void call(double *pkg)
 {
-	RuntimeException re;
-       if(C.getr(1, pkg[0]) == UFUNC){
-             stringstream ss;
-	     ss << "unidentified refrence to func " << pkg[0] ;
-             re.introduce("FunctionCallException", ss.str());
-       }
-       else if(C.getr(1, pkg[0]) == FUNC){
-          TMP = IP;
-          IP = (long) C.getr(0, pkg[0]);
-          C.setr(0, pkg[0], TMP);
-       }
-       else{
-	 stringstream ss;
-	 ss << "addr " << pkg[0] << " is not a func";
-         re.introduce("NotAFunctionException", ss.str());
-       }
-}
-
-void bck_t(double *pkg)
-{
-    RuntimeException re;
-       if(C.getr(1, pkg[0]) == FUNC){
-        //   cout << "setting ip " << C.getr(0, pkg[1]);
-           if(C.getr(1, pkg[1]) == INT || C.getr(1, pkg[1]) == SHORT)
-                C.setr(0, pkg[0], C.getr(0, pkg[1]));
-             else{
-                EBX = 2;
-                d_log.w("System", "warning: type must be an integer type to set bck_t");
-             }
-       }
-       else if(C.getr(1, pkg[0]) == UFUNC){
-          EBX = 2;
-          d_log.w("System", "func must be initalized before setting bck_t");
-       }
-       else{
-         stringstream ss;
-         ss << "addr " << pkg[0] << " is not a func";
-         re.introduce("NotAFunctionException", ss.str());
-       }
+      TMP = IP;
+      IP = (long) C.getr(0, pkg[0]);
+      C.setr(0, pkg[0], TMP);
 }
 
 void swp(double *pkg)
 {
-          TMP = C.getr(0, pkg[0]);
-          C.setr(0, pkg[0], C.getr(0, pkg[1]));
-          C.setr(0, pkg[1], TMP);
-
-         TMP = C.getr(1, pkg[0]);
-          C.setr(1, pkg[0], C.getr(1, pkg[1]));
-          C.setr(1, pkg[1], TMP);
-}
-
-void eof(double *pkg)
-{
-      C.setr(1, pkg[0], OI);
+     TMP = C.getr(0, pkg[0]);
+     C.setr(0, pkg[0], C.getr(0, pkg[1]));
+     C.setr(0, pkg[1], TMP);
 }
 
 void loop(double *pkg)
@@ -991,7 +888,7 @@ void endl(double *pkg)
 void _do(double *pkg)
 {
 	RuntimeException re;
-	if(C.getr(1, pkg[0]) == BOOL){
+	if(I1 == BOOL){
 	    if(C.getr(0, pkg[0]) == 1){}
             else {
 	       if_ignore = true;
@@ -1004,118 +901,83 @@ void _do(double *pkg)
 
 void ilt(double *pkg)
 {
-	RuntimeException re;
-	if(is_integer(C.getr(1, pkg[0]), C.getr(1, pkg[0]))){
 	    if(C.getr(0, pkg[0]) < C.getr(0, pkg[1])){}
             else {
 	       if_ignore = true;
                ignore = true;
 	    }
-	}
-	else
-	   re.introduce("UnsatisfiedTypeException","the types inputed must be an integer type");
 }
 
 void igt(double *pkg)
 {
-	RuntimeException re;
-	if(is_integer(C.getr(1, pkg[0]), C.getr(1, pkg[0]))){
 		if(C.getr(0, pkg[0]) > C.getr(0, pkg[1])){}
 		else {
 		  if_ignore = true;
 		  ignore = true;
 		}
-        }
-	else
-	   re.introduce("UnsatisfiedTypeException","the types inputed must be an integer type");
 }
 
-void iltoeq(double *pkg)
+void ile(double *pkg)
 {
-    RuntimeException re;
-	if(is_integer(C.getr(1, pkg[0]), C.getr(1, pkg[0]))){
 		if(C.getr(0, pkg[0]) <= C.getr(0, pkg[1])){}
 		else {
 		  if_ignore = true;
 		  ignore = true;
 		}
-        }
-	else
-	   re.introduce("UnsatisfiedTypeException","the types inputed must be an integer type");
 }
 
-void igtoeq(double *pkg)
+void ige(double *pkg)
 {
-	RuntimeException re;
-	if(is_integer(C.getr(1, pkg[0]), C.getr(1, pkg[0]))){
 		if(C.getr(0, pkg[0]) >= C.getr(0, pkg[1])){}
 		else {
 		  if_ignore = true;
 		  ignore = true;
 		}
-        }
-	else
-	   re.introduce("UnsatisfiedTypeException","the types inputed must be an integer type");
 }
 
 void ndo(double *pkg)
 {
-	RuntimeException re;
-	if(C.getr(1, pkg[0]) == BOOL){
-		if(C.getr(0, pkg[0]) == 0){}
+	if(I1 == 0){}
 		else {
 		  if_ignore = true;
 		  ignore = true;
 		}
-	}
-	else
-	  re.introduce("UnsatisfiedTypeException","the type inputed must be of type bool");
 }
 
 void inlt(double *pkg)
 {
-	RuntimeException re;
-	if(is_integer(C.getr(1, pkg[0]), C.getr(1, pkg[0]))){
 		if(!(C.getr(0, pkg[0]) < C.getr(0, pkg[1]))){}
 		else {
 		  if_ignore = true;
 		  ignore = true;
 		}
-        }
-	else
-	   re.introduce("UnsatisfiedTypeException","the types inputed must be an integer type");
 }
 
 void ingt(double *pkg)
 {
-	RuntimeException re;
-	if(is_integer(C.getr(1, pkg[0]), C.getr(1, pkg[0]))){
 		if(!(C.getr(0, pkg[0]) > C.getr(0, pkg[1]))){}
 		else {
 		  if_ignore = true;
 		  ignore = true;
 		}
-        }
-	else
-	   re.introduce("UnsatisfiedTypeException","the types inputed must be an integer type");
 }
 
 void t_cast(double *pkg)
 {
      RuntimeException re;
-	if(is_integer(C.getr(1, pkg[0]), C.getr(1, pkg[0]))){
+	if(I1 == INT || I1 == SHORT || I1 == DOUBLE || I1 == FLOAT){
 		switch( (long) pkg[1] ){
-                    case 0: // int
-                       C.setr(1, pkg[0], SHORT);
+                    case 0: // short
+                       C.setr(1, pkg[0], (int) C.getr(1, pkg[0]));
                     break;
 		    case 1: // int
-		       C.setr(1, pkg[0], INT);
+		       C.setr(1, pkg[0], (long) C.getr(1, pkg[0]));
 		    break;
-                    case 2: // int
-                       C.setr(1, pkg[0], FLOAT);
+                    case 2: //  float
+                       C.setr(1, pkg[0], (float) C.getr(1, pkg[0]));
                     break;
 		    case 3: // double
-	               C.setr(1, pkg[0], DOUBLE);
+	               C.setr(1, pkg[0], (double) C.getr(1, pkg[0]));
 		    break;
 	            default: // err
 		        stringstream ss;
@@ -1128,40 +990,30 @@ void t_cast(double *pkg)
 	   re.introduce("UnsatisfiedTypeException","the type inputed must be an integer type");
 }
 
-void inltoeq(double *pkg)
+void inle(double *pkg)
 {
-	RuntimeException re;
-	if(is_integer(C.getr(1, pkg[0]), C.getr(1, pkg[0]))){
 		if(!(C.getr(0, pkg[0]) <= C.getr(0, pkg[1]))){}
 		else {
 		  if_ignore = true;
 		  ignore = true;
 		}
-	}
-	else
-	   re.introduce("UnsatisfiedTypeException","the types inputed must be an integer type");
 }
 
-void ingtoeq(double *pkg)
+void inge(double *pkg)
 {
-	RuntimeException re;
-	if(is_integer(C.getr(1, pkg[0]), C.getr(1, pkg[0]))){
 		if((C.getr(0, pkg[0]) >= C.getr(0, pkg[1])) == false){}
 		else {
 		  if_ignore = true;
 		  ignore = true;
 		}
-        }
-	else
-	   re.introduce("UnsatisfiedTypeException","the types inputed must be an integer type");
 }
 
 void neg(double *pkg){
 	RuntimeException re;
-    if(C.getr(1, pkg[0]) == INT || C.getr(1, pkg[0]) == DOUBLE
-           || C.getr(1, pkg[0]) == SHORT || C.getr(1, pkg[0]) == FLOAT)
+    if(I1 == INT || I1 == DOUBLE
+           || I1 == SHORT || I1 == FLOAT)
       C.setr(0, pkg[0], (C.getr(0, pkg[0]) * -1));
-    else if(C.getr(1, pkg[0]) == BOOL){
+    else if(I1 == BOOL){
            if(C.getr(0, pkg[0]) == 0)
               C.setr(0, pkg[0], 1);
            else if(C.getr(0, pkg[0]) == 1)

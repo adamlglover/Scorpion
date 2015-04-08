@@ -30,14 +30,12 @@
 #include <string>
 using namespace std;
 
-#define MAX 4600000 /* 4.6mb of R\c(ram per cell)*/
+#define MAX 8000000 /* 8mb of R\c(ram per cell)*/
 #define MAX_SIZE 16000000 /* 16mb of program memory */
-#define NUM_CELLS 6
+#define NUM_CELLS 4
 double ram[ MAX ]; // cell 0
-double fram[ MAX ]; // cell 1
 double lram[ MAX ];// cell 2
 double xram[ MAX ];// cell 3
-double lfram[ MAX ]; // cell 4
 string program[ MAX_SIZE ]; // cell 5
 
 int rsize;
@@ -91,46 +89,13 @@ double Ram::data(double dataBus)
       switch( Ram::CB ) {
          case 1: // S
         //   cout << "Saving " << dataBus<< "to ram CB " << Ram::CB << " address " << address << endl;
-           if(fram[ address ] == INT)
-            ram[ address ] = (long) dataBus;
-           else if(fram[ address ] == SHORT)
-            ram[ address ] = (int) dataBus;
-           else if(fram[ address ] == FLOAT)
-            ram[ address ] = (float) dataBus;
-           else if(fram[ address ] == CHAR)
-            ram[ address ] = _char(dataBus);
-           else if(fram[ address ] == BOOL)
-            ram[ address ] = ibool( (long) dataBus);
-           else // format as double
             ram[ address ] = dataBus;
       //     if((address >= 30) && (address <= 33))
         //     cout << "ram " << ram[ address ];
          break;
          case 2: // E
         //   cout << "Getting " << dataBus<< "from ram CB " << Ram::CB << " address " << address << endl;
-            if(fram[ address ] == INT)
-              return (long) ram[ address ];
-            else if(fram[ address ] == SHORT)
-              return (int) ram[ address ];
-            else if(fram[ address ] == FLOAT)
-              return (float) ram[ address ];
-            else // format as double
               return ram[ address ];
-         break;
-         default:
-           RuntimeException re;
-           re.introduce("RamControlBusException","cannot access cell, invalid control bus input");
-         break;
-
-      }
-   }
-   else if(Ram::CS == 1){
-      switch( Ram::CB ) {
-         case 1: // S
-           fram[ address ] = dataBus;
-         break;
-         case 2: // E
-           return fram[ address ];
          break;
          default:
            RuntimeException re;
@@ -161,21 +126,6 @@ double Ram::data(double dataBus)
          break;
          case 2: // E
            return xram[ address ];
-         break;
-         default:
-           RuntimeException re;
-           re.introduce("RamControlBusException","cannot access cell, invalid control bus input");
-         break;
-
-      }
-   }
-    else if(Ram::CS == 4){
-      switch( Ram::CB ) {
-         case 1: // S
-           lfram[ address ] = dataBus;
-         break;
-         case 2: // E
-           return lfram[ address ];
          break;
          default:
            RuntimeException re;

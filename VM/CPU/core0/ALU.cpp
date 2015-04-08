@@ -34,7 +34,7 @@ void sr(double *pkg)
        if(pkg[0] == 21)
            EAX = EAX >> (long) pkg[1];
        else {
-          if((I1 == INT){
+          if(I1 == INT){
                long right = (long) c0.getr(1, pkg[0]) >> (short) pkg[1];
                c0.setr(0, pkg[0], right);
           }
@@ -54,17 +54,17 @@ void sl(double *pkg)
      if(pkg[0] == 21)
            EAX = EAX << (long) pkg[1];
        else {
-          if((I1 == INT){
-               long right = (long) c0.getr(1, pkg[0]) << (short) pkg[1];
-               c0.setr(0, pkg[0], right);
+          if(I1 == INT){
+               long left = (long) c0.getr(1, pkg[0]) << (short) pkg[1];
+               c0.setr(0, pkg[0], left);
           }
           else if(I1 == SHORT){
-               int right = (int) c0.getr(1, pkg[0]) << (short) pkg[1];
-               c0.setr(0, pkg[0], right);
+               int left = (int) c0.getr(1, pkg[0]) << (short) pkg[1];
+               c0.setr(0, pkg[0], left);
           }
           else {
-               long right = (long) c0.getr(1, pkg[0]) << (short) pkg[1];
-               c0.setr(0, pkg[0], right);
+               long left = (long) c0.getr(1, pkg[0]) << (short) pkg[1];
+               c0.setr(0, pkg[0], left);
           }
        }
 }
@@ -227,11 +227,11 @@ void rem(double *pkg)
       else if(I1 == FLOAT)// float addition
          c0.setr(0, pkg[0], fmod(c0.getr(0, pkg[1]), c0.getr(0, pkg[2])));
       else if(I1 == INT)// int addition
-         c0.setr(0, pkg[0], ((long) c0.getr(0, pkg[1]) % c0.getr(0, pkg[2])));
+         c0.setr(0, pkg[0], ((long) c0.getr(0, pkg[1]) % (long) c0.getr(0, pkg[2])));
       else if(I1 == SHORT)// short addition
-         c0.setr(0, pkg[0], ((int) c0.getr(0, pkg[1]) % c0.getr(0, pkg[2])));
+         c0.setr(0, pkg[0], ((int) c0.getr(0, pkg[1]) % (int) c0.getr(0, pkg[2])));
       else // int addition
-         c0.setr(0, pkg[0], ((long) c0.getr(0, pkg[1]) % c0.getr(0, pkg[2])));
+         c0.setr(0, pkg[0], ((long) c0.getr(0, pkg[1]) % (long) c0.getr(0, pkg[2])));
    }
 }
 
@@ -318,14 +318,14 @@ void crem(double *pkg)
    else
    {
       if(I1 == DOUBLE)// double addition
-         c0.setr(0, pkg[0], fmod(c0.getr(0, pkg[0]), fmod((c0.getr(0, pkg[1]), c0.getr(0, pkg[2])))));
+         c0.setr(0, pkg[0], fmod(c0.getr(0, pkg[0]), fmod(c0.getr(0, pkg[1]), c0.getr(0, pkg[2]))));
       else if(I1 == FLOAT)// float addition
-         c0.setr(0, pkg[0], (float) fmod(c0.getr(0, pkg[0]), fmod((c0.getr(0, pkg[1]), c0.getr(0, pkg[2])))));
+         c0.setr(0, pkg[0], (float) fmod(c0.getr(0, pkg[0]), fmod(c0.getr(0, pkg[1]), c0.getr(0, pkg[2]))));
       else if(I1 == INT)// int addition
-         c0.setr(0, pkg[0], (long) fmod(c0.getr(0, pkg[0]), fmod((c0.getr(0, pkg[1]), c0.getr(0, pkg[2])))));
+         c0.setr(0, pkg[0], (long) fmod(c0.getr(0, pkg[0]), fmod(c0.getr(0, pkg[1]), c0.getr(0, pkg[2]))));
       else if(I1 == SHORT)// short addition
-         c0.setr(0, pkg[0], (int) fmod(c0.getr(0, pkg[0]), fmod((c0.getr(0, pkg[1]), c0.getr(0, pkg[2])))));
+         c0.setr(0, pkg[0], (int) fmod(c0.getr(0, pkg[0]), fmod(c0.getr(0, pkg[1]), c0.getr(0, pkg[2]))));
       else // int addition
-         c0.setr(0, pkg[0], (long) fmod(c0.getr(0, pkg[0]), fmod((c0.getr(0, pkg[1]), c0.getr(0, pkg[2])))));
+         c0.setr(0, pkg[0], (long) fmod(c0.getr(0, pkg[0]), fmod(c0.getr(0, pkg[1]), c0.getr(0, pkg[2]))));
    }
 }

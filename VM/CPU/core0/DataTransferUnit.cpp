@@ -37,6 +37,11 @@ void rload(double *pkg)
     C.setr(0, pkg[0], reg);
 }
 
+void cp(double *pkg)
+{
+   C.setr(0, pkg[0], C.getr(0, pkg[1]));
+}
+
 void sload(double *pkg)
 {
      if(pkg[1] == 21937856)
@@ -49,7 +54,7 @@ void sload(double *pkg)
 void ct_int(double *pkg)
 {
   RuntimeException re;
-  if(I1 == SHORT) || (I1== INT)){
+  if(I1 == SHORT || I1 == INT){
      char a = C.getr(0, pkg[1]);
      int val = a - '0';
      C.setr(0, pkg[0], val);
@@ -64,9 +69,9 @@ void anum(double *pkg)
          ss << C.getr(0, pkg[0]) << C.getr(0, pkg[1]);
          string num = ss.str();
          
-         if(I1 == SHORT) || (I1 == INT))
+         if(I1 == SHORT || I1 == INT)
            C.setr(0, pkg[0], atoi(num.c_str()));
-         else if(I1 == DOUBLE) || (I1 == FLOAT))
+         else if(I1 == DOUBLE || I1 == FLOAT)
            C.setr(0, pkg[0], atof(num.c_str()));
          else {
            EBX = 2;
@@ -87,14 +92,10 @@ void rln(double *pkg)//  length, start addr, excape  char,
        for(int i = 0; i < input.length(); i++){
             char a = input.at(i);
             int chr = (int) a;
-            C.setr(1, s_addr + i, CHAR);
             C.setr(0, s_addr + i, chr);
          //   cout << "saving " << a << endl;
        }
-       if(is_integer(C.getr(1, pkg[0]), C.getr(1, pkg[0])))
          C.setr(0, pkg[0], length);
-       else
-         cout << "number must be an integer";
      }
      else
       cout << "resources unavailable";
@@ -225,6 +226,22 @@ void c_printf(double _char)
       d_log.w("System", ss.str());
       EBX = 2;
    }  
+  }
+}
+
+extern string prog_data;
+void c_update()
+{
+  Ram r;
+  for(int i = 0; i < L1_ICache_length; i++){
+      if(i > r.info(5))
+          break;
+      else {
+        C.getr(5, i);
+        string instr = prog_data;
+        if(instr != L1_ICache[ i ])
+           L1_ICache[ i ] = instr;
+      }
   }
 }
 
@@ -505,6 +522,12 @@ void r_mv(double *pkg)
              else
                 d_log.w("System", "warning: type must be an integer type to obtain cpu register info");
            break;
+           case 14:
+             if(I1 == INT || I1 == SHORT)
+                C.setr(0, pkg[1], IP);
+             else
+                d_log.w("System", "warning: type must be an integer type to obtain cpu register info");
+           break;
       }
 }
 
@@ -748,7 +771,7 @@ void xreg(double *pkg)
         C.setr(3, pkg[0], 0);
 }
 
-void mulock(double *pkg
+void mulock(double *pkg)
 {
       for(int i = 0; i < r.info(0); i++){
             if(C.getr(3, i) == 0)

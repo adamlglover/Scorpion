@@ -42,14 +42,14 @@
    */
    //int CPUFlags::LP   = 0x5; 
 
-   int   OI  = 0x0;
-   int   UFUNC = 0x1;
-   int   MAIN  = 0x2;
-   int   CU  = 0x3;
-   int   FUNC  = 0x4;
-   int   INT = 0x11;
-   int   DOUBLE = 0x12;
-   int   CHAR = 0x13;
-   int   BOOL = 0x14;
-   int   SHORT = 0x15;
-   int   FLOAT = 0x16;
+   int   OI  = 0;
+   int   UFUNC = 1;
+   int   MAIN  = 2;
+   int   CU  = 3;
+   int   FUNC  = 4;
+   int   INT = 11;
+   int   DOUBLE = 12;
+   int   CHAR = 13;
+   int   BOOL = 14;
+   int   SHORT = 15;
+   int   FLOAT = 16;

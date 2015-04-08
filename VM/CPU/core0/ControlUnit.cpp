@@ -43,6 +43,7 @@ clock_t tStart;
 clock_s t_clock;
 bool _0Halted;
 bool pass = false;
+bool run = false;
 bool scmnd = false;
 bool ignore = false;
 bool if_ignore = false;
@@ -94,7 +95,6 @@ void C0::Reset()
 
   EAX = 0;
   TMP = 0;
-  IP  = 0;
   EBX = 0;
   SDX = 0;
   SFC = 0;
@@ -128,7 +128,6 @@ void C0::Halt()
 
   EAX = 0;
   TMP = 0;
-  IP  = 0;
   SDX  = 0;
   BP  = 0;
   PS  = 0;
@@ -185,7 +184,7 @@ void C0::Interrupt(double offset)
 
 int ProcessOperands()
 {
-   cout << "processing operands {0:" << instruction << "} {1:" << reg1 << "} {2:" << reg2 << "} {3:" << reg3 << "}" << endl;
+ //  cout << "processing operands {0:" << instruction << "} {1:" << reg1 << "} {2:" << reg2 << "} {3:" << reg3 << "}" << endl;
    Gate gate;
    return gate.route(instruction, reg1, reg2, reg3);
 }
@@ -211,8 +210,17 @@ int fetch()
    Ram ramm;
    memstat = ramm.prog_status(IP);
    if(memstat == Ram::DONE){
-          printf("Time taken: %.3fs\n", (double)(clock() - tStart)/CLOCKS_PER_SEC);
-          p_exit();
+          if(!run){
+             printf("Time taken: %.3fs\n", (double)(clock() - tStart)/CLOCKS_PER_SEC);
+             p_exit();
+          }
+          else {
+             while(true)
+             {
+               // do not shut down
+               // run forever
+             }
+          }
    }
    else if(memstat == Ram::RUNNING){
       i1          = prog(2, IP++, "");

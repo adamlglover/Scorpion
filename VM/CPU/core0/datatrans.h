@@ -5,7 +5,7 @@ void loadi(double *pkg);
 void loadbl(double *pkg);
 void loadc(double *pkg);
 void dload(double *pkg);
-void loadr(double *pkg)
+void loadr(double *pkg);
 void mov(double *pkg);
 void rmov(double *pkg);
 void invoke(double *pkg);
@@ -50,5 +50,7 @@ void rload(double *pkg);
 void ct_int(double *pkg);
 void anum(double *pkg);
 void _sleep(double *pkg);
+void c_update();
+void cp(double *pkg);
 
 #endif

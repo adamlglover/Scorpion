@@ -7,6 +7,7 @@ extern bool scmnd;
 extern bool pass;
 extern long EAX,TMP,IP, EBX, SDX, SFC, SCX, BP, EXC, PS, LG, LSL, I1, I2, SCR;
 extern long *id; 
+extern bool run;
 extern string prog_data;
 extern long L1_ICache_length;
 extern string L1_ICache[ 128000 ];

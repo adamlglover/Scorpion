@@ -488,12 +488,6 @@ int Gate::route(double instr, double r1,double r2, double r3)
        if(scmnd && (!ignore))
        cout << ".addr:" << IP << " " <<  "loadi_r" << endl;
        break;
-       case 89:
-       if(!ignore)
-         bck_t(pkg);
-       if(scmnd && (!ignore))
-       cout << ".addr:" << IP << " " <<  "bck_t" << endl;
-       break;
        case 90:
          ct_int(pkg);
        if(scmnd && (!ignore))
@@ -510,6 +504,23 @@ int Gate::route(double instr, double r1,double r2, double r3)
          _sleep(pkg);
        if(scmnd && (!ignore))
        cout << ".addr:" << IP << " " <<  "sleep" << endl;
+       break;
+       case 94:
+       if(!ignore)
+         cp(pkg);
+       if(scmnd && (!ignore))
+       cout << ".addr:" << IP << " " <<  "cp" << endl;
+       break;
+       case 95:
+       if(!ignore)
+       {
+          if(run)
+             run = false;
+          else
+            run = true;
+       }  
+       if(scmnd && (!ignore))
+       cout << ".addr:" << IP << " " <<  "run" << endl;
        break;
        default:
          if(!ignore){

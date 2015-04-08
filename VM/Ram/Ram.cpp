@@ -278,10 +278,6 @@ void Ram::prog_load(string content)
     	l.v("System","Program finished loading to memory with size [" + ss.str() + "] bytes");
     	Program Applet;
     	Applet.Runnable(true);
-		C0 C;
-        Ram rm;
-        for(long i = 0; i < rm.info(0); i++)
-              C.setr(1, i, OI); // allow all ram memory addresses to be open for input
     }
     else {
       Ram ramm;

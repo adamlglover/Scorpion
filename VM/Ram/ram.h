@@ -8,7 +8,7 @@ class Ram {
 	   static int DONE;
        static int RUNNING;
 	   static int UNKNOWN;
-       int addr(long);
+       int addr(long,bool);
        int cell(short);
        double data(double);
        long info(int);

@@ -32,7 +32,7 @@ using namespace std;
 
 #define MAX 8000000 /* 8mb of R\c(ram per cell)*/
 #define MAX_SIZE 16000000 /* 16mb of program memory */
-#define NUM_CELLS 4
+#define NUM_CELLS 6 // (actually 4)-6 is the max
 double ram[ MAX ]; // cell 0
 double lram[ MAX ];// cell 2
 double xram[ MAX ];// cell 3
@@ -55,9 +55,13 @@ extern int INDEX_OK;
 long Ram::CB = 0;
 short Ram::CS = 0;
 long address = 0;
-int Ram::addr(long index)
+int Ram::addr(long index, bool p_mem)
 {
-  if(index < 0 || index > MAX){
+  if(((index < 0) || (index > MAX)) && !p_mem){
+         state = INDEX_OUT_OF_RANGE;
+     return INDEX_OUT_OF_RANGE;
+  }
+  else if(((index < 0) || (index > MAX_SIZE)) && p_mem){
          state = INDEX_OUT_OF_RANGE;
      return INDEX_OUT_OF_RANGE;
   }

@@ -142,7 +142,7 @@ double C0::getr(short cell_switch, long _addr)
 {
      Ram ram;
      ram.CB = 2; // E
-     ram.addr((long) _addr);
+     ram.addr((long) _addr, false);
      ram.cell(cell_switch);
 
      return ram.data(0.0); // get data from ram
@@ -152,7 +152,7 @@ void C0::setr(short cell_switch, long _addr, double data)
 {
     Ram ram;
     ram.CB = 1; // S
-    ram.addr((long) _addr);
+    ram.addr((long) _addr, false);
     ram.cell(cell_switch);
 
     ram.data(data); // set data to ram
@@ -196,7 +196,7 @@ string prog(int set_enable, long index, string data)
         else {
            Ram ram;
            ram.CB = set_enable; // E
-           ram.addr((long) index);
+           ram.addr(index, true);
            prog_data = data;
            ram.cell(5);
            ram.data(0.0);

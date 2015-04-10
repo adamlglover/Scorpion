@@ -431,6 +431,12 @@ void mov(double *pkg)
            case 11:
             TMP = pkg[1];
            break;
+           case 12:
+	    AI = pkg[1];
+           break;
+           case 13:
+            IPI = pkg[1];
+	   break;
       }
 }
 
@@ -528,6 +534,18 @@ void r_mv(double *pkg)
              else
                 d_log.w("System", "warning: type must be an integer type to obtain cpu register info");
            break;
+           case 15:
+	     if(I1 == INT || I1 == SHORT)
+		C.setr(0, pkg[1], AI);
+             else
+		d_log.w("System", "warning: type must be an integer type to obtain cpu register info");
+   	   break;
+  	   case 16:
+	     if(I1 == INT || I1 == SHORT)
+		C.setr(0, pkg[1], IPI);
+	     else
+		d_log.w("System", "warning: type must be an integer type to obtain cpu register info");
+	   break;
       }
 }
 
@@ -729,6 +747,9 @@ void invoke(double *pkg)
        case 10: // goto <address>(could be used for multitasking)
 	    C.Interrupt(SDX);
 		SCR = 0;
+       break;
+       case 11: // set IP back to original pos before it was interrupted
+          IP = auto_ipi;
        break;
        default:
        stringstream ss;

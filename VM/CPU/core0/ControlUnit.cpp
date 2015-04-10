@@ -37,7 +37,7 @@
 #include <string>
 using namespace std;
 
-long EAX, TMP, IP, EBX, SDX, SFC, SCX, BP, EXC, PS, LG, LSL, I1, I2, SCR;
+long EAX, TMP, IP, EBX, SDX, SFC, SCX, BP, EXC, PS, LG, LSL, I1, I2, SCR, AI, IPI;
 
 clock_t tStart;
 clock_s t_clock;
@@ -50,6 +50,7 @@ bool if_ignore = false;
 bool waiting = false;
 
 long *id;
+long auto_ipi;
 int fetch();
 int decode();
 int execute();
@@ -101,9 +102,11 @@ void C0::Reset()
   BP  = 0;
   EXC = 1;  // standard program close
   PS  = 0;
+  IPI = 0;
   LG  = 1; // logging
   LSL = 2; // verbose
   I1  = 0;
+  AI  = 0;
   I2  = 0;
   SCR = 0; // system call i/o response code
 
@@ -132,6 +135,8 @@ void C0::Halt()
   BP  = 0;
   PS  = 0;
   LG  = 0;
+  IPI = 0;
+  AI  = 0;
   LSL = 0;
   SCX = 0;
   SCR = 0;
@@ -153,7 +158,7 @@ void C0::setr(short cell_switch, long _addr, double data)
     Ram ram;
     ram.CB = 1; // S
     ram.addr((long) _addr, false);
-    ram.cell(cell_switch);
+   ram.cell(cell_switch);
 
     ram.data(data); // set data to ram
 }
@@ -207,6 +212,13 @@ string prog(int set_enable, long index, string data)
 int memstat;
 int fetch()
 {
+   if(AI != 0){
+      if((t_clock.ticks % AI) == 0){
+         auto_ipi = IP; // store previous ip pos
+         IP = IPI;    // tell cpu to scamper off and do something random(usually used in multitasking)
+      }
+   }
+
    Ram ramm;
    memstat = ramm.prog_status(IP);
    if(memstat == Ram::DONE){
@@ -254,7 +266,7 @@ int execute()
 }
 
 void C0::run0()
-{ 
+{
  tStart = clock();
  while(System::Running){
        fetch();

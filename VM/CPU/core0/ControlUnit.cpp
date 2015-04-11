@@ -34,6 +34,7 @@
 #include "../../Log/filter.h"
 #include "../x86Disassm/disassembler.h"
 #include "../../Log/Log.h"
+#include "thread.h"
 #include <string>
 using namespace std;
 
@@ -51,6 +52,7 @@ bool waiting = false;
 
 long *id;
 long auto_ipi;
+long IPH, IPL;
 int fetch();
 int decode();
 int execute();
@@ -88,7 +90,6 @@ bool C0::ACTIVE()
   return reverse(_0Halted);
 }
 
-bool f_thread = true;
 void C0::Reset()
 {
   log.v("System","Arm I-4 CPU core boot");
@@ -140,6 +141,11 @@ void C0::Halt()
   LSL = 0;
   SCX = 0;
   SCR = 0;
+
+  Thread t;
+  for(long i = t.thread_size(); i > 1; i--){
+     t.destroy(i - 1); // wipe all threads(except main) 
+  }
 }
 
 /* Methods used to easily talk to the ram */
@@ -196,6 +202,11 @@ int ProcessOperands()
 
 string prog(int set_enable, long index, string data)
 {
+        Thread t;
+        RuntimeException re; // are we accessing restricted cpu instructions outside of the current thread?
+        if(!(IP >= IPH) || !(IP <= IPL))
+               re.introduce("ThreadAccesOutOfBoundsException", "failure to access instructions outside of thread");
+
         if(index < L1_Cache_Size)
            return L1_ICache[ index ]; // super fast instruction fetching
         else {
@@ -218,7 +229,8 @@ int fetch()
          IP = IPI;    // tell cpu to scamper off and do something random(usually used in multitasking)
       }
    }
-
+   Thread t;
+   t.notify();
    Ram ramm;
    memstat = ramm.prog_status(IP);
    if(memstat == Ram::DONE){
@@ -268,6 +280,10 @@ int execute()
 void C0::run0()
 {
  tStart = clock();
+ Ram r;
+ Thread t;
+ t.create(0, r.info(5));
+ t.start(0);
  while(System::Running){
        fetch();
        decode();

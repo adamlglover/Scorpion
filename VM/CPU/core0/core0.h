@@ -8,6 +8,7 @@ extern bool pass;
 extern long EAX,TMP,IP, EBX, SDX, SFC, SCX, BP, EXC, PS, LG, LSL, I1, I2, SCR, AI, IPI;
 extern long *id; 
 extern long auto_ipi;
+extern long IPH, IPL;
 extern bool run;
 extern string prog_data;
 extern long L1_ICache_length;

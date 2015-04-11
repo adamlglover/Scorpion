@@ -12,6 +12,7 @@
 #include "../../Ram/ram.h"
 #include "../../GPIO/gpio.h"
 #include "io.h"
+#include "thread.h"
 #include <string>
 #include <sstream>
 #include <iostream>
@@ -688,12 +689,49 @@ void rmov(double *pkg)
      }
 }
 
+long iph, ipl; // ip high and low for threads
 void invoke(double *pkg)
 {
      switch((long) pkg[0] )
      {
        case 0:
-        // will be used soon
+        Thread t;
+        switch((long) pkg[1])
+        {
+	    case 0:
+	       SDX = t.create(iph, ipl);
+            break;
+	    case 1:
+	       SDX = t.start((long) SCX);
+	    break;
+	    case 2:
+	       SDX = t.stop((long) SCX);
+	    break;
+  	    case 3:
+	       SDX = t.wait((long) SCX);
+	    break;
+	    case 4:
+	       SDX = t.destroy((long) SCX);
+	    break;
+            case 5:
+	       SDX = t.stack_pointer();
+	    break;
+            case 6:
+	       SDX = t.thread_size();
+	    break;
+            case 7:
+	       SDX = t.max_ticks();
+	    break;
+  	    case 8:
+	       SDX = t.status(SDX, TMP);
+	    break;
+            case 9:
+	       iph = IP;
+	    break;
+  	    case 10:
+	       ipl = IP - 4;
+	    break;
+        }
        break;
        case 1: // log
         Log _l;

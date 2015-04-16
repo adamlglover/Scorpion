@@ -26,8 +26,6 @@ int Gate::route(double instr, double r1,double r2, double r3)
       case 0: // halt
        if(!ignore)
        p_exit();
-       if(scmnd && (!ignore))
-      cout << ".addr:" << IP << " " << "halt" << endl;
        break;
       case 1: // scmnd
        if(!scmnd)

@@ -208,8 +208,6 @@ void c_printf(double _char)
     if(!ignore){
       if(C.getr(0, _str) == null)
         cout << "null";
-      else if(C.getr(1, _str) == BOOL)
-        cout << str_bool((long) C.getr(0, _str));
       else{
          char c = C.getr(0, _str);
          cout << c;
@@ -699,7 +697,7 @@ void invoke(double *pkg)
         switch((long) pkg[1])
         {
 	    case 0:
-	       SDX = t.create(iph, ipl);
+	       SDX = t.create(SCX, iph, ipl);
             break;
 	    case 1:
 	       SDX = t.start((long) SCX);
@@ -727,9 +725,11 @@ void invoke(double *pkg)
 	    break;
             case 9:
 	       iph = IP;
+               ignore = true;
 	    break;
   	    case 10:
 	       ipl = IP - 4;
+	       ignore = false;
 	    break;
         }
        break;

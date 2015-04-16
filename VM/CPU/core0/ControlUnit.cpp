@@ -141,11 +141,8 @@ void C0::Halt()
   LSL = 0;
   SCX = 0;
   SCR = 0;
-
   Thread t;
-  for(long i = t.thread_size(); i > 1; i--){
-     t.destroy(i - 1); // wipe all threads(except main) 
-  }
+  t.Shutdown(); // shutdown all threads(except main)
 }
 
 /* Methods used to easily talk to the ram */
@@ -164,7 +161,7 @@ void C0::setr(short cell_switch, long _addr, double data)
     Ram ram;
     ram.CB = 1; // S
     ram.addr((long) _addr, false);
-   ram.cell(cell_switch);
+    ram.cell(cell_switch);
 
     ram.data(data); // set data to ram
 }
@@ -282,7 +279,7 @@ void C0::run0()
  tStart = clock();
  Ram r;
  Thread t;
- t.create(0, r.info(5));
+ t.create(0, 0, r.info(5));
  t.start(0);
  while(System::Running){
        fetch();

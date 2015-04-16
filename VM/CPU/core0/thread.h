@@ -2,6 +2,7 @@
 #define THREAD
 
 struct thread_map {
+     long id;
      long ip_h;
      long ip_l;
      short state;
@@ -16,16 +17,17 @@ extern unsigned long THREAD_SZ;
 
 class Thread {
       public:
-	long create(long high, long low);
-        long start(long index);
-	long stop(long index);
-        long wait(long index);
-	long destroy(long index);
+	long create(long id, long high, long low);
+        long start(long id);
+	long stop(long id);
+        long wait(long id);
+	long destroy(long id);
 	void notify();
         long stack_pointer();
         long thread_size();
 	long max_ticks();
-	long status(long index, int value);
+	long status(long id, int value);
+        void Shutdown();
 
 };
 

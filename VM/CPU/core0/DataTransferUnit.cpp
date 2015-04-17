@@ -193,8 +193,6 @@ void c_printf(double _char)
     if(!ignore){
       if(C.getr(0, _str) == null)
         cout << "null";
-      else if(C.getr(1, _str) == BOOL)
-        cout << str_bool((long) C.getr(0, _str));
       else
          cout << C.getr(0, _str);
     }
@@ -394,46 +392,46 @@ void mov(double *pkg)
 {
       switch( (long) pkg[0] )
       {
-          case 0:
+          case 20:
 	    EBX = pkg[1];
            break;
-  	   case 1:
+  	   case 22:
 	    SDX = pkg[1];
            break;
-	   case 2:
+	   case 23:
 	    BP = pkg[1];
            break;
- 	   case 3:
+ 	   case 24:
 	    EXC = pkg[1];
            break;
-	   case 4:
+	   case 25:
 	    PS = 0;
            break;
-	   case 5:
+	   case 26:
 	    LG = pkg[1];
            break;
-  	   case 6:
+  	   case 27:
 	    LSL = pkg[1];
            break;
-           case 7:
+           case 28:
 	    SFC = pkg[1];
            break;
-           case 8:
+           case 29:
             SCX = pkg[1];
            break;
-           case 9:
+           case 30:
             I1 = pkg[1];
            break;
-           case 10:
+           case 31:
             I2 = pkg[1];
            break;
-           case 11:
+           case 32:
             TMP = pkg[1];
            break;
-           case 12:
+           case 33:
 	    AI = pkg[1];
            break;
-           case 13:
+           case 34:
             IPI = pkg[1];
 	   break;
       }
@@ -443,103 +441,103 @@ void r_mv(double *pkg)
 {
       switch( (long) pkg[0] )
       {
-          case 0:
+          case 21:
             if(I1 == INT || I1 == SHORT)
                  C.setr(0, pkg[1], EBX);
             else
 	       d_log.w("System", "warning: type must be an integer type to obtain cpu register info");
            break;
-           case 1:
+           case 22:
             if(I1 == INT || I1 == SHORT)
                  C.setr(0, pkg[1], SDX);
             else
 	       d_log.w("System", "warning: type must be an integer type to obtain cpu register info");
            break;
-           case 2:
+           case 23:
              if(I1 == INT || I1 == SHORT)
                  C.setr(0, pkg[1], BP);
              else
 	        d_log.w("System", "warning: type must be an integer type to obtain cpu register info");
            break;
-           case 3:
+           case 24:
              if(I1 == INT || I1 == SHORT)
                 C.setr(0, pkg[1], EXC);
              else
 		d_log.w("System", "warning: type must be an integer type to obtain cpu register info");
            break;
-           case 4:
+           case 25:
             if(I1 == INT || I1 == SHORT)
                 C.setr(0, pkg[1], PS);
             else
 	       d_log.w("System", "warning: type must be an integer type to obtain cpu register info");
            break;
-           case 5:
+           case 26:
             if(I1 == INT || I1 == SHORT)
                 C.setr(0, pkg[1], LG);
             else
 	       d_log.w("System", "warning: type must be an integer type to obtain cpu register info");
            break;
-           case 6:
+           case 27:
             if(I1 == INT || I1 == SHORT)
                 C.setr(0, pkg[1], LSL);
             else
                d_log.w("System", "warning: type must be an integer type to obtain cpu register info");
            break;
-           case 7:
+           case 28:
             if(I1 == INT || I1 == SHORT)
                 C.setr(0, pkg[1], SFC);
             else
                d_log.w("System", "warning: type must be an integer type to obtain cpu register info");
            break;
-           case 8:
+           case 29:
             if(I1 == INT || I1 == SHORT)
                 C.setr(0, pkg[1], SCX);
             else
 	       d_log.w("System", "warning: type must be an integer type to obtain cpu register info");
            break;
-           case 9:
+           case 30:
             if(I1 == INT || I1 == SHORT)
                 C.setr(0, pkg[1], I1);
             else
 	       d_log.w("System", "warning: type must be an integer type to obtain cpu register info");
            break;
-           case 10:
+           case 31:
             if(I1 == INT || I1 == SHORT)
                 C.setr(0, pkg[1], I2);
             else
                d_log.w("System", "warning: type must be an integer type to obtain cpu register info");
            break;
-           case 11:
+           case 32:
              if(I1 == INT || I1 == SHORT)
                 C.setr(0, pkg[1], TMP);
              else
                 d_log.w("System", "warning: type must be an integer type to obtain cpu register info");
            break;
-           case 12:
+           case 36:
              if(I1 == INT || I1 == SHORT)
                 C.setr(0, pkg[1], SCR);
              else
                 d_log.w("System", "warning: type must be an integer type to obtain cpu register info");
            break;
-           case 13:
+           case 20:
              if(I1 == INT || I1 == SHORT)
                 C.setr(0, pkg[1], EAX);
              else
                 d_log.w("System", "warning: type must be an integer type to obtain cpu register info");
            break;
-           case 14:
+           case 35:
              if(I1 == INT || I1 == SHORT)
                 C.setr(0, pkg[1], IP);
              else
                 d_log.w("System", "warning: type must be an integer type to obtain cpu register info");
            break;
-           case 15:
+           case 33:
 	     if(I1 == INT || I1 == SHORT)
 		C.setr(0, pkg[1], AI);
              else
 		d_log.w("System", "warning: type must be an integer type to obtain cpu register info");
    	   break;
-  	   case 16:
+  	   case 34:
 	     if(I1 == INT || I1 == SHORT)
 		C.setr(0, pkg[1], IPI);
 	     else
@@ -552,8 +550,8 @@ void rmov(double *pkg)
 {
      switch( (long) pkg[0] )
      {
-          case 0:
-             if(pkg[1] == 21)
+          case 21:
+             if(pkg[1] == 20)
                EBX = EAX;
             else{
               if(I1 == INT || I1 == SHORT)
@@ -564,8 +562,8 @@ void rmov(double *pkg)
      	      }
             }
            break;
-           case 1:
-            if(pkg[1] == 21)
+           case 22:
+            if(pkg[1] == 20)
                SDX = EAX;
             else{
               if(I1 == INT || I1 == SHORT)
@@ -576,8 +574,8 @@ void rmov(double *pkg)
               }
             }
            break;
-           case 2:
-             if(pkg[1] == 21)
+           case 23:
+             if(pkg[1] == 20)
                BP = EAX;
             else{
              if(I1 == INT || I1 == SHORT)
@@ -588,8 +586,8 @@ void rmov(double *pkg)
 	     }
             }
            break;
-           case 3:
-	     if(pkg[1] == 21)
+           case 24:
+	     if(pkg[1] == 20)
                EXC = EAX;
             else{
              if(I1 == INT || I1 == SHORT)
@@ -600,8 +598,8 @@ void rmov(double *pkg)
 	     }
             }
            break;
-           case 5:
-	     if(pkg[1] == 21)
+           case 26:
+	     if(pkg[1] == 20)
                LG = EAX;
             else{
               if(I1 == INT || I1 == SHORT)
@@ -612,8 +610,8 @@ void rmov(double *pkg)
 	      }
             }
            break;
-           case 6:
-             if(pkg[1] == 21)
+           case 27:
+             if(pkg[1] == 20)
                LSL = EAX;
             else{
                if(I1 == INT || I1 == SHORT)
@@ -624,8 +622,8 @@ void rmov(double *pkg)
                }
             }
             break;
-           case 7:
- 	     if(pkg[1] == 21)
+           case 28:
+ 	     if(pkg[1] == 20)
                SFC = EAX;
             else{
              if(I1 == INT || I1 == SHORT)
@@ -636,8 +634,8 @@ void rmov(double *pkg)
              } 
            }
            break;
-           case 8:
-	     if(pkg[1] == 21)
+           case 29:
+	     if(pkg[1] == 20)
                SCX = EAX;
             else{
               if(I1 == INT || I1 == SHORT)
@@ -648,8 +646,8 @@ void rmov(double *pkg)
 	      }
             }
            break;
-           case 9:
-             if(pkg[1] == 21)
+           case 30:
+             if(pkg[1] == 20)
                I1 = EAX;
             else{
              if(I1 == INT || I1 == SHORT)
@@ -660,8 +658,8 @@ void rmov(double *pkg)
 	        }
             }
            break;
-           case 10:
-             if(pkg[1] == 21)
+           case 31:
+             if(pkg[1] == 20)
                I2 = EAX;
             else{
              if(I1 == INT || I1 == SHORT)
@@ -672,8 +670,8 @@ void rmov(double *pkg)
 	        }
             }
            break;
-           case 11:
-             if(pkg[1] == 21)
+           case 32:
+             if(pkg[1] == 20)
                TMP = EAX;
             else{
              if(I1 == INT || I1 == SHORT)
@@ -856,9 +854,9 @@ void same(double *pkg)
 {
 	RuntimeException re;
 	if(I1 == BOOL){
-           if( pkg[1] == 21)
+           if( pkg[1] == 20)
                C.setr(0, pkg[0], tibool(EAX == C.getr(0, pkg[2])));
-           else if(pkg[2] == 21)
+           else if(pkg[2] == 20)
                C.setr(0, pkg[0], tibool(C.getr(0, pkg[1]) == EAX));
            else
                C.setr(0, pkg[0], tibool(C.getr(0, pkg[1]) == C.getr(0, pkg[2])));
@@ -1019,11 +1017,16 @@ void ige(double *pkg)
 
 void ndo(double *pkg)
 {
-	if(I1 == 0){}
-		else {
-		  if_ignore = true;
-		  ignore = true;
-		}
+        RuntimeException re;
+        if(I1 == BOOL){
+            if(C.getr(0, pkg[0]) == 0){}
+            else {
+               if_ignore = true;
+               ignore = true;
+            }
+        }
+        else
+          re.introduce("UnsatisfiedTypeException","the type inputed must be of type bool");
 }
 
 void inlt(double *pkg)

@@ -83,7 +83,7 @@ int ibool(long num)
 void nand_l(double *pkg)
 {
   RuntimeException re;
-   if(pkg[0] == 21)
+   if(pkg[0] == 20)
        EAX = _nand(ibool(pkg[1]),ibool(pkg[2]));
    else
    {
@@ -97,7 +97,7 @@ void nand_l(double *pkg)
 void nor_l(double *pkg)
 {
   RuntimeException re;
-   if(pkg[0] == 21)
+   if(pkg[0] == 20)
      EAX = _nor(ibool(pkg[1]),ibool(pkg[2]));
    else
    {
@@ -111,7 +111,7 @@ void nor_l(double *pkg)
 void xnor_l(double *pkg)
 {
   RuntimeException re;
-   if(pkg[0] == 21)
+   if(pkg[0] == 20)
        EAX = _xnor(ibool(pkg[1]),ibool(pkg[2]));
    else 
    {
@@ -125,7 +125,7 @@ void xnor_l(double *pkg)
 void and_l(double *pkg)
 {
   RuntimeException re;
-   if(pkg[0] == 21)
+   if(pkg[0] == 20)
        EAX = _and(ibool(pkg[1]),ibool(pkg[2]));
    else
    {
@@ -139,7 +139,7 @@ void and_l(double *pkg)
 void or_l(double *pkg)
 {
   RuntimeException re;
-   if(pkg[0] == 21)
+   if(pkg[0] == 20)
      EAX = _or(ibool(pkg[1]),ibool(pkg[2]));
    else
    {
@@ -153,7 +153,7 @@ void or_l(double *pkg)
 void xor_l(double *pkg)
 {
   RuntimeException re;
-   if(pkg[0] == 21)
+   if(pkg[0] == 20)
        EAX = _xor(ibool(pkg[1]),ibool(pkg[2]));
    else 
    {
@@ -167,7 +167,7 @@ void xor_l(double *pkg)
 void not_l(double *pkg)
 {
   RuntimeException re;
-     if(pkg[0] == 21)
+     if(pkg[0] == 20)
        EAX = _not(ibool(pkg[1]));
    else
    {

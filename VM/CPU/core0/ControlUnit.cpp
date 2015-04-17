@@ -192,7 +192,8 @@ void C0::Interrupt(double offset)
 
 int ProcessOperands()
 {
- //  cout << "processing operands {0:" << instruction << "} {1:" << reg1 << "} {2:" << reg2 << "} {3:" << reg3 << "}" << endl;
+   if(scmnd)
+   cout << "processing operands {0:" << instruction << "} {1:" << reg1 << "} {2:" << reg2 << "} {3:" << reg3 << "}" << endl;
    Gate gate;
    return gate.route(instruction, reg1, reg2, reg3);
 }

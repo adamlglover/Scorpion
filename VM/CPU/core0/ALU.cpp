@@ -12,7 +12,7 @@ long _char(long);
 C0 c0;
 void add(double *pkg)
 {
-  if(pkg[0] == 21)
+  if(pkg[0] == 20)
        EAX = pkg[1] + pkg[2];
    else
    {
@@ -31,7 +31,7 @@ void add(double *pkg)
 
 void sr(double *pkg)
 {
-       if(pkg[0] == 21)
+       if(pkg[0] == 20)
            EAX = EAX >> (long) pkg[1];
        else {
           if(I1 == INT){
@@ -51,7 +51,7 @@ void sr(double *pkg)
 
 void sl(double *pkg)
 {
-     if(pkg[0] == 21)
+     if(pkg[0] == 20)
            EAX = EAX << (long) pkg[1];
        else {
           if(I1 == INT){
@@ -141,7 +141,7 @@ void rand_3(double *pkg)
 
 void sub(double *pkg)
 {
-   if(pkg[0] == 21)
+   if(pkg[0] == 20)
        EAX = pkg[1] - pkg[2];
    else
    {
@@ -160,7 +160,7 @@ void sub(double *pkg)
 
 void inc(double *pkg)
 {
-    if(pkg[0] == 21)
+    if(pkg[0] == 20)
        EAX++;
    else
     {
@@ -170,7 +170,7 @@ void inc(double *pkg)
 
 void dec(double *pkg)
 {
-   if(pkg[0] == 21)
+   if(pkg[0] == 20)
        EAX--;
    else
     {
@@ -180,7 +180,7 @@ void dec(double *pkg)
 
 void mult(double *pkg)
 {
-   if(pkg[0] == 21)
+   if(pkg[0] == 20)
        EAX = pkg[1] * pkg[2];
    else
    {
@@ -199,7 +199,7 @@ void mult(double *pkg)
 
 void div(double *pkg)
 {
-   if(pkg[0] == 21)
+   if(pkg[0] == 20)
        EAX = pkg[1] / pkg[2];
    else
    {
@@ -218,7 +218,7 @@ void div(double *pkg)
 
 void rem(double *pkg)
 {
-   if(pkg[0] == 21)
+   if(pkg[0] == 20)
        EAX = ((long) pkg[1]) % ((long) pkg[2]);
    else
    {
@@ -237,7 +237,7 @@ void rem(double *pkg)
 
 void cadd(double *pkg)
 {
-  if(pkg[0] == 21)
+  if(pkg[0] == 20)
        EAX += pkg[1] + pkg[2];
    else
    {
@@ -256,7 +256,7 @@ void cadd(double *pkg)
 
 void csub(double *pkg)
 {
-   if(pkg[0] == 21)
+   if(pkg[0] == 20)
        EAX -= pkg[1] - pkg[2];
    else
    {
@@ -275,7 +275,7 @@ void csub(double *pkg)
 
 void cmult(double *pkg)
 {
-   if(pkg[0] == 21)
+   if(pkg[0] == 20)
        EAX *= pkg[1] * pkg[2];
    else
    {
@@ -294,7 +294,7 @@ void cmult(double *pkg)
 
 void cdiv(double *pkg)
 {
-   if(pkg[0] == 21)
+   if(pkg[0] == 20)
        EAX /= ((long) pkg[1]) / ((long) pkg[2]);
    else
    {
@@ -313,7 +313,7 @@ void cdiv(double *pkg)
 
 void crem(double *pkg)
 {
-   if(pkg[0] == 21)
+   if(pkg[0] == 20)
        EAX %= ((long) pkg[1]) % ((long) pkg[2]);
    else
    {
@@ -329,3 +329,4 @@ void crem(double *pkg)
          c0.setr(0, pkg[0], (long) fmod(c0.getr(0, pkg[0]), fmod(c0.getr(0, pkg[1]), c0.getr(0, pkg[2]))));
    }
 }
+

@@ -27,30 +27,30 @@ double binary_decimal(string num) /* Function to convert binary to dec */
     return dec;
 }
 
-//long decimal_binary(long n)  /* Function to convert decimal to bin */
-/*{
-    long rem, i=1, binary=0;
-    while (n!=0)
-    {
-        rem=n%2;
-        n/=2;
-        binary+=rem*i;
-        i*=10;
-    }
-    return binary;
-}*/
+string decimal_binary(long num)
+ {
+     int number;
+     string bin;
+     char holder=' ';
+     number = num;
+     while(number != 0)
+     {
+	holder = number%2+'0';
+        bin =holder+bin;
+	number /= 2;
+     }
+     return bin;
+ }
 
 
-
-double Disassemble(string dataset, bool todecimal)
-{
-  if(todecimal){}
-//      return decimal_binary(dataset);
-  else
-        return binary_decimal(dataset);
-}
 
 double Disassembler::disassemble(string data)
 {
-   return Disassemble(data, false);
+   return  binary_decimal(data);
 }
+
+string Disassembler::assemble(long data)
+{
+   return decimal_binary(data);
+}
+

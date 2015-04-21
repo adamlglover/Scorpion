@@ -787,13 +787,36 @@ void invoke(double *pkg)
        case 11: // set IP back to original pos before it was interrupted
           IP = auto_ipi;
        break;
+       case 18: // assemble data
+        {
+          Disassembler d;
+          string bin = d.assemble(SDX);
+          SDX = bin.length();
+          int c = 0;
+          for(long i = SCX; c < bin.length(); i++){
+             C.setr(0, i, bin.at(c));
+             c++;
+          }
+        }
+       break;
+       case 19: // dissassemble data
+        {
+          Disassembler d;
+          string bin = "";
+          stringstream ss1;
+          for(long i = SDX; i < (SDX + SCX); i++){
+             ss1 << C.getr(0, i);
+          }
+          bin += "" + ss1.str();
+          SDX = (long) d.disassemble(bin);
+        }
+       break;
        default:
        stringstream ss;
        ss << pkg[0];
        RuntimeException re;
        re.introduce("IllegalSystemCallExcpetion", "code is not a system call [" + ss.str() + "]");
        break;
-
      }
 }
 
@@ -941,6 +964,7 @@ void endwl(double *pkg)
 
 void rloop(double *pkg)
 {
+         C.setr(0, pkg[0], IP);
          C.setr(0, pkg[1], C.getr(0, pkg[2]));
          waiting = true;
 }

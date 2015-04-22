@@ -2,7 +2,7 @@
 A dynamic new computer language implemented in C++ 
 
 # Info
-I will be developing a new Computer language called Scorpion. Scorpion, alike java, is a platform independant language. Scorpion will have a VM that works as the middle layer between the Operating System and the underlying hardware. Once the High level source code is compiled all the way down to binary level(the code that the VM understands) the program can run seemlessly on any operating system that has the Scorpion VM on it with little to no code modifications at all. The high level language rules and syntax will be developed after the VM. Writing programs in the vm will operate at a low level allowing the simulation of programming a real computer. Below is a diagram of how it is platform independant(alot like java):
+I will be developing a new Computer language called Scorpion. Scorpion, alike java, is a platform independant language. Scorpion will have a VM that works as the middle layer between the Operating System and the underlying hardware. Scorpion is a bare metal programming language that provides access to various hardware and interfaces on a device and the code that runs on that device is specifically tied to it. Althought I have created some exceptions that will allowyou to write a basic program on a device and run that very same program directly on another device. Hence, is some ways this allows for scorpion code to be portable.
 
 ![alt tag](https://github.com/AndroDevcd/Scorpion/blob/master/diagrams/platfom_execution.png)
 
@@ -11,7 +11,7 @@ The vm will have an organized process for executing code. Below is a simple repr
 
               [source] ========> High level source code 'helloworld.sc'
                  ||
-              [source] =========> Low level assembly source code 'helloworld.ss'
+              [source] =========> Low level bare metal assembly source code 'helloworld.ss'
                  ||
            [machine code] =======> Direct 'machine' code for the vm to execute 'hello.b'
                  ||
@@ -32,7 +32,7 @@ Based on the specifications defined, for everthing to work there are a total of 
 Name | Description
 ---- | -----------
 (undecided) | (scorpion compiler) is used to compile the high level source code down to assembly language.
-sasm | (scorpion assembler) translate the assembly code to binary object format.
+nsc | (Native Scorpion Compiler) translates the assembly code to binary format.
 scorpion | The Scorpion virtural machine itself runs the (single)generated .b file as the entire program.
 
 All programs reside in the bin/ directory(version specific).
@@ -41,7 +41,7 @@ All programs reside in the bin/ directory(version specific).
 To use these programs you will have to folow the restrictions I have provoded. So far I only have the specifications for the vm(currently i only write programs in direct 'machine code').
 In the console type:
 
-      $  sudo ./scorpion file
+      $  sudo ./scorpion file [args...]
  
 You do not have to type the .b extention of the file(program) to run the program(if you do, an error will be thrown).
 The vm can only take a single object file that has all the instructions needed to run your program. The vm will also print out in real-time a log of data that represents what the system is doing at that point in time. this file will be located in '/usr/share/scorpion/log.txt'. NOTE: If you have superuser access to all your files and or is logged in as root you do not need to type sudo before the program. Any system configs you will be having will go under the file '/usr/share/svm/system.conf'(not yet implemented).

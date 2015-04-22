@@ -52,5 +52,7 @@ void anum(double *pkg);
 void _sleep(double *pkg);
 void c_update();
 void cp(double *pkg);
+void _string(double *pkg);
+void adr(double *pkg);
 
 #endif

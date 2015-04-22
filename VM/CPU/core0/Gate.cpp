@@ -525,6 +525,18 @@ int Gate::route(double instr, double r1,double r2, double r3)
        if(scmnd && (!ignore))
        cout << ".addr:" << IP << " " <<  "run" << endl;
        break;
+       case 96:
+       if(!ignore)
+         _string(pkg);
+       if(scmnd && (!ignore))
+       cout << ".addr:" << IP << " " <<  "string" << endl;
+       break;
+       case 97:
+       if(!ignore)
+         adr(pkg);
+       if(scmnd && (!ignore))
+       cout << ".addr:" << IP << " " <<  "adr" << endl;
+       break;
        default:
          if(!ignore){
              Log lg;

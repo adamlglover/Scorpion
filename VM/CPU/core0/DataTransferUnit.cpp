@@ -15,6 +15,7 @@
 #include "thread.h"
 #include <string>
 #include <sstream>
+#include <stdio.h>
 #include <iostream>
 #include <unistd.h>
 using namespace std;
@@ -52,16 +53,16 @@ void sload(double *pkg)
        // log invalid type assignment
 }
 
+void adr(double *pkg)
+{
+   C.setr(0, pkg[0], (long) pkg[1]);
+}
+
 void ct_int(double *pkg)
 {
-  RuntimeException re;
-  if(I1 == SHORT || I1 == INT){
      char a = C.getr(0, pkg[1]);
      int val = a - '0';
      C.setr(0, pkg[0], val);
-  }
-  else
-     re.introduce("UnsatisfiedTypeException","invalid type assignment, inputed type is not of type int");
 }
 
 void anum(double *pkg)
@@ -120,30 +121,47 @@ void rflush()
 	  
 }
 
+void loadc(double *pkg);
+void _string(double *pkg) // string @434 32 'this is the string'
+{
+ if(pkg[1] <= 0){}
+ else if(pkg[1] == 1){
+   C.setr(0, pkg[0], 1);
+   double *pckg;
+   pckg[0] == pkg[0] + 1;
+   pckg[1] == pkg[2];
+   loadc(pckg);
+ }
+ else if(pkg[1] >= 2) {
+    IP--;
+    Disassembler d;
+    long addr = pkg[0] + 1;
+    C.setr(0, pkg[0], pkg[1]);
+    for(int i = 0; i < (long) pkg[1]; i++){
+       string str = prog(2, IP++, ""); // get char
+       long _str = d.disassemble(str); // dissasemble char
+       C.setr(0, addr, _str);
+       addr++;
+   }
+ }
+ else{
+  cout << "CPU string_length_logic err something went wrong while determing the length of the string to print" << endl;
+  EBX = 1;
+  p_exit();
+ }
+}
+
 void c_print(double _char)
 {
-  if(_char == 256)
-    cout << "\n";
-  else if(_char == 257)
-    cout << "\t";
-  else if(_char == 258)
-    cout << "";
-  else if((_char >= 0) && (_char <= 255)) {
     char c = _char;
     cout << c;
-  }
-  else{
-   stringstream ss;
-   ss << "warning: value " << _char << " is not a char" << endl;
-   d_log.w("System", ss.str());
-   EBX = 2; 
-  }
 }
 
 void _print(double *pkg)
 { 
  if(pkg[0] <= 0){}
  else if(pkg[0] == 1){
+   IP--;
    c_print(pkg[1]);
  }
  else if(pkg[0] == 2){
@@ -178,13 +196,7 @@ string str_bool(long a)
 
 void c_printf(double _char)
 {
-  if(_char == 256 && !ignore)
-    cout << "\n";
-  else if(_char == 257  && !ignore)
-    cout << "\t";
-  else if(_char == 258  && !ignore)
-    cout << "";
-  else if(_char == 0){ // reg r#
+   if(_char == 256){ // reg r#
     reg = true;
     Disassembler d;
     string str = prog(2, IP++, ""); // get char
@@ -197,7 +209,7 @@ void c_printf(double _char)
          cout << C.getr(0, _str);
     }
    }
-  else if(_char == 1){ // %c reg r#
+  else if(_char == 257){ // %c r#
     reg = true;
     Disassembler d;
     string str = prog(2, IP++, ""); // get char
@@ -212,7 +224,126 @@ void c_printf(double _char)
       }
     }
    }
-  else if((_char >= 5) && (_char <= 255)  && (!ignore)) {
+  else if(_char == 258){ // %d r#
+    reg = true;
+    Disassembler d;
+    string str = prog(2, IP++, ""); // get char
+    long _str = d.disassemble(str); // dissasemble char
+    //cout << "pinting from reg " << _str  << " -1: " << (_str - 1) << " +1$
+    if(!ignore){
+      if(C.getr(0, _str) == null)
+        cout << "null";
+      else
+         cout << (long) C.getr(0, _str);
+    }
+   }
+  else if(_char == 259){ // %f r#
+    reg = true;
+    Disassembler d;
+    string str = prog(2, IP++, ""); // get char
+    long _str = d.disassemble(str); // dissasemble char
+    //cout << "pinting from reg " << _str  << " -1: " << (_str - 1) << " +1$
+    if(!ignore){
+      if(C.getr(0, _str) == null)
+        cout << "null";
+      else
+         printf("%f",C.getr(0, _str));
+    }
+   }
+  else if(_char == 260){ // %x r#
+    reg = true;
+    Disassembler d;
+    string str = prog(2, IP++, ""); // get char
+    long _str = d.disassemble(str); // dissasemble char
+    //cout << "pinting from reg " << _str  << " -1: " << (_str - 1) << " +1$
+    if(!ignore){
+      if(C.getr(0, _str) == null)
+        cout << "null";
+      else
+        std::cout << "0x" << std::hex << (long) C.getr(0, _str);
+    }
+   }
+   else if(_char == 261){ // %u r#
+    reg = true;
+    Disassembler d;
+    string str = prog(2, IP++, ""); // get char
+    long _str = d.disassemble(str); // dissasemble char
+    //cout << "pinting from reg " << _str  << " -1: " << (_str - 1) << " +1$
+    if(!ignore){
+      if(C.getr(0, _str) == null)
+        cout << "null";
+      else{
+         unsigned num = (long) C.getr(0, _str);
+         cout << num;
+      }
+    }
+   }
+  else if(_char == 262){ // %g r#
+    reg = true;
+    Disassembler d;
+    string str = prog(2, IP++, ""); // get char
+    long _str = d.disassemble(str); // dissasemble char
+    //cout << "pinting from reg " << _str  << " -1: " << (_str - 1) << " +1$
+    if(!ignore){
+      if(C.getr(0, _str) == null)
+        cout << "null";
+      else
+         printf("%g",C.getr(0, _str));
+    }
+   }
+  else if(_char == 263){ // %e r#
+    reg = true;
+    Disassembler d;
+    string str = prog(2, IP++, ""); // get char
+    long _str = d.disassemble(str); // dissasemble char
+    //cout << "pinting from reg " << _str  << " -1: " << (_str - 1) << " +1$
+    if(!ignore){
+      if(C.getr(0, _str) == null)
+        cout << "null";
+      else
+         printf("%e",C.getr(0, _str));
+    }
+   }
+  else if(_char == 264){ // %do r#
+    reg = true;
+    Disassembler d;
+    string str = prog(2, IP++, ""); // get char
+    long _str = d.disassemble(str); // dissasemble char
+    //cout << "pinting from reg " << _str  << " -1: " << (_str - 1) << " +1$
+    if(!ignore){
+      if(C.getr(0, _str) == null)
+        cout << "null";
+      else
+         printf("%lf",C.getr(0, _str));
+    }
+   }
+  else if(_char == 265){ // %lg r#
+    reg = true;
+    Disassembler d;
+    string str = prog(2, IP++, ""); // get char
+    long _str = d.disassemble(str); // dissasemble char
+    //cout << "pinting from reg " << _str  << " -1: " << (_str - 1) << " +1$
+    if(!ignore){
+      if(C.getr(0, _str) == null)
+        cout << "null";
+      else
+         printf("%lg",C.getr(0, _str));
+    }
+   }
+  else if(_char == 266){ // %le r#
+    reg = true;
+    Disassembler d;
+    string str = prog(2, IP++, ""); // get char
+    long _str = d.disassemble(str); // dissasemble char
+    //cout << "pinting from reg " << _str  << " -1: " << (_str - 1) << " +1$
+    if(!ignore){
+      if(C.getr(0, _str) == null)
+        cout << "null";
+      else
+         printf("%le",C.getr(0, _str));
+    }
+   }
+  else if((!ignore)) {
     char c = _char;
     cout << c;
   }
@@ -341,15 +472,14 @@ void loadbl(double *pkg)
 
 long _char(long _ch)
 {
-  if(_ch >= 5 && _ch <= 258)
-     return _ch;
-  else 
-     return 5;
+  char c = _ch;
+  long chr = c;
+  return chr;
 }
 
 void loadc(double *pkg)
 {
-    C.setr(0, pkg[0],(long) _char((long) pkg[1]));
+    C.setr(0, pkg[0], _char((long) pkg[1]));
 }
 
 void _sleep(double *pkg)

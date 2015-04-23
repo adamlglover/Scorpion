@@ -21,6 +21,8 @@
 using namespace std;
 
 bool inFunc = false;
+extern string prog_args;
+extern int arg_c;
 C0 C;
 Log d_log;
 void loadi(double *pkg)
@@ -37,6 +39,12 @@ void rload(double *pkg)
     long ref = C.getr(0, pkg[1]);
     double reg = C.getr(0, ref);
     C.setr(0, pkg[0], reg);
+}
+
+void r_load(double *pkg)
+{
+    long ref = C.getr(0, pkg[0]);
+    C.setr(0, ref, C.getr(0, pkg[1]));
 }
 
 void cp(double *pkg)
@@ -136,11 +144,13 @@ void _string(double *pkg) // string @434 32 'this is the string'
     IP--;
     Disassembler d;
     long addr = pkg[0] + 1;
-    C.setr(0, pkg[0], pkg[1]);
+    if(!ignore)
+        C.setr(0, pkg[0], pkg[1]);
     for(int i = 0; i < (long) pkg[1]; i++){
        string str = prog(2, IP++, ""); // get char
        long _str = d.disassemble(str); // dissasemble char
-       C.setr(0, addr, _str);
+       if(!ignore)
+          C.setr(0, addr, _str);
        addr++;
    }
  }
@@ -346,14 +356,6 @@ void c_printf(double _char)
   else if((!ignore)) {
     char c = _char;
     cout << c;
-  }
-  else {
-   if(!ignore){
-      stringstream ss;
-      ss << "system warning: value " << _char << " is not a char" << endl;
-      d_log.w("System", ss.str());
-      EBX = 2;
-   }  
   }
 }
 
@@ -696,6 +698,7 @@ void rmov(double *pkg)
      }
 }
 
+
 long iph, ipl; // ip high and low for threads
 void invoke(double *pkg)
 {
@@ -820,6 +823,17 @@ void invoke(double *pkg)
           }
           bin += "" + ss1.str();
           SDX = (long) d.disassemble(bin);
+        }
+       break;
+       case 35:
+        {
+          C.setr(0, SDX, prog_args.length());
+          long start_addr = SCX;
+          for(int i = 0; i < prog_args.length(); i++){
+             int ch = prog_args.at(i);
+             C.setr(0, start_addr + i, ch);
+          }
+          SCX = arg_c - 2;
         }
        break;
        default:

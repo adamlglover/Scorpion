@@ -84,12 +84,10 @@ bool isgenuine = false;
    void verify( int argc, const char **file )
    {
        rules_log.v("System","Verifying args...");
-       if(argc == 2)
+       if(argc >= 2)
           authenticate(file[1]);
        else if(argc < 2)
          rules_log.v("System","Fatal err occured. No input files, System Halt!");
-       else if(argc > 2)
-         rules_log.v("System","Fatal err occured. Too many argument inputs, System Halt!");
    }
 
 string getname()

@@ -417,6 +417,13 @@ int Gate::route(double instr, double r1,double r2, double r3)
            IP--;
            IP += pkg[0];
          }
+         else if(pkg[0] == 1){
+           IP--;
+         }
+         else if (pkg[0] == 0){
+           IP--;
+           IP--;
+         }
       }
        if(scmnd && (!ignore))
         cout << ".addr:" << IP << " " <<  "print" << endl;
@@ -536,6 +543,12 @@ int Gate::route(double instr, double r1,double r2, double r3)
          adr(pkg);
        if(scmnd && (!ignore))
        cout << ".addr:" << IP << " " <<  "adr" << endl;
+       break;
+       case 98:
+       if(!ignore)
+         r_load(pkg);
+       if(scmnd && (!ignore))
+       cout << ".addr:" << IP << " " <<  "r_load" << endl;
        break;
        default:
          if(!ignore){

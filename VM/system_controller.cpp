@@ -19,6 +19,7 @@
 #include "Log/Logger.h"
 #include <sys/types.h>
 #include <sys/stat.h>
+#include <sstream>
 
 using namespace std;
 //using namespace CPU;
@@ -55,9 +56,11 @@ void Start()
    System::SetupSystem();
 }
 
+string prog_args = "";
+int arg_c = 0;
 int main( int argc, const char **file )
 {
-  
+  arg_c = argc;
   prepargs();
   string arg = "";
   if(argc == 2){
@@ -68,6 +71,13 @@ int main( int argc, const char **file )
      handleargs();
   }
 
+  if(argc > 2){
+     for(int i = 2; i < argc; i++){
+        stringstream ss;
+        ss << file[i] << " ";
+        prog_args += ss.str();
+     }
+  }
   status = mkdir("/usr/share/scorpion", S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);
   status = mkdir("/usr/share/scorpion/disks", S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);
   status = mkdir("/usr/share/scorpion/lib/src", S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);

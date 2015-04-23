@@ -54,5 +54,6 @@ void c_update();
 void cp(double *pkg);
 void _string(double *pkg);
 void adr(double *pkg);
+void r_load(double *pkg);
 
 #endif

@@ -45,7 +45,6 @@ void t_cast(double *pkg);
 void rln(double *pkg);
 void sload(double *pkg);
 void loadf(double *pkg);
-void _throw(double *pkg);
 void rload(double *pkg);
 void ct_int(double *pkg);
 void anum(double *pkg);

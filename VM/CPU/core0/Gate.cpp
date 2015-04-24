@@ -196,6 +196,8 @@ int Gate::route(double instr, double r1,double r2, double r3)
 	 case 32:
        if(!ignore)
          _do(pkg);
+       if(if_ignore)
+        passed_if = true;
        if(scmnd && (!ignore))
        cout << ".addr:" << IP << " " <<  "do" << endl;
        break;
@@ -245,6 +247,8 @@ int Gate::route(double instr, double r1,double r2, double r3)
         case 40:
        if(!ignore)
         ndo(pkg);
+       if(if_ignore)
+        passed_if = true;
        if(scmnd && (!ignore))
        cout << ".addr:" << IP << " " <<  "ndo" << endl;
         break;
@@ -481,11 +485,6 @@ int Gate::route(double instr, double r1,double r2, double r3)
        if(scmnd && (!ignore))
        cout << ".addr:" << IP << " " <<  "loadf" << endl;
        break;
-       case 83:
-         _throw(pkg);
-       if(scmnd && (!ignore))
-       cout << ".addr:" << IP << " " <<  "throw" << endl;
-       break;
        case 84:
        if(!ignore)
          rln(pkg);
@@ -533,7 +532,6 @@ int Gate::route(double instr, double r1,double r2, double r3)
        cout << ".addr:" << IP << " " <<  "run" << endl;
        break;
        case 96:
-       if(!ignore)
          _string(pkg);
        if(scmnd && (!ignore))
        cout << ".addr:" << IP << " " <<  "string" << endl;

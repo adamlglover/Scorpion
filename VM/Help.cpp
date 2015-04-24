@@ -8,7 +8,7 @@ using namespace std;
 * Scorpion VM Info
 */
 
-string Version = "0.0.19_2";
+string Version = "0.0.19_3";
 string v_stage = "beta";
 
 // ----------------------------------

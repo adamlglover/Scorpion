@@ -398,67 +398,6 @@ void _printf(double *pkg)
  }
 }
 
-string e_throw(long _char)
-{
-  if(_char == 256 && !ignore)
-    return "\n";
-  else if(_char == 257  && !ignore)
-    return "\t";
-  else if(_char == 258  && !ignore)
-    return "";
-  else if(_char == 0){ // reg r#
-    reg = true;
-    Disassembler d;
-    string str = prog(2, IP++, ""); // get char
-    long _str = d.disassemble(str); // dissasemble char
-    //cout << "pinting from reg " << _str  << " -1: " << (_str - 1) << " +1: " << (_str + 1)<< endl;
-    if(!ignore){
-      if(C.getr(0, _str) == null)
-        return "null";
-      else {
-         stringstream ss;
-         ss << C.getr(0, _str);
-         return ss.str() + "";
-      }
-    }
-  }
-  else if((_char >= 5) && (_char <= 255)  && (!ignore)) {
-    char c = _char;
-    return "" + c;
-  }
-  else {
-   if(!ignore){
-      stringstream ss;
-      ss << "warning: value " << _char << " is not a char" << endl;
-      d_log.w("System", ss.str());
-      EBX = 2;
-   }
-  }
-}
-
-void _throw(double *pkg)
-{
-  string excpn = "", msg = "", str;
-
-  long _str;
-  IP--;
-  Disassembler d;
-  RuntimeException re;
-    for(int i = 0; i < pkg[0]; i++){ // Exception
-       _str = (long) d.disassemble(prog(2, IP++, "")); // dissasemble char
-       cout << _str << endl;
-       excpn.append(e_throw(_str)); // print char
-    }
-
-    for(int i = 0; i < pkg[1]; i++){ // E_Message
-       _str = (long) d.disassemble(prog(2, IP++, "")); // dissasemble char
-       cout << _str << endl;
-       msg.append(e_throw(_str)); // print char
-    }
-
-    if(!ignore)
-        re.introduce(excpn,  msg);
-}
 
 void loadr(double *pkg)
 {
@@ -991,7 +930,11 @@ void rloop(double *pkg)
 
 void end() // for do
 {
-      if(if_ignore){
+  if(passed_if && if_ignore){
+      passed_if = false;
+      return;
+  }
+     if(if_ignore){
           if_ignore = false;
           ignore = false;
       }

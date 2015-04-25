@@ -1,5 +1,5 @@
 import <GPIO/basic-gpio>
 import <GPIO/gpio>
-import <util/array-builder>
+import <util/ArrayBuilder>
 import <util/RuntimeException>
 

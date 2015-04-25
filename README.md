@@ -18,7 +18,7 @@ Scorpion is a dynamic bare metal programming language supporting various program
 (coming soon)
 
 # How it works
-Scorpion represents a miniture system that lives on your computers ram and can be programmed to do anything from processing a text file, to sending a signal to physical hardware on a device. Depending on the size of accessable memory on a specific device might affect the power and performance of how fast scorpion runs on that device. Sorpion's runtime enviornment consits of a Virtural machine that virturalizes all the physical hardware on the device it is running on to be programmed. This VM allows for scorpion source code to be portable considering that the only thingthat changes is the hardware access. Below is an example of running a scorpion program on 2 different operating systems.
+Scorpion represents a miniture system that lives on your computers ram and can be programmed to do anything from processing a text file, to sending a signal to physical hardware on a device. Depending on the size of accessable memory on a specific device might affect the power and performance of how fast scorpion runs on that device. Sorpion's runtime enviornment consits of a Virtural machine that virturalizes all the physical hardware on the device it is running on to be programmed. This VM allows for scorpion source code to be portable considering that the only thing that changes is the hardware access. Below is an example of running a scorpion program on 2 different operating systems.
 
 ![alt tag](https://github.com/AndroDevcd/Scorpion/blob/master/diagrams/platfom_execution.png)
 

@@ -11,7 +11,7 @@ loadi ARRAY_SIZE 4    ; allocate 4 addresses for array
 loadi ARRAY_TYPE 1    ; specify type int 
 call build_array
 cp build_array build_array_b
-&&idx_offset: 5                    ; offset the assembler for setting unique variable id's to 5 units(prevents data collision)
+&&idx_offset: 6                    ; offset the assembler for setting unique variable id's to 5 units(prevents data collision)
 
 ; Set each element in the array
 adr ref num           ; set the addr of num again( we use different var to keep array size in num)

@@ -1,6 +1,0 @@
-=======System Dev Log begin=======
-2015-02-21.17:42:19:v/System: Verifying args...
-2015-02-21.17:42:19:v/System: Arm I-4 CPU core boot
-2015-02-21.17:42:19:v/System: Setting up System...
-2015-02-21.17:42:19:v/System: Program finished loading to memory with size [95] bytes
-2015-02-21.17:42:19:v/System: program exited with code 0

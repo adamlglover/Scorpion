@@ -1029,17 +1029,27 @@ void t_cast(double *pkg)
      RuntimeException re;
 		switch( (long) pkg[1] ){
                     case 0: // short
-                       C.setr(1, pkg[0], (int) C.getr(1, pkg[0]));
+                       C.setr(0, pkg[0], (int) C.getr(0, pkg[0]));
                     break;
 		    case 1: // int
-		       C.setr(1, pkg[0], (long) C.getr(1, pkg[0]));
+		       C.setr(0, pkg[0], (long) C.getr(0, pkg[0]));
 		    break;
                     case 2: //  float
-                       C.setr(1, pkg[0], (float) C.getr(1, pkg[0]));
+                       C.setr(0, pkg[0], (float) C.getr(0, pkg[0]));
                     break;
 		    case 3: // double
-	               C.setr(1, pkg[0], (double) C.getr(1, pkg[0]));
+	               C.setr(0, pkg[0], (double) C.getr(0, pkg[0]));
 		    break;
+                    case 4: // char
+                     {
+                       char ch = C.getr(0, pkg[0]);
+                       int c = ch;
+                       C.setr(0, pkg[0], c);
+                     }
+                    break;
+                    case 5: // bool
+                       C.setr(0, pkg[0], ibool(C.getr(0, pkg[0])));
+                    break;
 	            default: // err
 		        stringstream ss;
 		        ss << "the specified cast value [" << pkg[1] << "] is not a valid arg[double(3),float(2),int(1),short(0)]";

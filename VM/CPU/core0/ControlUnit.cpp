@@ -44,7 +44,7 @@ clock_t tStart;
 clock_s t_clock;
 bool _0Halted;
 bool pass = false;
-bool passed_if = false;
+int passed_if = 0;
 bool run = false;
 bool scmnd = false;
 bool ignore = false;

@@ -194,10 +194,10 @@ int Gate::route(double instr, double r1,double r2, double r3)
        cout << ".addr:" << IP << " " <<  "endl" << endl;
        break;
 	 case 32:
+       if(if_ignore)
+        passed_if++;
        if(!ignore)
          _do(pkg);
-       if(if_ignore)
-        passed_if = true;
        if(scmnd && (!ignore))
        cout << ".addr:" << IP << " " <<  "do" << endl;
        break;
@@ -245,10 +245,10 @@ int Gate::route(double instr, double r1,double r2, double r3)
        cout << ".addr:" << IP << " " <<  "ige" << endl;
         break;
         case 40:
+       if(if_ignore)
+        passed_if++;
        if(!ignore)
         ndo(pkg);
-       if(if_ignore)
-        passed_if = true;
        if(scmnd && (!ignore))
        cout << ".addr:" << IP << " " <<  "ndo" << endl;
         break;

@@ -930,8 +930,8 @@ void rloop(double *pkg)
 
 void end() // for do
 {
-  if(passed_if && if_ignore){
-      passed_if = false;
+  if((passed_if > 0) && if_ignore){
+      passed_if--;
       return;
   }
      if(if_ignore){

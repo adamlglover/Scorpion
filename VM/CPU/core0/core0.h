@@ -10,7 +10,7 @@ extern long *id;
 extern long auto_ipi;
 extern long IPH, IPL;
 extern bool run;
-extern bool passed_if;
+extern int passed_if;
 extern string prog_data;
 extern long L1_ICache_length;
 extern string L1_ICache[ 128000 ];

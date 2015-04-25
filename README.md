@@ -41,7 +41,7 @@ All programs reside in the bin/ directory(version specific).
 To use these programs you will have to folow the restrictions I have provoded. So far I only have the specifications for the vm(currently i only write programs in direct 'machine code').
 In the console type:
 
-      $  sudo ./scorpion file [args...]
+      $  sudo scorpion file [args...]
  
 You do not have to type the .b extention of the file(program) to run the program(if you do, an error will be thrown).
 The vm can only take a single object file that has all the instructions needed to run your program. The vm will also print out in real-time a log of data that represents what the system is doing at that point in time. this file will be located in '/usr/share/scorpion/log.txt'. NOTE: If you have superuser access to all your files and or is logged in as root you do not need to type sudo before the program. Any system configs you will be having will go under the file '/usr/share/svm/system.conf'(not yet implemented).

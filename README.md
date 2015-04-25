@@ -30,9 +30,6 @@ The vm will have an organized process for executing code. Below is a simple repr
 In order to run programs in scorpion, you need to use nsc(Native Scorpion Compiler) to compile your source code down to binary format. During the compilation process nsc will add the included library modules, built-in function, as well as any custom defined modules that you have created to your project. After this process is completed, nsc will generate a binary file that is fully executableby the Scorpion Virtural Machine. When the file is given to the VM, it will be verified for any unusal elements inside the file then executed by the virtural hardware.
 
 
-![alt tag](https://github.com/AndroDevcd/Scorpion/blob/master/diagrams/source_to_bytecode.png)
-
-
 
 # Programs
 Based on the specifications defined, for everthing to work there are a total of 2 programs needed to run scorpion source code.

@@ -44,6 +44,7 @@ void Program::Main() // entry point of application
   Ram Mem;
   Mem.prog_wipe();
   Mem.prog_load(PROG);
+  PROG = "";
   Program Application;
   Application.Run();
 }

@@ -221,24 +221,32 @@ int Gate::route(double instr, double r1,double r2, double r3)
        cout << ".addr:" << IP << " " <<  "invoke" << endl;
         break;
         case 36:
+       if(if_ignore)
+        passed_if++;
        if(!ignore)
           ilt(pkg);
        if(scmnd && (!ignore))
        cout << ".addr:" << IP << " " <<  "ilt" << endl;
         break;
         case 37:
+       if(if_ignore)
+        passed_if++;
        if(!ignore)
         igt(pkg);
        if(scmnd && (!ignore))
        cout << ".addr:" << IP << " " <<  "igt" << endl;
         break;
         case 38:
+       if(if_ignore)
+        passed_if++;
        if(!ignore)
 	 ile(pkg);
        if(scmnd && (!ignore))
        cout << ".addr:" << IP << " " <<  "ile" << endl;
         break;
         case 39:
+       if(if_ignore)
+        passed_if++;
        if(!ignore)
 	ige(pkg);
        if(scmnd && (!ignore))
@@ -253,24 +261,32 @@ int Gate::route(double instr, double r1,double r2, double r3)
        cout << ".addr:" << IP << " " <<  "ndo" << endl;
         break;
         case 41:
+       if(if_ignore)
+        passed_if++;
        if(!ignore)
         inlt(pkg);
        if(scmnd && (!ignore))
 	cout << ".addr:" << IP << " " <<  "inlt" << endl;
 	break;
         case 42:
+       if(if_ignore)
+        passed_if++;
        if(!ignore)
 	ingt(pkg);
        if(scmnd && (!ignore))
         cout << ".addr:" << IP << " " <<  "ingt" << endl;
 	break;
  	case 43:
+       if(if_ignore)
+        passed_if++;
        if(!ignore)
 	inle(pkg);
        if(scmnd && (!ignore))
  	cout << ".addr:" << IP << " " <<  "inle" << endl;
 	break;
 	case 44:
+       if(if_ignore)
+        passed_if++;
        if(!ignore)
  	inge(pkg);
        if(scmnd && (!ignore))

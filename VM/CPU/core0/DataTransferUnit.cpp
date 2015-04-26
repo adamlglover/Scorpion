@@ -18,6 +18,7 @@
 #include <stdio.h>
 #include <iostream>
 #include <unistd.h>
+#include <fstream>
 using namespace std;
 
 bool inFunc = false;
@@ -695,19 +696,14 @@ void invoke(double *pkg)
        break;
        case 5:// I/O for GPIO pins
          InputOutput io;
-         long data[2];
+         long data[8];
          switch( SFC ) {
             case 0:
-              {
-                data[0] = SDX;
                 SCR = io.Read(0,data);
                 if(SCR == -1)
                    EBX = 3;
-              }
 	    break;
             case 1:
-              data[0] = SDX;
-              data[1] =  TMP;
               SCR = io.Write(0,data);
               if(SCR == -1)
                  EBX = 3;
@@ -773,6 +769,18 @@ void invoke(double *pkg)
              C.setr(0, start_addr + i, ch);
           }
           SCX = arg_c - 2;
+        }
+       break;
+       case 50: // read to a file
+        {
+          data[0] = pkg[1];
+          SCR = io.Read(1,data); // read to a file
+        }
+       break;
+       case 51: // read to a file
+        {
+          data[0] = pkg[1];
+          SCR = io.Write(1,data); // read to a file
         }
        break;
        default:

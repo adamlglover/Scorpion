@@ -1,10 +1,4 @@
 loadbl hasInp1 0
-loadi inp1 203
-mov i1 11
-neg inp1
-loadi inp2 203
-mov i1 11
-neg inp2
 loadc chOp '-'
 
 .CalculateResult:
@@ -35,6 +29,7 @@ loadc chOp '-'
 
    do tmpb
     add CalculateResult_return inpt1 inpt2
+    printf 'inpt1 = <v,inpt1> inpt2 = <v,inpt2> CalculateResult_return = <v,CalculateResult_return>'
     return CalculateResult 1                            ; skip return if not true
    end
  
@@ -61,7 +56,7 @@ loadc chOp '-'
 
 .GetUserInput:
    r_mv ip GetUserInput_b
-   print 16 'Type a number : '
+   print 'Type a number : '
    mov i1 14
    ndo hasInp1
      ; Parse input
@@ -79,7 +74,7 @@ loadc chOp '-'
          same handle_txt index inputLength                   ; if inputLength == 0
          do handle_txt
                 ; err plz type something
-            print 6 'Err : '
+            print 'Err : '
             mov i1 11
             rmov sdx GetUserInput_b
             invoke 0xA 0
@@ -260,7 +255,7 @@ loadc chOp '-'
      end
      inle inputLength max_size                             ; !(inputLength <= 10)
             ; Woah, I can't calculate that! int_max: 2.14748e+09
-            print 52 'Woah, I can/'t calculate that! int_max: 2.14748e+09\n'
+            print 'Woah, I can/'t calculate that! int_max: 2.14748e+09/n'
             rmov sdx GetUserInput_b
             invoke 0xA 0
      end
@@ -283,7 +278,7 @@ loadc chOp '-'
          same handle_txt index inputLength                   ; if inputLength == 0
          do handle_txt
                 ; err plz type something
-            print 6 'Err : '
+            print 'Err : '
             mov i1 11
             rmov sdx GetUserInput_b
             invoke 0xA 0
@@ -463,21 +458,18 @@ loadc chOp '-'
      end
      inle inputLength max_size                             ; !(inputLength <= 10)
             ; Woah, I can't calculate that! int_max: 2.14748e+09
-            print 52 'Woah, I can/'t calculate that! int_max: 2.14748e+09\n'
+            print 'Woah, I can/'t calculate that! int_max: 2.14748e+09/n'
             rmov sdx GetUserInput_b
             invoke 0xA 0
      end
         loadbl hasInp1 0
 		
-        loadi inpt1 0
-		loadi inpt2 0
 		cp inpt1 inp1
 		cp inpt2 inp2
 		cp op chOp
 		call CalculateResult
 		cp CalculateResult  CalculateResult_b
 
-		loadi txt 0
 		cp txt CalculateResult_return
 		call _print 
 		cp _print _print_b
@@ -537,7 +529,7 @@ loadc chOp '-'
 
    mov i1 14
    ndo foundOp
-     print 6 'Err : '
+     print 'Err : '
      cp GetMatmaticialOpr GetMatmaticialOpr_b
      call GetMatmaticialOpr
    end
@@ -545,7 +537,7 @@ loadc chOp '-'
 
 .GetMatmaticialOpr:
   r_mv ip GetMatmaticialOpr_b
-  print 46 'Please type an operator (*, +, -, %, or \)  : '
+  print 'Please type an operator (*, +, -, %, or \)  : '
      loadi inputLength 0
      rln inputLength 990000 '/n'                      ; recieve input and create an input buffer of 10,000 chars
 

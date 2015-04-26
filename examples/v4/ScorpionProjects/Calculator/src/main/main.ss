@@ -1,16 +1,16 @@
 ; This Is a Calculator designed to show the power of scorpion
 
-%include 'C:\Users\Braxton\ScorpionProjects\Calculator\src\prog.ss'
-%include 'C:\Users\Braxton\ScorpionProjects\Calculator\src\brain.ss'
-%include 'C:\Users\Braxton\ScorpionProjects\Calculator\src\io.ss' 
+import 'C:\Users\Braxton\Desktop\ScorpionProjects\Calculator\src\prog.ss'
+import 'C:\Users\Braxton\Desktop\ScorpionProjects\Calculator\src\brain.ss'
+import 'C:\Users\Braxton\Desktop\ScorpionProjects\Calculator\src\io.ss' 
 
 loadi bueatify_b 0
 
 .bueatify:
     r_mv ip bueatify_b
-    print 42 '=========================================/n'
-    print 32 '            Scorpion CALCULATOR/n'
-    print 42 '=========================================/n'
+    print '=========================================/n'
+    print '            Scorpion CALCULATOR/n'
+    print '=========================================/n'
     ret
 
 loadi main_b 0

@@ -4,9 +4,9 @@ loadi end_prog_return 0
 .end_prog:
    mov i1 11
    r_mv ip end_prog_b
-   print 42 '-----------------------------------------/n'
-   print 32 '           ($---- EXIT ? ----$)/n'
-   print 42 '-----------------------------------------/n'
+   print '-----------------------------------------/n'
+   print '           ($---- EXIT ? ----$)/n'
+   print '-----------------------------------------/n'
      loadi inputLength 0
      rln inputLength 990000 '/n'                      ; recieve input and create an input buffer of 10,000 chars
 

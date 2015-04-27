@@ -5,5 +5,6 @@ I will explain an abstract device that expresses the features of the Scorpion Vi
 - 16mb of program memory(16 million instructions)
 - 32mb of ram(16mb of accessable ram)
 - GPIO access
-- 113KHz CPU clock speed
+- File I/O
+- 113KHz processor
 - 128kb CPU program cache

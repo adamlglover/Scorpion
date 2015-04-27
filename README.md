@@ -13,6 +13,7 @@ Scorpion is a dynamic bare metal programming language supporting various program
 
 #### Linux / Debian
 - Raspberry pi model B+
+- Raspberry pi model B+ 2
 
 #### Windows
 (coming soon)

@@ -7,4 +7,4 @@ Below is a list of features that the current Scorpion Virtural machine supports.
 - GPIO access
 - File I/O
 - 287KHz processor
-- 1024kb CPU program cache
+- 1024kb L1 ICache

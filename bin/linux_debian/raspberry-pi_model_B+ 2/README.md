@@ -1,7 +1,7 @@
-## Raspberry Pi Model B+ 2
+## Raspberry Pi Model B+ 2(Faster...Better..)
 Below is a list of features that the current Scorpion Virtural machine supports.
 
-# Features(Faster...Better..)
+# Features
 - 16mb of program memory(16 million instructions)
 - 64mb of ram(32mb of accessable ram)
 - GPIO access

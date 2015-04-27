@@ -63,8 +63,8 @@ void x86Shutdown();
 Disassembler disasm;
 Log log;
 
-long L1_ICache_length = 128000;// to be used else where
-#define L1_Cache_Size 128000 // 128kb L1 Instruction Cache
+long L1_ICache_length = 1024000;// to be used else where
+#define L1_Cache_Size 1024000 // 1024kb L1 Instruction Cache
 string L1_ICache[ L1_Cache_Size ];
 
 /* Instruction Set 4 */
@@ -159,12 +159,13 @@ double C0::getr(short cell_switch, long _addr)
 
 void C0::setr(short cell_switch, long _addr, double data)
 {
+
     Ram ram;
     ram.CB = 1; // S
     ram.addr((long) _addr, false);
     ram.cell(cell_switch);
 
-    ram.data(data); // set data to ram
+    ram.data(data);   // set data to ram
 }
 
 
@@ -189,14 +190,6 @@ void C0::Interrupt(double offset)
      fetch();
      decode();
      execute();
-}
-
-int ProcessOperands()
-{
-   if(scmnd)
-   cout << "processing operands {0:" << instruction << "} {1:" << reg1 << "} {2:" << reg2 << "} {3:" << reg3 << "}" << endl;
-   Gate gate;
-   return gate.route(instruction, reg1, reg2, reg3);
 }
 
 string prog(int set_enable, long index, string data)
@@ -256,7 +249,7 @@ int fetch()
     re.introduce("ProgramStateUndetectableException","hardware faliure: cannot determine the current state of the program");
    }
 
-   return ramm.prog_status(IP);
+   return 0;
 }
 
 int decode()
@@ -269,17 +262,24 @@ int decode()
 
 int execute()
 {
-	if(_0Halted && ((instruction >= 0 && instruction <= 3) || instruction == 35)) { }
+   Gate gate;
+    if(_0Halted && ((instruction >= 0 && instruction <= 3) || instruction == 35)) {
+      if(ignore)
+        ignore = false;
+      return gate.route(instruction, reg1, reg2, reg3);
+    }
     else if(_0Halted)
        return 0;
-  t_clock.ticks++;
-  return ProcessOperands();
+    t_clock.ticks++;
+
+  if(scmnd)
+   cout << "processing operands {0:" << instruction << "} {1:" << reg1 << "} {2:" << reg2 << "} {3:" << reg3 << "}" << endl;
+   return gate.route(instruction, reg1, reg2, reg3);
 }
 
 void C0::run0()
 {
  tStart = clock();
- Ram r;
 // Thread t;
 // t.create(0, 0, r.info(5));
 // t.start(0);

@@ -354,6 +354,25 @@ void c_printf(double _char)
          printf("%le",C.getr(0, _str));
     }
    }
+  else if(_char == 267){ // %bl r#
+    reg = true;
+    Disassembler d;
+    string str = prog(2, IP++, ""); // get char
+    long _str = d.disassemble(str); // dissasemble char
+    //cout << "pinting from reg " << _str  << " -1: " << (_str - 1) << " +1$
+    if(!ignore){
+      if(C.getr(0, _str) == null)
+        cout << "null";
+      else{
+         if(C.getr(0, _str) == 1)
+           cout << "true";
+         else if(C.getr(0, _str) == 0)
+           cout << "false";
+         else
+           cout << C.getr(0, _str);
+      }
+    }
+   }
   else if((!ignore)) {
     char c = _char;
     cout << c;

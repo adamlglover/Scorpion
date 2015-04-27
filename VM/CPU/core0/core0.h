@@ -13,7 +13,7 @@ extern bool run;
 extern int passed_if;
 extern string prog_data;
 extern long L1_ICache_length;
-extern string L1_ICache[ 128000 ];
+extern string L1_ICache[ 1024000 ];
 
 struct clock_s {
    long ticks;

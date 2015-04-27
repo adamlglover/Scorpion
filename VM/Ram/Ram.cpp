@@ -30,7 +30,7 @@
 #include <string>
 using namespace std;
 
-#define MAX 8000000 /* 8mb of R\c(ram per cell)*/
+#define MAX 16000000 /* 16mb of R\c(ram per cell)*/
 #define MAX_SIZE 16000000 /* 16mb of program memory */
 #define NUM_CELLS 6 // (actually 4)-6 is the max
 double ram[ MAX ]; // cell 0

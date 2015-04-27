@@ -2,9 +2,7 @@
 
 .main:
    call console     ; recieve the data from the console and store it
-   cp console console_b
    call _print      ; print data
-   cp _print _print_b
    ret
 
 loadi argc 0

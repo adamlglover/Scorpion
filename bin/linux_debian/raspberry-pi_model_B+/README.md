@@ -1,5 +1,5 @@
 ## Raspberry Pi Model B+
-I will explain an abstract device that expresses the features of the Scorpion Virtural machine running on this device.
+Below is a list of features that the current Scorpion Virtural machine supports.
 
 # Features
 - 16mb of program memory(16 million instructions)

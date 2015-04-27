@@ -6,7 +6,7 @@ Scorpion is a dynamic bare metal programming language supporting various program
 - Fast
 - Exception Handling(soon to come)
 - Portable(works on various Unix/POSIX Operating Systems)
-- Os independant(device specific)
+- Extreemly low level
 - Dynamic module and internal structure
 
 # Supported Devices

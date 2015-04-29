@@ -1,5 +1,5 @@
 #include "core0.h"
-#include <stdlib.h>
+#include <cstdlib>
 #include "runtime_exception.h"
 #include "../../System.h"
 #include "../../program.h"
@@ -19,6 +19,7 @@
 #include <iostream>
 #include <unistd.h>
 #include <fstream>
+#include <time.h>
 using namespace std;
 
 bool inFunc = false;
@@ -92,24 +93,22 @@ void anum(double *pkg)
 
 void rln(double *pkg)//  length, start addr, excape  char, 
 {
-   long s_addr = (long) pkg[1];
+   long s_addr = (long) pkg[0] + 1;
+   long max = C.getr(0, pkg[0]);
    long length = 0;
-   if(pkg[2] == 10){ // excape char = \n
+   if(pkg[1] == 10){ // excape char = \n
      string input = "";
      getline(cin, input);
      length = input.length();
      Ram ram;
-     if(input.length() <= (ram.info(0) - s_addr)){ // resources available
        for(int i = 0; i < input.length(); i++){
+         if(i > max)
+           break;
             char a = input.at(i);
             int chr = (int) a;
             C.setr(0, s_addr + i, chr);
-         //   cout << "saving " << a << endl;
        }
          C.setr(0, pkg[0], length);
-     }
-     else
-      cout << "resources unavailable";
    }
 }
 
@@ -373,6 +372,23 @@ void c_printf(double _char)
       }
     }
    }
+  else if(_char == 268){ // %s r#
+    reg = true;
+    Disassembler d;
+    string str = prog(2, IP++, ""); // get char
+    long _str = d.disassemble(str); // dissasemble char
+    //cout << "pinting from reg " << _str  << " -1: " << (_str - 1) << " +1$
+    if(!ignore){
+      if(C.getr(0, _str) == null)
+        cout << "null";
+      else{
+         long ref = _str + 1;
+         for(int i = 0; i < C.getr(0, _str); i++){
+             c_printf(C.getr(0, ref++));
+         }
+      }
+    }
+   }
   else if((!ignore)) {
     char c = _char;
     cout << c;
@@ -443,12 +459,19 @@ void loadc(double *pkg)
     C.setr(0, pkg[0], _char((long) pkg[1]));
 }
 
+void thread_wait(int seconds) 
+{ 
+    int endwait; 
+    endwait = clock() + seconds * CLOCKS_PER_SEC ; 
+    while (clock() < endwait){} 
+}
+
 void _sleep(double *pkg)
 {
    if(SCX < 0)
      SCX *= -1;
    if((long) pkg[0] == 0)
-       sleep(SCX); // sleep curr thread for specified secs
+       sleep(SCX);
    else
       usleep(SCX); // sleep for mills
 }

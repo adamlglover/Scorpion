@@ -12,7 +12,6 @@
 #include "../../Ram/ram.h"
 #include "../../GPIO/gpio.h"
 #include "io.h"
-#include "thread.h"
 #include <string>
 #include <sstream>
 #include <stdio.h>
@@ -33,7 +32,6 @@ void loadi(double *pkg)
          C.setr(0, pkg[0], null);
       else
          C.setr(0, pkg[0], (long) pkg[1]);
-       // log invalid type assignment
 }
 
 void rload(double *pkg)
@@ -110,23 +108,6 @@ void rln(double *pkg)//  length, start addr, excape  char,
        }
          C.setr(0, pkg[0], length);
    }
-}
-
-void rflush()
-{
-  Ram ram;
-      d_log.i("System","Flushing cell [0]");
-      for(int i = 0; i < ram.info(0); i++)
-          C.setr(0, i, 0);
-	
-	  d_log.i("System","Flushing cell [2]");
-      for(int i = 0; i < ram.info(0); i++)
-          C.setr(2, i, 0);
-		  
-      d_log.i("System","Flushing cell [3]");
-      for(int i = 0; i < ram.info(0); i++)
-          C.setr(3, i, 0);
-	  
 }
 
 void loadc(double *pkg);
@@ -687,45 +668,6 @@ void invoke(double *pkg)
      switch((long) pkg[0] )
      {
        case 0:
-        Thread t;
-        switch((long) pkg[1])
-        {
-	    case 0:
-	       SDX = t.create(SCX, iph, ipl);
-            break;
-	    case 1:
-	       SDX = t.start((long) SCX);
-	    break;
-	    case 2:
-	       SDX = t.stop((long) SCX);
-	    break;
-  	    case 3:
-	       SDX = t.wait((long) SCX);
-	    break;
-	    case 4:
-	       SDX = t.destroy((long) SCX);
-	    break;
-            case 5:
-	       SDX = t.stack_pointer();
-	    break;
-            case 6:
-	       SDX = t.thread_size();
-	    break;
-            case 7:
-	       SDX = t.max_ticks();
-	    break;
-  	    case 8:
-	       SDX = t.status(SDX, TMP);
-	    break;
-            case 9:
-	       iph = IP;
-               ignore = true;
-	    break;
-  	    case 10:
-	       ipl = IP - 4;
-	       ignore = false;
-	    break;
-        }
        break;
        case 1: // log
         Log _l;
@@ -819,10 +761,10 @@ void invoke(double *pkg)
           SCR = io.Read(1,data); // read to a file
         }
        break;
-       case 51: // read to a file
+       case 51: // write to a file
         {
           data[0] = pkg[1];
-          SCR = io.Write(1,data); // read to a file
+          SCR = io.Write(1,data); // write to a file
         }
        break;
        default:
@@ -835,16 +777,6 @@ void invoke(double *pkg)
 }
 
 Ram r;
-void mlock(double *pkg)
-{
-      for(int i = 0; i < r.info(0); i++){
-            if(C.getr(3, i) == 0){
-	//	lreg[ i ] = reg[ i ];
-                C.setr(2, i, C.getr(0, i));
-            }
-      }
-}
-
 void lock(double *pkg)
 {
 	 if(C.getr(3, pkg[0]) == 0)
@@ -863,14 +795,6 @@ void xreg(double *pkg)
         C.setr(3, pkg[0], 1);
      else if(C.getr(3, pkg[0]) == 1)
         C.setr(3, pkg[0], 0);
-}
-
-void mulock(double *pkg)
-{
-      for(int i = 0; i < r.info(0); i++){
-            if(C.getr(3, i) == 0)
-                 C.setr(0, i, C.getr(2, i));
-      }
 }
 
 void clx(double *pkg)

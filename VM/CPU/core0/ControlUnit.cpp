@@ -34,7 +34,6 @@
 #include "../../Log/filter.h"
 #include "../x86Disassm/disassembler.h"
 #include "../../Log/Log.h"
-//#include "thread.h"
 #include <string>
 using namespace std;
 
@@ -54,9 +53,8 @@ bool waiting = false;
 long *id;
 long auto_ipi;
 long IPH, IPL;
-int fetch();
-int decode();
-int execute();
+void fetch();
+void execute();
 
 void x86Shutdown();
 
@@ -68,11 +66,6 @@ long L1_ICache_length = 1024000;// to be used else where
 string L1_ICache[ L1_Cache_Size ];
 
 /* Instruction Set 4 */
-   double instruction = 0;
-   double reg1 = 0;
-   double reg2 = 0;
-   double reg3 = 0;
-
    string i1 = "";
    string i2 = "";
    string i3 = "";
@@ -142,8 +135,6 @@ void C0::Halt()
   LSL = 0;
   SCX = 0;
   SCR = 0;
-  //Thread t;
-  //t.Shutdown(); // shutdown all threads(except main)
 }
 
 /* Methods used to easily talk to the ram */
@@ -174,46 +165,36 @@ int C0::GetVirturalAddress()
   return IP;
 }
 
-double DisassemblerRead(string operand)
-{
-   return disasm.disassemble(operand);
-}
-
+C0 _x86;
 void C0::Interrupt(double offset)
 {
     if(_0Halted){
        _0Halted = false;
-	   C0 cpu;
-	   cpu.Reset();
+       _x86.Reset();
     }
      IP = (long) offset;
-     fetch();
-     decode();
-     execute();
+       fetch();
+       execute();
 }
 
+Ram _Ram;
 string prog(int set_enable, long index, string data)
 {
-     //   Thread t;
-        RuntimeException re; // are we accessing restricted cpu instructions outside of the current thread?
-    //    if(!(IP > IPH) || !(IP < IPL))
-    //           re.introduce("ThreadAccesOutOfBoundsException", "failure to access instructions outside of thread");
 
         if(index < L1_Cache_Size)
            return L1_ICache[ index ]; // super fast instruction fetching
         else {
-           Ram ram;
-           ram.CB = set_enable; // E
-           ram.addr(index, true);
+           _Ram.CB = set_enable; // E
+           _Ram.addr(index, true);
            prog_data = data;
-           ram.cell(5);
-           ram.data(0.0);
+           _Ram.cell(5);
+           _Ram.data(0.0);
            return prog_data;
         }
 }
 
 int memstat;
-int fetch()
+void fetch()
 {
    if(AI != 0){
       if((t_clock.ticks % AI) == 0){
@@ -221,10 +202,8 @@ int fetch()
          IP = IPI;    // tell cpu to scamper off and do something random(usually used in multitasking)
       }
    }
-   //Thread t;
-   //t.notify();
-   Ram ramm;
-   memstat = ramm.prog_status(IP);
+
+   memstat = _Ram.prog_status(IP);
    if(memstat == Ram::DONE){
           if(!run){
              printf("Time taken: %.3fs\n", (double)(clock() - tStart)/CLOCKS_PER_SEC);
@@ -243,49 +222,36 @@ int fetch()
       i2          = prog(2, IP++, "");
       i3          = prog(2, IP++, "");
       i4          = prog(2, IP++, "");
+      execute();
+      return;
    }
    else {
     RuntimeException re;
     re.introduce("ProgramStateUndetectableException","hardware faliure: cannot determine the current state of the program");
    }
-
-   return 0;
 }
 
-int decode()
+Gate gate;
+void execute() // The Decode process is inside the execute method(for performance concerns)
 {
-   instruction = DisassemblerRead(i1);
-   reg1        = DisassemblerRead(i2);
-   reg2        = DisassemblerRead(i3);
-   reg3        = DisassemblerRead(i4);
-}
-
-int execute()
-{
-   Gate gate;
-    if(_0Halted && ((instruction >= 0 && instruction <= 3) || instruction == 35)) {
+    if(_0Halted && (disasm.disassemble(i1) == 35)) {
       if(ignore)
         ignore = false;
-      return gate.route(instruction, reg1, reg2, reg3);
+        gate.route(disasm.disassemble(i1), disasm.disassemble(i2), disasm.disassemble(i3), disasm.disassemble(i4));
     }
     else if(_0Halted)
-       return 0;
+       return;
     t_clock.ticks++;
 
   if(scmnd)
-   cout << "processing operands {0:" << instruction << "} {1:" << reg1 << "} {2:" << reg2 << "} {3:" << reg3 << "}" << endl;
-   return gate.route(instruction, reg1, reg2, reg3);
+   cout << "processing operands {0:" << disasm.disassemble(i1) << "} {1:" << disasm.disassemble(i2) << "} {2:" 
+        << disasm.disassemble(i3) << "} {3:" << disasm.disassemble(i4) << "}" << endl;
+   gate.route(disasm.disassemble(i1), disasm.disassemble(i2), disasm.disassemble(i3), disasm.disassemble(i4));
 }
 
 void C0::run0()
 {
  tStart = clock();
-// Thread t;
-// t.create(0, 0, r.info(5));
-// t.start(0);
- while(System::Running){
+ while(System::Running)
        fetch();
-       decode();
-       execute();
- }
 }

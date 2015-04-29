@@ -12,14 +12,14 @@
 #include "../../System.h"
 using namespace std;
 
+double pkg[3];
+C0 _cpu;
 int Gate::route(double instr, double r1,double r2, double r3)
 {
-   double pkg [3];
    pkg[0] = r1;
    pkg[1] = r2;
    pkg[2] = r3;
 
-   C0 _cpu;
    switch( (long) instr )
    {
   /*---System Control---*/
@@ -141,6 +141,7 @@ int Gate::route(double instr, double r1,double r2, double r3)
          loadi(pkg);
        if(scmnd && (!ignore))
        cout << ".addr:" << IP << " " <<  "loadi" << endl;
+       return 0;
        break;
 	 case 19:
        if(!ignore)
@@ -328,23 +329,11 @@ int Gate::route(double instr, double r1,double r2, double r3)
        if(scmnd && (!ignore))
        cout << ".addr:" << IP << " " <<  "crem" << endl;
         break;
-       case 51:
-       if(!ignore)
-          mlock(pkg);
-       if(scmnd && (!ignore))
-       cout << ".addr:" << IP << " " <<  "mlock" << endl;
-        break;
        case 52:
        if(!ignore)
 	  lock(pkg);
        if(scmnd && (!ignore))
        cout << ".addr:" << IP << " " <<  "lock" << endl;
-        break;
-       case 53:
-       if(!ignore)
-	  mulock(pkg);
-       if(scmnd && (!ignore))
-       cout << ".addr:" << IP << " " <<  "mulock" << endl;
         break;
       case 54:
        if(!ignore)
@@ -421,12 +410,6 @@ int Gate::route(double instr, double r1,double r2, double r3)
            rdtsc();
        if(scmnd && (!ignore))
         cout << ".addr:" << IP << " " <<  "rdtsc" << endl;
-        break;
-        case 68:
-       if(!ignore)
-           rflush();
-       if(scmnd && (!ignore))
-        cout << ".addr:" << IP << " " <<  "rflush" << endl;
         break;
        case 69:
        if(!ignore)
@@ -514,6 +497,7 @@ int Gate::route(double instr, double r1,double r2, double r3)
        cout << ".addr:" << IP << " " <<  "rload" << endl;
        break;
        case 90:
+       if(!ignore)
          ct_int(pkg);
        if(scmnd && (!ignore))
        cout << ".addr:" << IP << " " <<  "ct_int" << endl;

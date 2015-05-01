@@ -15,7 +15,7 @@ loadi file_exists 1                    ; the response code we want back
 same file_exists file_exists,response
 do file_exists
    rmov scx ofstream_adr               ; set the addr to the stream of data to set to the file
-   invoke 0x33 1                       ; open the file
+   invoke 0x33 1                       ; attempt to open the file
    
    loadi is_open 1
    r_mv scr response

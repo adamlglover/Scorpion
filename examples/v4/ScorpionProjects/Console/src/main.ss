@@ -1,17 +1,11 @@
-PRINT 'What is your name: '
+print 'What is your name: '
 
-RLN input_length 990000 '/n'
+loadi input 10000            ; The max ammount of input chars set to the console
+rln input '/n'               ; use the "input" label as a string and store the console input in it
+&&idx_offset: 10000          ; allocate 10,000 addresses for the input
 
-PRINT 'Hello '
-; parse input
-LOADI ref 990000
-RLOOP parse loop_b input_length
-   RLOAD char ref
-   PRINTF '<c,char>'
-   INC ref
-ENDL parse loop_b
-
-PRINT '/n'
+print 'Hello '
+printf '<str,input>/n'       ; print the input from the console
 
 string msg 'This is a string!'
 

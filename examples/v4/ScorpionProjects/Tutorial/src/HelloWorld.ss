@@ -1,13 +1,8 @@
 
-string msg 'This is a string message'
-adr ref msg
-inc ref
-rloop parse loop_b msg
-   rload char ref
-   printf '<c,char>'
-   inc ref
-endl parse loop_b
+string msg2 'This is a second message.'
+string msg 'This is a string message.'
 
+printf '<str,msg> <str,msg2>'
 print '/n'
 
 loadi data 29430

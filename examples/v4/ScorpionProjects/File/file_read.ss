@@ -26,36 +26,12 @@ do file_exists
                             ; The VM can only handle 1 file at a time(unless you use a thread)
 							
     ilt file file_max       ; print file contents
-	    print 'file: '
-		
-		loadi i 0           ; int i = 0;
-		inc file_name_adr
-		r_mv ip for
-		ilt i file_name     ; i < file_name.length;
-		    rload char file_name_adr
-			printf '<c,char>'; System.print(file_name.at(i));
-		    inc file_name_adr
-			inc i           ; i++;
-			rmov sdx for
-			invoke 0xA 0    ; loop back up
-		end
-		
-	    print '/n'
-	    loadi i 0           ; int i = 0;
-		inc file_adr
-		r_mv ip for
-		ilt i file          ; i < file.length;
-		    rload char file_adr
-			printf '<c,char>'; System.print(file.at(i));
-		    inc file_adr
-			inc i           ; i++;
-			rmov sdx for
-			invoke 0xA 0    ; loop back up
-		end
+	    printf 'file: <str,file_name>/n'		
+		printf '<str,file>'
     end
 
     inlt file file_max
-        print 'err file size too big, extitig/n'
+        print 'err file size too big, extitig./n'
 		halt
     end
 end

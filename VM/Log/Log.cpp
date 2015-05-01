@@ -59,8 +59,8 @@ int Log::v(string tag,string message)
 
 void Log::prepare(int priority, bool to_file)
 {
- Logging = true;
- Logger l;
- SetPriority( priority );
- l.init(to_file);
+  Logging = true;
+  Logger l;
+  SetPriority( priority );
+  l.init(to_file);
 }

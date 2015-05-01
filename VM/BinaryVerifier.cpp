@@ -11,14 +11,13 @@ Log rules_log;
 string prog_name = "";
 bool isgenuine = false;
 
-     bool file_exists(const char *fileName)
-    {
-      std::ifstream infile(fileName);
-          return infile.good();
-    }
+   bool file_exists(const char *fileName)
+   {
+     std::ifstream infile(fileName);
+         return infile.good();
+   }
 
    string p;
-
    void tostring(const char *name)
    {
       string tmp;
@@ -45,7 +44,7 @@ bool isgenuine = false;
          _char++;
         else{
           uchar = prog.at(i);
-           return false;
+          return false;
         }
     }
      return true;
@@ -60,11 +59,11 @@ bool isgenuine = false;
         if(file_exists(name)){
            tostring(name);
         if(hassyntax(p)){
-             Program App;
-             App.Save(p);
-             p = "";
-             isgenuine = true;
-           prog_name = file;
+            Program App;
+            App.Save(p);
+            p = "";
+            isgenuine = true;
+            prog_name = file;
         }
         else{
           std::ostringstream stream;
@@ -74,8 +73,8 @@ bool isgenuine = false;
         }
       }
       else{
-        std::ostringstream stream;
-          stream << "Fatal err occured. Could not find or load binary executable " << file;
+         std::ostringstream stream;
+         stream << "Fatal err occured. Could not find or load binary executable " << file;
          string data = stream.str();
          rules_log.v("System",data);
       }
@@ -85,7 +84,7 @@ bool isgenuine = false;
    {
        rules_log.v("System","Verifying args...");
        if(argc >= 2)
-          authenticate(file[1]);
+         authenticate(file[1]);
        else if(argc < 2)
          rules_log.v("System","Fatal err occured. No input files, System Halt!");
    }

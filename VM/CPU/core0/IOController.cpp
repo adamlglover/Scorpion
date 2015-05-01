@@ -14,7 +14,6 @@ extern void tostring(const char *name);
 extern bool file_exists(const char *file);
 int ibool(long);
 
-C0 cpu;
 string file_name = "";
 ofstream stream;
 long InputOutput::Write(int device,  long *data)
@@ -31,12 +30,12 @@ long InputOutput::Write(int device,  long *data)
                const char *f = file_name.c_str();
                stream.open(f, std::ofstream::out);
                if (stream.is_open())
-                  return 1;
+                 return 1;
                else
-                  return 0;
+                 return 0;
             }
             else
-               return -1;
+             return -1;
          }
          else if(data[0] == 2)
          {
@@ -44,23 +43,27 @@ long InputOutput::Write(int device,  long *data)
              //char fstream[1000000];
              long start_addr = SCX;
              start_addr++;
-             for(int i = 0; i < cpu.getr(0, SCX); i++){
-                 int ch = cpu.getr(0, start_addr++);
-                 char wrd = ch;
-                 stream << wrd; 
+             int ch;
+             char wrd;
+             for(int i = 0; i < core0.getr(0, SCX); i++){
+                 ch = core0.getr(0, start_addr++);
+                 wrd = ch;
+                 stream << wrd;
              }
-               //cout << " fstream: " << fstream << endl;
-               //stream << fstream;
            }
            else
             return -1;
          }
          else if(data[0] == 3)
          {
+           if (stream.is_open()){
              stream.close();
+           }
+           else
+            return -1;
          }
          else
-             return -3;
+          return -3;
        }
       break;
   }
@@ -79,8 +82,8 @@ long InputOutput::Read(int device,  long *data)
           {
              long start_addr = SCX;
              file_name = "";
-             for(int i = start_addr + 1; i < (cpu.getr(0, SCX) + SCX) + 1; i++)
-                 file_name += cpu.getr(0, i);
+             for(int i = start_addr + 1; i < (core0.getr(0, SCX) + SCX) + 1; i++)
+                 file_name += core0.getr(0, i);
              return ibool(file_exists(file_name.c_str()));
           }
           else if(data[0] == 3) // empty temporary file's contents
@@ -90,10 +93,11 @@ long InputOutput::Read(int device,  long *data)
           else if(data[0] == 6) // load the temporary file data to the ram
           {
              long start_addr = SDX + 1;
+             int ch;
              for(long i = 0; i < p.length(); i++)
              {
-                  int ch = p.at(i);
-                  cpu.setr(0, start_addr++, ch);
+                  ch = p.at(i);
+                  core0.setr(0, start_addr++, ch);
              }
           }
           else if(data[0] == 2) // save the file in a temporary location
@@ -101,15 +105,16 @@ long InputOutput::Read(int device,  long *data)
              if(file_exists(file_name.c_str())){
                  const char *f = file_name.c_str();
                  tostring(f);
-                 cpu.setr(0, SDX, p.length());
+                 core0.setr(0, SDX, p.length());
              }
              else
                return -1;
           }
           else
-             return -3;
+           return -3;
        }
       break;
   }
    return 1;
 }
+

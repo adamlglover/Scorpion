@@ -1,8 +1,8 @@
-#include "disassembler.h" 
-#include <sstream> 
-#include <string> 
+#include "disassembler.h"
+#include <sstream>
+#include <string>
 #include "../core0/runtime_exception.h"
-#include <math.h> 
+#include <math.h>
 #include <iostream>
 using namespace std;
 
@@ -27,16 +27,16 @@ double binary_decimal(string num) /* Function to convert binary to dec */
     return dec;
 }
 
-string decimal_binary(long num)
+string decimal_binary(long num) /* Function to convert dec to binary */
  {
      int number;
      string bin;
-     char holder=' ';
+     char holder = ' ';
      number = num;
      while(number != 0)
      {
-	holder = number%2+'0';
-        bin =holder+bin;
+	holder = number % 2 + '0';
+        bin = holder + bin;
 	number /= 2;
      }
      return bin;

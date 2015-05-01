@@ -3,7 +3,6 @@
 #include "runtime_exception.h"
 #include <sstream>
 
-C0 c;
 long _xor(int,int);
 long _or(int,int);
 long _and(int,int);
@@ -82,77 +81,70 @@ int ibool(long num)
 
 void nand_l(double *pkg)
 {
-  RuntimeException re;
    if(pkg[0] == 20)
        EAX = _nand(ibool(pkg[1]),ibool(pkg[2]));
    else
    {
-       c.setr(0, pkg[0], _nand(ibool(c.getr(0, pkg[1])),ibool(c.getr(0, pkg[2]))));
+       core0.setr(0, pkg[0], _nand(ibool(core0.getr(0, pkg[1])),ibool(core0.getr(0, pkg[2]))));
    }
 }
 
 void nor_l(double *pkg)
 {
-  RuntimeException re;
    if(pkg[0] == 20)
      EAX = _nor(ibool(pkg[1]),ibool(pkg[2]));
    else
    {
-       c.setr(0, pkg[0], _nor(ibool(c.getr(0, pkg[1])),ibool(c.getr(0, pkg[2]))));
+       core0.setr(0, pkg[0], _nor(ibool(core0.getr(0, pkg[1])),ibool(core0.getr(0, pkg[2]))));
    }
 }
 
 void xnor_l(double *pkg)
 {
-  RuntimeException re;
    if(pkg[0] == 20)
        EAX = _xnor(ibool(pkg[1]),ibool(pkg[2]));
    else 
    {
-       c.setr(0, pkg[0], _xnor(ibool(c.getr(0, pkg[1])),ibool(c.getr(0, pkg[2]))));
+       core0.setr(0, pkg[0], _xnor(ibool(core0.getr(0, pkg[1])),ibool(core0.getr(0, pkg[2]))));
    }
 }
 
 void and_l(double *pkg)
 {
-  RuntimeException re;
    if(pkg[0] == 20)
-       EAX = _and(ibool(pkg[1]),ibool(pkg[2]));
+      EAX = _and(ibool(pkg[1]),ibool(pkg[2]));
    else
    {
-      c.setr(0, pkg[0], _and(ibool(c.getr(0, pkg[1])),ibool(c.getr(0, pkg[2]))));
+      core0.setr(0, pkg[0], _and(ibool(core0.getr(0, pkg[1])),ibool(core0.getr(0, pkg[2]))));
    }
 }
 
 void or_l(double *pkg)
 {
-  RuntimeException re;
    if(pkg[0] == 20)
      EAX = _or(ibool(pkg[1]),ibool(pkg[2]));
    else
    {
-      c.setr(0, pkg[0], _or(ibool(c.getr(0, pkg[1])),ibool(c.getr(0, pkg[2]))));
+      core0.setr(0, pkg[0], _or(ibool(core0.getr(0, pkg[1])),ibool(core0.getr(0, pkg[2]))));
    }
 }
 
 void xor_l(double *pkg)
 {
-  RuntimeException re;
    if(pkg[0] == 20)
-       EAX = _xor(ibool(pkg[1]),ibool(pkg[2]));
+      EAX = _xor(ibool(pkg[1]),ibool(pkg[2]));
    else 
    {
-       c.setr(0, pkg[0], _xor(ibool(c.getr(0, pkg[1])),ibool(c.getr(0, pkg[2]))));
+       core0.setr(0, pkg[0], _xor(ibool(core0.getr(0, pkg[1])),ibool(core0.getr(0, pkg[2]))));
    }
 }
 
 void not_l(double *pkg)
 {
-  RuntimeException re;
-     if(pkg[0] == 20)
-       EAX = _not(ibool(pkg[1]));
+   if(pkg[0] == 20)
+      EAX = _not(ibool(pkg[1]));
    else
    {
-       c.setr(0, pkg[0], _not(ibool(c.getr(0, pkg[1]))));
+       core0.setr(0, pkg[0], _not(ibool(core0.getr(0, pkg[1]))));
    }
 }

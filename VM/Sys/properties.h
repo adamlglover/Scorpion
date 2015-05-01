@@ -13,6 +13,6 @@ using namespace std;
            int SetProperty(string,string);
            string s_list();
            void PropertyNames();
-   }; 
+  };
 
 #endif

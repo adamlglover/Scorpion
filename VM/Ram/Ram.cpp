@@ -57,11 +57,11 @@ short Ram::CS = 0;
 long address = 0;
 int Ram::addr(long index, bool p_mem)
 {
-  if(((index < 0) || (index > MAX)) && !p_mem){
+  if(((index < 0) || (index > MAX_SIZE)) && p_mem){
          state = INDEX_OUT_OF_RANGE;
      return INDEX_OUT_OF_RANGE;
   }
-  else if(((index < 0) || (index > MAX_SIZE)) && p_mem){
+  else if(((index < 0) || (index > MAX)) && !p_mem){
          state = INDEX_OUT_OF_RANGE;
      return INDEX_OUT_OF_RANGE;
   }
@@ -92,14 +92,11 @@ double Ram::data(double dataBus)
    if(Ram::CS == 0) {
       switch( Ram::CB ) {
          case 1: // S
-        //   cout << "Saving " << dataBus<< "to ram CB " << Ram::CB << " address " << address << endl;
             ram[ address ] = dataBus;
-      //     if((address >= 30) && (address <= 33))
-        //     cout << "ram " << ram[ address ];
+            return 0;
          break;
          case 2: // E
-        //   cout << "Getting " << dataBus<< "from ram CB " << Ram::CB << " address " << address << endl;
-              return ram[ address ];
+            return ram[ address ];
          break;
          default:
            RuntimeException re;
@@ -112,12 +109,13 @@ double Ram::data(double dataBus)
       switch( Ram::CB ) {
          case 1: // S
            lram[ address ] = dataBus;
+           return 0;
          break;
          case 2: // E
            return lram[ address ];
          break;
          default:
-          RuntimeException re;
+           RuntimeException re;
            re.introduce("RamControlBusException","cannot access cell, invalid control bus input");
          break;
 
@@ -127,6 +125,7 @@ double Ram::data(double dataBus)
       switch( Ram::CB ) {
          case 1: // S
            xram[ address ] = dataBus;
+           return 0;
          break;
          case 2: // E
            return xram[ address ];
@@ -152,11 +151,12 @@ double Ram::data(double dataBus)
             re.introduce("RamProgramOutOfRangeException", "cannot access program at index [" + ss.str() + "]");
         }
         prog_data = program[ address ];
+        return 0;
       break;
       default:
       // err
-       RuntimeException re;
-           re.introduce("RamControlBusException","cannot access cell, invalid control bus input");
+        RuntimeException re;
+        re.introduce("RamControlBusException","cannot access cell, invalid control bus input");
       break;
      }
    }
@@ -166,6 +166,7 @@ double Ram::data(double dataBus)
       switch( Ram::CB ) {
          case 1: // S
            ram[ address ] = dataBus;
+           return 0;
          break;
          case 2: // E
            return ram[ address ];
@@ -184,12 +185,9 @@ double Ram::data(double dataBus)
      re.introduce("RamIndexOutOfRangeException","faliure to acccess ram at address #" + ss.str());
   }
   else {
-    RuntimeException re;
+     RuntimeException re;
      re.introduce("RamStateUnknownException","failure to get current ram state");
   }
-  state = 0; // dump addr state
-  Ram::CB = 0; // dump the control bus
-  address = 0; // dump address
   return 0;
 }
 
@@ -245,8 +243,7 @@ long Ram::info(int info)
 
 bool overload = false;
 void nextinstr(string instr) /* load the next instruction to ram*/
-{ 
-//  cout << "next instr "<< icount + 1 << " I$ " << instr << endl;
+{
    if(!(SIZE > MAX_SIZE)){
         program[ SIZE++ ] = instr; //  assign the next  instr(I was being lazy)
         if((SIZE -1) < L1_ICache_length)
@@ -263,32 +260,31 @@ void Ram::prog_load(string content)
   string str = "";
      for(int i = 0; i < content.length(); i++)
      {
-    if(content.at(i) == '.' || content.at(i) == ' '){
-       if(str != ""){
-           //cout << result << endl;
-           nextinstr(str);
-           str = "";
-       }
-    }
-    else if((content.at(i) == '1'))
-       str.append("1");
-    else if(content.at(i) == '0')
-       str.append("0");
-  }
-    if(!overload){
+        if(content.at(i) == '.' || content.at(i) == ' '){
+            if(str != ""){
+              nextinstr(str);
+              str = "";
+            }
+        }
+        else if((content.at(i) == '1'))
+          str.append("1");
+        else if(content.at(i) == '0')
+          str.append("0");
+     }
+     if(!overload){
     	Log l;
     	stringstream ss;
      	ss << SIZE;
     	l.v("System","Program finished loading to memory with size [" + ss.str() + "] bytes");
     	Program Applet;
     	Applet.Runnable(true);
-    }
-    else {
-      Ram ramm;
-      printf("Ram: program_size_overload err \nsize > %d(%08x) \n      --size[%d] bytes\n", MAX_SIZE, MAX_SIZE, ramm.info(5));
-      cout << "Shutting down...\n";
-      EBX = null;
-      p_exit();
-    }
+     }
+     else {
+       Ram ramm;
+       printf("Ram: program_size_overload err \nsize > %d(%08x) \n      --size[%d] bytes\n", MAX_SIZE, MAX_SIZE, ramm.info(5));
+       cout << "Shutting down...\n";
+       EBX = null;
+       p_exit();
+     }
 }
 

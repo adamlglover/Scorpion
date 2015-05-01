@@ -1,11 +1,10 @@
 /*
-* Scorpion Virtural Machine 
+* Scorpion Virtural Machine
 * Designed and developed by Braxton Nunnally
 *
 * current processor speed
-* .109MHz
+* .340MHz
 */
-
 #include <string>
 #include <algorithm>
 #include <iostream>
@@ -22,7 +21,6 @@
 #include <sstream>
 
 using namespace std;
-//using namespace CPU;
 
 int status;
 int STACK_LEVEL = 2;
@@ -32,20 +30,20 @@ Logger logger1;
 
 void Restart()
 {
-    System::Running = false;
-    CPU mprocessor;
-    mprocessor.Reset();
-    System::Running = true;
-    System::SetupSystem();
+   System::Running = false;
+   CPU mprocessor;
+   mprocessor.Reset();
+   System::Running = true;
+   System::SetupSystem();
 }
 
 void x86Shutdown()
 {
-  System::Running = false;
-  CPU mprocessor;
-  mprocessor.Halt();
-  Log lg;
-  lg.Shutdown();
+   System::Running = false;
+   CPU mprocessor;
+   mprocessor.Halt();
+   Log lg;
+   lg.Shutdown();
 }
 
 void Start()
@@ -72,8 +70,8 @@ int main( int argc, const char **file )
   }
 
   if(argc > 2){
+     stringstream ss;
      for(int i = 2; i < argc; i++){
-        stringstream ss;
         ss << file[i] << " ";
         prog_args += ss.str();
      }
@@ -81,6 +79,7 @@ int main( int argc, const char **file )
   status = mkdir("/usr/share/scorpion", S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);
   status = mkdir("/usr/share/scorpion/disks", S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);
   status = mkdir("/usr/share/scorpion/lib/src", S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);
+
   if(isarg(arg))
      handleargs();
   else

@@ -6,7 +6,6 @@
 
 using namespace std;
 
-void inf(string);
 namespace System {
   bool Running;
   Log Sys_log;

@@ -8,7 +8,7 @@ void CPU::Reset()
 {
   core0.Reset();
 }
- 
+
 void CPU::Halt()
 {
   core0.Halt();

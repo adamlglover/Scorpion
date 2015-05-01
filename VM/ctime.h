@@ -2,6 +2,6 @@
 #define TIME
 #include <string>
 using namespace std;
-  string currtime();
+string currtime();
 
 #endif

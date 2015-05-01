@@ -6,6 +6,7 @@
 #include "CPU/cpu.h"
 #include "CPU/core0/core0.h"
 #include <stdio.h>
+#include <iostream>
 using namespace std;
 
 string PROG = "";
@@ -19,13 +20,15 @@ void Program::Save(string prog)
 void Program::Runnable(bool run)
 {
     runnable = run;
-} 
+}
 
 void Program::Run()
 {
   CPU cpu;
  if(runnable)
      cpu.Run();
+ else
+  cout << "scorpion: fatal err: something went wrong wile attempting to run the program." << endl;
  runnable = false;
 }
 

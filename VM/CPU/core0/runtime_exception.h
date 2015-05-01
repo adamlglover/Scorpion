@@ -5,9 +5,8 @@
 using namespace std;
 
 class RuntimeException {
-            public:
-             void introduce(string exception, string message);
-
+       public:
+         void introduce(string exception, string message);
 };
 
 #endif

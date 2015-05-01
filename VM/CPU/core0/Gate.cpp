@@ -299,36 +299,6 @@ int Gate::route(double instr, double r1,double r2, double r3)
        if(scmnd && (!ignore))
         cout << ".addr:" << IP << " " <<  "neg" << endl;
         break;
-        case 46:
-       if(!ignore)
-         cadd(pkg);
-       if(scmnd && (!ignore))
-       cout << ".addr:" << IP << " " <<  "cadd" << endl;
-        break;
-       case 47:
-       if(!ignore)
-         csub(pkg);
-       if(scmnd && (!ignore))
-       cout << ".addr:" << IP << " " <<  "csub" << endl;
-        break;
-       case 48:
-       if(!ignore)
-         cmult(pkg);
-       if(scmnd && (!ignore))
-       cout << ".addr:" << IP << " " <<  "cmult" << endl;
-        break;
-       case 49:
-       if(!ignore)
-         cdiv(pkg);
-       if(scmnd && (!ignore))
-       cout << ".addr:" << IP << " " <<  "cdiv" << endl;
-        break;
-       case 50:
-       if(!ignore)
-         crem(pkg);
-       if(scmnd && (!ignore))
-       cout << ".addr:" << IP << " " <<  "crem" << endl;
-        break;
        case 52:
        if(!ignore)
 	  lock(pkg);
@@ -373,7 +343,7 @@ int Gate::route(double instr, double r1,double r2, double r3)
 	break;
        case 61:
        if(!ignore)
-           same(pkg);
+          same(pkg);
        if(scmnd && (!ignore))
         cout << ".addr:" << IP << " " <<  "same" << endl;
         break;
@@ -383,25 +353,25 @@ int Gate::route(double instr, double r1,double r2, double r3)
        break;
        case 63:
        if(!ignore)
-           sr(pkg);
+          sr(pkg);
        if(scmnd && (!ignore))
         cout << ".addr:" << IP << " " <<  "sr" << endl;
         break;
        case 64:
        if(!ignore)
-           sl(pkg);
+          sl(pkg);
        if(scmnd && (!ignore))
         cout << ".addr:" << IP << " " <<  "sl" << endl;
         break;
         case 65:
        if(!ignore)
-           r_mv(pkg);
+          r_mv(pkg);
        if(scmnd && (!ignore))
         cout << ".addr:" << IP << " " <<  "r_mv" << endl;
         break;
         case 66:
        if(!ignore)
-           cpuid();
+          cpuid();
        if(scmnd && (!ignore))
         cout << ".addr:" << IP << " " <<  "cpuid" << endl;
         break;
@@ -433,19 +403,19 @@ int Gate::route(double instr, double r1,double r2, double r3)
         break;
         case 70:
        if(!ignore)
-           rand_1(pkg);
+          rand_1(pkg);
        if(scmnd && (!ignore))
         cout << ".addr:" << IP << " " <<  "rand_1" << endl;
         break;
         case 71:
        if(!ignore)
-           rand_2(pkg);
+          rand_2(pkg);
        if(scmnd && (!ignore))
         cout << ".addr:" << IP << " " <<  "rand_2" << endl;
         break;
         case 72:
        if(!ignore)
-           rand_3(pkg);
+          rand_3(pkg);
        if(scmnd && (!ignore))
         cout << ".addr:" << IP << " " <<  "rand_3" << endl;
         break;
@@ -456,13 +426,13 @@ int Gate::route(double instr, double r1,double r2, double r3)
         break;
         case 78:
        if(!ignore)
-         loadc(pkg);
+          loadc(pkg);
        if(scmnd && (!ignore))
        cout << ".addr:" << IP << " " <<  "loadc" << endl;
          break;
          case 79:
        if(!ignore)
-         dload(pkg);
+          dload(pkg);
        if(scmnd && (!ignore))
        cout << ".addr:" << IP << " " <<  "dload" << endl;
        break;
@@ -520,17 +490,6 @@ int Gate::route(double instr, double r1,double r2, double r3)
        if(scmnd && (!ignore))
        cout << ".addr:" << IP << " " <<  "cp" << endl;
        break;
-       case 95:
-       if(!ignore)
-       {
-          if(run)
-             run = false;
-          else
-            run = true;
-       }  
-       if(scmnd && (!ignore))
-       cout << ".addr:" << IP << " " <<  "run" << endl;
-       break;
        case 96:
          _string(pkg);
        if(scmnd && (!ignore))
@@ -550,7 +509,6 @@ int Gate::route(double instr, double r1,double r2, double r3)
        break;
        default:
          if(!ignore){
-             Log lg;
              cout << "Segmentation Fault" << endl;
              stringstream ss;
              ss << "unknown command at {IP:" << _cpu.GetVirturalAddress() << "}. Shutting Down System...";

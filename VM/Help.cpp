@@ -7,11 +7,9 @@ using namespace std;
 /*
 * Scorpion VM Info
 */
-
 string Version = "0.0.19_3";
 string v_stage = "beta";
 
-// ----------------------------------
 
 #define NUM_OPTIONS 2
 string args[ NUM_OPTIONS ];

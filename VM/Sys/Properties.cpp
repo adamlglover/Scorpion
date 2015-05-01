@@ -31,7 +31,7 @@ void c_names()
   values[ 2 ] = "0.0.1";
   values[ 3 ] = "1";
   values[ 4 ] = "Core";
-  values[ 5 ] = "x86 Arm i1-400 CPU";
+  values[ 5 ] = "RMD Atrix X1 340K Cortex digital processor revision 2(8008)";
   values[ 6 ] = "VCT v1.0";
   values[ 7 ] = "Pi-C700";
   values[ 8 ] = "Raspberry Pi VM";
@@ -109,9 +109,9 @@ int Properties::SetProperty(string property, string value)
    if(property == "IP")
        values[ 9 ] = value;
    else if(property == "Serial #")
-        values[ 1 ] = value;
+       values[ 1 ] = value;
    else if(property == "RSID-Fingerprint")
-        values[ 0 ] = value;
+       values[ 0 ] = value;
    else {
        p_log.v("System","Err cannot modify property [" + property + "]");
      return bad();

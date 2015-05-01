@@ -37,7 +37,7 @@ int Logger::println(int priority,string tag,string message)
   else {
      stackmsg += currtime() + ":" + t_ch(priority) + "/" + tag + ": " + message + "\n";
      ofstream log_file ("/usr/share/scorpion/log.txt");
-     
+
      if (log_file.is_open())
     {
        log_file << stackmsg;
@@ -66,7 +66,7 @@ void Logger::init(bool to_file)
        log_file << stackmsg;
        log_file.close();
     }
-     else 
+     else
         cout << "scorpion: fatal err ocured unable to open log file!" << endl;
   }
 }

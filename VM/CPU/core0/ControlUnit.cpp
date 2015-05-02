@@ -151,6 +151,11 @@ int C0::GetVirturalAddress()
   return IP;
 }
 
+double C0::GetTime()
+{
+  return (double)(clock() - tStart)/CLOCKS_PER_SEC;
+}
+
 void C0::Interrupt(double offset)
 {
     if(_0Halted){

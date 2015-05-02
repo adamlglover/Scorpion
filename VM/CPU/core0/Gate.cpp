@@ -149,12 +149,6 @@ int Gate::route(double instr, double r1,double r2, double r3)
        if(scmnd && (!ignore))
        cout << ".addr:" << IP << " " <<  "loadbl" << endl;
        break;
-       case 22:
-       if(!ignore)
-         loadr(pkg);
-       if(scmnd && (!ignore))
-       cout << ".addr:" << IP << " " << "loadr" << endl;
-       break;
        case 24:
          push(pkg);
        if(scmnd && (!ignore))

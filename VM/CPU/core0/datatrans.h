@@ -5,7 +5,6 @@ void loadi(double *pkg);
 void loadbl(double *pkg);
 void loadc(double *pkg);
 void dload(double *pkg);
-void loadr(double *pkg);
 void mov(double *pkg);
 void rmov(double *pkg);
 void invoke(double *pkg);

@@ -65,8 +65,28 @@ void adr(double *pkg)
 void ct_int(double *pkg)
 {
    char a = core0.getr(0, pkg[1]);
-   int val = a - '0';
-   core0.setr(0, pkg[0], val);
+   if(a == '0')
+    core0.setr(0, pkg[0], 0);
+   else if (a == '1')
+    core0.setr(0, pkg[0], 1);
+   else if (a == '2')
+    core0.setr(0, pkg[0], 2);
+   else if (a == '3')
+    core0.setr(0, pkg[0], 3);
+   else if (a == '4')
+    core0.setr(0, pkg[0], 4);
+   else if (a == '5')
+    core0.setr(0, pkg[0], 5);
+   else if (a == '6')
+    core0.setr(0, pkg[0], 6);
+   else if (a == '7')
+    core0.setr(0, pkg[0], 7);
+   else if (a == '8')
+    core0.setr(0, pkg[0], 8);
+   else if (a == '9')
+    core0.setr(0, pkg[0], 9);
+   else
+    core0.setr(0, pkg[0], 0);
 }
 
 void anum(double *pkg)
@@ -102,7 +122,7 @@ void rln(double *pkg)//  length, start addr, excape  char,
          break;
           a = input.at(i);
           chr = (int) a;
-          core0.setr(0, s_addr + i, chr);
+          core0.setr(0, s_addr++, chr);
      }
        core0.setr(0, pkg[0], length);
    }
@@ -402,11 +422,6 @@ void _printf(double *pkg)
 }
 
 
-void loadr(double *pkg)
-{
-   core0.setr(0, pkg[0], core0.getr(0, pkg[1]));
-}
-
 int ibool(long);
 void loadbl(double *pkg)
 {
@@ -444,7 +459,7 @@ void dload(double *pkg)
    if(atof(dec.c_str()) == 21937856.0)
       core0.setr(0, pkg[0], null);
    else
-      core0.setr(0, pkg[0], atof(dec.c_str()));
+      core0.setr(0, pkg[0], (double) atof(dec.c_str()));
 }
 
 void loadf(double *pkg)
@@ -455,7 +470,7 @@ void loadf(double *pkg)
    if(atof(dec.c_str()) == 21937856)
       core0.setr(0, pkg[0], null);
    else
-      core0.setr(0, pkg[0], atof(dec.c_str()));
+      core0.setr(0, pkg[0], (float) atof(dec.c_str()));
 }
 
 void mov(double *pkg)
@@ -603,7 +618,7 @@ void rmov(double *pkg)
              if(pkg[1] == 20)
                LSL = EAX;
             else
-                   LSL =  (long) core0.getr(0, pkg[1]);
+              LSL =  (long) core0.getr(0, pkg[1]);
             break;
            case 28:
  	     if(pkg[1] == 20)
@@ -633,8 +648,20 @@ void rmov(double *pkg)
              if(pkg[1] == 20)
                TMP = EAX;
             else
-               TMP = (long) core0.getr(0, pkg[1]); 
+               TMP = (long) core0.getr(0, pkg[1]);
             break;
+           case 33:
+             if(pkg[1] == 20)
+               AI = EAX;
+            else
+              AI = (long) core0.getr(0, pkg[1]);
+           break;
+           case 34:
+            if(pkg[1] == 20)
+               IPI = EAX;
+            else
+              IPI = (long) core0.getr(0, pkg[1]);
+           break;
      }
 }
 
@@ -730,6 +757,40 @@ void invoke(double *pkg)
           SCX = arg_c - 2;
         }
        break;
+       case 42:
+        {
+          stringstream ss, ss1;
+          long start_addr = SDX + 1; // the tag
+          char ch;
+          for(int i = 0; i < core0.getr(0, SDX); i++){
+             ch = core0.getr(0, start_addr++);
+             if((ch == '\n') || (ch == ' ') || (ch == '\t') || (ch == 10)){ }
+             else
+               ss << ch;
+          }
+
+          start_addr = SCX + 1; // the tag
+          for(int i = 0; i < core0.getr(0, SCX); i++){
+             ch = core0.getr(0, start_addr++);
+             if((ch == '\n') || (ch == 10)){ }
+             else
+             ss1 << ch;
+          }
+
+          if(pkg[1] <= 2)
+           lg.v(ss.str(), ss1.str());
+          else if(pkg[1] == 3)
+           lg.d(ss.str(), ss1.str());
+          else if(pkg[1] == 4)
+           lg.i(ss.str(), ss1.str());
+          else if(pkg[1] == 5)
+           lg.w(ss.str(), ss1.str());
+          else if(pkg[1] == 6)
+           lg.e(ss.str(), ss1.str());
+          else
+           lg.a(ss.str(), ss1.str());
+        }
+       break;
        case 50: // read to a file
         {
           data[0] = pkg[1];
@@ -741,6 +802,22 @@ void invoke(double *pkg)
           data[0] = pkg[1];
           SCR = io.Write(1,data); // write to a file
         }
+       break;
+       case 94:
+        {
+          stringstream ss;
+          ss << core0.getr(0, SDX);
+          string num = ss.str();
+          long start_addr = SCX + 1; // the str
+          char ch;
+          for(int i = 0; i < num.length(); i++){
+             core0.setr(0, start_addr++, num.at(i));
+          }
+          core0.setr(0, SCX, num.length());
+        }
+       break;
+       case 250: // get total internal time the cpu has been running(in secs)
+          core0.setr(0, SDX, core0.GetTime());
        break;
        default:
        stringstream ss;

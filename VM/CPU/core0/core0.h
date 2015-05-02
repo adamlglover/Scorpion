@@ -31,6 +31,7 @@ extern bool waiting;
         int GetVirturalAddress();
         void Interrupt(double);
         void run0();
+        double GetTime();
    };
 
 extern C0 core0;

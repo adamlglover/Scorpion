@@ -114,7 +114,6 @@ void rln(double *pkg)//  length, start addr, excape  char,
      string input = "";
      getline(cin, input);
      length = input.length();
-     Ram ram;
      char a;
      int chr;
      for(int i = 0; i < input.length(); i++){
@@ -124,6 +123,31 @@ void rln(double *pkg)//  length, start addr, excape  char,
           chr = (int) a;
           core0.setr(0, s_addr++, chr);
      }
+       core0.setr(0, pkg[0], length);
+   }
+   else {
+     string input = "", tmp = "";
+     Ram ram;
+     char a = pkg[1];
+     int chr;
+     stringstream ss;
+     ss << a;
+      while (true) {
+       getline(cin, tmp);
+        if (tmp == ss.str()) {
+            break;
+        }
+        else
+         input += tmp + "\n";
+    }
+    for(int i = 0; i < input.length(); i++){
+       if(i > max)
+         break;
+          a = input.at(i);
+          chr = (int) a;
+          core0.setr(0, s_addr++, chr);
+     }
+      	 length = input.length();
        core0.setr(0, pkg[0], length);
    }
 }
@@ -477,7 +501,7 @@ void mov(double *pkg)
 {
       switch( (long) pkg[0] )
       {
-          case 20:
+          case 21:
 	    EBX = pkg[1];
            break;
   	   case 22:
@@ -585,82 +609,43 @@ void rmov(double *pkg)
      switch( (long) pkg[0] )
      {
           case 21:
-             if(pkg[1] == 20)
-               EBX = EAX;
-            else
-               EBX = (long) core0.getr(0, pkg[1]);
+               EBX = (long) reg_check_ret( pkg[1]);
            break;
            case 22:
-            if(pkg[1] == 20)
-               SDX = EAX;
-            else
-               SDX = (long) core0.getr(0, pkg[1]);
+               SDX = (long) reg_check_ret( pkg[1]);
            break;
            case 23:
-             if(pkg[1] == 20)
-               BP = EAX;
-            else
-               BP = (long) core0.getr(0, pkg[1]);
+               BP = (long) reg_check_ret( pkg[1]);
            break;
            case 24:
-	     if(pkg[1] == 20)
-               EXC = EAX;
-            else
-                EXC = (long) core0.getr(0, pkg[1]);
+               EXC = (long) reg_check_ret( pkg[1]);
            break;
            case 26:
-	     if(pkg[1] == 20)
-               LG = EAX;
-            else
-               LG = (long) core0.getr(0, pkg[1]);
+               LG = (long) reg_check_ret( pkg[1]);
            break;
            case 27:
-             if(pkg[1] == 20)
-               LSL = EAX;
-            else
-              LSL =  (long) core0.getr(0, pkg[1]);
+              LSL =  (long) reg_check_ret( pkg[1]);
             break;
            case 28:
- 	     if(pkg[1] == 20)
-               SFC = EAX;
-            else
-               SFC = (long) core0.getr(0, pkg[1]);
+               SFC = (long) reg_check_ret( pkg[1]);
            break;
            case 29:
-	     if(pkg[1] == 20)
-               SCX = EAX;
-            else
-                SCX = (long) core0.getr(0, pkg[1]);
+               SCX = (long) reg_check_ret( pkg[1]);
            break;
            case 30:
-             if(pkg[1] == 20)
-               I1 = EAX;
-            else
-               I1 = (long) core0.getr(0, pkg[1]);
+               I1 = (long) reg_check_ret( pkg[1]);
            break;
            case 31:
-             if(pkg[1] == 20)
-               I2 = EAX;
-            else
-               I2 = (long) core0.getr(0, pkg[1]);
+               I2 = (long) reg_check_ret( pkg[1]);
            break;
            case 32:
-             if(pkg[1] == 20)
-               TMP = EAX;
-            else
-               TMP = (long) core0.getr(0, pkg[1]);
+               TMP = (long) reg_check_ret( pkg[1]);
             break;
            case 33:
-             if(pkg[1] == 20)
-               AI = EAX;
-            else
-              AI = (long) core0.getr(0, pkg[1]);
+              AI = (long) reg_check_ret( pkg[1]);
            break;
            case 34:
-            if(pkg[1] == 20)
-               IPI = EAX;
-            else
-              IPI = (long) core0.getr(0, pkg[1]);
+              IPI = (long) reg_check_ret( pkg[1]);
            break;
      }
 }
@@ -748,7 +733,7 @@ void invoke(double *pkg)
        case 35:
         {
           core0.setr(0, SDX, prog_args.length());
-          long start_addr = SCX;
+          long start_addr = SDX;
           int ch;
           for(int i = 0; i < prog_args.length(); i++){
              ch = prog_args.at(i);
@@ -907,7 +892,7 @@ void _return(double *pkg)
 void call(double *pkg)
 {
     TMP = IP;
-    IP = (long) core0.getr(0, pkg[0]);
+    IP = (long) core0.getr(0,  pkg[0]);
     core0.setr(0, pkg[0], TMP);
 }
 
@@ -978,7 +963,7 @@ void endl(double *pkg)
 
 void _do(double *pkg)
 {
-   if(core0.getr(0, pkg[0]) == 1){}
+   if(reg_check_ret( pkg[0]) == 1){}
    else {
      if_ignore = true;
      ignore = true;
@@ -987,7 +972,7 @@ void _do(double *pkg)
 
 void ilt(double *pkg)
 {
-   if(core0.getr(0, pkg[0]) < core0.getr(0, pkg[1])){}
+   if(reg_check_ret(pkg[0]) < reg_check_ret( pkg[1])){}
    else {
      if_ignore = true;
      ignore = true;
@@ -996,7 +981,7 @@ void ilt(double *pkg)
 
 void igt(double *pkg)
 {
-   if(core0.getr(0, pkg[0]) > core0.getr(0, pkg[1])){}
+   if(reg_check_ret( pkg[0]) > reg_check_ret( pkg[1])){}
    else {
      if_ignore = true;
      ignore = true;
@@ -1005,7 +990,7 @@ void igt(double *pkg)
 
 void ile(double *pkg)
 {
-   if(core0.getr(0, pkg[0]) <= core0.getr(0, pkg[1])){}
+   if(reg_check_ret( pkg[0]) <= reg_check_ret( pkg[1])){}
    else {
      if_ignore = true;
      ignore = true;
@@ -1014,7 +999,7 @@ void ile(double *pkg)
 
 void ige(double *pkg)
 {
-   if(core0.getr(0, pkg[0]) >= core0.getr(0, pkg[1])){}
+   if(reg_check_ret( pkg[0]) >= reg_check_ret( pkg[1])){}
    else {
      if_ignore = true;
      ignore = true;
@@ -1023,7 +1008,7 @@ void ige(double *pkg)
 
 void ndo(double *pkg)
 {
-   if(core0.getr(0, pkg[0]) == 0){}
+   if(reg_check_ret( pkg[0]) == 0){}
    else {
      if_ignore = true;
      ignore = true;
@@ -1032,7 +1017,7 @@ void ndo(double *pkg)
 
 void inlt(double *pkg)
 {
-   if(!(core0.getr(0, pkg[0]) < core0.getr(0, pkg[1]))){}
+   if(!(reg_check_ret( pkg[0]) < reg_check_ret( pkg[1]))){}
    else {
      if_ignore = true;
      ignore = true;
@@ -1041,7 +1026,7 @@ void inlt(double *pkg)
 
 void ingt(double *pkg)
 {
-   if(!(core0.getr(0, pkg[0]) > core0.getr(0, pkg[1]))){}
+   if(!(reg_check_ret( pkg[0]) > reg_check_ret( pkg[1]))){}
    else {
      if_ignore = true;
      ignore = true;
@@ -1084,7 +1069,7 @@ void t_cast(double *pkg)
 
 void inle(double *pkg)
 {
-   if(!(core0.getr(0, pkg[0]) <= core0.getr(0, pkg[1]))){}
+   if(!(reg_check_ret( pkg[0]) <= reg_check_ret( pkg[1]))){}
    else {
      if_ignore = true;
      ignore = true;
@@ -1093,7 +1078,7 @@ void inle(double *pkg)
 
 void inge(double *pkg)
 {
-   if(!(core0.getr(0, pkg[0]) >= core0.getr(0, pkg[1]))){}
+   if(!(reg_check_ret( pkg[0]) >= reg_check_ret( pkg[1]))){}
    else {
      if_ignore = true;
      ignore = true;
@@ -1104,12 +1089,12 @@ void neg(double *pkg){
     RuntimeException re;
     if(I1 == INT || I1 == DOUBLE
            || I1 == SHORT || I1 == FLOAT)
-      core0.setr(0, pkg[0], (core0.getr(0, pkg[0]) * -1));
+      reg_check_set( pkg[0], (reg_check_ret( pkg[0]) * -1));
     else if(I1 == BOOL){
-        if(core0.getr(0, pkg[0]) == 0)
-           core0.setr(0, pkg[0], 1);
-        else if(core0.getr(0, pkg[0]) == 1)
-           core0.setr(0, pkg[0], 0);
+        if(reg_check_ret( pkg[0]) == 0)
+           reg_check_set( pkg[0], 1);
+        else if(reg_check_ret( pkg[0]) == 1)
+           reg_check_set( pkg[0], 0);
     }
     else
        re.introduce("UnsatisfiedTypeException","must specify correct type to be inverted");

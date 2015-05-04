@@ -8,22 +8,22 @@
 using namespace std;
 
 long _char(long);
-void add(double *pkg)
+void add(double *pkg)// add <eax><const><const> | add <reg><mem> | add <mem><reg> | add <reg><reg> | add <reg> <reg><reg> reg_check_ret(
 {
   if(pkg[0] == 20)
        EAX = pkg[1] + pkg[2];
    else
    {
       if(I1 == DOUBLE)// double addition
-         core0.setr(0, pkg[0], core0.getr(0, pkg[1]) + core0.getr(0, pkg[2]));
+         reg_check_set( pkg[0], reg_check_ret(pkg[1]) + reg_check_ret(pkg[2]));
       else if(I1 == FLOAT)// float addition
-         core0.setr(0, pkg[0], ((float) core0.getr(0, pkg[1]) + core0.getr(0, pkg[2])));
+         reg_check_set(pkg[0], ((float) reg_check_ret(pkg[1]) + reg_check_ret(pkg[2])) );
       else if(I1 == INT)// int addition
-         core0.setr(0, pkg[0], ((long) core0.getr(0, pkg[1]) + core0.getr(0, pkg[2])));
+         reg_check_set( pkg[0], ((long) reg_check_ret(pkg[1]) + reg_check_ret(pkg[2]) ));
       else if(I1 == SHORT)// short addition
-         core0.setr(0, pkg[0], ((int) core0.getr(0, pkg[1]) + core0.getr(0, pkg[2])));
+         reg_check_set( pkg[0], ((int) reg_check_ret(pkg[1]) + reg_check_ret(pkg[2]) ));
       else // int addition
-         core0.setr(0, pkg[0], ((long) core0.getr(0, pkg[1]) + core0.getr(0, pkg[2])));
+         reg_check_set( pkg[0], ((long) reg_check_ret(pkg[1]) + reg_check_ret(pkg[2]) ));
    }
 }
 
@@ -33,16 +33,16 @@ void sr(double *pkg)
        EAX = EAX >> (long) SDX;
    else {
        if(I1 == INT){
-         long right = (long) core0.getr(1, pkg[0]) >> (short) SDX;
-         core0.setr(0, pkg[0], right);
+         long right = (long) reg_check_ret(pkg[0]) >> (short) SDX;
+         reg_check_set(pkg[0], right);
        }
        else if(I1 == SHORT){
-         int right = (int) core0.getr(1, pkg[0]) >> (short) SDX;
-         core0.setr(0, pkg[0], right);
+         int right = (int) reg_check_ret(pkg[0]) >> (short) SDX;
+         reg_check_set(pkg[0], right);
        }
        else {
-         long right = (long) core0.getr(1, pkg[0]) >> (short) SDX;
-         core0.setr(0, pkg[0], right);
+         long right = (long) reg_check_ret(pkg[0]) >> (short) SDX;
+         reg_check_set(pkg[0], right);
        }
    }
 }
@@ -52,17 +52,17 @@ void sl(double *pkg)
    if(pkg[0] == 20)
        EAX = EAX << (long) SDX;
    else {
-       if(I1 == INT){
-         long right = (long) core0.getr(1, pkg[0]) << (short) SDX;
-         core0.setr(0, pkg[0], right);
+        if(I1 == INT){
+         long right = (long) reg_check_ret(pkg[0]) << (short) SDX;
+         reg_check_set(pkg[0], right);
        }
        else if(I1 == SHORT){
-         int right = (int) core0.getr(1, pkg[0]) << (short) SDX;
-         core0.setr(0, pkg[0], right);
+         int right = (int) reg_check_ret(pkg[0]) << (short) SDX;
+         reg_check_set(pkg[0], right);
        }
        else {
-         long right = (long) core0.getr(1, pkg[0]) << (short) SDX;
-         core0.setr(0, pkg[0], right);
+         long right = (long) reg_check_ret(pkg[0]) << (short) SDX;
+         reg_check_set(pkg[0], right);
        }
    }
 }
@@ -112,28 +112,19 @@ long rand3(long lim)
 void rand_1(double *pkg)
 {
   double offset = rand() % 4;
-  if(pkg[1] > 5)
-     core0.setr(0, pkg[0], _catch(rand1(pkg[1]) - offset));
-  else
-     core0.setr(0, pkg[0], _catch(rand1(pkg[1])));
+     EAX = _catch(rand1(SDX) - offset);
 }
 
 void rand_2(double *pkg)
 {
   double offset = rand() % 4;
-  if(pkg[1] > 5)
-     core0.setr(0, pkg[0], _catch(rand2(pkg[1], pkg[2]) - offset));
-  else
-     core0.setr(0, pkg[0], _catch(rand2(pkg[1], pkg[2])));
+     EAX = _catch(rand2(SDX, SCX) - offset);
 }
 
 void rand_3(double *pkg)
 {
   double offset = rand() % 4;
-  if(pkg[1] > 5)
-     core0.setr(0, pkg[0], _catch(rand3(pkg[1]) - offset));
-  else
-     core0.setr(0, pkg[0], _catch(rand3(pkg[1])));
+     EAX =  _catch(rand3(SDX) - offset);
 }
 
 void sub(double *pkg)
@@ -142,16 +133,16 @@ void sub(double *pkg)
        EAX = pkg[1] - pkg[2];
    else
    {
-      if(I1 == DOUBLE)// double addition
-         core0.setr(0, pkg[0], core0.getr(0, pkg[1]) - core0.getr(0, pkg[2]));
+       if(I1 == DOUBLE)// double addition
+         reg_check_set( pkg[0], reg_check_ret(pkg[1]) - reg_check_ret(pkg[2]));
       else if(I1 == FLOAT)// float addition
-         core0.setr(0, pkg[0], ((float) core0.getr(0, pkg[1]) - core0.getr(0, pkg[2])));
+         reg_check_set(pkg[0], ((float) reg_check_ret(pkg[1]) - reg_check_ret(pkg[2])) );
       else if(I1 == INT)// int addition
-         core0.setr(0, pkg[0], ((long) core0.getr(0, pkg[1]) - core0.getr(0, pkg[2])));
+         reg_check_set( pkg[0], ((long) reg_check_ret(pkg[1]) - reg_check_ret(pkg[2]) ));
       else if(I1 == SHORT)// short addition
-         core0.setr(0, pkg[0], ((int) core0.getr(0, pkg[1]) - core0.getr(0, pkg[2])));
+         reg_check_set( pkg[0], ((int) reg_check_ret(pkg[1]) - reg_check_ret(pkg[2]) ));
       else // int addition
-         core0.setr(0, pkg[0], ((long) core0.getr(0, pkg[1]) - core0.getr(0, pkg[2])));
+         reg_check_set( pkg[0], ((long) reg_check_ret(pkg[1]) - reg_check_ret(pkg[2]) ));
    }
 }
 
@@ -161,7 +152,7 @@ void inc(double *pkg)
        EAX++;
    else
     {
-       core0.setr(0, pkg[0], (core0.getr(0, pkg[0]) + 1));
+       reg_check_set(pkg[0], (reg_check_ret(pkg[0]) + 1));
     }
 }
 
@@ -171,7 +162,7 @@ void dec(double *pkg)
        EAX--;
    else
     {
-       core0.setr(0, pkg[0], (core0.getr(0, pkg[0]) - 1));
+       reg_check_set(pkg[0], (reg_check_ret(pkg[0]) - 1));
     }
 }
 
@@ -181,16 +172,16 @@ void mult(double *pkg)
        EAX = pkg[1] * pkg[2];
    else
    {
-      if(I1 == DOUBLE)// double addition
-         core0.setr(0, pkg[0], core0.getr(0, pkg[1]) * core0.getr(0, pkg[2]));
+       if(I1 == DOUBLE)// double addition
+         reg_check_set( pkg[0], reg_check_ret(pkg[1]) * reg_check_ret(pkg[2]));
       else if(I1 == FLOAT)// float addition
-         core0.setr(0, pkg[0], ((float) core0.getr(0, pkg[1]) * core0.getr(0, pkg[2])));
+         reg_check_set(pkg[0], ((float) reg_check_ret(pkg[1]) * reg_check_ret(pkg[2])) );
       else if(I1 == INT)// int addition
-         core0.setr(0, pkg[0], ((long) core0.getr(0, pkg[1]) * core0.getr(0, pkg[2])));
+         reg_check_set( pkg[0], ((long) reg_check_ret(pkg[1]) * reg_check_ret(pkg[2]) ));
       else if(I1 == SHORT)// short addition
-         core0.setr(0, pkg[0], ((int) core0.getr(0, pkg[1]) * core0.getr(0, pkg[2])));
+         reg_check_set( pkg[0], ((int) reg_check_ret(pkg[1]) * reg_check_ret(pkg[2]) ));
       else // int addition
-         core0.setr(0, pkg[0], ((long) core0.getr(0, pkg[1]) * core0.getr(0, pkg[2])));
+         reg_check_set( pkg[0], ((long) reg_check_ret(pkg[1]) * reg_check_ret(pkg[2]) ));
    }
 }
 
@@ -200,16 +191,16 @@ void div(double *pkg)
        EAX = pkg[1] / pkg[2];
    else
    {
-      if(I1 == DOUBLE)// double addition
-         core0.setr(0, pkg[0], core0.getr(0, pkg[1]) / core0.getr(0, pkg[2]));
+       if(I1 == DOUBLE)// double addition
+         reg_check_set( pkg[0], reg_check_ret(pkg[1]) / reg_check_ret(pkg[2]));
       else if(I1 == FLOAT)// float addition
-         core0.setr(0, pkg[0], ((float) core0.getr(0, pkg[1]) / core0.getr(0, pkg[2])));
+         reg_check_set(pkg[0], ((float) reg_check_ret(pkg[1]) / reg_check_ret(pkg[2])) );
       else if(I1 == INT)// int addition
-         core0.setr(0, pkg[0], ((long) core0.getr(0, pkg[1]) / core0.getr(0, pkg[2])));
+         reg_check_set( pkg[0], ((long) reg_check_ret(pkg[1]) / reg_check_ret(pkg[2]) ));
       else if(I1 == SHORT)// short addition
-         core0.setr(0, pkg[0], ((int) core0.getr(0, pkg[1]) / core0.getr(0, pkg[2])));
+         reg_check_set( pkg[0], ((int) reg_check_ret(pkg[1]) / reg_check_ret(pkg[2]) ));
       else // int addition
-         core0.setr(0, pkg[0], ((long) core0.getr(0, pkg[1]) / core0.getr(0, pkg[2])));
+         reg_check_set( pkg[0], ((long) reg_check_ret(pkg[1]) / reg_check_ret(pkg[2]) ));
    }
 }
 
@@ -219,15 +210,15 @@ void rem(double *pkg)
        EAX = ((long) pkg[1]) % ((long) pkg[2]);
    else
    {
-      if(I1 == DOUBLE)// double addition
-         core0.setr(0, pkg[0], fmod(core0.getr(0, pkg[1]), core0.getr(0, pkg[2])));
+       if(I1 == DOUBLE)// double addition
+         reg_check_set( pkg[0], fmod(reg_check_ret(pkg[1]), reg_check_ret(pkg[2])));
       else if(I1 == FLOAT)// float addition
-         core0.setr(0, pkg[0], fmod(core0.getr(0, pkg[1]), core0.getr(0, pkg[2])));
+         reg_check_set(pkg[0], ((float) fmod(reg_check_ret(pkg[1]), reg_check_ret(pkg[2]))) );
       else if(I1 == INT)// int addition
-         core0.setr(0, pkg[0], ((long) core0.getr(0, pkg[1]) % (long) core0.getr(0, pkg[2])));
+         reg_check_set( pkg[0], ((long) reg_check_ret(pkg[1]) % (long) reg_check_ret(pkg[2]) ));
       else if(I1 == SHORT)// short addition
-         core0.setr(0, pkg[0], ((int) core0.getr(0, pkg[1]) % (int) core0.getr(0, pkg[2])));
+         reg_check_set( pkg[0], ((int) reg_check_ret(pkg[1]) % (int) reg_check_ret(pkg[2]) ));
       else // int addition
-         core0.setr(0, pkg[0], ((long) core0.getr(0, pkg[1]) % (long) core0.getr(0, pkg[2])));
+         reg_check_set( pkg[0], ((long) reg_check_ret(pkg[1]) % (long) reg_check_ret(pkg[2]) ));
    }
 }

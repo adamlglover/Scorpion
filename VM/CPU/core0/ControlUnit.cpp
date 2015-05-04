@@ -71,6 +71,113 @@ bool reverse(bool cstate)
       return false;
 }
 
+double reg_check_ret(long addr)
+{
+   switch( addr )
+      {
+          case 20:
+            return EAX;
+          break;
+          case 21:
+            return EBX;
+           break;
+           case 22:
+            return SDX;
+           break;
+           case 23:
+            return BP;
+           break;
+           case 24:
+            return EXC;
+           break;
+           case 25:
+            return PS;
+           break;
+           case 26:
+            return LG;
+           break;
+           case 27:
+            return LSL;
+           break;
+           case 28:
+            return SFC;
+           break;
+           case 29:
+            return SCX;
+           break;
+           case 30:
+            return I1;
+           break;
+           case 31:
+            return I2;
+           break;
+           case 32:
+            return TMP;
+           break;
+           case 33:
+            return AI;
+           break;
+           case 34:
+            return IPI;
+           break;
+           default:
+            return core0.getr(0, addr);
+           break;
+      }
+}
+
+void reg_check_set(long addr, double data)
+{
+     switch( addr )
+      {
+          case 20:
+            EBX = (long) data;
+           break;
+           case 22:
+            SDX = (long) data;
+           break;
+           case 23:
+            BP = (long) data;
+           break;
+           case 24:
+            EXC = (long) data;
+           break;
+           case 25:
+            PS = (long) data;
+           break;
+           case 26:
+            LG = (long) data;
+           break;
+           case 27:
+            LSL = (long) data;
+           break;
+           case 28:
+            SFC = (long) data;
+           break;
+           case 29:
+            SCX = (long) data;
+           break;
+           case 30:
+            I1 = (long) data;
+           break;
+           case 31:
+            I2 = (long) data;
+           break;
+           case 32:
+            TMP = (long) data;
+           break;
+           case 33:
+            AI = (long) data;
+           break;
+           case 34:
+            IPI = (long) data;
+           break;
+           default:
+            core0.setr(0, addr, data);
+           break;
+    }
+}
+
 bool C0::ACTIVE()
 {
   return reverse(_0Halted);

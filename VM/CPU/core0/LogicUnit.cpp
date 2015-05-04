@@ -85,7 +85,7 @@ void nand_l(double *pkg)
        EAX = _nand(ibool(pkg[1]),ibool(pkg[2]));
    else
    {
-       core0.setr(0, pkg[0], _nand(ibool(core0.getr(0, pkg[1])),ibool(core0.getr(0, pkg[2]))));
+       reg_check_set( pkg[0], _nand(ibool(reg_check_ret(pkg[1])),ibool(reg_check_ret(pkg[2]))));
    }
 }
 
@@ -95,7 +95,7 @@ void nor_l(double *pkg)
      EAX = _nor(ibool(pkg[1]),ibool(pkg[2]));
    else
    {
-       core0.setr(0, pkg[0], _nor(ibool(core0.getr(0, pkg[1])),ibool(core0.getr(0, pkg[2]))));
+       reg_check_set(pkg[0], _nor(ibool(reg_check_ret(pkg[1])),ibool(reg_check_ret(pkg[2]))));
    }
 }
 
@@ -105,7 +105,7 @@ void xnor_l(double *pkg)
        EAX = _xnor(ibool(pkg[1]),ibool(pkg[2]));
    else 
    {
-       core0.setr(0, pkg[0], _xnor(ibool(core0.getr(0, pkg[1])),ibool(core0.getr(0, pkg[2]))));
+       reg_check_set(pkg[0], _xnor(ibool(reg_check_ret( pkg[1])),ibool(reg_check_ret( pkg[2]))));
    }
 }
 
@@ -115,7 +115,7 @@ void and_l(double *pkg)
       EAX = _and(ibool(pkg[1]),ibool(pkg[2]));
    else
    {
-      core0.setr(0, pkg[0], _and(ibool(core0.getr(0, pkg[1])),ibool(core0.getr(0, pkg[2]))));
+      reg_check_set( pkg[0], _and(ibool(reg_check_ret(pkg[1])),ibool(reg_check_ret(pkg[2]))));
    }
 }
 
@@ -125,7 +125,7 @@ void or_l(double *pkg)
      EAX = _or(ibool(pkg[1]),ibool(pkg[2]));
    else
    {
-      core0.setr(0, pkg[0], _or(ibool(core0.getr(0, pkg[1])),ibool(core0.getr(0, pkg[2]))));
+      reg_check_set( pkg[0], _or(ibool(reg_check_ret( pkg[1])),ibool(reg_check_ret( pkg[2]))));
    }
 }
 
@@ -135,7 +135,7 @@ void xor_l(double *pkg)
       EAX = _xor(ibool(pkg[1]),ibool(pkg[2]));
    else 
    {
-       core0.setr(0, pkg[0], _xor(ibool(core0.getr(0, pkg[1])),ibool(core0.getr(0, pkg[2]))));
+       reg_check_set(pkg[0], _xor(ibool(reg_check_ret(pkg[1])),ibool(reg_check_ret(pkg[2]))));
    }
 }
 
@@ -145,6 +145,6 @@ void not_l(double *pkg)
       EAX = _not(ibool(pkg[1]));
    else
    {
-       core0.setr(0, pkg[0], _not(ibool(core0.getr(0, pkg[1]))));
+        reg_check_set( pkg[0], _not(ibool(reg_check_ret(pkg[1]))));
    }
 }

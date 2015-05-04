@@ -3,9 +3,8 @@
 #include "../../GPIO/gpio.h"
 #include <string>
 #include <iostream>
-#include <string>
-#include <iostream>
 #include <fstream>
+#include <sstream>
 
 using namespace std;
 
@@ -15,7 +14,7 @@ extern bool file_exists(const char *file);
 int ibool(long);
 
 string file_name = "";
-ofstream stream;
+std::ofstream stream;
 long InputOutput::Write(int device,  long *data)
 {
    switch( device ) {
@@ -28,7 +27,7 @@ long InputOutput::Write(int device,  long *data)
          {
             if(file_exists(file_name.c_str())){
                const char *f = file_name.c_str();
-               stream.open(f, std::ofstream::out);
+               stream.open(f);
                if (stream.is_open())
                  return 1;
                else

@@ -5,11 +5,11 @@
 
 1. Setting things up
 2. [Introduction](https://github.com/AndroDevcd/Scorpion/blob/master/docs/Introduction.md#Introduction)
-    * 2.1. [Invoking the Interpreter](https://github.com/AndroDevcd/Scorpion/blob/master/docs/Introduction.md#11-invoking-the-interpreter)
-    * 2.2. [A simple explination](https://github.com/AndroDevcd/Scorpion/blob/master/docs/Introduction.md#12-a-simple-explanation)
+    * [2.1. Invoking the Interpreter](https://github.com/AndroDevcd/Scorpion/blob/master/docs/Introduction.md#11-invoking-the-interpreter)
+    * [2.2. A simple explination](https://github.com/AndroDevcd/Scorpion/blob/master/docs/Introduction.md#12-a-simple-explanation)
        * [2.2.1. Memory](https://github.com/AndroDevcd/Scorpion/blob/master/docs/Introduction.md#121-memory)
-       * 2.2.2. [The Digital processor](https://github.com/AndroDevcd/Scorpion/blob/master/docs/Introduction.md#122-the-digital-processor)
-    * 2.3. [The syntax](https://github.com/AndroDevcd/Scorpion/blob/master/docs/Introduction.md#23-the-syntax)   
+       * [2.2.2. The Digital processor](https://github.com/AndroDevcd/Scorpion/blob/master/docs/Introduction.md#122-the-digital-processor)
+    * [2.3. The syntax](https://github.com/AndroDevcd/Scorpion/blob/master/docs/Introduction.md#23-the-syntax)   
 3. Beginning with Scorpion programming
     * 3.1. Comments
        * 3.1.1. Avoiding errors

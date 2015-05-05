@@ -4,12 +4,12 @@
 ### Tabel of Contents
 
 1. Setting things up
-2. Introduction
-    * 2.1. Invoking the Interpreter
-    * 2.2. A simple explination
-       * 2.2.1. Memory
-       * 2.2.2. The Digital processor
-    * 2.3. The syntax   
+2. [Introduction](https://github.com/AndroDevcd/Scorpion/blob/master/docs/Introduction.md#Introduction)
+    * 2.1. [Invoking the Interpreter](https://github.com/AndroDevcd/Scorpion/blob/master/docs/Introduction.md#invoking-the-interpreter)
+    * 2.2. [A simple explination](https://github.com/AndroDevcd/Scorpion/blob/master/docs/Introduction.md#a-simple-explination)
+       * [2.2.1. Memory](https://github.com/AndroDevcd/Scorpion/blob/master/docs/Introduction.md#memory)
+       * 2.2.2. [The Digital processor](https://github.com/AndroDevcd/Scorpion/blob/master/docs/Introduction.md#the-digital-processor)
+    * 2.3. [The syntax](https://github.com/AndroDevcd/Scorpion/blob/master/docs/Introduction.md#the-syntax)   
 3. Beginning with Scorpion programming
     * 3.1. Comments
        * 3.1.1. Avoiding errors

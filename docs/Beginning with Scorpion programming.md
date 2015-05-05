@@ -68,10 +68,28 @@ DO NOT insert a physical new line inside in a string literal otherwise the assem
 In Scorpion, data types are considered eleements. Each element has rules and restrictions that define the element. There are a total of  7 different element types(short, int, double, float, bool, char, string).
 
 #### 3.3.1. Numbers
-We will discuss the number element types. Each numeric element type has a max and min. value of data that it holds.
+We will discuss the number element types. Each numeric element type has a max and min. value of data that it can hold.
 
-            short: max: 65,243  min: -65,243
-            int: 
+            short: max: 32,767  min: -32,767
+              int: max: 2147483647 min: -2147483647
+           double: max: 1.7*10^308 min: -1.7*10^308
+            float: max: 1.175494351e–38F min: -1.175494351e–38F
+            
+The short element holds a very small ammount of data for simple math calculations. Assigning an element type is simple, you first choose your element, then pick a lable(more on labels below), then assign a value. Below is an example of this process.
 
+           sload  cats   5   
+             ^     ^     ^
+          element  label value
+          
+A label is simply a refrence name that you give that points to a unique address in the ram that holds a value(basically a variable). For instance: the label cats may point to addr (@193 -> 5) which holds 5. The instruction that is used to load a short value to a label is 'sload'. These rules also apply the same to all the other numeric element types.
+
+          ; load a double
+          dload pi 3.14159357 ; if you put 3 the number will be 3.0
+          
+          ; load a float
+          loadf inches 12.3295  ; if you put 12 the number will be 12.0
+          
+          ; loadi a int
+          loadi apples 6 ; if you put 6.2442, the number will be truncated to 6
 
 

@@ -5,7 +5,7 @@ Each virturalized hardware part of the machine is quantified into the groups bel
 
 ##### Systems
 
- * [MMC4080(Multifunctional Micro Computer)](https://github.com/AndroDevcd/Scorpion/edit/master/LINEUP.md#mmc4080)
+ * [MMC4080(Multifunctional Micro Computer)](https://github.com/AndroDevcd/Scorpion/blob/master/LINEUP.md#mmc4080)
  
 ##### Micro processors
 

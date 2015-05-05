@@ -54,4 +54,16 @@ that is on your device.
 If you are more interested in learning about this virtual ram chip, see: "Advanced Memory Concepts" to learn more.
 
 #### 1.2.2 The Digital processor
-The Scorpion Virtual Machine provides a Digital processor or virtual cpu that works as the heart of the SRE (Scorpion Runtime Environment). This virtual cpu is what you will be programming to do everything from performing simple math to processing a txt file. This digital processor emulates how a real microprocessor would operate and gives the end user a similar experience as the dedicated hardware would provide. When programming in Scorpion, you will be learning this "digital processor" and how it works to use it's capabilities to your advantage to program it to do just about anything you would want it to do.
+The Scorpion Virtual Machine provides a Digital processor or virtual cpu that works as the heart of the SRE (Scorpion Runtime Environment). This virtual cpu is what you will be programming to do everything from performing simple math to processing a txt file. This digital processor emulates how a real microprocessor would operate and gives the end user a similar experience as the dedicated hardware would provide. When programming in Scorpion, you will be learning this "digital processor" and how it works to use its capabilities to your advantage to program it to do just about anything you would want it to do.
+
+## 2.3 The syntax
+Scorpion is very similar to assembly programming language while allowing for a much more friendly and simple syntax. The source code depicted throughout the guide is fully executable by the assembler and can be ran on the Scorpion VM with no errors at all. Below is an example of some of the program examples you may see throughout the guide:
+
+         dload pi 3.1415937
+          .main:
+             print 'Hello World!/n' 
+             print 'pi is: <do,pi>'
+             ret
+
+          call main
+          halt

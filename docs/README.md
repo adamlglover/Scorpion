@@ -4,7 +4,6 @@
 ### Tabel of Contents
 1. Introduction
     * 1.1. Invoking the Interpreter
-       * 1.1.1. Argument Passing
     * 1.2. A simple explination
        * 1.2.1. Memory
        * 1.2.2. The Digital processor

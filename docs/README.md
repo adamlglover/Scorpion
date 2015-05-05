@@ -12,21 +12,22 @@
     * [2.3. The syntax](https://github.com/AndroDevcd/Scorpion/blob/master/docs/Introduction.md#23-the-syntax)   
 3. Beginning with Scorpion programming
     * 3.1. Comments
-       * 3.1.1. Avoiding errors
-    * 3.2. The print command
+    * 3.2. The print instruction
     * 3.3 Basic elements
        * 3.3.1. Numbers
        * 3.3.2. Strings
-       * 3.3.2. Conditonal elements
+       * 3.3.3. Conditonal elements
+       * 3.3.4. Printing element values
 4. Control flow tools
     * 4.1. if statements
-    * 4.2. for statements
+    * 4.2. for loops, while loops, and std loops
     * 4.3. Arithmetic commands
     * 4.4. Defining functions
 5. Data Structures
 6. Importing modules
 7. Input and Output
     * 7.1 Logging
+    * 7.2 Concurrent & Non-Concurrent Threading
     * 7.2 File I/O
     * 7.3 Hardware I/O
 8. Errors and Exceptions

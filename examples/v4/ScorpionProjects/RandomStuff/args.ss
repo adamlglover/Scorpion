@@ -13,12 +13,7 @@ loadi ref 0
   printf 'The argument count is: <r,argc> the argument str_size is: <r,str>/n'
   
   loadi ref 990000
-  print 'program args >> '
-  rloop parse loop_b str
-     rload char ref
-     printf '<c,char>'
-     inc ref
-  endl parse loop_b
+  printf 'program args >> <str,str>'
 
   print '/n'
   ret

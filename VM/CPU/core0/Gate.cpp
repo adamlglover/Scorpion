@@ -501,6 +501,24 @@ int Gate::route(double instr, double r1,double r2, double r3)
        if(scmnd && (!ignore))
        cout << ".addr:" << IP << " " <<  "r_load" << endl;
        break;
+       case 99:
+       if(!ignore)
+         strcp(pkg);
+       if(scmnd && (!ignore))
+       cout << ".addr:" << IP << " " <<  "strcp" << endl;
+       break;
+       case 100:
+       if(!ignore)
+         e2str(pkg);
+       if(scmnd && (!ignore))
+       cout << ".addr:" << IP << " " <<  "e2str" << endl;
+       break; // strcpi
+        case 101:
+       if(!ignore)
+         strcpi(pkg);
+       if(scmnd && (!ignore))
+       cout << ".addr:" << IP << " " <<  "strcpi" << endl;
+       break;
        default:
          if(!ignore){
              cout << "Segmentation Fault" << endl;

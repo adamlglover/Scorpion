@@ -10,7 +10,7 @@ import 'C:\Users\Braxton\Desktop\ScorpionProjects\Ultra\src\setup.ss'
 
 call setup
 
-print 'sending wave'
+print 'sending wave/n'
 call trigger 
 
 call dist

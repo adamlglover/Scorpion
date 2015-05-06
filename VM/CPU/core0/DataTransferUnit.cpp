@@ -49,6 +49,67 @@ void cp(double *pkg)
    core0.setr(0, pkg[0], core0.getr(0, pkg[1]));
 }
 
+int tibool(bool val);
+void strcp(double *pkg)
+{
+   stringstream ss, ss1;
+   long start_addr = SDX + 1; // string 1
+   char ch;
+   for(int i = 0; i < core0.getr(0, SDX); i++){
+        ch = core0.getr(0, start_addr++);
+        ss << ch;
+   }
+
+   start_addr = SCX + 1; // string 2
+   for(int i = 0; i < core0.getr(0, SCX); i++){
+         ch = core0.getr(0, start_addr++);
+         ss1 << ch;
+   }
+    reg_check_set( pkg[0], tibool(ss.str() == ss1.str()));
+}
+
+bool iequals(const string& a, const string& b)
+{
+    unsigned int sz = a.size();
+    if (b.size() != sz)
+        return false;
+    for (unsigned int i = 0; i < sz; ++i)
+        if (tolower(a[i]) != tolower(b[i]))
+            return false;
+    return true;
+}
+
+void strcpi(double *pkg)
+{
+   stringstream ss, ss1;
+   long start_addr = SDX + 1; // string 1
+   char ch;
+   for(int i = 0; i < core0.getr(0, SDX); i++){
+        ch = core0.getr(0, start_addr++);
+        ss << ch;
+   }
+
+   start_addr = SCX + 1; // string 2
+   for(int i = 0; i < core0.getr(0, SCX); i++){
+         ch = core0.getr(0, start_addr++);
+         ss1 << ch;
+   }
+    reg_check_set( pkg[0], tibool(iequals(ss.str(),ss1.str())));
+}
+
+void e2str(double *pkg)
+{
+   stringstream ss;
+   ss << core0.getr(0, SDX);
+   string num = ss.str();
+   long start_addr = SCX + 1; // the str
+   char ch;
+   for(int i = 0; i < num.length(); i++){
+        core0.setr(0, start_addr++, num.at(i));
+   }
+     core0.setr(0, SCX, num.length());
+}
+
 void sload(double *pkg)
 {
    if(pkg[1] == 21937856)
@@ -59,7 +120,7 @@ void sload(double *pkg)
 
 void adr(double *pkg)
 {
-   core0.setr(0, pkg[0], (long) pkg[1]);
+   reg_check_set( pkg[0], (long) pkg[1]);
 }
 
 void ct_int(double *pkg)
@@ -776,6 +837,27 @@ void invoke(double *pkg)
            lg.a(ss.str(), ss1.str());
         }
        break;
+       case 49:
+        {
+          stringstream ss, ss1;
+          long start_addr = SDX + 1; // the exception
+          char ch;
+          for(int i = 0; i < core0.getr(0, SDX); i++){
+             ch = core0.getr(0, start_addr++);
+             if((ch == '\n') || (ch == ' ') || (ch == '\t') || (ch == 10)){ }
+             else
+               ss << ch;
+          }
+
+          start_addr = SCX + 1; // the msg
+          for(int i = 0; i < core0.getr(0, SCX); i++){
+             ch = core0.getr(0, start_addr++);
+             ss1 << ch;
+          }
+         RuntimeException re;
+         re.introduce(ss.str(), ss1.str());
+        }
+       break;
        case 50: // read to a file
         {
           data[0] = pkg[1];
@@ -786,19 +868,6 @@ void invoke(double *pkg)
         {
           data[0] = pkg[1];
           SCR = io.Write(1,data); // write to a file
-        }
-       break;
-       case 94:
-        {
-          stringstream ss;
-          ss << core0.getr(0, SDX);
-          string num = ss.str();
-          long start_addr = SCX + 1; // the str
-          char ch;
-          for(int i = 0; i < num.length(); i++){
-             core0.setr(0, start_addr++, num.at(i));
-          }
-          core0.setr(0, SCX, num.length());
         }
        break;
        case 250: // get total internal time the cpu has been running(in secs)
@@ -850,13 +919,7 @@ int tibool(bool val)
 
 void same(double *pkg)
 {
-   if( pkg[1] == 20)
-       core0.setr(0, pkg[0], tibool(EAX == core0.getr(0, pkg[2])));
-   else if(pkg[2] == 20)
-       core0.setr(0, pkg[0], tibool(core0.getr(0, pkg[1]) == EAX));
-   else
-       core0.setr(0, pkg[0], tibool(core0.getr(0, pkg[1]) == core0.getr(0, pkg[2])));
-
+   reg_check_set( pkg[0], tibool(reg_check_ret( pkg[1]) == reg_check_ret( pkg[2])));
 }
 
 void ulock(double *pkg)

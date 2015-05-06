@@ -12,6 +12,7 @@
 import 'C:\Users\Braxton\Desktop\ScorpionProjects\BMOS\os\kernal.ss'
 ; We use this method to signify that the os has been started
 ; This pwr led will be on for the life of the os
+
 ; GPIO pin 4 
 .pwr_on:
     mov sdx 4
@@ -136,7 +137,6 @@ import 'C:\Users\Braxton\Desktop\ScorpionProjects\BMOS\os\kernal.ss'
      call kernal   ; Run kernal
      ;call Os      ; Start Os
 	 call pwr_off  ; pwr off device
-	 loadi @1000
      ret
 
 call main

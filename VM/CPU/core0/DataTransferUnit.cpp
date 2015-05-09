@@ -49,6 +49,15 @@ void cp(double *pkg)
    core0.setr(0, pkg[0], core0.getr(0, pkg[1]));
 }
 
+void swi(double *pkg)
+{
+   long ip = IP;	
+   long start_addr = SDX;
+   for(long i= 0; i < pkg[0]; i++)
+        core.Interrupt(start_addr++);
+   IP = ip;     
+}
+
 int tibool(bool val);
 void strcp(double *pkg)
 {
@@ -807,8 +816,6 @@ void invoke(double *pkg)
 {
      switch((long) pkg[0] )
      {
-       case 0:
-       break;
        case 1: // log settings
         if(LG == 1)
           lg.On();
@@ -816,6 +823,16 @@ void invoke(double *pkg)
           lg.Shutdown();
 
         SetPriority(LSL);
+       break;
+       case 3:
+          switch((long) pkg[1]){
+          	case 0:
+          	    tSP = SDX;
+          	break;
+          	case 1: // start processe
+          	   
+          	break;
+          }
        break;
        case 5:// I/O for GPIO pins
          InputOutput io;

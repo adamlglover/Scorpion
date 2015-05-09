@@ -27,6 +27,9 @@ struct page {
      long start_addr;
 } ;
 
+extern long mainIP;
+extern int tSP;
+extern long pageCount;
 extern page task_que[ TASK_LIMIT ];
 extern clock_s t_clock;
 extern page processes;

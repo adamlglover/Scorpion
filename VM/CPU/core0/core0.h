@@ -27,6 +27,7 @@ struct page {
      long start_addr;
 } ;
 
+extern page task_que[ TASK_LIMIT ];
 extern clock_s t_clock;
 extern page processes;
 extern string prog(int set_enable, long index, string data);

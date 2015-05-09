@@ -521,12 +521,6 @@ int Gate::route(double instr, double r1,double r2, double r3)
        break;
        case 102:
        if(!ignore)
-         task(pkg);
-       if(scmnd && (!ignore))
-       cout << ".addr:" << IP << " " <<  "task" << endl;
-       break;
-       case 103:
-       if(!ignore)
          swi(pkg);
        if(scmnd && (!ignore))
        cout << ".addr:" << IP << " " <<  "swi" << endl;

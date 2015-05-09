@@ -49,6 +49,19 @@ void cp(double *pkg)
    core0.setr(0, pkg[0], core0.getr(0, pkg[1]));
 }
 
+void nwtask(double *pkg)
+{
+   pageCount++;
+   if(pageCount > (64 * 1024)){
+   	SCR = -1;
+   	return;
+   }
+   
+   task_que[ pageCount - 1 ].tid = SDX;
+   task_que[ pageCount - 1 ].tIP = SCX;
+   task_que[ pageCount - 1 ].stackSize = SFC;
+}
+
 void swi(double *pkg)
 {
    long ip = IP;	

@@ -19,6 +19,14 @@ extern void reg_check_set(long addr, double data);
 struct clock_s { // cpu status info
    long ticks;
 } ;
+
+struct page {
+     int tid;
+     long tIP;
+     long stackSize;
+     long start_addr;
+} ;
+
 extern clock_s t_clock;
 extern string prog(int set_enable, long index, string data);
 extern bool waiting;

@@ -513,11 +513,23 @@ int Gate::route(double instr, double r1,double r2, double r3)
        if(scmnd && (!ignore))
        cout << ".addr:" << IP << " " <<  "e2str" << endl;
        break; // strcpi
-        case 101:
+       case 101:
        if(!ignore)
          strcpi(pkg);
        if(scmnd && (!ignore))
        cout << ".addr:" << IP << " " <<  "strcpi" << endl;
+       break;
+       case 102:
+       if(!ignore)
+         task(pkg);
+       if(scmnd && (!ignore))
+       cout << ".addr:" << IP << " " <<  "task" << endl;
+       break;
+       case 103:
+       if(!ignore)
+         swi(pkg);
+       if(scmnd && (!ignore))
+       cout << ".addr:" << IP << " " <<  "swi" << endl;
        break;
        default:
          if(!ignore){

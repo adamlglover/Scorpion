@@ -372,7 +372,7 @@ string prog(int set_enable, long index, string data)
 }
 
 long mainIP = 0;
-int tSP = 0;
+int tSP = -1;
 long pageCount = 0;
 
 #define TASK_LIMIT (64 * 1024)

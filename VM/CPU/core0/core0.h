@@ -6,7 +6,7 @@
 using namespace std;
 extern bool _0Halted, scmnd, pass,
             ignore, if_ignore;
-extern long EAX,TMP,IP, EBX, SDX, SFC, SCX, BP, EXC, PS, LG, LSL, I1, I2, SCR, AI, IPI;
+extern long EAX,TMP,IP, EBX, SDX, SFC, SCX, BP, EXC, PS, LG, LSL, I1, I2, SCR, AI, IPI, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12;
 extern long *id, auto_ipi, IPH, IPL,
               L1_ICache_length;
 extern int passed_if;

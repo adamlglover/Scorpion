@@ -604,6 +604,36 @@ void mov(double *pkg)
            case 34:
             IPI = pkg[1];
 	   break;
+           case 37:
+            I3 = pkg[1];
+           break;
+           case 38:
+            I4 = pkg[1];
+           break;
+           case 39:
+            I5 = pkg[1];
+           break;
+           case 40:
+            I6 = pkg[1];
+           break;
+           case 41:
+            I7 = pkg[1];
+           break;
+           case 42:
+            I8 = pkg[1];
+           break;
+           case 43:
+            I9 = pkg[1];
+           break;
+           case 44:
+            I10 = pkg[1];
+           break;
+           case 45:
+            I11 = pkg[1];
+           break;
+           case 46:
+            I12 = pkg[1];
+           break;
       }
 }
 
@@ -662,6 +692,36 @@ void r_mv(double *pkg)
   	   case 34:
                 core0.setr(0, pkg[1], IPI);
 	   break;
+           case 37:
+                core0.setr(0, pkg[1], I3);
+           break;
+           case 38:
+                core0.setr(0, pkg[1], I4);
+           break;
+           case 39:
+                core0.setr(0, pkg[1], I5);
+           break;
+           case 40:
+                core0.setr(0, pkg[1], I6);
+           break;
+           case 41:
+                core0.setr(0, pkg[1], I7);
+           break;
+           case 42:
+                core0.setr(0, pkg[1], I8);
+           break;
+           case 43:
+                core0.setr(0, pkg[1], I9);
+           break;
+           case 44:
+                core0.setr(0, pkg[1], I10);
+           break;
+           case 45:
+                core0.setr(0, pkg[1], I11);
+           break;
+           case 46:
+                core0.setr(0, pkg[1], I12);
+           break;
       }
 }
 
@@ -707,6 +767,36 @@ void rmov(double *pkg)
            break;
            case 34:
               IPI = (long) reg_check_ret( pkg[1]);
+           break;
+           case 37:
+               I3 = (long) reg_check_ret( pkg[1]);
+           break;
+           case 38:
+               I4 = (long) reg_check_ret( pkg[1]);
+           break;
+           case 39:
+               I5 = (long) reg_check_ret( pkg[1]);
+           break;
+           case 40:
+               I6 = (long) reg_check_ret( pkg[1]);
+           break;
+           case 41:
+               I7 = (long) reg_check_ret( pkg[1]);
+           break;
+           case 42:
+               I8 = (long) reg_check_ret( pkg[1]);
+           break;
+           case 43:
+               I9 = (long) reg_check_ret( pkg[1]);
+           break;
+           case 44:
+               I10 = (long) reg_check_ret( pkg[1]);
+           break;
+           case 45:
+               I11 = (long) reg_check_ret( pkg[1]);
+           break;
+           case 46:
+               I12 = (long) reg_check_ret( pkg[1]);
            break;
      }
 }

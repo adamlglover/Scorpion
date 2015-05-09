@@ -35,7 +35,7 @@
 #include <string>
 using namespace std;
 
-long EAX, TMP, IP, EBX, SDX, SFC, SCX, BP, EXC, PS, LG, LSL, I1, I2, SCR, AI, IPI;
+long EAX, TMP, IP, EBX, SDX, SFC, SCX, BP, EXC, PS, LG, LSL, I1, I2, SCR, AI, IPI, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12;
 
 clock_t tStart;
 clock_s t_clock;
@@ -120,6 +120,36 @@ double reg_check_ret(long addr)
            case 34:
             return IPI;
            break;
+           case 37:
+            return I3;
+           break;
+           case 38:
+            return I4;
+           break;
+           case 39:
+            return I5;
+           break;
+           case 40:
+            return I6;
+           break;
+           case 41:
+            return I7;
+           break;
+           case 42:
+            return I8;
+           break;
+           case 43:
+            return I9;
+           break;
+           case 44:
+            return I10;
+           break;
+           case 45:
+            return I11;
+           break;
+           case 46:
+            return I12;
+           break;
            default:
             return core0.getr(0, addr);
            break;
@@ -172,6 +202,36 @@ void reg_check_set(long addr, double data)
            case 34:
             IPI = (long) data;
            break;
+           case 37:
+            I3 = (long) data;
+           break;
+           case 38:
+            I4 = (long) data;
+           break;
+           case 39:
+            I5 = (long) data;
+           break;
+           case 40:
+            I6 = (long) data;
+           break;
+           case 41:
+            I7 = (long) data;
+           break;
+           case 42:
+            I8 = (long) data;
+           break;
+           case 43:
+            I9 = (long) data;
+           break;
+           case 44:
+            I10 = (long) data;
+           break;
+           case 45:
+            I11 = (long) data;
+           break;
+           case 46:
+            I12 = (long) data;
+           break;
            default:
             core0.setr(0, addr, data);
            break;
@@ -202,6 +262,16 @@ void C0::Reset()
   I1  = 0;
   AI  = 0;
   I2  = 0;
+  I3  = 0;
+  I4  = 0;
+  I5  = 0;
+  I6  = 0;
+  I7  = 0;
+  I8  = 0;
+  I9  = 0;
+  I10  = 0;
+  I11  = 0;
+  I12  = 0;
   SCR = 0; // system call i/o response code
 
   t_clock.ticks = 0;
@@ -227,8 +297,20 @@ void C0::Halt()
   LG  = 0;
   IPI = 0;
   AI  = 0;
-  LSL = 0;
-  SCX = 0;
+  LSL  = 0;
+  SCX  = 0;
+  I1  = 0;
+  I2  = 0;
+  I3  = 0;
+  I4  = 0;
+  I5  = 0;
+  I6  = 0;
+  I7  = 0;
+  I8  = 0;
+  I9  = 0;
+  I10  = 0;
+  I11  = 0;
+  I1  = 0;
   SCR = 0;
 }
 
@@ -301,7 +383,8 @@ void fetch()
 
    memstat = _Ram.prog_status(IP);
    if(memstat == Ram::DONE){
-      printf("Time taken: %.3fs\n", (double)(clock() - tStart)/CLOCKS_PER_SEC);
+      C0 core;
+      printf("Time taken: %.3fs\n", (double) core.GetTime());
       p_exit();
    }
    else if(memstat == Ram::RUNNING){

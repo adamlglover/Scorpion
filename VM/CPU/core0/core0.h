@@ -24,7 +24,6 @@ struct page {
      int tid;
      long tIP;
      long stackSize;
-     long start_addr;
 } ;
 
 extern long mainIP;

@@ -13,7 +13,7 @@ Comments in scorpion are the most rudamentary thing that there is in scorpion. A
           * comment
           */
           
-Comments in Scorpion are completly ignored by the compiler and can be placed anywhere in the file in your source code. When using the single line comment ';', anything can be placed inside of that comment and will in-fact be ignored until the end of that line in the file. However when using multiline comments, do not nest comments together or you may confuse the assembler on where the end of the comment block ended.
+Comments in Scorpion are completly ignored by the compiler and can be placed anywhere in the file in your source code. When using the single line comment ';', anything can be placed inside of that comment and will in-fact be ignored until the end of that line. However when using multiline comments, al information inside the comment block will be ignore until the first occurence of '*/'. When using multiline comments, do not nest comments together or you will confuse the assembler on where the end of the comment block ended. 
 
           Valid Single line comment
           ; This comment ; is /* ok /* ------*/ */ and will not throw an error
@@ -21,9 +21,9 @@ Comments in Scorpion are completly ignored by the compiler and can be placed any
           Invalid multi-line comment
           /*
           * This multi-line
-          * /* comment is wrong */
-          *
-          */
+          * /* comment is wrong */ <- end of multi-line comment
+          * <- err
+          */ <- err
           
           Valid multi-line comment
           /* 
@@ -32,15 +32,14 @@ Comments in Scorpion are completly ignored by the compiler and can be placed any
           * ----
           */
           
-When using multiline comments be sure to not nest another multi-line comment inside of each other, otherwise the compiler will assume that the first '*/' that it reaches is the end of the comment block
 
-## 3.2 The print command
-All commands in scorpion are non-case sensitive, meaning that the command 'print' is the same as the command 'PRINT' or'PrINt', etc. You also do not have to declare functins to run a program in scorpion. you can simply type out any number of of commands to be executed. Functions in Scorpion are simply control flow tools that you can use to write cleaner and more efficent code. Scorpion allows you to interface with the console using whats called the 'print' command. The print command can print any character that's printable by the computer and takes one argument. Throught this guide I will be using a graphic syntatical example for expressing the args that each instruction takes. Below Is an examplle of using the print command.
+## 3.2 The print instruction
+All instructions in scorpion are non-case sensitive, meaning that the instruction 'print' is the same as the instr. 'PRINT' or'PrINt', etc. You also do not have to declare functins or if statements to run a program in scorpion. you can simply type out any number of of instructions to be executed. Functions and if statements in Scorpion are simply control flow tools that you can use to write cleaner and more sophisticated code. Scorpion allows you to interface with the console using whats called the 'print' instruction. Print can print any character or sequence of characters that's printable by the computer and takes one argument. Below Is an examplle of using the print instruction.
 
            ; print <string_literal>
            print 'Hello World!/n'
 
-The print command takes a string literal as a single argument. In Scorpion, a string literal consists of 2 single quotes which begins and ends the string literal. DO NOT use double quotes to begin and end a string because it will not be considered a string literal by the assembler. You can however insert double quotes inside of single quotes.
+The print instruction and takes a string literal as a single argument. In Scorpion, a string literal consists of 2 single quotes which begins and ends the string literal. DO NOT use double quotes to begin and end a string because it will not be considered a string literal by the assembler. You can however insert double quotes inside of single quotes.
 
            ; Invalid print statement
            print "Hello World"
@@ -49,20 +48,21 @@ The print command takes a string literal as a single argument. In Scorpion, a st
            print '"Hello World"'; prints "Hello World"
 
 #### 3.2.1 Escape sequences
-In a string literal there are escape sequesequences allow you to put special characters in such as a new linebor tab. In order to insert an escape sequence in a string literal, you must use the string escape insertion operator '/'.
+In a string literal there are escape sequesequences allow you to put special characters in such as a new line or tab. In order to insert an escape sequence in a string literal, you must use the string escape insertion operator '/'.
 
            ; Scorpion string literal escape sequences 
                 Newline:   /n    prints new line
                     Tab:   /t    prints tab
                   Slash:   /s    prints /
            Single quote:   /'    prints '
+               LessThan:   /<    prints < (more on this later)
 
            ; example
-           print '/'Hello/n World/'/t/s'
-           ; prints 'Hello
-           ;         World'    /
+           print '/'/<Hello/n World>/'/t/s'
+           ; prints '<Hello
+           ;         World>'    /
 
-DO NOT insert a physical new line inside in a string literal otherwise the assembler will throw an error. Use an excape sequence.
+DO NOT insert a physical new line inside in a string literal otherwise the assembler will throw an error. Use the escape insertion operator.
 
 ## 3.3 Basic elements
 In Scorpion, data types are considered eleements. Each element has rules and restrictions that define the element. There are a total of  7 different element types(short, int, double, float, bool, char, string).

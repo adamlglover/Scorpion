@@ -73,10 +73,10 @@ void array(double *pkg) // array numbers 5 int
 }
 
 int tibool( bool val );
-void aload(double *pkg) // aload numbers 0 i4
+void aload(double *pkg) // aload numbers sdx i4
 {
    long length = core0.getr(0, pkg[0]);
-   long index = pkg[1];
+   long index = reg_check_ret(pkg[1]);
    if(index >= length){
    	RuntimeException re;
    	stringstream ss, ss1;

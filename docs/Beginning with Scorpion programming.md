@@ -111,11 +111,26 @@ In strings you can include some simple formatting by using the string excape seq
 
              string msg 'h/n/te/n/tl/n/tl/n/to'
              /*
-             * prints: h\
+             * prints:  h
              *             e
              *             l
              *             l
              *             o
              */
 
-Strings in scorpion are a bit complex. In laymen's terms, a string is a continuing sequence of characters
+Strings in scorpion are a bit complex. In laymen's terms, a string is a continuing sequence of characters that may represent a word or sentance. I will not go into the nitty gritty details about how a string works, however you will need to have a basic understanding of how a string works in order to use it. When a sequence of chars are assigned to a string label, the label is used as a refrence label that only contains the length of the string. The very next immediate address(es) will contain the actual string. Below is a visual representation of how this works.
+
+      ; code 
+      string msg 'Hello'
+      
+      ; This is what happens internally
+      ; addr: msg -> @192
+      ;
+      ; | @192 | @193 | @194 | @195 | @196 | @197 |
+      ; |   5  |   H  |   e  |   l  |   l  |   o  |
+      ;
+      
+
+
+
+

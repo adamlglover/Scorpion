@@ -1,5 +1,5 @@
 # What is Scorpion?
-Scorpion is a dynamic bare metal programming language supporting various programming paradigms. It provides a set of features that allow for easy text and data processing as well as programming the physical hardware on a specific device. It is very simple and easy to use.
+Scorpion is a dynamic bare metal programming language supporting various programming paradigms. It provides a set of features that allow for easy text and data processing as well as programming the physical hardware on a specific device. It is very simple and easy to use. Scorpion is intended to be used for embedded systems and consumer applications that runs on micro-electronics.
 
 # Features Of Scorpion
 - Very Simple Syntax

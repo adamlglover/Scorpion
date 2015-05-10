@@ -20,16 +20,6 @@ struct clock_s { // cpu status info
    long ticks;
 } ;
 
-struct page {
-     int tid;
-     long tIP;
-     long stackSize;
-} ;
-
-extern long mainIP;
-extern int tSP;
-extern long pageCount;
-extern page task_que[ TASK_LIMIT ];
 extern clock_s t_clock;
 extern page processes;
 extern string prog(int set_enable, long index, string data);

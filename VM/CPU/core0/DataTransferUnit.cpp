@@ -49,17 +49,78 @@ void cp(double *pkg)
    core0.setr(0, pkg[0], core0.getr(0, pkg[1]));
 }
 
-void nwtask(double *pkg)
+
+
+void array(double *pkg) // array numbers 5 int
 {
-   pageCount++;
-   if(pageCount > (64 * 1024)){
-   	SCR = -1;
-   	return;
+   if(pkg[1] == 0){
+      SCR = -5;
+      return;
+   }   
+   core0.setr(0, pkg[0], pkg[1]); // check type
+   if(pkg[2] == INT || pkg[2] == BOOL || pkg[2] == CHAR || pkg[2] == FLOAT || pkg[2] == DOUBLE || pkg[2] == SHORT) { }
+   else {
+   	RuntimeException re;
+   	stringstream ss;
+   	ss << pkg[2];
+   	re.introduce("ArrayTypeNotFoundException", "the specified array type: " + ss.str() + " was not found");
+   }
+   core0.setr(0, (pkg[0] + 1), pkg[2]);
+   
+   long ref = pkg[0] + 2;
+   for(int i = 0; i < pkg[1] - 1; i++)
+       core0.setr(0, ref++, 0);
+}
+
+int tibool( bool val );
+void aload(double *pkg) // aload numbers 0 i4
+{
+   long length = core0.getr(0, pkg[0]);
+   long index = pkg[1];
+   if(index >= length){
+   	RuntimeException re;
+   	stringstream ss, ss1;
+   	ss << index;
+   	ss1 << length;
+   	re.introduce("ArrayLengthOutOfBoundsException", "index >= length;  could not access array at index[" + ss.str() + "] length is: " + ss1.str());
    }
    
-   task_que[ pageCount - 1 ].tid = SDX;
-   task_que[ pageCount - 1 ].tIP = SCX;
-   task_que[ pageCount - 1 ].stackSize = SFC;
+   long addr = pkg[0] + 2;
+   addr += index;
+   long array_type = core0.getr(0, pkg[0] + 1);
+   
+   if(array_type == INT)
+       core0.setr(0, addr, (long) reg_check_ret(pkg[2]));
+   els if(array_type == SHORT)
+       core0.setr(0, addr, (int) reg_check_ret(pkg[2]));
+   else if(array_type == DOUBLE)
+       core0.setr(0, addr, (double) reg_check_ret(pkg[2]));
+   else if(array_type == FLOAT)
+       core0.setr(0, addr, (float) reg_check_ret(pkg[2]));
+   else if(array_type == BOOL)
+       core0.setr(0, addr, tibool(reg_check_ret(pkg[2])) );
+   else if(array_type == CHAR){
+       char ch = reg_check_ret(pkg[2]);
+       int int_char = ch;
+       core0.setr(0, addr, int_char);
+   }    
+}
+
+void aaload(double *pkg) // aaload numbers 0 num1
+{
+   long length = core0.getr(0, pkg[0]);
+   long index = pkg[1];
+   if(index >= length){
+   	RuntimeException re;
+   	stringstream ss, ss1;
+   	ss << index;
+   	ss1 << length;
+   	re.introduce("ArrayLengthOutOfBoundsException", "index >= length;  could not access array at index[" + ss.str() + "] length is: " + ss1.str());
+   }
+   
+   long addr = pkg[0] + 2;
+   addr += index;
+   reg_check_set(pkg[2], core0.getr(0, addr))
 }
 
 void swi(double *pkg)

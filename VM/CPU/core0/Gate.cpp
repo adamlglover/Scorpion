@@ -525,6 +525,24 @@ int Gate::route(double instr, double r1,double r2, double r3)
        if(scmnd && (!ignore))
        cout << ".addr:" << IP << " " <<  "swi" << endl;
        break;
+       case 103:
+       if(!ignore)
+         array(pkg);
+       if(scmnd && (!ignore))
+       cout << ".addr:" << IP << " " <<  "swi" << endl;
+       break;
+       case 104:
+       if(!ignore)
+         aload(pkg);
+       if(scmnd && (!ignore))
+       cout << ".addr:" << IP << " " <<  "swi" << endl;
+       break;
+       case 105:
+       if(!ignore)
+         aaload(pkg);
+       if(scmnd && (!ignore))
+       cout << ".addr:" << IP << " " <<  "swi" << endl;
+       break;
        default:
          if(!ignore){
              cout << "Segmentation Fault" << endl;

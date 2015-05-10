@@ -371,13 +371,6 @@ string prog(int set_enable, long index, string data)
   }
 }
 
-long mainIP = 0;
-int tSP = -1;
-long pageCount = 0;
-
-#define TASK_LIMIT (64 * 1024)
-page task_que[ TASK_LIMIT ];
-
 int memstat;
 void fetch()
 {

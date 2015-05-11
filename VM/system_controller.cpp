@@ -24,9 +24,38 @@ using namespace std;
 
 int status;
 int STACK_LEVEL = 2;
+#define nullptr ((void *)0)
 
+long mem = 2000000; // std 2mb of mem
+long pmem = 6000000; // std 6mb of mem
 Log x86_log;
 Logger logger1;
+
+extern double *ram; // cell 0
+extern double *lram;// cell 2
+extern double *xram;// cell 3
+extern string *program; // cell 5
+
+void malloc()
+{
+   ram = new double[ mem ];
+   lram = new double[ mem ];
+   xram = new double[ mem ];
+   program = new string[ pmem ];
+
+   if(ram == nullptr || lram == nullptr || xram == nullptr || program == nullptr){
+      cout << "Error: Could not create the Scorpion Virtural Machine.\nA fatal error has occured: Program will now exit." << endl;
+      exit(-1039439);
+   }
+}
+
+void mualloc()
+{
+  delete[] ram;
+  delete[] lram;
+  delete[] xram;
+  delete[] program;
+}
 
 void Restart()
 {
@@ -39,6 +68,7 @@ void Restart()
 
 void x86Shutdown()
 {
+   mualloc();
    System::Running = false;
    CPU mprocessor;
    mprocessor.Halt();
@@ -48,42 +78,43 @@ void x86Shutdown()
 
 void Start()
 {
+   malloc();
    CPU mprocessor;
    System::Running = true;
    mprocessor.Reset();
    System::SetupSystem();
 }
 
+extern int arg_start;
 string prog_args = "";
 int arg_c = 0;
 int main( int argc, const char **file )
 {
-  arg_c = argc;
   prepargs();
-  string arg = "";
-  if(argc == 2){
-    arg = file[1];
-  }
-  else if(argc == 1){
-    if(isarg("-help"))
-     handleargs();
-  }
+  if(argc >= 2)
+    handleargs(argc, file);
+  else if (argc == 1)
+    help();
 
   if(argc > 2){
      stringstream ss;
-     for(int i = 2; i < argc; i++){
+     for(int i = arg_start + 2; i < argc; i++){
         ss << file[i] << " ";
-        prog_args += ss.str();
      }
+     prog_args = ss.str();
   }
+  arg_c = argc - (arg_start + 2);
+
+  if(arg_c == -1){ // prog was not passed
+     cout << "Error: Could not create the Scorpion Virtural Machine.\nA fatal error has occured: Program will now exit." << endl;
+     exit(-1039439);
+  }
+
   status = mkdir("/usr/share/scorpion", S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);
   status = mkdir("/usr/share/scorpion/disks", S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);
   status = mkdir("/usr/share/scorpion/lib/src", S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);
 
-  if(isarg(arg))
-     handleargs();
-  else
-    x86_log.prepare(VERBOSE,true);
+  x86_log.prepare(VERBOSE,true);
 
   if(OK(argc, file))
       Start();

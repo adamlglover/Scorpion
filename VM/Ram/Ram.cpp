@@ -30,13 +30,13 @@
 #include <string>
 using namespace std;
 
-#define MAX 16000000 /* 16mb of R\c(ram per cell)*/
-#define MAX_SIZE 16000000 /* 16mb of program memory */
+extern long mem; 
+extern long pmem;
 #define NUM_CELLS 6 // (actually 4)-6 is the max
-double ram[ MAX ]; // cell 0
-double lram[ MAX ];// cell 2
-double xram[ MAX ];// cell 3
-string program[ MAX_SIZE ]; // cell 5
+double *ram; // cell 0
+double *lram;// cell 2
+double *xram;// cell 3
+string *program; // cell 5
 
 int rsize;
 
@@ -57,11 +57,11 @@ short Ram::CS = 0;
 long address = 0;
 int Ram::addr(long index, bool p_mem)
 {
-  if(((index < 0) || (index > MAX_SIZE)) && p_mem){
+  if(((index < 0) || (index > pmem)) && p_mem){
          state = INDEX_OUT_OF_RANGE;
      return INDEX_OUT_OF_RANGE;
   }
-  else if(((index < 0) || (index > MAX)) && !p_mem){
+  else if(((index < 0) || (index > mem)) && !p_mem){
          state = INDEX_OUT_OF_RANGE;
      return INDEX_OUT_OF_RANGE;
   }
@@ -222,17 +222,17 @@ long b_tmb(long bytes)
 long Ram::info(int info)
 {
    if(info == 0)
-    return MAX; // return r/c unformatted
+    return mem; // return r/c unformatted
    else if(info == 3)
-    return b_tmb(MAX); // return r/c formatted
+    return b_tmb(mem); // return r/c formatted
    else if(info == 1)
-    return b_tmb((MAX * (NUM_CELLS - 1)) + MAX_SIZE); // return total ram size
+    return b_tmb((mem * (NUM_CELLS - 1)) + pmem); // return total ram size
    else if(info == 2)
     return NUM_CELLS; // return the total num of ram cells
    else if (info == 4)
-	return b_tmb(MAX_SIZE); // return total program mem formatted
+	return b_tmb(pmem); // return total program mem formatted
    else if (info == 6)
-        return MAX_SIZE; // return total program mem unformatted
+        return pmem; // return total program mem unformatted
    else if(info == 5)
 	return SIZE; // return current occupied prog mem
   else 
@@ -244,7 +244,7 @@ long Ram::info(int info)
 bool overload = false;
 void nextinstr(string instr) /* load the next instruction to ram*/
 {
-   if(!(SIZE > MAX_SIZE)){
+   if(!(SIZE > pmem)){
         program[ SIZE++ ] = instr; //  assign the next  instr(I was being lazy)
         if((SIZE -1) < L1_ICache_length)
           L1_ICache[SIZE - 1] = instr; // this was the best I could do at the moment
@@ -281,7 +281,7 @@ void Ram::prog_load(string content)
      }
      else {
        Ram ramm;
-       printf("Ram: program_size_overload err \nsize > %d(%08x) \n      --size[%d] bytes\n", MAX_SIZE, MAX_SIZE, ramm.info(5));
+       printf("Ram: program_size_overload err \nsize > %d(%08x) \n      --size[%d] bytes\n", pmem, pmem, ramm.info(5));
        cout << "Shutting down...\n";
        EBX = null;
        p_exit();

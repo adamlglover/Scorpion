@@ -80,11 +80,12 @@ bool isgenuine = false;
       }
    }
 
+extern int arg_start;
    void verify( int argc, const char **file )
    {
        rules_log.v("System","Verifying args...");
        if(argc >= 2)
-         authenticate(file[1]);
+         authenticate(file[ arg_start + 1 ]);
        else if(argc < 2)
          rules_log.v("System","Fatal err occured. No input files, System Halt!");
    }

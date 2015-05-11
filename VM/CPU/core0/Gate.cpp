@@ -529,19 +529,19 @@ int Gate::route(double instr, double r1,double r2, double r3)
        if(!ignore)
          array(pkg);
        if(scmnd && (!ignore))
-       cout << ".addr:" << IP << " " <<  "swi" << endl;
+       cout << ".addr:" << IP << " " <<  "array" << endl;
        break;
        case 104:
        if(!ignore)
          aload(pkg);
        if(scmnd && (!ignore))
-       cout << ".addr:" << IP << " " <<  "swi" << endl;
+       cout << ".addr:" << IP << " " <<  "array" << endl;
        break;
        case 105:
        if(!ignore)
          aaload(pkg);
        if(scmnd && (!ignore))
-       cout << ".addr:" << IP << " " <<  "swi" << endl;
+       cout << ".addr:" << IP << " " <<  "array" << endl;
        break;
        default:
          if(!ignore){

@@ -53,6 +53,7 @@ void r_load(double *pkg);
 void strcp(double *pkg);
 void e2str(double *pkg);
 void strcpi(double *pkg);
+void swi(double *pkg);
 void array(double *pkg);
 void aload(double *pkg);
 void aaload(double *pkg);

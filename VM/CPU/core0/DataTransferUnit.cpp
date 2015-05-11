@@ -91,7 +91,7 @@ void aload(double *pkg) // aload numbers sdx i4
    
    if(array_type == INT)
        core0.setr(0, addr, (long) reg_check_ret(pkg[2]));
-   els if(array_type == SHORT)
+   else if(array_type == SHORT)
        core0.setr(0, addr, (int) reg_check_ret(pkg[2]));
    else if(array_type == DOUBLE)
        core0.setr(0, addr, (double) reg_check_ret(pkg[2]));
@@ -109,7 +109,7 @@ void aload(double *pkg) // aload numbers sdx i4
 void aaload(double *pkg) // aaload numbers 0 num1
 {
    long length = core0.getr(0, pkg[0]);
-   long index = pkg[1];
+   long index = reg_check_ret(pkg[1]);
    if(index >= length){
    	RuntimeException re;
    	stringstream ss, ss1;
@@ -120,15 +120,16 @@ void aaload(double *pkg) // aaload numbers 0 num1
    
    long addr = pkg[0] + 2;
    addr += index;
-   reg_check_set(pkg[2], core0.getr(0, addr))
+   reg_check_set(pkg[2], core0.getr(0, addr));
 }
 
 void swi(double *pkg)
 {
    long ip = IP;	
    long start_addr = SDX;
-   for(long i= 0; i < pkg[0]; i++)
-        core.Interrupt(start_addr++);
+   long run_for = SCX;
+   for(long i= 0; i < run_for; i++)
+        core0.Interrupt(start_addr++);
    IP = ip;     
 }
 
@@ -897,16 +898,6 @@ void invoke(double *pkg)
           lg.Shutdown();
 
         SetPriority(LSL);
-       break;
-       case 3:
-          switch((long) pkg[1]){
-          	case 0:
-          	    tSP = SDX;
-          	break;
-          	case 1: // start processe
-          	   
-          	break;
-          }
        break;
        case 5:// I/O for GPIO pins
          InputOutput io;

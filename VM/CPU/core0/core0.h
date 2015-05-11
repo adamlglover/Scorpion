@@ -21,7 +21,6 @@ struct clock_s { // cpu status info
 } ;
 
 extern clock_s t_clock;
-extern page processes;
 extern string prog(int set_enable, long index, string data);
 extern bool waiting;
    class C0 {

@@ -915,6 +915,10 @@ void invoke(double *pkg)
       	    break;
 	  }
        break;
+       case 2:
+         Ram rm;
+         SCR = rm.info(pkg[1]);
+       break;
        case 6: // Os Calls for GPIO
            switch( SFC ) {
             case 0:// set dir

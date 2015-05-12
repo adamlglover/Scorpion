@@ -38,10 +38,10 @@ extern string *program; // cell 5
 
 void malloc()
 {
-   ram = new double[ mem ];
-   lram = new double[ mem ];
-   xram = new double[ mem ];
-   program = new string[ pmem ];
+   ram = new (nothrow) double[ mem ];
+   lram = new (nothrow) double[ mem ];
+   xram = new (nothrow) double[ mem ];
+   program = new (nothrow) string[ pmem ];
 
    if(ram == nullptr || lram == nullptr || xram == nullptr || program == nullptr){
       cout << "Error: Could not create the Scorpion Virtural Machine.\nA fatal error has occured: Program will now exit." << endl;

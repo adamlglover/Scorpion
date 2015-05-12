@@ -11,7 +11,7 @@ string Version = "0.0.19_12";
 string v_stage = "beta";
 
 
-#define NUM_OPTIONS 5
+#define NUM_OPTIONS 4
 string args[ NUM_OPTIONS ];
 
 string OPTION = "";
@@ -22,8 +22,7 @@ void prepargs()
    args[0] = "-help";
    args[1] = "-version";
    args[2] = "-Qms:";
-   args[3] = "-Qmx:";
-   args[4] = "-pstd:";
+   args[3] = "-pstd:";
 }
 
 bool isarg(string arg)
@@ -53,12 +52,12 @@ void help()
    cout << "Binary file must be a binary source(b) file contailing only 1's, 0's, .'s, and whitespace.\n" << endl;
    cout << "[-options]\n\n    -version          print the current product version and exit" << endl;
    cout <<               "    -Qms:<value>      set inital memory size" << endl;
-   cout <<               "    -Qmx:<value>      set max memory size" << endl;
    cout <<               "    -pstd:<value>     set program memory size" << endl;
    exit(1);
 }
 
 extern long mem;
+extern long xmem;
 extern long pmem;
 void handleargs(int argc, const char **args)
 {
@@ -90,15 +89,17 @@ void handleargs(int argc, const char **args)
         mem = mb;
         if(mem == 0)
           mem = 1000000;
-     }
+     }/*
      else if(OPTION == "-Qmx:"){
         i++;
         arg_start++;
         data = args[i];
         int mb = atoi(data.c_str());
         mb *= 1000000; // convert to actual mem addrs
-       // mem = mb;
-     }
+        xmem = mb;
+        if(xmem == 0) // no mem
+          xmem = mem;
+     }*/
      else if(OPTION == "-pstd:"){
         i++;
         arg_start++;

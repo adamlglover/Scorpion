@@ -218,6 +218,27 @@ void sload(double *pkg)
      core0.setr(0, pkg[0], (int) pkg[1]);
 }
 
+void throw(double *pkg)
+{
+   stringstream ss, ss1;
+   long start_addr = SDX + 1; // the exception
+     char ch;
+     for(int i = 0; i < core0.getr(0, SDX); i++){
+        ch = core0.getr(0, start_addr++);
+        if((ch == '\n') || (ch == ' ') || (ch == '\t') || (ch == 10)){ }
+        else
+          ss << ch;
+     }
+
+     start_addr = SCX + 1; // the msg
+     for(int i = 0; i < core0.getr(0, SCX); i++){
+         ch = core0.getr(0, start_addr++);
+         ss1 << ch;
+     }
+      RuntimeException re;
+      re.introduce(ss.str(), ss1.str());
+}
+
 void adr(double *pkg)
 {
    reg_check_set( pkg[0], (long) pkg[1]);
@@ -1027,27 +1048,6 @@ void invoke(double *pkg)
            lg.e(ss.str(), ss1.str());
           else
            lg.a(ss.str(), ss1.str());
-        }
-       break;
-       case 49:
-        {
-          stringstream ss, ss1;
-          long start_addr = SDX + 1; // the exception
-          char ch;
-          for(int i = 0; i < core0.getr(0, SDX); i++){
-             ch = core0.getr(0, start_addr++);
-             if((ch == '\n') || (ch == ' ') || (ch == '\t') || (ch == 10)){ }
-             else
-               ss << ch;
-          }
-
-          start_addr = SCX + 1; // the msg
-          for(int i = 0; i < core0.getr(0, SCX); i++){
-             ch = core0.getr(0, start_addr++);
-             ss1 << ch;
-          }
-         RuntimeException re;
-         re.introduce(ss.str(), ss1.str());
         }
        break;
        case 50: // read to a file

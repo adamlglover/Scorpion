@@ -543,6 +543,12 @@ int Gate::route(double instr, double r1,double r2, double r3)
        if(scmnd && (!ignore))
        cout << ".addr:" << IP << " " <<  "array" << endl;
        break;
+       case 106:
+       if(!ignore)
+         throw(pkg);
+       if(scmnd && (!ignore))
+       cout << ".addr:" << IP << " " <<  "throw" << endl;
+       break;
        default:
          if(!ignore){
              cout << "Segmentation Fault" << endl;

@@ -218,20 +218,20 @@ void sload(double *pkg)
      core0.setr(0, pkg[0], (int) pkg[1]);
 }
 
-void throw(double *pkg)
+void _throw(double *pkg)
 {
    stringstream ss, ss1;
-   long start_addr = SDX + 1; // the exception
+   long start_addr = pkg[0] + 1; // the exception
      char ch;
-     for(int i = 0; i < core0.getr(0, SDX); i++){
+     for(int i = 0; i < core0.getr(0, pkg[0]); i++){
         ch = core0.getr(0, start_addr++);
         if((ch == '\n') || (ch == ' ') || (ch == '\t') || (ch == 10)){ }
         else
           ss << ch;
      }
 
-     start_addr = SCX + 1; // the msg
-     for(int i = 0; i < core0.getr(0, SCX); i++){
+     start_addr = pkg[1] + 1; // the msg
+     for(int i = 0; i < core0.getr(0, pkg[1]); i++){
          ch = core0.getr(0, start_addr++);
          ss1 << ch;
      }
@@ -374,7 +374,10 @@ void c_print(double _char)
 
 void _print(double *pkg)
 { 
- if(pkg[0] <= 0){}
+ if(pkg[0] <= 0){
+    IP--;
+    IP--;
+ }
  else if(pkg[0] == 1){
    IP--;
    c_print(pkg[1]);
@@ -605,7 +608,10 @@ void c_update()
 
 void _printf(double *pkg)
 {
- if(pkg[0] <= 0){}
+ if(pkg[0] <= 0){
+   IP--;
+   IP--;
+ }
  else if(pkg[0] >= 1) {
     IP--;
     IP--;
@@ -616,8 +622,6 @@ void _printf(double *pkg)
        _str = disasm.disassemble(str); // dissasemble char
        c_printf(_str); // print char
    }
-   if((pkg[0] == 1) && !(reg))
-    IP++;
    reg = false;
  }
  else{

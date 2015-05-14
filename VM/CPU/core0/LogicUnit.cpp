@@ -161,6 +161,6 @@ void not_l(double *pkg)
       EAX = _not(ibool(pkg[1]));
    else
    {
-        reg_check_set( pkg[0], _not(ibool(reg_check_ret(pkg[1]))));
+        reg_check_set( pkg[0], _not(ibool(reg_check_ret(pkg[0]))));
    }
 }

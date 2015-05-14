@@ -57,6 +57,6 @@ void swi(double *pkg);
 void array(double *pkg);
 void aload(double *pkg);
 void aaload(double *pkg);
-void throw(double *pkg);
+void _throw(double *pkg);
 
 #endif

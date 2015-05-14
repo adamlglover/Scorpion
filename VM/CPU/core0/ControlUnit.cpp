@@ -332,6 +332,7 @@ Ram _Ram;
 /* Methods used to easily talk to the ram */
 double C0::getr(short cell_switch, long _addr)
 {
+     t_clock.ticks++;
      _Ram.CB = 2; // E
      _Ram.addr(_addr, false);
      _Ram.cell(cell_switch);
@@ -341,6 +342,7 @@ double C0::getr(short cell_switch, long _addr)
 
 void C0::setr(short cell_switch, long _addr, double data)
 {
+    t_clock.ticks++;
     _Ram.CB = 1; // S
     _Ram.addr(_addr, false);
     _Ram.cell(cell_switch);

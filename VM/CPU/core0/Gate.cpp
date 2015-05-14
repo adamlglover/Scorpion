@@ -545,7 +545,7 @@ int Gate::route(double instr, double r1,double r2, double r3)
        break;
        case 106:
        if(!ignore)
-         throw(pkg);
+         _throw(pkg);
        if(scmnd && (!ignore))
        cout << ".addr:" << IP << " " <<  "throw" << endl;
        break;

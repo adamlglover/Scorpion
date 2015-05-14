@@ -15,9 +15,11 @@
 *
 */
 #include "math.h"
+#include <math.h>
 #include "core0.h"
 #include "cpuf.h"
 #include "../../Log/Log.h"
+#include "runtime_exception.h"
 #include <stdlib.h>
 #include <sstream>
 #include <iostream>
@@ -127,7 +129,9 @@ long rand3(long lim)
 
 void rand_1(double *pkg)
 {
+  EAX = SDX + 1;
   double offset = rand() % 4;
+   while(!(EAX < SDX))
      EAX = _catch(rand1(SDX) - offset);
 }
 
@@ -226,6 +230,10 @@ void rem(double *pkg)
        EAX = ((long) pkg[1]) % ((long) pkg[2]);
    else
    {
+       RuntimeException re;
+       bool n = isnan(reg_check_ret(pkg[1]) / reg_check_ret(pkg[2]));
+       if(n)
+           re.introduce("ArathmeticException", "fatal error: / zero");
        if(I1 == DOUBLE)// double addition
          reg_check_set( pkg[0], fmod(reg_check_ret(pkg[1]), reg_check_ret(pkg[2])));
       else if(I1 == FLOAT)// float addition

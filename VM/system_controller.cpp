@@ -42,6 +42,8 @@ int STACK_LEVEL = 2;
 
 long mem = 2000000; // std 2mb of mem
 long pmem = 6000000; // std 6mb of mem
+long mmax = 3000000;
+long pmmax = 7000000;
 Log x86_log;
 Logger logger1;
 

@@ -15,6 +15,7 @@ class Ram {
        void prog_wipe();
        void prog_load(string);
        int prog_status(long);
+       void malloc(long,short);
 };
 
 #endif

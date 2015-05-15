@@ -334,7 +334,7 @@ double C0::getr(short cell_switch, long _addr)
 {
      t_clock.ticks++;
      _Ram.CB = 2; // E
-     _Ram.addr(_addr, false);
+     _Ram.addr((long) _addr, false);
      _Ram.cell(cell_switch);
 
      return _Ram.data(0.0); // get data from ram
@@ -344,7 +344,7 @@ void C0::setr(short cell_switch, long _addr, double data)
 {
     t_clock.ticks++;
     _Ram.CB = 1; // S
-    _Ram.addr(_addr, false);
+    _Ram.addr((long) _addr, false);
     _Ram.cell(cell_switch);
 
     _Ram.data(data);   // set data to ram

@@ -67,13 +67,13 @@ void cp(double *pkg)
 
 
 
-void array(double *pkg) // array numbers 5 int
+void array(double *pkg) // array numbers sdx int
 {
    if(pkg[1] == 0){
       SCR = -5;
       return;
    }   
-   core0.setr(0, pkg[0], pkg[1]); // check type
+   core0.setr(0, pkg[0], reg_check_ret(pkg[1])); // check type
    if(pkg[2] == INT || pkg[2] == BOOL || pkg[2] == CHAR || pkg[2] == FLOAT || pkg[2] == DOUBLE || pkg[2] == SHORT) { }
    else {
    	RuntimeException re;
@@ -1144,8 +1144,10 @@ void _return(double *pkg)
        ignore = false;
     else if(ignore && pkg[1] == 1) // skip
        inFunc = true;
-    else
+    else{
        IP = (long) core0.getr(0, pkg[0]);
+       core0.setr(0, pkg[0], core0.getr(0, pkg[0] + 1));
+    }
 }
 
 void call(double *pkg)
@@ -1153,6 +1155,7 @@ void call(double *pkg)
     TMP = IP;
     IP = (long) core0.getr(0,  pkg[0]);
     core0.setr(0, pkg[0], TMP);
+    core0.setr(0, pkg[0] + 1, IP);
 }
 
 void swp(double *pkg)

@@ -44,8 +44,10 @@
 #include <string>
 using namespace std;
 
-extern long mem; 
+extern long mem;
 extern long pmem;
+extern long mmax;
+extern long pmmax;
 #define NUM_CELLS 6 // (actually 4)-6 is the max
 double *ram; // cell 0
 double *lram;// cell 2
@@ -205,7 +207,6 @@ double Ram::data(double dataBus)
   return 0;
 }
 
-
 void Ram::prog_wipe()
 {
    if(!first_time){
@@ -249,7 +250,11 @@ long Ram::info(int info)
         return pmem; // return total program mem unformatted
    else if(info == 5)
 	return SIZE; // return current occupied prog mem
-  else 
+   else if(info == 8)
+      return mmax;
+   else if(info == 9)
+      return pmmax;
+   else 
     return 0;
 }
 

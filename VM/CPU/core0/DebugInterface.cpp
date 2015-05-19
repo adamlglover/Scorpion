@@ -1,3 +1,19 @@
+/*
+* Copyright 2015 Braxton Nunnally
+*
+*  Licensed under the Apache License, Version 2.0 (the "License");
+*  you may not use this file except in compliance with the License.
+*  You may obtain a copy of the License at
+*
+*      http://www.apache.org/licenses/LICENSE-2.0
+*
+*  Unless required by applicable law or agreed to in writing, software
+*  distributed under the License is distributed on an "AS IS" BASIS,
+*  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+*  See the License for the specific language governing permissions and
+*  limitations under the License.
+*
+*/
 #include <iostream>
 #include <string>
 #include <cstdlib>
@@ -8,32 +24,25 @@
 #include "../../Ram/ram.h"
 using namespace std;
 
-short DEBUG_STATE;
+short DEBUG_STATE = 0x00000;
 bool has_started = false;
 string command, instr;
-long addrr, skip;
+long addrr;
 extern bool inFunc;
+
 void debug();
 void debug_help();
 void listen();
 void update(string);
 
-double *d;
 /*
-* DEBUG CONSOLE COMMANDS
-* {Debug Mode}
-*
-* >  what
-* Debug Commands
-* ---------------------------------------------------
-* ls(list)   print debugger commands
-* n(next)   go to next line of execution
-* wh(where) print a trace to where we are in executing the file
-* p(prev)   go back to the previously line of execution
-* so(step out) setep out into the next line of execution that is not reaccurring
-* ?         what are we about to execute
+* DEBUG INTERFACE
+* Scorpion provides a simple debug
+* interface that allows you to debug your
+* scorpion programs. The debug interface will become
+* more complex as time passes.
 */
-void debugger(long addr, string instruction, double *data)
+void debugger(long addr, string instruction)
 {
     if(!has_started)
      debug();
@@ -57,7 +66,7 @@ void listen()
      ss << "[" << disasm.disassemble(i2) << ", " <<  disasm.disassemble(i3) << ", " << disasm.disassemble(i4) << "]";
      string args = ss.str();
      printf(".addr: %08X    %s %s", addrr, instr.c_str(), args.c_str());
-     debugger(addrr, instr, d);
+     debugger(addrr, instr);
    }
    else if(command == "n" || command == "next")
    {
@@ -77,17 +86,17 @@ void listen()
           DEBUG_STATE = 0x55;
         else{
            debugging = true;
-           debugger(addrr, instr, d);
+           debugger(addrr, instr);
         }
    }
-   else if(command == "si" || command == "step_in"){
+   else if(command == "fn" || command == "fource_nxt"){
       debugging = false;
       DEBUG_STATE = 0x44;
    }
    else
    {
       cout << "Error: " << command << " is not a debug command.\nUse ls or list for help." << endl;
-      debugger(addrr,instr, d);
+      debugger(addrr,instr);
    }
 }
 
@@ -99,13 +108,12 @@ void debug_help()
   cout << "n(next)        go to next line of execution" << endl;
   cout << "cont(continue) continue until a breakpoint is reached" << endl;
   cout << "so(step_out)   step out of a reaccurring loop or function" << endl;
-  cout << "si(step_in)    step into the next line of execution that is reaccurring" << endl;
+  cout << "fn(fource_nxt) fource jump to next occurance of a reaccurring loop or function" << endl;
   cout << "?              print what is about to be executed" << endl;
   cout << "---------------------------------------------------------------------------" << endl;
-  debugger(addrr,instr, d);
+  debugger(addrr,instr);
 }
 
-#define nullptr ((void *)0)
 void debug()
 {
    cout << "{Debug Mode}" << endl;

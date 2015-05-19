@@ -17,7 +17,6 @@ extern Disassembler disasm;
 extern string L1_ICache[ 1024000 ];
 extern double reg_check_ret(long addr);
 extern void reg_check_set(long addr, double data);
-extern void debugger(long addr,string instr, double *pkg);
 struct clock_s { // cpu status info
    long ticks;
 } ;

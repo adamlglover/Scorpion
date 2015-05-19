@@ -32,6 +32,7 @@ void CPU::Halt()
 
 void CPU::Run()
 {
+  IP = 0;
   core0.run0();
 }
 

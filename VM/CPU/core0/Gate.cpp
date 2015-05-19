@@ -14,6 +14,8 @@ using namespace std;
 
 double pkg[3];
 C0 _cpu;
+extern long skip;
+extern short DEBUG_STATE;
 int Gate::route(double instr, double r1,double r2, double r3)
 {
    pkg[0] = r1;
@@ -24,358 +26,474 @@ int Gate::route(double instr, double r1,double r2, double r3)
    {
   /*---System Control---*/
       case 0: // halt
+       if(debugging && !ignore)
+         debugger(IP,"halt", pkg);
+
        if(!ignore)
        p_exit();
        break;
-      case 1: // scmnd
-       if(!scmnd)
-         scmnd = true;
-       else 
-         scmnd = false;
-      cout << ".addr:" << IP << " " << "scmnd" << endl;
-       break;
+      case 1: // breakp
+      {
+        if(DEBUG_STATE == 0x43 || DEBUG_STATE == 0x54 || DEBUG_STATE == 0x55)
+        {
+           debugging = true;
+        }
+      }
+      break;
       case 2: // rhalt
+       if(debugging && !ignore)
+         debugger(IP,"rhalt", pkg);
+
        if(!ignore)
           _cpu.Reset();
-       if(scmnd && (!ignore))
-       cout <<  ".addr:" << IP << " " << "rhalt" << endl;
-        break;
+       break;
        case 3: // chalt
+       if(debugging && !ignore)
+         debugger(IP,"chalt", pkg);
+
        if(!ignore)
 	  _cpu.Halt();
-       if(scmnd && (!ignore))
-       cout <<  ".addr:" << IP << " " << "chalt" << endl;
         break;
 
    /*---ALU---*/
        case 4:
+       if(debugging && !ignore)
+         debugger(IP,"add", pkg);
+
        if(!ignore)
          add(pkg);
-       if(scmnd && (!ignore)) 
-       cout <<  ".addr:" << IP << " " << "add" << endl;
         break;
        case 5:
+       if(debugging && !ignore)
+         debugger(IP,"sub", pkg);
+
        if(!ignore)
          sub(pkg);
-       if(scmnd && (!ignore))
-       cout << ".addr:" << IP << " " <<  "sub" << endl;
         break;
        case 6:
+       if(debugging && !ignore)
+         debugger(IP,"mult", pkg);
+
        if(!ignore)
 	 mult(pkg);
-       if(scmnd && (!ignore))
-       cout << ".addr:" << IP << " " <<  "mult" << endl;
         break;
        case 7:
+       if(debugging && !ignore)
+         debugger(IP,"div", pkg);
+
        if(!ignore)
 	 div(pkg);
-       if(scmnd && (!ignore))
-       cout << ".addr:" << IP << " " <<  "div" << endl;
         break;
        case 8:
+       if(debugging && !ignore)
+         debugger(IP,"rem", pkg);
+
        if(!ignore)
 	 rem(pkg);
-       if(scmnd && (!ignore))
-       cout << ".addr:" << IP << " " <<  "rem" << endl;
  	break;
        case 9:
+       if(debugging && !ignore)
+         debugger(IP,"inc", pkg);
+
        if(!ignore)
          inc(pkg);
-       if(scmnd && (!ignore))
-       cout << ".addr:" << IP << " " <<  "inc" << endl;
        break;
        case 10:
+       if(debugging && !ignore)
+         debugger(IP,"dec", pkg);
+
        if(!ignore)
 	 dec(pkg);
-       if(scmnd && (!ignore))
-       cout << ".addr:" << IP << " " <<  "dec" << endl;
        break;
 
    /*---Logic Unit---*/
        case 11:
+       if(debugging && !ignore)
+         debugger(IP,"and", pkg);
+       
        if(!ignore)
          and_l(pkg);
-       if(scmnd && (!ignore))
-       cout << ".addr:" << IP << " " <<  "and" << endl;
        break;
        case 12:
+       if(debugging && !ignore)
+         debugger(IP,"or", pkg);
+       
        if(!ignore)
          or_l(pkg);
-       if(scmnd && (!ignore))
-       cout << ".addr:" << IP << " " <<  "or" << endl;
        break;
        case 13:
+       if(debugging && !ignore)
+         debugger(IP,"xor", pkg);
+       
        if(!ignore)
          xor_l(pkg);
-       if(scmnd && (!ignore))
-       cout << ".addr:" << IP << " " <<  "xor" << endl;
        break;
        case 14:
+       if(debugging && !ignore)
+         debugger(IP,"not", pkg);
+       
        if(!ignore)
          not_l(pkg);
-       if(scmnd && (!ignore))
-       cout << ".addr:" << IP << " " <<  "not" << endl;
        break;
        case 15:
+       if(debugging && !ignore)
+         debugger(IP,"nand", pkg);
+       
        if(!ignore)
          nand_l(pkg);
-       if(scmnd && (!ignore))
-       cout << ".addr:" << IP << " " <<  "nand" << endl;
        break;
        case 16:
+       if(debugging && !ignore)
+         debugger(IP,"nor", pkg);
+       
        if(!ignore)
          nor_l(pkg);
-       if(scmnd && (!ignore))
-       cout << ".addr:" << IP << " " <<  "nor" << endl;
        break;
        case 17:
+       if(debugging && !ignore)
+         debugger(IP,"xnor", pkg);
+       
        if(!ignore)
          xnor_l(pkg);
-       if(scmnd && (!ignore))
-       cout << ".addr:" << IP << " " <<  "xnor" << endl;
        break;
 
   /*---Data Transfer---*/
         case 18:
+       if(debugging && !ignore)
+         debugger(IP,"loadi", pkg);
+       
        if(!ignore)
          loadi(pkg);
-       if(scmnd && (!ignore))
-       cout << ".addr:" << IP << " " <<  "loadi" << endl;
        return 0;
        break;
 	 case 19:
+       if(debugging && !ignore)
+         debugger(IP,"loadbl", pkg);
+       
        if(!ignore)
          loadbl(pkg);
-       if(scmnd && (!ignore))
-       cout << ".addr:" << IP << " " <<  "loadbl" << endl;
        break;
        case 24:
-         push(pkg);
-       if(scmnd && (!ignore))
-       cout << ".addr:" << IP << " " <<  "push" << endl;
+       if(debugging && !ignore)
+         debugger(IP,"push", pkg);
+       push(pkg);
        break;
-	 case 25:
+       case 25:
+       if(debugging && !ignore)
+         debugger(IP,"return", pkg);
          _return(pkg);
-       if(scmnd && (!ignore))
-       cout << ".addr:" << IP << " " <<  "return" << endl;
        break;
-	 case 26:
+       case 26:
+        if(DEBUG_STATE == 0x44)
+        {
+           debugging = true;
+        }
+       if(debugging && !ignore)
+         debugger(IP,"call", pkg);
        if(!ignore)
          call(pkg);
-       if(scmnd && (!ignore))
-       cout << ".addr:" << IP << " " <<  "call" << endl;
        break;
-	 case 27:
+       case 27:
+       if(debugging && !ignore)
+         debugger(IP,"swp", pkg);
+       
        if(!ignore)
          swp(pkg);
-       if(scmnd && (!ignore))
-       cout << ".addr:" << IP << " " <<  "swp" << endl;
        break;
-	 case 29:
+       case 29:
+        if(DEBUG_STATE == 0x44)
+        {
+           debugging = true;
+        }
+       if(debugging && !ignore)
+         debugger(IP,"loop", pkg);
+       
        if(!ignore)
          loop(pkg);
-       if(scmnd && (!ignore))
-       cout << ".addr:" << IP << " " <<  "loop" << endl;
        break;
-	 case 30:
+       case 30:
+       if(debugging && !ignore)
+         debugger(IP,"end", pkg);
+       
          end();
-       if(scmnd && (!ignore))
-       cout << ".addr:" << IP << " " <<  "end" << endl;
        break;
 	 case 31:
+       if(debugging && !ignore)
+         debugger(IP,"endl", pkg);
+       
        if(!ignore)
          endl(pkg);
-       if(scmnd && (!ignore))
-       cout << ".addr:" << IP << " " <<  "endl" << endl;
        break;
 	 case 32:
+        if(DEBUG_STATE == 0x44)
+        {
+           debugging = true;
+        }
+       if(debugging && !ignore)
+         debugger(IP,"do", pkg);
+       
        if(if_ignore)
         passed_if++;
        if(!ignore)
          _do(pkg);
-       if(scmnd && (!ignore))
-       cout << ".addr:" << IP << " " <<  "do" << endl;
        break;
    /*---Special commands---*/
         case 33: // mov
+       if(debugging && !ignore)
+         debugger(IP,"mov", pkg);
+       
        if(!ignore)
           mov(pkg);
-       if(scmnd && (!ignore))
-       cout << ".addr:" << IP << " " <<  "mov" << endl;
          break;
         case 34: // rmov
+       if(debugging && !ignore)
+         debugger(IP,"rmov", pkg);
+       
        if(!ignore)
 	  rmov(pkg);
-       if(scmnd && (!ignore))
-       cout << ".addr:" << IP << " " <<  "rmov" << endl;
         break;
         case 35: // init
+       if(debugging && !ignore)
+         debugger(IP,"invoke", pkg);
+       
        if(!ignore) 
          invoke(pkg);
-       if(scmnd && (!ignore))
-       cout << ".addr:" << IP << " " <<  "invoke" << endl;
         break;
         case 36:
+        if(DEBUG_STATE == 0x44)
+        {
+           debugging = true;
+        }
+       if(debugging && !ignore)
+         debugger(IP,"ilt", pkg);
+       
        if(if_ignore)
         passed_if++;
        if(!ignore)
           ilt(pkg);
-       if(scmnd && (!ignore))
-       cout << ".addr:" << IP << " " <<  "ilt" << endl;
         break;
         case 37:
+        if(DEBUG_STATE == 0x44)
+        {
+           debugging = true;
+        }
+       if(debugging && !ignore)
+         debugger(IP,"igt", pkg);
+       
        if(if_ignore)
         passed_if++;
        if(!ignore)
         igt(pkg);
-       if(scmnd && (!ignore))
-       cout << ".addr:" << IP << " " <<  "igt" << endl;
         break;
         case 38:
+        if(DEBUG_STATE == 0x44)
+        {
+           debugging = true;
+        }
+       if(debugging && !ignore)
+         debugger(IP,"ile", pkg);
+       
        if(if_ignore)
         passed_if++;
        if(!ignore)
 	 ile(pkg);
-       if(scmnd && (!ignore))
-       cout << ".addr:" << IP << " " <<  "ile" << endl;
         break;
         case 39:
+        if(DEBUG_STATE == 0x44)
+        {
+           debugging = true;
+        }
+       if(debugging && !ignore)
+         debugger(IP,"ige", pkg);
+       
        if(if_ignore)
         passed_if++;
        if(!ignore)
 	ige(pkg);
-       if(scmnd && (!ignore))
-       cout << ".addr:" << IP << " " <<  "ige" << endl;
         break;
         case 40:
+        if(DEBUG_STATE == 0x44)
+        {
+           debugging = true;
+        }
+       if(debugging && !ignore)
+         debugger(IP,"ndo", pkg);
+       
        if(if_ignore)
         passed_if++;
        if(!ignore)
         ndo(pkg);
-       if(scmnd && (!ignore))
-       cout << ".addr:" << IP << " " <<  "ndo" << endl;
         break;
         case 41:
+        if(DEBUG_STATE == 0x44)
+        {
+           debugging = true;
+        }
+       if(debugging && !ignore)
+         debugger(IP,"inlt", pkg);
+       
        if(if_ignore)
         passed_if++;
        if(!ignore)
         inlt(pkg);
-       if(scmnd && (!ignore))
-	cout << ".addr:" << IP << " " <<  "inlt" << endl;
 	break;
         case 42:
+        if(DEBUG_STATE == 0x44)
+        {
+           debugging = true;
+        }
+       if(debugging && !ignore)
+         debugger(IP,"ingt", pkg);
+       
        if(if_ignore)
         passed_if++;
        if(!ignore)
 	ingt(pkg);
-       if(scmnd && (!ignore))
-        cout << ".addr:" << IP << " " <<  "ingt" << endl;
 	break;
  	case 43:
+        if(DEBUG_STATE == 0x44)
+        {
+           debugging = true;
+        }
+       if(debugging && !ignore)
+         debugger(IP,"inle", pkg);
+       
        if(if_ignore)
         passed_if++;
        if(!ignore)
 	inle(pkg);
-       if(scmnd && (!ignore))
- 	cout << ".addr:" << IP << " " <<  "inle" << endl;
 	break;
 	case 44:
+        if(DEBUG_STATE == 0x44)
+        {
+           debugging = true;
+        }
+       if(debugging && !ignore)
+         debugger(IP,"inge", pkg);
+       
        if(if_ignore)
         passed_if++;
        if(!ignore)
  	inge(pkg);
-       if(scmnd && (!ignore))
-	cout << ".addr:" << IP << " " <<  "inge" << endl;
 	break;
         case 45:
+       if(debugging && !ignore)
+         debugger(IP,"neg", pkg);
+       
        if(!ignore)
         neg(pkg);
-       if(scmnd && (!ignore))
-        cout << ".addr:" << IP << " " <<  "neg" << endl;
         break;
        case 52:
+       if(debugging && !ignore)
+         debugger(IP,"lock", pkg);
+       
        if(!ignore)
 	  lock(pkg);
-       if(scmnd && (!ignore))
-       cout << ".addr:" << IP << " " <<  "lock" << endl;
         break;
       case 54:
+       if(debugging && !ignore)
+         debugger(IP,"ulock", pkg);
+       
        if(!ignore)
 	  ulock(pkg);
-       if(scmnd && (!ignore))
-       cout << ".addr:" << IP << " " <<  "ulock" << endl;
 	break;
       case 55:
+       if(debugging && !ignore)
+         debugger(IP,"xreg", pkg);
+       
        if(!ignore)
 	  xreg(pkg);
-       if(scmnd && (!ignore))
-       cout << ".addr:" << IP << " " <<  "xreg" << endl;
         break;
       case 56:
+       if(debugging && !ignore)
+         debugger(IP,"clx", pkg);
+       
        if(!ignore)
           clx(pkg);
-       if(scmnd && (!ignore))
-       cout << ".addr:" << IP << " " <<  "clx" << endl;
         break;
        case 57:
+        if(DEBUG_STATE == 0x44)
+        {
+           debugging = true;
+        }
+       if(debugging && !ignore){
+         in_loop = true;
+         debugger(IP,"rloop", pkg);
+       }
        if(!ignore)
 	  rloop(pkg);
-       if(scmnd && (!ignore))
-       cout << ".addr:" << IP << " " <<  "rloop" << endl;
         break;
        case 58:
+        if(DEBUG_STATE == 0x44)
+        {
+           debugging = true;
+        }
+       if(debugging && !ignore){
+         in_loop = true;
+         debugger(IP,"wloop", pkg);
+       }
        if(!ignore)
           wloop(pkg);
-       if(scmnd && (!ignore))
-	cout << ".addr:" << IP << " " <<  "wloop" << endl;
-        break;
+       break;
        case 59:
+       if(debugging && !ignore){
+         in_loop = false;
+         debugger(IP,"endwl", pkg);
+       }
        if(!ignore)
           endwl(pkg);
-       if(scmnd && (!ignore))
-	cout << ".addr:" << IP << " " <<  "endwl" << endl;
 	break;
        case 61:
+       if(debugging && !ignore)
+         debugger(IP,"same", pkg);
+       
        if(!ignore)
           same(pkg);
-       if(scmnd && (!ignore))
-        cout << ".addr:" << IP << " " <<  "same" << endl;
         break;
        case 62: // nac
-       if(scmnd && (!ignore))
-        cout << ".addr:" << IP << " " <<  "nac" << endl;
+       if(debugging && !ignore)
+         debugger(IP,"nac", pkg);
+       
        break;
        case 63:
+       if(debugging && !ignore)
+         debugger(IP,"sr", pkg);
+       
        if(!ignore)
           sr(pkg);
-       if(scmnd && (!ignore))
-        cout << ".addr:" << IP << " " <<  "sr" << endl;
         break;
        case 64:
+       if(debugging && !ignore)
+         debugger(IP,"sl", pkg);
+       
        if(!ignore)
           sl(pkg);
-       if(scmnd && (!ignore))
-        cout << ".addr:" << IP << " " <<  "sl" << endl;
         break;
         case 65:
+       if(debugging && !ignore)
+         debugger(IP,"r_mv", pkg);
+       
        if(!ignore)
           r_mv(pkg);
-       if(scmnd && (!ignore))
-        cout << ".addr:" << IP << " " <<  "r_mv" << endl;
         break;
         case 66:
+       if(debugging && !ignore)
+         debugger(IP,"cpuid", pkg);
+       
        if(!ignore)
           cpuid();
-       if(scmnd && (!ignore))
-        cout << ".addr:" << IP << " " <<  "cpuid" << endl;
         break;
         case 67:
+       if(debugging && !ignore)
+         debugger(IP,"rdtsc", pkg);
+       
        if(!ignore)
            rdtsc();
-       if(scmnd && (!ignore))
-        cout << ".addr:" << IP << " " <<  "rdtsc" << endl;
         break;
        case 69:
+       if(debugging && !ignore)
+         debugger(IP,"print", pkg);
+       
        if(!ignore)
           _print(pkg);
       else if(ignore){
@@ -392,162 +510,190 @@ int Gate::route(double instr, double r1,double r2, double r3)
            IP--;
          }
       }
-       if(scmnd && (!ignore))
-        cout << ".addr:" << IP << " " <<  "print" << endl;
         break;
         case 70:
+       if(debugging && !ignore)
+         debugger(IP,"rand_1", pkg);
+       
        if(!ignore)
           rand_1(pkg);
-       if(scmnd && (!ignore))
-        cout << ".addr:" << IP << " " <<  "rand_1" << endl;
         break;
         case 71:
+       if(debugging && !ignore)
+         debugger(IP,"rand_2", pkg);
+       
        if(!ignore)
           rand_2(pkg);
-       if(scmnd && (!ignore))
-        cout << ".addr:" << IP << " " <<  "rand_2" << endl;
         break;
         case 72:
+       if(debugging && !ignore)
+         debugger(IP,"rand_3", pkg);
+       
        if(!ignore)
           rand_3(pkg);
-       if(scmnd && (!ignore))
-        cout << ".addr:" << IP << " " <<  "rand_3" << endl;
         break;
         case 77:
+       if(debugging && !ignore)
+         debugger(IP,"printf", pkg);
+       
           _printf(pkg);
-       if(scmnd && (!ignore))
-        cout << ".addr:" << IP << " " <<  "printf" << endl;
         break;
         case 78:
+       if(debugging && !ignore)
+         debugger(IP,"rhalt", pkg);
+       
        if(!ignore)
           loadc(pkg);
-       if(scmnd && (!ignore))
-       cout << ".addr:" << IP << " " <<  "loadc" << endl;
          break;
          case 79:
+       if(debugging && !ignore)
+         debugger(IP,"dload", pkg);
+       
        if(!ignore)
           dload(pkg);
-       if(scmnd && (!ignore))
-       cout << ".addr:" << IP << " " <<  "dload" << endl;
        break;
          case 80:
+       if(debugging && !ignore)
+         debugger(IP,"t_cast", pkg);
+       
        if(!ignore)
          t_cast(pkg);
-       if(scmnd && (!ignore))
-       cout << ".addr:" << IP << " " <<  "t_cast" << endl;
        break;
         case 81:
+       if(debugging && !ignore)
+         debugger(IP,"sload", pkg);
+       
        if(!ignore)
          sload(pkg);
-       if(scmnd && (!ignore))
-       cout << ".addr:" << IP << " " <<  "sload" << endl;
        break;
         case 82:
+       if(debugging && !ignore)
+         debugger(IP,"loadf", pkg);
+       
        if(!ignore)
          loadf(pkg);
-       if(scmnd && (!ignore))
-       cout << ".addr:" << IP << " " <<  "loadf" << endl;
        break;
        case 84:
+       if(debugging && !ignore)
+         debugger(IP,"rln", pkg);
+       
        if(!ignore)
          rln(pkg);
-       if(scmnd && (!ignore))
-       cout << ".addr:" << IP << " " <<  "rln" << endl;
        break;
        case 85:
+       if(debugging && !ignore)
+         debugger(IP,"rload", pkg);
+       
        if(!ignore)
          rload(pkg);
-       if(scmnd && (!ignore))
-       cout << ".addr:" << IP << " " <<  "rload" << endl;
        break;
        case 90:
+       if(debugging && !ignore)
+         debugger(IP,"ct_int", pkg);
+       
        if(!ignore)
          ct_int(pkg);
-       if(scmnd && (!ignore))
-       cout << ".addr:" << IP << " " <<  "ct_int" << endl;
        break;
        case 92:
+       if(debugging && !ignore)
+         debugger(IP,"anum", pkg);
+       
        if(!ignore)
          anum(pkg);
-       if(scmnd && (!ignore))
-       cout << ".addr:" << IP << " " <<  "anum" << endl;
        break;
        case 93:
+       if(debugging && !ignore)
+         debugger(IP,"sleep", pkg);
+       
        if(!ignore)
          _sleep(pkg);
-       if(scmnd && (!ignore))
-       cout << ".addr:" << IP << " " <<  "sleep" << endl;
        break;
        case 94:
+       if(debugging && !ignore)
+         debugger(IP,"cp", pkg);
+       
        if(!ignore)
          cp(pkg);
-       if(scmnd && (!ignore))
-       cout << ".addr:" << IP << " " <<  "cp" << endl;
        break;
        case 96:
+       if(debugging && !ignore)
+         debugger(IP,"string", pkg);
+       
          _string(pkg);
-       if(scmnd && (!ignore))
-       cout << ".addr:" << IP << " " <<  "string" << endl;
        break;
        case 97:
+       if(debugging && !ignore)
+         debugger(IP,"adr", pkg);
+       
        if(!ignore)
          adr(pkg);
-       if(scmnd && (!ignore))
-       cout << ".addr:" << IP << " " <<  "adr" << endl;
        break;
        case 98:
+       if(debugging && !ignore)
+         debugger(IP,"r_load", pkg);
+       
        if(!ignore)
          r_load(pkg);
-       if(scmnd && (!ignore))
-       cout << ".addr:" << IP << " " <<  "r_load" << endl;
        break;
        case 99:
+       if(debugging && !ignore)
+         debugger(IP,"strcp", pkg);
+       
        if(!ignore)
          strcp(pkg);
-       if(scmnd && (!ignore))
-       cout << ".addr:" << IP << " " <<  "strcp" << endl;
        break;
        case 100:
+       if(debugging && !ignore)
+         debugger(IP,"e2str", pkg);
+       
        if(!ignore)
          e2str(pkg);
-       if(scmnd && (!ignore))
-       cout << ".addr:" << IP << " " <<  "e2str" << endl;
        break; // strcpi
        case 101:
+       if(debugging && !ignore)
+         debugger(IP,"strcpi", pkg);
+       
        if(!ignore)
          strcpi(pkg);
-       if(scmnd && (!ignore))
-       cout << ".addr:" << IP << " " <<  "strcpi" << endl;
        break;
        case 102:
+       if(debugging && !ignore)
+         debugger(IP,"swi", pkg);
+       
        if(!ignore)
          swi(pkg);
-       if(scmnd && (!ignore))
-       cout << ".addr:" << IP << " " <<  "swi" << endl;
        break;
        case 103:
+       if(debugging && !ignore)
+         debugger(IP,"array", pkg);
+       
        if(!ignore)
          array(pkg);
-       if(scmnd && (!ignore))
-       cout << ".addr:" << IP << " " <<  "array" << endl;
        break;
        case 104:
+       if(debugging && !ignore)
+         debugger(IP,"aload", pkg);
+       
        if(!ignore)
          aload(pkg);
-       if(scmnd && (!ignore))
-       cout << ".addr:" << IP << " " <<  "array" << endl;
        break;
        case 105:
+       if(debugging && !ignore)
+         debugger(IP,"aaload", pkg);
+       
        if(!ignore)
          aaload(pkg);
-       if(scmnd && (!ignore))
-       cout << ".addr:" << IP << " " <<  "array" << endl;
        break;
        case 106:
+        if(DEBUG_STATE == 0x44)
+        {
+           debugging = true;
+        }
+       if(debugging && !ignore)
+         debugger(IP,"throw", pkg);
+       
        if(!ignore)
          _throw(pkg);
-       if(scmnd && (!ignore))
-       cout << ".addr:" << IP << " " <<  "throw" << endl;
        break;
        default:
          if(!ignore){

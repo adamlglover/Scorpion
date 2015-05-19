@@ -5,7 +5,8 @@
 #include "../x86Disassm/disassembler.h"
 using namespace std;
 extern bool _0Halted, scmnd, pass,
-            ignore, if_ignore;
+            ignore, if_ignore, in_func, in_loop,
+            debugging, clear_ignore;
 extern long EAX,TMP,IP, EBX, SDX, SFC, SCX, BP, EXC, PS, LG, LSL, I1, I2, SCR, AI, IPI, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12;
 extern long *id, auto_ipi, IPH, IPL,
               L1_ICache_length;
@@ -16,6 +17,7 @@ extern Disassembler disasm;
 extern string L1_ICache[ 1024000 ];
 extern double reg_check_ret(long addr);
 extern void reg_check_set(long addr, double data);
+extern void debugger(long addr,string instr, double *pkg);
 struct clock_s { // cpu status info
    long ticks;
 } ;

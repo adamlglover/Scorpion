@@ -17,6 +17,7 @@
 #include "math.h"
 #include <math.h>
 #include "core0.h"
+#include "../../var.h"
 #include "cpuf.h"
 #include "../../Log/Log.h"
 #include "runtime_exception.h"
@@ -211,6 +212,10 @@ void div(double *pkg)
        EAX = pkg[1] / pkg[2];
    else
    {
+       RuntimeException re;
+       if((reg_check_ret(pkg[1]) == 0) && (reg_check_ret(pkg[2]) == 0))
+           re.introduce("ArithmeticException", "fatal error: / zero");
+
        if(I1 == DOUBLE)// double addition
          reg_check_set( pkg[0], reg_check_ret(pkg[1]) / reg_check_ret(pkg[2]));
       else if(I1 == FLOAT)// float addition
@@ -231,9 +236,11 @@ void rem(double *pkg)
    else
    {
        RuntimeException re;
-       bool n = isnan(reg_check_ret(pkg[1]) / reg_check_ret(pkg[2]));
-       if(n)
-           re.introduce("ArathmeticException", "fatal error: / zero");
+       if((reg_check_ret(pkg[1]) == 0) && (reg_check_ret(pkg[2]) == 0))
+           re.introduce("ArithmeticException", "fatal error: / zero");
+       if((reg_check_ret(pkg[1]) == 1) && (reg_check_ret(pkg[2]) == 0))
+           reg_check_set( pkg[0], null);
+
        if(I1 == DOUBLE)// double addition
          reg_check_set( pkg[0], fmod(reg_check_ret(pkg[1]), reg_check_ret(pkg[2])));
       else if(I1 == FLOAT)// float addition
@@ -244,5 +251,5 @@ void rem(double *pkg)
          reg_check_set( pkg[0], ((int) reg_check_ret(pkg[1]) % (int) reg_check_ret(pkg[2]) ));
       else // int addition
          reg_check_set( pkg[0], ((long) reg_check_ret(pkg[1]) % (long) reg_check_ret(pkg[2]) ));
-   }
+  }
 }

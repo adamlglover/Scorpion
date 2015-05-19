@@ -39,6 +39,8 @@ using namespace std;
 bool inFunc = false;
 extern string prog_args;
 extern int arg_c;
+extern short DEBUG_STATE;
+
 void loadi(double *pkg)
 {
    if(pkg[1] == 21937856)
@@ -1144,18 +1146,24 @@ void _return(double *pkg)
        ignore = false;
     else if(ignore && pkg[1] == 1) // skip
        inFunc = true;
-    else{
+    else {
        IP = (long) core0.getr(0, pkg[0]);
        core0.setr(0, pkg[0], core0.getr(0, pkg[0] + 1));
+       if(DEBUG_STATE == 0x54)
+       {
+           debugging = true;
+       }
     }
 }
 
 void call(double *pkg)
 {
+    in_func = true;
     TMP = IP;
     IP = (long) core0.getr(0,  pkg[0]);
     core0.setr(0, pkg[0], TMP);
     core0.setr(0, pkg[0] + 1, IP);
+    inFunc = true;
 }
 
 void swp(double *pkg)
@@ -1167,6 +1175,7 @@ void swp(double *pkg)
 
 void loop(double *pkg)
 {
+     in_loop = true;
      core0.setr(0, pkg[1], pkg[2]);
      core0.setr(0, pkg[0], IP);
      waiting = true;
@@ -1188,8 +1197,13 @@ void endwl(double *pkg)
      ignore = false;
      pass = false;
   }
-  else if(!ignore && (core0.getr(0, pkg[0]) == 1)) // loop again
+  else if(!ignore && (core0.getr(0, pkg[0]) == 1)){ // loop again
        IP = core0.getr(0, pkg[1]);
+       if(DEBUG_STATE == 0x55)
+       {
+           debugging = true;
+       }
+   }
 }
 
 void rloop(double *pkg)
@@ -1215,9 +1229,14 @@ void endl(double *pkg)
 {
    if(waiting){
       core0.setr(0, pkg[1], (core0.getr(0, pkg[1]) - 1));
-    if(core0.getr(0, pkg[1]) <= 0)
+    if(core0.getr(0, pkg[1]) <= 0){
       waiting = false;
-   else {
+      if(DEBUG_STATE == 0x55)
+      {
+           debugging = true;
+      }
+    }
+    else {
       IP = core0.getr(0, pkg[0]);
    }
   }

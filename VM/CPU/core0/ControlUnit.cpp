@@ -55,7 +55,7 @@ clock_t tStart;
 clock_s t_clock;
 bool _0Halted, pass = false, scmnd = false,
      ignore = false, if_ignore = false,
-     waiting = false;
+     waiting = false, debugging = true, in_loop = false, in_func = false, clear_ignore = false;
 int passed_if = 0;
 
 long *id;
@@ -429,9 +429,10 @@ void execute() // The Decode process is inside the execute method(for performanc
        return;
     t_clock.ticks++;
 
-  if(scmnd) // slows down program execution
-   cout << "processing operands {0:" << disasm.disassemble(i1) << "} {1:" << disasm.disassemble(i2) << "} {2:" 
-        << disasm.disassemble(i3) << "} {3:" << disasm.disassemble(i4) << "}" << endl;
+  if(clear_ignore){
+     clear_ignore = false;
+     debugging = true;
+  }
    gate.route(disasm.disassemble(i1), disasm.disassemble(i2), disasm.disassemble(i3), disasm.disassemble(i4));
 }
 

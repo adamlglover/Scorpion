@@ -22,7 +22,7 @@ Scorpion source code does not have to be written in any particular editor or IDE
 This general guide is a quick guide to get you started with Scorpion programming and is not an in-depth explanation on how to 
 program in Scorpion.
 
-## 1.1 Invoking The interpreter
+## 2.1 Invoking The interpreter
 If you have yet to set up Scorpion, see: "Setting Things Up". Once Scorpion is set up correctly it will be set in your path on your 
 machine and can be directly typed in as a command. The Scorpion Virtual Machine takes 2 types of arguments when invoking the interpreter.
 
@@ -41,19 +41,19 @@ is in the files that you passed to the VM. Your program must be in binary format
               
 The above example program "file_reader" takes files as arguments and prints the contents of what is in those files.              
 
-## 1.2 A simple explanation
+## 2.2 A simple explanation
 The Scorpion Virtual machine in laymen's terms is a fictional machine that resides in your computer's memory and emulates the components 
 that are on that device. The end user will have a very similar experience on the Scorpion VM as they would have on the dedicated hardware.
 Scorpion is an extremely low level language and provides access to all the hardware on a specific machine ready to be programmed.
 
-#### 1.2.1 Memory
+#### 2.2.1 Memory
 Depending on the machine the Scorpion VM is running on will determine the amount of memory that it can access. Instead of having "heap memory" 
 or a pool of memory addresses that holds all variables and data, the Scorpion VM provides a virtualized ram chip that emulates the physical chip 
 that is on your device. 
 
 If you are more interested in learning about this virtual ram chip, see: "Advanced Memory Concepts" to learn more.
 
-#### 1.2.2 The Digital processor
+#### 2.2.2 The Digital processor
 The Scorpion Virtual Machine provides a Digital processor or virtual cpu that works as the heart of the SRE (Scorpion Runtime Environment). This virtual cpu is what you will be programming to do everything from performing simple math to processing a txt file. This digital processor emulates how a real microprocessor would operate and gives the end user a similar experience as the dedicated hardware would provide. When programming in Scorpion, you will be learning this "digital processor" and how it works to use its capabilities to your advantage to program it to do just about anything you would want it to do.
 
 ## 2.3 The syntax
@@ -67,3 +67,8 @@ Scorpion is very similar to assembly programming language while allowing for a m
 
           call main
           halt
+#Beginning with Scorpion programming
+
+## 3.1 Comments
+To implement a single line comment, you only need to use a semicolon (;)
+; This comments out code

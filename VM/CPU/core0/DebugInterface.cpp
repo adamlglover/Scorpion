@@ -19,14 +19,16 @@
 #include <cstdlib>
 #include <stdio.h>
 #include <sstream>
+#include <ctype.h>
 #include "datatrans.h"
 #include "core0.h"
 #include "../../Ram/ram.h"
+#include "../../program.h"
 using namespace std;
 
 short DEBUG_STATE = 0x00000;
 bool has_started = false;
-string command, instr;
+string command = "", instr;
 long addrr;
 extern bool inFunc;
 
@@ -55,10 +57,14 @@ extern string i2;
 extern string i3;
 extern string i4;
 
+void getinput();
+
 void listen()
 {
    cout << "\n>>>    ";
-   cin >> command;
+   command = "";
+   getinput();
+
    if(command == "ls" || command == "list")
      debug_help();
    else if(command == "?"){
@@ -100,6 +106,201 @@ void listen()
    }
 }
 
+string c;
+int oc_stream = 0;
+void s_char()
+{
+  // Set terminal to raw mode
+  system("stty raw");
+
+  // Wait for single character
+  c = getchar();
+
+   // Reset terminal to normal "cooked" mode
+   system("stty cooked");
+  oc_stream++;
+}
+
+void o_stream(string out)
+{
+   oc_stream += out.length() - 1;
+   cout << out;
+}
+
+void flush()
+{
+  if(!(oc_stream <= 0)){
+    cout << "\r";
+    for(int i = 0; i < oc_stream + 7; i++)
+       cout << "         ";
+    cout << "\r>>>    ";
+  }
+}
+
+int s_int(string data)
+{
+  int value = 0;
+  for(int i = 0; i < c.length(); i++){
+       value += c.at(i);
+ }
+ return value;
+}
+
+string list[100];
+int listptr = -1, list_size = -1, ptr = 0;
+
+void upshift()
+{
+  listptr++;
+  if(listptr >= 100)
+   listptr = 99;
+  
+  if(listptr < list_size){
+    flush(); // flush current input from console
+    oc_stream = 0;
+    o_stream(list[list_size - listptr]); // output from list stream
+  }
+  else {
+    flush();
+    oc_stream = 0;
+    o_stream(list[0]);
+    listptr = list_size;
+  }
+}
+
+void downshift()
+{
+  listptr--;
+  if(listptr < 0){
+    listptr = -1;
+    flush();
+    oc_stream = 0;
+    o_stream(command);
+  }
+  else {
+    flush(); // flush current input from console
+    oc_stream = 0;
+    o_stream(list[list_size - listptr]); // output from list stream
+  }
+}
+
+string trim(string str)
+{
+  return str.substr(0, str.size()-1);
+}
+
+#define KEY_UP 183
+#define KEY_DOWN 184
+#define KEY_RIGHT 185
+#define KEY_LEFT 186
+#define ESC 27
+#define ENTER 13
+#define CTRL_Z 26
+#define BACKSPACE 127
+
+int key, KEY_WAIT = 0, KEY_EVENTS = 0;
+void key_event(string chars) // we have full control of all keyboard recieved inputs
+{
+  key = s_int(chars);
+  if(key == ESC){
+    KEY_WAIT = 3; // wait 2 keys
+  }
+
+  KEY_WAIT--;
+  if(KEY_WAIT <= 0){
+    key += KEY_EVENTS;
+    KEY_WAIT = 0;
+    KEY_EVENTS = 0;
+    switch( key ){
+       case KEY_UP:
+         upshift();
+         getinput();
+       break;
+       case KEY_DOWN:
+        downshift();
+        getinput();
+       break;
+       case KEY_RIGHT:
+         for(int i = 0; i < 4; i++)
+           cout << "\b";
+         cout << "    ";
+         for(int i = 0; i < 4; i++)
+           cout << "\b";
+         getinput();
+       break;
+       case KEY_LEFT:
+         for(int i = 0; i < 4; i++)
+           cout << "\b";
+         cout << "    ";
+         for(int i = 0; i < 4; i++)
+           cout << "\b";
+         getinput();
+       break;
+       case CTRL_Z:
+           p_exit();
+       break;
+       case BACKSPACE:
+        {
+          oc_stream--;
+          if(!(oc_stream <= 0)){
+            if(listptr < 0)
+            { }
+            else
+              command = list[ list_size - listptr ];
+            command = trim(command);
+            flush();
+            cout << command;
+          }
+          else
+            oc_stream = 0;
+          getinput();
+        }
+       break;
+       case ENTER:
+         {
+         if(listptr < 0)
+         { }
+         else
+          command = list[ list_size - listptr ];
+
+          flush();
+          cout << command;
+          oc_stream = 0;
+
+         list_size++;       // save command
+         if((list_size > 100) || (ptr > 99)){
+           list_size = 100;
+           ptr = 0;
+         }
+
+         list[ ptr++ ] = command;
+         listptr = -1;
+         cout << "\n";
+        }
+       break;
+       default:
+         stringstream ss;
+         ss << (char) key;
+         command += ss.str();
+//         cout << "letter or symbol " << key << " " << command << " \n";
+         getinput();
+       break;
+    }
+  }
+  else{
+    KEY_EVENTS += key;
+    getinput();
+  }
+}
+
+void getinput()
+{
+
+  s_char();
+  key_event(c);
+  c = "";
+}
+
 void debug_help()
 {
   cout << "\nDebug Commands" << endl;
@@ -110,6 +311,7 @@ void debug_help()
   cout << "so(step_out)   step out of a reaccurring loop or function" << endl;
   cout << "fn(fource_nxt) fource jump to next occurance of a reaccurring loop or function" << endl;
   cout << "?              print what is about to be executed" << endl;
+  cout << "up/down(arrow keys)   shift up and down a list of recent debugger commands" << endl;
   cout << "---------------------------------------------------------------------------" << endl;
   debugger(addrr,instr);
 }

@@ -1,3 +1,4 @@
+#include "CPU/core0/core0.h"
 #include <stdlib.h>
 #include <stdio.h>
 #include <iostream>
@@ -7,11 +8,11 @@ using namespace std;
 /*
 * Scorpion VM Info
 */
-string Version = "0.0.19_12";
+string Version = "0.0.19_15";
 string v_stage = "beta";
 
 
-#define NUM_OPTIONS 4
+#define NUM_OPTIONS 5
 string args[ NUM_OPTIONS ];
 
 string OPTION = "";
@@ -23,6 +24,7 @@ void prepargs()
    args[1] = "-version";
    args[2] = "-Qms:";
    args[3] = "-pstd:";
+   args[4] = "-db";
 }
 
 bool isarg(string arg)
@@ -53,6 +55,7 @@ void help()
    cout << "[-options]\n\n    -version          print the current product version and exit" << endl;
    cout <<               "    -Qms:<value>      set inital memory size" << endl;
    cout <<               "    -pstd:<value>     set program memory size" << endl;
+   cout <<               "    -db               enable the Scorpion debug interface" << endl;
    exit(1);
 }
 
@@ -89,17 +92,10 @@ void handleargs(int argc, const char **args)
         mem = mb;
         if(mem == 0)
           mem = 1000000;
-     }/*
-     else if(OPTION == "-Qmx:"){
-        i++;
-        arg_start++;
-        data = args[i];
-        int mb = atoi(data.c_str());
-        mb *= 1000000; // convert to actual mem addrs
-        xmem = mb;
-        if(xmem == 0) // no mem
-          xmem = mem;
-     }*/
+     }
+     else if(OPTION == "-db"){
+        debugging = true;
+     }
      else if(OPTION == "-pstd:"){
         i++;
         arg_start++;

@@ -55,7 +55,8 @@ clock_t tStart;
 clock_s t_clock;
 bool _0Halted, pass = false, scmnd = false,
      ignore = false, if_ignore = false,
-     waiting = false, debugging = true, in_loop = false, in_func = false, clear_ignore = false;
+     waiting = false, debugging = false,
+     in_loop = false, in_func = false;
 int passed_if = 0;
 
 long *id;
@@ -429,10 +430,6 @@ void execute() // The Decode process is inside the execute method(for performanc
        return;
     t_clock.ticks++;
 
-  if(clear_ignore){
-     clear_ignore = false;
-     debugging = true;
-  }
    gate.route(disasm.disassemble(i1), disasm.disassemble(i2), disasm.disassemble(i3), disasm.disassemble(i4));
 }
 

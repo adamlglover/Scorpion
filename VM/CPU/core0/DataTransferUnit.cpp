@@ -988,6 +988,20 @@ void invoke(double *pkg)
        case 11: // set IP back to original pos before it was interrupted
           IP = auto_ipi;
        break;
+      case 12:
+        {
+
+          // Set terminal to raw mode
+          system("stty raw"); 
+
+          // Wait for single character
+          char input = getchar();
+
+          // Reset terminal to normal "cooked" mode
+          system("stty cooked");
+          core0.setr(0, SDX, (int) input);
+        }
+      break;
        case 18: // assemble data
         {
           string bin = disasm.assemble(SDX);

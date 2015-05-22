@@ -2,7 +2,7 @@
 #define VCPU 
 #include <string>
 #include "../../Log/Log.h"
-#include "../x86Disassm/disassembler.h"
+#include "../x24Disassm/disassembler.h"
 using namespace std;
 extern bool _0Halted, scmnd, pass,
             ignore, if_ignore, in_func, in_loop,

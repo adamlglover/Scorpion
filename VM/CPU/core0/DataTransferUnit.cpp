@@ -929,11 +929,27 @@ void rmov(double *pkg)
 }
 
 
+extern long SIZE;
 long iph, ipl; // ip high and low for threads
 void invoke(double *pkg)
 {
      switch((long) pkg[0] )
      {
+       case 0: // os system call
+        {
+          stringstream ss;
+          long start_addr = SDX + 1; // the command
+          char ch;
+          for(int i = 0; i < core0.getr(0, SDX); i++){
+             ch = core0.getr(0, start_addr++);
+             if((ch == '\n') || (ch == ' ') || (ch == '\t') || (ch == 10)){ }
+             else
+               ss << ch;
+          }
+          string command = "" + ss.str();;
+          system(command.c_str());
+        }
+       break;
        case 1: // log settings
         if(LG == 1)
           lg.On();
@@ -942,6 +958,43 @@ void invoke(double *pkg)
 
         SetPriority(LSL);
        break;
+       case 2:
+         Ram rm;
+         SCR = rm.info(pkg[1]);
+       break;
+       case 3: // push code to Ram
+        {
+         long addr = SFC;
+         string bin = "";
+         stringstream ss1;
+         for(long i = SDX; i < (SDX + SCX); i++){
+            ss1 << core0.getr(0, i);
+         }
+
+         bin += "" + ss1.str();
+         for(int i = 0; i < bin.length(); i++)
+          {
+               if(bin.at(i) != '1' || bin.at(i) != '0')
+               {
+                   SCR = -1;
+                   return;
+               }
+          } // verify is binary
+
+         prog(1, addr, bin);
+        }
+       break;
+       case 4: // get code from ram
+        {
+         string bin = prog(2, SDX, "");
+         SDX = bin.length();
+          int c = 0;
+          for(long i = SCX; c < bin.length(); i++){
+             core0.setr(0, i, bin.at(c));
+             c++;
+          }
+        }
+       break; 
        case 5:// I/O for GPIO pins
          InputOutput io;
          long data[8];
@@ -957,10 +1010,6 @@ void invoke(double *pkg)
                  EBX = 3;
       	    break;
 	  }
-       break;
-       case 2:
-         Ram rm;
-         SCR = rm.info(pkg[1]);
        break;
        case 6: // Os Calls for GPIO
            switch( SFC ) {
@@ -981,6 +1030,12 @@ void invoke(double *pkg)
             break;
           }
        break;
+       case 7: // Ram Modification
+         switch( SFC ) {
+          case 0:
+           SIZE = SDX; // Program Size modification(Dangerous!)
+          break;
+         }
        case 10: // goto <address>(could be used for multitasking)
 	  core0.Interrupt(SDX);
 	  SCR = 0;
@@ -992,7 +1047,7 @@ void invoke(double *pkg)
         {
 
           // Set terminal to raw mode
-          system("stty raw"); 
+          system("stty raw");
 
           // Wait for single character
           char input = getchar();
@@ -1016,11 +1071,22 @@ void invoke(double *pkg)
        case 19: // dissassemble data
         {
           string bin = "";
-          stringstream ss1;
+          stringstream ss1; // sdx - start addr
+                           // scx - length
           for(long i = SDX; i < (SDX + SCX); i++){
              ss1 << core0.getr(0, i);
           }
+
           bin += "" + ss1.str();
+          for(int i = 0; i < bin.length(); i++)
+          {
+               if(bin.at(i) != '1' || bin.at(i) != '0')
+               {
+                   SCR = -1;
+                   return;
+               }
+          } // verify is binary
+
           SDX = (long) disasm.disassemble(bin);
         }
        break;

@@ -83,7 +83,7 @@ void listen()
       DEBUG_STATE = 0x43;
       debugging = false;
    }
-   else if(command == "so" || command == "step_out"){
+   else if(command == "so" || command == "step out"){
 
         debugging = false;
         if((inFunc && !waiting))
@@ -95,7 +95,7 @@ void listen()
            debugger(addrr, instr);
         }
    }
-   else if(command == "fn" || command == "fource_nxt"){
+   else if(command == "fn" || command == "force next"){
       debugging = false;
       DEBUG_STATE = 0x44;
    }
@@ -106,7 +106,7 @@ void listen()
    }
 }
 
-string c;
+char c;
 int oc_stream = 0;
 void s_char()
 {
@@ -132,19 +132,19 @@ void flush()
   if(!(oc_stream <= 0)){
     cout << "\r";
     for(int i = 0; i < oc_stream + 7; i++)
-       cout << "         ";
+       cout << "   ";
     cout << "\r>>>    ";
   }
 }
 
-int s_int(string data)
+/*int s_int(string data)
 {
   int value = 0;
   for(int i = 0; i < c.length(); i++){
        value += c.at(i);
  }
  return value;
-}
+}*/
 
 string list[100];
 int listptr = -1, list_size = -1, ptr = 0;
@@ -199,9 +199,9 @@ string trim(string str)
 #define BACKSPACE 127
 
 int key, KEY_WAIT = 0, KEY_EVENTS = 0;
-void key_event(string chars) // we have full control of all keyboard recieved inputs
+void key_event(char event) // we have full control of all keyboard recieved inputs
 {
-  key = s_int(chars);
+  key = (int) event;
   if(key == ESC){
     KEY_WAIT = 3; // wait 2 keys
   }
@@ -245,8 +245,10 @@ void key_event(string chars) // we have full control of all keyboard recieved in
           if(!(oc_stream <= 0)){
             if(listptr < 0)
             { }
-            else
+            else{
               command = list[ list_size - listptr ];
+              listptr = -1;
+            }
             command = trim(command);
             flush();
             cout << command;
@@ -279,6 +281,12 @@ void key_event(string chars) // we have full control of all keyboard recieved in
         }
        break;
        default:
+         if(listptr < 0)
+         { }
+         else{
+           command = list[ list_size - listptr ];
+           listptr = -1;
+         }
          stringstream ss;
          ss << (char) key;
          command += ss.str();
@@ -298,7 +306,7 @@ void getinput()
 
   s_char();
   key_event(c);
-  c = "";
+  c = '#';
 }
 
 void debug_help()
@@ -308,8 +316,8 @@ void debug_help()
   cout << "ls(list)       list debugger commands" << endl;
   cout << "n(next)        go to next line of execution" << endl;
   cout << "cont(continue) continue until a breakpoint is reached" << endl;
-  cout << "so(step_out)   step out of a reaccurring loop or function" << endl;
-  cout << "fn(fource_nxt) fource jump to next occurance of a reaccurring loop or function" << endl;
+  cout << "so(step out)   step out of a reaccurring loop or function" << endl;
+  cout << "fn(force next) force jump to next occurance of a reaccurring if statement, loop, or function" << endl;
   cout << "?              print what is about to be executed" << endl;
   cout << "up/down(arrow keys)   shift up and down a list of recent debugger commands" << endl;
   cout << "---------------------------------------------------------------------------" << endl;

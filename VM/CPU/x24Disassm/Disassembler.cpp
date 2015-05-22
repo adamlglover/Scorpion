@@ -6,16 +6,20 @@
 #include <iostream>
 using namespace std;
 
+void bin_overload(string binary)
+{
+   stringstream ss;
+   ss << binary.length();
+   RuntimeException re;
+   re.introduce("BinarySizeOverloadException","max allowable binary instruction is 1020 bits size[" + ss.str() + "]");
+}
+
 double binary_decimal(string num) /* Function to convert binary to dec */
 {
   double dec = 0, n = 1, exp = 0;
   string bin = num;
-  if(bin.length() > 1020){
-    stringstream ss;
-    ss << bin.length();
-    RuntimeException re;
-    re.introduce("BinarySizeOverloadException","max allowable binary instruction is 1020 bits size[" + ss.str() + "]");
-  }
+  if(bin.length() > 1024)
+       bin_overload(bin);
   else {
      for(int i = bin.length() - 1; i > -1; i--)
      {
@@ -39,6 +43,10 @@ string decimal_binary(long num) /* Function to convert dec to binary */
         bin = holder + bin;
 	number /= 2;
      }
+
+     if(bin.length() > 1024)
+       bin_overload(bin);
+
      return bin;
  }
 

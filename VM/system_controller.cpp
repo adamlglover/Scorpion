@@ -82,7 +82,7 @@ void Restart()
    System::SetupSystem();
 }
 
-void x86Shutdown()
+void x24Shutdown()
 {
    mualloc();
    System::Running = false;

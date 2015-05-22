@@ -80,7 +80,7 @@ void handleargs(int argc, const char **args)
      if(OPTION == "-help")
         help();
      else if(OPTION == "-version"){
-        cout << "scorpion version \"" << Version << " " << v_stage << "\"\nScorpion Virtural Machine(TM)\nplatform version(" << Version << "-x86)" << endl;
+        cout << "scorpion version \"" << Version << " " << v_stage << "\"\nScorpion Virtural Machine(TM)\nplatform version(" << Version << "-x24)" << endl;
         exit(1);
      }
      else if(OPTION == "-Qms:"){

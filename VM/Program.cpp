@@ -27,7 +27,7 @@ using namespace std;
 
 string PROG = "";
 bool runnable = false;
-void x86Shutdown();
+void x24Shutdown();
 void Program::Save(string prog)
 {
    PROG = prog;
@@ -50,7 +50,7 @@ void Program::Run()
 
 void p_exit()
 {
-  x86Shutdown();
+  x24Shutdown();
   if(EXC == 1){
     string pname = getname();
     printf("\nThe program %s exited with code %d\n", pname.c_str(), EBX);

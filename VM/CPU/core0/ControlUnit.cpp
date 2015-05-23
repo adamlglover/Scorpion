@@ -135,6 +135,9 @@ double reg_check_ret(long addr)
            case 34:
             return IPI;
            break;
+           case 35:
+            return IP;
+           break;
            case 37:
             return I3;
            break;
@@ -369,8 +372,6 @@ void C0::Interrupt(double offset)
        core0.Reset();
     }
      IP = (long) offset;
-       fetch();
-       execute();
 }
 
 string prog(int set_enable, long index, string data)

@@ -155,15 +155,15 @@ int tibool(bool val);
 void strcp(double *pkg)
 {
    stringstream ss, ss1;
-   long start_addr = SDX + 1; // string 1
+   long start_addr = pkg[1] + 1; // string 1
    char ch;
-   for(int i = 0; i < core0.getr(0, SDX); i++){
+   for(int i = 0; i < core0.getr(0, pkg[1]); i++){
         ch = core0.getr(0, start_addr++);
         ss << ch;
    }
 
-   start_addr = SCX + 1; // string 2
-   for(int i = 0; i < core0.getr(0, SCX); i++){
+   start_addr = pkg[2] + 1; // string 2
+   for(int i = 0; i < core0.getr(0, pkg[2]); i++){
          ch = core0.getr(0, start_addr++);
          ss1 << ch;
    }
@@ -368,10 +368,15 @@ void _string(double *pkg) // string @434 32 'this is the string'
  }
 }
 
+char _ostream;
 void c_print(double _char)
 {
-    char c = _char;
-    cout << c;
+    if(_char == 269)
+         cout << std::flush;
+    else{
+      _ostream = _char;
+      cout << _ostream;
+    }
 }
 
 void _print(double *pkg)
@@ -396,6 +401,7 @@ void _print(double *pkg)
        long _str = disasm.disassemble(str); // dissasemble char
        c_print(_str); // print char
    }
+   cout << std::flush;
  }
  else{
   cout << "CPU print_length_logic err something went wrong while determing the length of the string to print" << endl;
@@ -585,6 +591,10 @@ void c_printf(double _char)
       }
     }
    }
+  else if(_char == 269){ // %fs r#
+    if(!ignore)
+        cout << std::flush;
+   }
   else if((!ignore)) {
     char c = _char;
     cout << c;
@@ -625,6 +635,7 @@ void _printf(double *pkg)
        c_printf(_str); // print char
    }
    reg = false;
+   cout << std::flush;
  }
  else{
   cout << "CPU print_length_logic err something went wrong while determing the length of the string to print" << endl;
@@ -1049,12 +1060,17 @@ void invoke(double *pkg)
           // Set terminal to raw mode
           system("stty raw");
 
+          char input;
           // Wait for single character
-          char input = getchar();
-
+          if(I1 != CHAR){ // do not print char to screen
+            input = getchar();
+            cout << "\b \b" << std::flush;
+          }
+          else
+            input = getchar();
           // Reset terminal to normal "cooked" mode
           system("stty cooked");
-          core0.setr(0, SDX, (int) input);
+          SDX = (int) input;
         }
       break;
        case 18: // assemble data

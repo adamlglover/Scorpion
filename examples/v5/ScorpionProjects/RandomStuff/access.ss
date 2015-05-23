@@ -2,7 +2,17 @@
 scmnd
 rhalt
 rhalt
-scmnd   
+scmnd
+;loadi @2000500 8
+;printf '2 = <v,2000500> l = <v,8000000>, <v,8060000>, <v,8000100>/n'  
+
+.func:
+   print 'in func!/n'
+   ret
+
+call func ; no more backtrack variable shyt YESSS!!!!! haha
+call func 
+   
 loadi CARS 0   
 
 add eax 734,43222
@@ -129,6 +139,11 @@ mov sdx 100
 rand_1
 r_mv eax a
 printf 'rand 1 = [<v,a>]/n'
+
+mov sdx 10
+mov i1 int
+neg sdx 
+invoke 0xA 0
 
 string excpn 'Random Exception'
 string msg 'This is a random exception'

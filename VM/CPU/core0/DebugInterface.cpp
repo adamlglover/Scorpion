@@ -71,7 +71,7 @@ void listen()
      stringstream ss;
      ss << "[" << disasm.disassemble(i2) << ", " <<  disasm.disassemble(i3) << ", " << disasm.disassemble(i4) << "]";
      string args = ss.str();
-     printf(".addr: %08X    %s %s", addrr, instr.c_str(), args.c_str());
+     printf(".addr: 0x%08X    %s %s", addrr, instr.c_str(), args.c_str());
      debugger(addrr, instr);
    }
    else if(command == "n" || command == "next")

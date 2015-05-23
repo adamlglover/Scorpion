@@ -1,5 +1,5 @@
 
-string password 'fe2ab7dee93'
+string password 'password'
 loadi usr_passwd 0                            ; will be our passwd string for later
 &&idx_offset: 500
 adr ref usr_passwd

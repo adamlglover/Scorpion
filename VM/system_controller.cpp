@@ -30,6 +30,7 @@
 #include "System.h"
 #include "Log/Log.h"
 #include "Log/Logger.h"
+#include "CPU/core0/runtime_exception.h"
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <sstream>
@@ -43,7 +44,8 @@ int STACK_LEVEL = 2;
 long mem = 2000000; // std 2mb of mem
 long pmem = 6000000; // std 6mb of mem
 long mmax = 3000000;
-long pmmax = 7000000;
+long mmin;
+
 Log x86_log;
 Logger logger1;
 
@@ -58,11 +60,107 @@ void malloc()
    lram = new (nothrow) double[ mem ];
    xram = new (nothrow) double[ mem ];
    program = new (nothrow) string[ pmem ];
+   mmin = mem;
 
    if(ram == nullptr || lram == nullptr || xram == nullptr || program == nullptr){
       cout << "Error: Could not create the Scorpion Virtural Machine.\nA fatal error has occured: Program will now exit." << endl;
       exit(-1039439);
    }
+}
+
+/*
+* ALLOCATION_FAILED = -3;
+*/
+int alloc(bool free, long size)// size(in bytes)
+{
+  if(free){ // free mem
+      if((mem - size) < mmin){
+          RuntimeException re;
+          re.introduce("ScorpionOutOfMemoryError","failure to free more memory than the minimum set ammount");
+       }
+
+       double *memory;
+       memory = new (nothrow) double[ mem ];
+       if(memory == nullptr)
+          return -3;
+
+       for(int i = 0; i < mem; i++)
+          memory[i] = ram[i];
+       delete[] ram;
+
+       ram = new (nothrow) double[ mem - size ];
+       if(ram == nullptr)
+          return -3;
+       for(int i = 0; i < (mem - size); i++)
+          ram[i] = memory[i];
+
+       // ---------------------------------------
+       for(int i = 0; i < mem; i++)
+          memory[i] = lram[i];
+       delete[] lram;
+
+       lram = new (nothrow) double[ mem - size ];
+       if(lram == nullptr)
+          return -3;
+       for(int i = 0; i < (mem - size); i++)
+          lram[i] = memory[i];
+
+       // ---------------------------------------
+       for(int i = 0; i < mem; i++)
+          memory[i] = xram[i];
+       delete[] xram;
+
+       xram = new (nothrow) double[ mem - size ];
+       if(xram == nullptr)
+          return -3;
+       for(int i = 0; i < (mem - size); i++)
+          xram[i] = memory[i];
+       mem -= size;
+  }
+  else {
+       if((size + mem) > mmax){
+          RuntimeException re;
+          re.introduce("ScorpionOutOfMemoryError","failure to allocate more memory than the max set ammount");
+       }
+
+       double *memory;
+       memory = new (nothrow) double[ mem ];
+       if(memory == nullptr)
+          return -3;
+
+       for(int i = 0; i < mem; i++)
+          memory[i] = ram[i];
+       delete[] ram;
+
+       ram = new (nothrow) double[ mem + size ];
+       if(ram == nullptr)
+          return -3;
+       for(int i = 0; i < mem; i++)
+          ram[i] = memory[i];
+
+// ---------------------------------------
+       for(int i = 0; i < mem; i++)
+          memory[i] = lram[i];
+       delete[] lram;
+
+       lram = new (nothrow) double[ mem + size ];
+       if(lram == nullptr)
+          return -3;
+       for(int i = 0; i < mem; i++)
+          lram[i] = memory[i];
+
+// ----------------------------------------
+       for(int i = 0; i < mem; i++)
+          memory[i] = xram[i];
+       delete[] xram;
+
+       xram = new (nothrow) double[ mem + size ];
+       if(xram == nullptr)
+          return -3;
+       for(int i = 0; i < mem; i++)
+          xram[i] = memory[i];
+       mem += size;
+  }
 }
 
 void mualloc()

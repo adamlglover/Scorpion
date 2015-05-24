@@ -47,7 +47,7 @@ using namespace std;
 extern long mem;
 extern long pmem;
 extern long mmax;
-extern long pmmax;
+extern long mmin;
 #define NUM_CELLS 6 // (actually 4)-6 is the max
 double *ram; // cell 0
 double *lram;// cell 2
@@ -74,11 +74,17 @@ long address = 0;
 int Ram::addr(long index, bool p_mem)
 {
   if(((index < 0) || (index > pmem)) && p_mem){
-         state = INDEX_OUT_OF_RANGE;
+         stringstream ss;
+         ss << index;
+         RuntimeException re;
+         re.introduce("RamIndexOutOfRangeException","failure to access ram outside of allocated space(@" + ss.str() + ")");
      return INDEX_OUT_OF_RANGE;
   }
   else if(((index < 0) || (index > mem)) && !p_mem){
-         state = INDEX_OUT_OF_RANGE;
+         stringstream ss;
+         ss << index;
+         RuntimeException re;
+         re.introduce("RamIndexOutOfRangeException","failure to access ram outside of allocated space(@" + ss.str() + ")");
      return INDEX_OUT_OF_RANGE;
   }
   else
@@ -104,7 +110,6 @@ long _char(long _ch);
 int ibool(long);
 double Ram::data(double dataBus)
 {
-  if( state == INDEX_OK ){
    if(Ram::CS == 0) {
       switch( Ram::CB ) {
          case 1: // S
@@ -192,18 +197,7 @@ double Ram::data(double dataBus)
            re.introduce("RamControlBusException","cannot access cell, invalid control bus input");
          break;
       }
-   }
-  }
-  else if(state == INDEX_OUT_OF_RANGE) {
-     stringstream ss;
-     ss << address;
-     RuntimeException re;
-     re.introduce("RamIndexOutOfRangeException","faliure to acccess ram at address #" + ss.str());
-  }
-  else {
-     RuntimeException re;
-     re.introduce("RamStateUnknownException","failure to get current ram state");
-  }
+    }
   return 0;
 }
 
@@ -253,7 +247,7 @@ long Ram::info(int info)
    else if(info == 8)
       return mmax;
    else if(info == 9)
-      return pmmax;
+      return mmin;
    else 
     return 0;
 }
@@ -263,7 +257,7 @@ long Ram::info(int info)
 bool overload = false;
 void nextinstr(string instr) /* load the next instruction to ram*/
 {
-   if(!(SIZE > pmem)){
+   if(!(SIZE >= pmem)){
         program[ SIZE++ ] = instr; //  assign the next  instr(I was being lazy)
         if((SIZE -1) < L1_ICache_length)
           L1_ICache[SIZE - 1] = instr; // this was the best I could do at the moment
@@ -300,7 +294,7 @@ void Ram::prog_load(string content)
      }
      else {
        Ram ramm;
-       printf("Ram: program_size_overload err \nsize > %d(%08x) \n      --size[%d] bytes\n", pmem, pmem, ramm.info(5));
+       printf("Ram: program_size_overload err \nsize > %d(%08x)   --size[%d] bytes\n", pmem, pmem, ramm.info(5));
        cout << "Shutting down...\n";
        EBX = null;
        p_exit();

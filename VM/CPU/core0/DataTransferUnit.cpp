@@ -941,6 +941,7 @@ void rmov(double *pkg)
 
 
 extern long SIZE;
+extern int alloc(bool free, long size);
 long iph, ipl; // ip high and low for threads
 void invoke(double *pkg)
 {
@@ -1163,6 +1164,9 @@ void invoke(double *pkg)
           data[0] = pkg[1];
           SCR = io.Write(1,data); // write to a file
         }
+       break;
+       case 128:
+          SCR = alloc(tibool(SDX), SCX);
        break;
        case 250: // get total internal time the cpu has been running(in secs)
           core0.setr(0, SDX, core0.GetTime());

@@ -75,7 +75,7 @@ void array(double *pkg) // array numbers sdx int
       SCR = -5;
       return;
    }   
-   core0.setr(0, pkg[0], reg_check_ret(pkg[1])); // check type
+   core0.setr(0, pkg[0], (int) reg_check_ret(pkg[1])); // check type
    if(pkg[2] == INT || pkg[2] == BOOL || pkg[2] == CHAR || pkg[2] == FLOAT || pkg[2] == DOUBLE || pkg[2] == SHORT) { }
    else {
    	RuntimeException re;
@@ -86,15 +86,16 @@ void array(double *pkg) // array numbers sdx int
    core0.setr(0, (pkg[0] + 1), pkg[2]);
    
    long ref = pkg[0] + 2;
-   for(int i = 0; i < pkg[1] - 1; i++)
+   for(int i = 0; i < pkg[1]; i++)
        core0.setr(0, ref++, 0);
 }
 
 int tibool( bool val );
+long _char(long);
 void aload(double *pkg) // aload numbers sdx i4
 {
-   long length = core0.getr(0, pkg[0]);
-   long index = reg_check_ret(pkg[1]);
+   long length = (long) core0.getr(0, pkg[0]);
+   long index = (long) reg_check_ret(pkg[1]);
    if(index >= length){
    	RuntimeException re;
    	stringstream ss, ss1;
@@ -105,8 +106,8 @@ void aload(double *pkg) // aload numbers sdx i4
    
    long addr = pkg[0] + 2;
    addr += index;
-   long array_type = core0.getr(0, pkg[0] + 1);
-   
+   long array_type = (long) core0.getr(0, pkg[0] + 1);
+
    if(array_type == INT)
        core0.setr(0, addr, (long) reg_check_ret(pkg[2]));
    else if(array_type == SHORT)
@@ -117,17 +118,20 @@ void aload(double *pkg) // aload numbers sdx i4
        core0.setr(0, addr, (float) reg_check_ret(pkg[2]));
    else if(array_type == BOOL)
        core0.setr(0, addr, tibool(reg_check_ret(pkg[2])) );
-   else if(array_type == CHAR){
-       char ch = reg_check_ret(pkg[2]);
-       int int_char = ch;
-       core0.setr(0, addr, int_char);
-   }    
+   else if(array_type == CHAR)
+       core0.setr(0, addr,  _char((long) reg_check_ret(pkg[2])));
+   else {
+        RuntimeException re;
+        stringstream ss;
+        ss << array_type;
+        re.introduce("ArrayTypeNotFoundException", "the specified array type: " + ss.str() + " was not found");
+   }
 }
 
 void aaload(double *pkg) // aaload numbers 0 num1
 {
-   long length = core0.getr(0, pkg[0]);
-   long index = reg_check_ret(pkg[1]);
+   long length = (long) core0.getr(0, pkg[0]);
+   long index = (long) reg_check_ret(pkg[1]);
    if(index >= length){
    	RuntimeException re;
    	stringstream ss, ss1;

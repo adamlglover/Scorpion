@@ -1,5 +1,5 @@
 
-string password 'fe2ab7dee93'
+string password 'dk3o399e3e'
 loadi usr_passwd 0                            ; will be our passwd string for later
 &&idx_offset: 500
 loadbl HasPassword false

@@ -539,7 +539,7 @@ int Gate::route(double instr, double r1,double r2, double r3)
         break;
         case 78:
        if(debugging && !ignore)
-         debugger(IP,"rhalt");
+         debugger(IP,"loadc");
        
        if(!ignore)
           loadc(pkg);

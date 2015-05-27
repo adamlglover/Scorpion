@@ -145,13 +145,16 @@ void aaload(double *pkg) // aaload numbers 0 num1
    reg_check_set(pkg[2], core0.getr(0, addr));
 }
 
+extern void sfinterrupt();
 void swi(double *pkg)
 {
    long ip = IP;	
    long start_addr = SDX;
    long run_for = SCX;
+   IP = start_addr;
    for(long i= 0; i < run_for; i++)
-        core0.Interrupt(start_addr++);
+        sfinterrupt();
+
    IP = ip;     
 }
 
@@ -946,7 +949,7 @@ void rmov(double *pkg)
 
 extern long SIZE;
 extern int alloc(bool free, long size);
-long iph, ipl; // ip high and low for threads
+extern void ucache();
 void invoke(double *pkg)
 {
      switch((long) pkg[0] )
@@ -983,7 +986,7 @@ void invoke(double *pkg)
          long addr = SFC;
          string bin = "";
          stringstream ss1;
-         for(long i = SDX; i < (SDX + SCX); i++){
+         for(long i = SDX + 1; i < (SDX + core0.getr(0, SDX)); i++){
             ss1 << core0.getr(0, i);
          }
 
@@ -997,6 +1000,7 @@ void invoke(double *pkg)
                }
           } // verify is binary
 
+         cout << "setting to addr " << addr << endl; 
          prog(1, addr, bin);
         }
        break;
@@ -1046,15 +1050,8 @@ void invoke(double *pkg)
             break;
           }
        break;
-       case 7: // Ram Modification
-         switch( SFC ) {
-          case 0:
-           SIZE = SDX; // Program Size modification(Dangerous!)
-          break;
-         }
        case 10: // goto <address>(could be used for multitasking)
 	  core0.Interrupt(SDX);
-	  SCR = 0;
        break;
        case 11: // set IP back to original pos before it was interrupted
           IP = auto_ipi;
@@ -1122,6 +1119,9 @@ void invoke(double *pkg)
           }
           SCX = arg_c - 2;
         }
+       break;
+       case 40:
+         ucache();
        break;
        case 42:
         {

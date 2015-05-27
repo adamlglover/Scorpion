@@ -78,6 +78,20 @@ string L1_ICache[ L1_Cache_Size ];
    string i3 = "";
    string i4 = "";
 
+extern string *program;
+extern long SIZE;
+void ucache()
+{
+   for(int i = 0; i < L1_Cache_Size; i++)
+   {
+      if(i > SIZE)
+         break;
+
+      if(L1_ICache[i] != program[i])
+        L1_ICache[i] = program[i];
+   }
+}
+
 bool reverse(bool cstate)
 {
     if(!cstate)
@@ -256,6 +270,11 @@ void reg_check_set(long addr, double data)
     }
 }
 
+void sfinterrupt()
+{
+  fetch();
+}
+
 bool C0::ACTIVE()
 {
   return reverse(_0Halted);
@@ -390,6 +409,7 @@ string prog(int set_enable, long index, string data)
 }
 
 int memstat;
+extern long offset;
 void fetch()
 {
    if(AI != 0){

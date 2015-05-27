@@ -13,7 +13,7 @@
 *  See the License for the specific language governing permissions and
 *  limitations under the License.
 *
-* athread.ppp
+* athread.cpp
 * Non concurrent threading
 *
 * The Scorpion VM supports 2

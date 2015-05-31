@@ -54,7 +54,7 @@ using namespace std;
 
   #define THREAD_STATE_ACTIVE 0x00001
 
-  #define THREAD STATE_PAUSED 0x00002
+  #define THREAD_STATE_PAUSED 0x00002
 
   #define THREAD_STATE_WAITING 0x00003
 

@@ -15,6 +15,7 @@
 *
 */
 #include "core0.h"
+#include "system_color.h"
 #include <cstdlib>
 #include "runtime_exception.h"
 #include "../../System.h"
@@ -592,15 +593,27 @@ void c_printf(double _char)
         cout << "null";
       else{
          long ref = _str + 1;
+         stringstream ss;
+         string message = "";
          for(int i = 0; i < core0.getr(0, _str); i++){
-             c_printf(core0.getr(0, ref++));
+             ss << (char) core0.getr(0, ref++) << "";
          }
+         message = ss.str();
+         cout << message;
       }
     }
    }
-  else if(_char == 269){ // %fs r#
+  else if(_char == 269){ // /&
     if(!ignore)
         cout << std::flush;
+  }
+  else if(_char == 270){ // %col shade
+    reg = true;
+    string str = prog(2, IP++, ""); // get color shade
+    long _str = disasm.disassemble(str); // dissasemble char
+    SystemColor color;
+    if(color.isColor(core0.getr(0, _str), I2) && !ignore)
+      color.changeColor();
    }
   else if((!ignore)) {
     char c = _char;
@@ -642,7 +655,6 @@ void _printf(double *pkg)
        c_printf(_str); // print char
    }
    reg = false;
-   cout << std::flush;
  }
  else{
   cout << "CPU print_length_logic err something went wrong while determing the length of the string to print" << endl;
@@ -1171,6 +1183,10 @@ void invoke(double *pkg)
        break;
        case 128:
           SCR = alloc(tibool(SDX), SCX);
+       break;
+       case 132:
+          SystemColor color;
+          SCR = color.getSystemColorInfo((int) SDX);
        break;
        case 250: // get total internal time the cpu has been running(in secs)
           core0.setr(0, SDX, core0.GetTime());

@@ -280,6 +280,7 @@ bool C0::ACTIVE()
   return reverse(_0Halted);
 }
 
+extern void _sys_color_init();
 void C0::Reset()
 {
   lg.v("System","RMD Atrix X1 340K Cortex processor core boot");
@@ -318,6 +319,8 @@ void C0::Reset()
   id[1] = 1; // # of cores
   id[2] = 4; // IFT
   id[3] = 315; // Production date
+
+  _sys_color_init();
 }
 
 void C0::Halt()

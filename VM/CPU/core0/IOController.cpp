@@ -35,7 +35,7 @@ long InputOutput::Write(int device,  long *data)
 {
    switch( device ) {
       case 0:  // GPIO
-        return GPIOWrite(SDX, TMP);
+        return GPIOWrite(SDX, SCX);
       break;
       case 1:
        {
@@ -55,13 +55,12 @@ long InputOutput::Write(int device,  long *data)
          else if(data[0] == 2)
          {
            if (stream.is_open()){
-             //char fstream[1000000];
-             long start_addr = SCX;
-             start_addr++;
+             TMP = SDX;
+             TMP++;
              int ch;
              char wrd;
-             for(int i = 0; i < core0.getr(0, SCX); i++){
-                 ch = core0.getr(0, start_addr++);
+             for(int i = 0; i < core0.getr(0, SDX); i++){
+                 ch = core0.getr(0, TMP++);
                  wrd = ch;
                  stream << wrd;
              }
@@ -95,9 +94,9 @@ long InputOutput::Read(int device,  long *data)
        {
            if(data[0] == 1) // check for a file's presence
           {
-             long start_addr = SCX;
+             TMP = SDX;
              file_name = "";
-             for(int i = start_addr + 1; i < (core0.getr(0, SCX) + SCX) + 1; i++)
+             for(int i = TMP + 1; i < (core0.getr(0, SDX) + SDX) + 1; i++)
                  file_name += core0.getr(0, i);
              return ibool(file_exists(file_name.c_str()));
           }
@@ -107,12 +106,12 @@ long InputOutput::Read(int device,  long *data)
           }
           else if(data[0] == 6) // load the temporary file data to the ram
           {
-             long start_addr = SDX + 1;
+             TMP = SDX + 1;
              int ch;
              for(long i = 0; i < p.length(); i++)
              {
                   ch = p.at(i);
-                  core0.setr(0, start_addr++, ch);
+                  core0.setr(0, TMP++, ch);
              }
           }
           else if(data[0] == 2) // save the file in a temporary location

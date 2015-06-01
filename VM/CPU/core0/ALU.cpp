@@ -33,13 +33,17 @@ void add(double *pkg)// add <eax><const><const> | add <reg><mem> | add <mem><reg
        EAX = pkg[1] + pkg[2];
    else
    {
-      if(I1 == DOUBLE)// double addition
+      RuntimeException re;
+       if((reg_check_ret(pkg[1]) == null) && (reg_check_ret(pkg[2]) == null))
+           re.introduce("NullpointerException", "cannot perform math on null element");
+
+      if(SFC == DOUBLE)// double addition
          reg_check_set( pkg[0], reg_check_ret(pkg[1]) + reg_check_ret(pkg[2]));
-      else if(I1 == FLOAT)// float addition
+      else if(SFC == FLOAT)// float addition
          reg_check_set(pkg[0], ((float) reg_check_ret(pkg[1]) + reg_check_ret(pkg[2])) );
-      else if(I1 == INT)// int addition
+      else if(SFC == INT)// int addition
          reg_check_set( pkg[0], ((long) reg_check_ret(pkg[1]) + reg_check_ret(pkg[2]) ));
-      else if(I1 == SHORT)// short addition
+      else if(SFC == SHORT)// short addition
          reg_check_set( pkg[0], ((int) reg_check_ret(pkg[1]) + reg_check_ret(pkg[2]) ));
       else // int addition
          reg_check_set( pkg[0], ((long) reg_check_ret(pkg[1]) + reg_check_ret(pkg[2]) ));
@@ -51,11 +55,15 @@ void sr(double *pkg)
    if(pkg[0] == 20)
        EAX = EAX >> (long) SDX;
    else {
-       if(I1 == INT){
+      RuntimeException re;
+       if(reg_check_ret(pkg[0]) == null)
+           re.introduce("NullpointerException", "cannot perform math on null element");
+
+       if(SFC == INT){
          long right = (long) reg_check_ret(pkg[0]) >> (short) SDX;
          reg_check_set(pkg[0], right);
        }
-       else if(I1 == SHORT){
+       else if(SFC == SHORT){
          int right = (int) reg_check_ret(pkg[0]) >> (short) SDX;
          reg_check_set(pkg[0], right);
        }
@@ -71,11 +79,15 @@ void sl(double *pkg)
    if(pkg[0] == 20)
        EAX = EAX << (long) SDX;
    else {
-        if(I1 == INT){
+        RuntimeException re;
+       if(reg_check_ret(pkg[0]) == null)
+           re.introduce("NullpointerException", "cannot perform math on null element");
+
+        if(SFC == INT){
          long right = (long) reg_check_ret(pkg[0]) << (short) SDX;
          reg_check_set(pkg[0], right);
        }
-       else if(I1 == SHORT){
+       else if(SFC == SHORT){
          int right = (int) reg_check_ret(pkg[0]) << (short) SDX;
          reg_check_set(pkg[0], right);
        }
@@ -88,7 +100,7 @@ void sl(double *pkg)
 
 void rdtsc() // Read Time Stamp Counter
 {
-   EAX = t_clock.ticks; // store total clock ticks since last startup
+   EAX = t_clock.cycles; // store total clock ticks since last startup
 }
 
 void cpuid()
@@ -154,13 +166,17 @@ void sub(double *pkg)
        EAX = pkg[1] - pkg[2];
    else
    {
-       if(I1 == DOUBLE)// double addition
+       RuntimeException re;
+       if((reg_check_ret(pkg[1]) == null) && (reg_check_ret(pkg[2]) == null))
+           re.introduce("NullpointerException", "cannot perform math on null element");
+
+       if(SFC == DOUBLE)// double addition
          reg_check_set( pkg[0], reg_check_ret(pkg[1]) - reg_check_ret(pkg[2]));
-      else if(I1 == FLOAT)// float addition
+      else if(SFC == FLOAT)// float addition
          reg_check_set(pkg[0], ((float) reg_check_ret(pkg[1]) - reg_check_ret(pkg[2])) );
-      else if(I1 == INT)// int addition
+      else if(SFC == INT)// int addition
          reg_check_set( pkg[0], ((long) reg_check_ret(pkg[1]) - reg_check_ret(pkg[2]) ));
-      else if(I1 == SHORT)// short addition
+      else if(SFC == SHORT)// short addition
          reg_check_set( pkg[0], ((int) reg_check_ret(pkg[1]) - reg_check_ret(pkg[2]) ));
       else // int addition
          reg_check_set( pkg[0], ((long) reg_check_ret(pkg[1]) - reg_check_ret(pkg[2]) ));
@@ -173,6 +189,10 @@ void inc(double *pkg)
        EAX++;
    else
     {
+       RuntimeException re;
+       if(reg_check_ret(pkg[0]) == null)
+           re.introduce("NullpointerException", "cannot perform math on null element");
+
        reg_check_set(pkg[0], (reg_check_ret(pkg[0]) + 1));
     }
 }
@@ -183,6 +203,10 @@ void dec(double *pkg)
        EAX--;
    else
     {
+       RuntimeException re;
+       if(reg_check_ret(pkg[0]) == null)
+           re.introduce("NullpointerException", "cannot perform math on null element");
+
        reg_check_set(pkg[0], (reg_check_ret(pkg[0]) - 1));
     }
 }
@@ -193,13 +217,17 @@ void mult(double *pkg)
        EAX = pkg[1] * pkg[2];
    else
    {
-       if(I1 == DOUBLE)// double addition
+       RuntimeException re;
+       if((reg_check_ret(pkg[1]) == null) && (reg_check_ret(pkg[2]) == null))
+           re.introduce("NullpointerException", "cannot perform math on null element");
+
+       if(SFC == DOUBLE)// double addition
          reg_check_set( pkg[0], reg_check_ret(pkg[1]) * reg_check_ret(pkg[2]));
-      else if(I1 == FLOAT)// float addition
+      else if(SFC == FLOAT)// float addition
          reg_check_set(pkg[0], ((float) reg_check_ret(pkg[1]) * reg_check_ret(pkg[2])) );
-      else if(I1 == INT)// int addition
+      else if(SFC == INT)// int addition
          reg_check_set( pkg[0], ((long) reg_check_ret(pkg[1]) * reg_check_ret(pkg[2]) ));
-      else if(I1 == SHORT)// short addition
+      else if(SFC == SHORT)// short addition
          reg_check_set( pkg[0], ((int) reg_check_ret(pkg[1]) * reg_check_ret(pkg[2]) ));
       else // int addition
          reg_check_set( pkg[0], ((long) reg_check_ret(pkg[1]) * reg_check_ret(pkg[2]) ));
@@ -215,14 +243,16 @@ void div(double *pkg)
        RuntimeException re;
        if((reg_check_ret(pkg[1]) == 0) && (reg_check_ret(pkg[2]) == 0))
            re.introduce("ArithmeticException", "fatal error: / zero");
+       if((reg_check_ret(pkg[1]) == null) && (reg_check_ret(pkg[2]) == null))
+           re.introduce("NullpointerException", "cannot perform math on null element");
 
-       if(I1 == DOUBLE)// double addition
+       if(SFC == DOUBLE)// double addition
          reg_check_set( pkg[0], reg_check_ret(pkg[1]) / reg_check_ret(pkg[2]));
-      else if(I1 == FLOAT)// float addition
+      else if(SFC == FLOAT)// float addition
          reg_check_set(pkg[0], ((float) reg_check_ret(pkg[1]) / reg_check_ret(pkg[2])) );
-      else if(I1 == INT)// int addition
+      else if(SFC == INT)// int addition
          reg_check_set( pkg[0], ((long) reg_check_ret(pkg[1]) / reg_check_ret(pkg[2]) ));
-      else if(I1 == SHORT)// short addition
+      else if(SFC == SHORT)// short addition
          reg_check_set( pkg[0], ((int) reg_check_ret(pkg[1]) / reg_check_ret(pkg[2]) ));
       else // int addition
          reg_check_set( pkg[0], ((long) reg_check_ret(pkg[1]) / reg_check_ret(pkg[2]) ));
@@ -240,14 +270,16 @@ void rem(double *pkg)
            re.introduce("ArithmeticException", "fatal error: / zero");
        if((reg_check_ret(pkg[1]) == 1) && (reg_check_ret(pkg[2]) == 0))
            reg_check_set( pkg[0], null);
-
-       if(I1 == DOUBLE)// double addition
+       if((reg_check_ret(pkg[1]) == null) && (reg_check_ret(pkg[2]) == null))
+           re.introduce("NullpointerException", "cannot perform math on null element");
+       
+       if(SFC == DOUBLE)// double addition
          reg_check_set( pkg[0], fmod(reg_check_ret(pkg[1]), reg_check_ret(pkg[2])));
-      else if(I1 == FLOAT)// float addition
+      else if(SFC == FLOAT)// float addition
          reg_check_set(pkg[0], ((float) fmod(reg_check_ret(pkg[1]), reg_check_ret(pkg[2]))) );
-      else if(I1 == INT)// int addition
+      else if(SFC == INT)// int addition
          reg_check_set( pkg[0], ((long) reg_check_ret(pkg[1]) % (long) reg_check_ret(pkg[2]) ));
-      else if(I1 == SHORT)// short addition
+      else if(SFC == SHORT)// short addition
          reg_check_set( pkg[0], ((int) reg_check_ret(pkg[1]) % (int) reg_check_ret(pkg[2]) ));
       else // int addition
          reg_check_set( pkg[0], ((long) reg_check_ret(pkg[1]) % (long) reg_check_ret(pkg[2]) ));

@@ -312,7 +312,7 @@ void C0::Reset()
   I12  = 0;
   SCR = 0; // system call i/o response code
 
-  t_clock.ticks = 0;
+  t_clock.cycles = 0;
 
   id =  new long[ 4 ];
   id[0] = 8008; // processor id
@@ -358,7 +358,7 @@ Ram _Ram;
 /* Methods used to easily talk to the ram */
 double C0::getr(short cell_switch, long _addr)
 {
-     t_clock.ticks++;
+     t_clock.cycles++;
      _Ram.CB = 2; // E
      _Ram.addr((long) _addr, false);
      _Ram.cell(cell_switch);
@@ -368,7 +368,7 @@ double C0::getr(short cell_switch, long _addr)
 
 void C0::setr(short cell_switch, long _addr, double data)
 {
-    t_clock.ticks++;
+    t_clock.cycles++;
     _Ram.CB = 1; // S
     _Ram.addr((long) _addr, false);
     _Ram.cell(cell_switch);
@@ -416,7 +416,7 @@ extern long offset;
 void fetch()
 {
    if(AI != 0){
-      if((t_clock.ticks % AI) == 0){
+      if((t_clock.cycles % AI) == 0){
          auto_ipi = IP; // store previous ip pos
          IP = IPI;    // tell cpu to scamper off and do something random(usually used in multitasking)
       }
@@ -452,7 +452,7 @@ void execute() // The Decode process is inside the execute method(for performanc
     }
     else if(_0Halted)
        return;
-    t_clock.ticks++;
+    t_clock.cycles++;
 
    gate.route(disasm.disassemble(i1), disasm.disassemble(i2), disasm.disassemble(i3), disasm.disassemble(i4));
 }

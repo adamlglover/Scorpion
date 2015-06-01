@@ -61,7 +61,7 @@ void getinput();
 
 void listen()
 {
-   cout << "\n>>>    ";
+   cout << "\033[0;34m" << "\n>>>    " << "\033[0m";
    command = "";
    getinput();
 

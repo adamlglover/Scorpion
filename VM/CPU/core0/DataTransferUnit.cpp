@@ -52,15 +52,15 @@ void loadi(double *pkg)
 
 void rload(double *pkg)
 {
-    long ref = core0.getr(0, pkg[1]);
-    double reg = core0.getr(0, ref);
+    TMP = core0.getr(0, pkg[1]);
+    double reg = core0.getr(0, TMP);
     core0.setr(0, pkg[0], reg);
 }
 
 void r_load(double *pkg)
 {
-    long ref = core0.getr(0, pkg[0]);
-    core0.setr(0, ref, core0.getr(0, pkg[1]));
+    TMP = core0.getr(0, pkg[0]);
+    core0.setr(0, TMP, core0.getr(0, pkg[1]));
 }
 
 void cp(double *pkg)
@@ -86,9 +86,9 @@ void array(double *pkg) // array numbers sdx int
    }
    core0.setr(0, (pkg[0] + 1), pkg[2]);
    
-   long ref = pkg[0] + 2;
+   TMP = pkg[0] + 2;
    for(int i = 0; i < pkg[1]; i++)
-       core0.setr(0, ref++, 0);
+       core0.setr(0, TMP++, 0);
 }
 
 int tibool( bool val );
@@ -107,24 +107,24 @@ void aload(double *pkg) // aload numbers sdx i4
    
    long addr = pkg[0] + 2;
    addr += index;
-   long array_type = (long) core0.getr(0, pkg[0] + 1);
+   TMP  = (long) core0.getr(0, pkg[0] + 1);
 
-   if(array_type == INT)
+   if(TMP == INT)
        core0.setr(0, addr, (long) reg_check_ret(pkg[2]));
-   else if(array_type == SHORT)
+   else if(TMP == SHORT)
        core0.setr(0, addr, (int) reg_check_ret(pkg[2]));
-   else if(array_type == DOUBLE)
+   else if(TMP == DOUBLE)
        core0.setr(0, addr, (double) reg_check_ret(pkg[2]));
-   else if(array_type == FLOAT)
+   else if(TMP == FLOAT)
        core0.setr(0, addr, (float) reg_check_ret(pkg[2]));
-   else if(array_type == BOOL)
+   else if(TMP == BOOL)
        core0.setr(0, addr, tibool(reg_check_ret(pkg[2])) );
-   else if(array_type == CHAR)
+   else if(TMP == CHAR)
        core0.setr(0, addr,  _char((long) reg_check_ret(pkg[2])));
    else {
         RuntimeException re;
         stringstream ss;
-        ss << array_type;
+        ss << TMP;
         re.introduce("ArrayTypeNotFoundException", "the specified array type: " + ss.str() + " was not found");
    }
 }
@@ -141,38 +141,37 @@ void aaload(double *pkg) // aaload numbers 0 num1
    	re.introduce("ArrayLengthOutOfBoundsException", "index >= length;  could not access array at index[" + ss.str() + "] length is: " + ss1.str());
    }
    
-   long addr = pkg[0] + 2;
-   addr += index;
-   reg_check_set(pkg[2], core0.getr(0, addr));
+   TMP = pkg[0] + 2;
+   TMP += index;
+   reg_check_set(pkg[2], core0.getr(0, TMP));
 }
 
 extern void sfinterrupt();
 void swi(double *pkg)
 {
-   long ip = IP;	
-   long start_addr = SDX;
-   long run_for = SCX;
-   IP = start_addr;
+   long ip = IP;
+   long run_for = SDX;
+   IP = SCX;
    for(long i= 0; i < run_for; i++)
         sfinterrupt();
 
-   IP = ip;     
+   IP = ip;
 }
 
 int tibool(bool val);
 void strcp(double *pkg)
 {
    stringstream ss, ss1;
-   long start_addr = pkg[1] + 1; // string 1
+   TMP = pkg[1] + 1; // string 1
    char ch;
    for(int i = 0; i < core0.getr(0, pkg[1]); i++){
-        ch = core0.getr(0, start_addr++);
+        ch = core0.getr(0, TMP++);
         ss << ch;
    }
 
-   start_addr = pkg[2] + 1; // string 2
+   TMP = pkg[2] + 1; // string 2
    for(int i = 0; i < core0.getr(0, pkg[2]); i++){
-         ch = core0.getr(0, start_addr++);
+         ch = core0.getr(0, TMP++);
          ss1 << ch;
    }
     reg_check_set( pkg[0], tibool(ss.str() == ss1.str()));
@@ -192,18 +191,19 @@ bool iequals(const string& a, const string& b)
 void strcpi(double *pkg)
 {
    stringstream ss, ss1;
-   long start_addr = SDX + 1; // string 1
+   TMP = pkg[1] + 1; // string 1
    char ch;
-   for(int i = 0; i < core0.getr(0, SDX); i++){
-        ch = core0.getr(0, start_addr++);
+   for(int i = 0; i < core0.getr(0, pkg[1]); i++){
+        ch = core0.getr(0, TMP++);
         ss << ch;
    }
 
-   start_addr = SCX + 1; // string 2
-   for(int i = 0; i < core0.getr(0, SCX); i++){
-         ch = core0.getr(0, start_addr++);
+   TMP = pkg[2] + 1; // string 2
+   for(int i = 0; i < core0.getr(0, pkg[2]); i++){
+         ch = core0.getr(0, TMP++);
          ss1 << ch;
    }
+
     reg_check_set( pkg[0], tibool(iequals(ss.str(),ss1.str())));
 }
 
@@ -212,10 +212,10 @@ void e2str(double *pkg)
    stringstream ss;
    ss << core0.getr(0, SDX);
    string num = ss.str();
-   long start_addr = SCX + 1; // the str
+   TMP = SCX + 1; // the str
    char ch;
    for(int i = 0; i < num.length(); i++){
-        core0.setr(0, start_addr++, num.at(i));
+        core0.setr(0, TMP++, num.at(i));
    }
      core0.setr(0, SCX, num.length());
 }
@@ -231,20 +231,21 @@ void sload(double *pkg)
 void _throw(double *pkg)
 {
    stringstream ss, ss1;
-   long start_addr = pkg[0] + 1; // the exception
+   TMP = pkg[0] + 1; // the exception
      char ch;
      for(int i = 0; i < core0.getr(0, pkg[0]); i++){
-        ch = core0.getr(0, start_addr++);
+        ch = core0.getr(0, TMP++);
         if((ch == '\n') || (ch == ' ') || (ch == '\t') || (ch == 10)){ }
         else
           ss << ch;
      }
 
-     start_addr = pkg[1] + 1; // the msg
+     TMP = pkg[1] + 1; // the msg
      for(int i = 0; i < core0.getr(0, pkg[1]); i++){
-         ch = core0.getr(0, start_addr++);
+         ch = core0.getr(0, TMP++);
          ss1 << ch;
      }
+
       RuntimeException re;
       re.introduce(ss.str(), ss1.str());
 }
@@ -287,9 +288,9 @@ void anum(double *pkg)
    ss << core0.getr(0, pkg[0]) << core0.getr(0, pkg[1]);
    string num = ss.str();
 
-   if(I1 == SHORT || I1 == INT)
+   if(SFC == SHORT || SFC == INT)
      core0.setr(0, pkg[0], atoi(num.c_str()));
-   else if(I1 == DOUBLE || I1 == FLOAT)
+   else if(SFC == DOUBLE || SFC == FLOAT)
      core0.setr(0, pkg[0], atof(num.c_str()));
    else {
       EBX = 2;
@@ -299,13 +300,11 @@ void anum(double *pkg)
 
 void rln(double *pkg)//  length, start addr, excape  char, 
 {
-   long s_addr = (long) pkg[0] + 1;
+   TMP = (long) pkg[0] + 1;
    long max = core0.getr(0, pkg[0]);
-   long length = 0;
    if(pkg[1] == 10){ // excape char = \n
      string input = "";
      getline(cin, input);
-     length = input.length();
      char a;
      int chr;
      for(int i = 0; i < input.length(); i++){
@@ -313,9 +312,10 @@ void rln(double *pkg)//  length, start addr, excape  char,
          break;
           a = input.at(i);
           chr = (int) a;
-          core0.setr(0, s_addr++, chr);
+          core0.setr(0, TMP++, chr);
      }
-       core0.setr(0, pkg[0], length);
+       TMP = input.length();
+       core0.setr(0, pkg[0], TMP);
    }
    else {
      string input = "", tmp = "";
@@ -325,22 +325,23 @@ void rln(double *pkg)//  length, start addr, excape  char,
      stringstream ss;
      ss << a;
       while (true) {
-       getline(cin, tmp);
-        if (tmp == ss.str()) {
-            break;
-        }
-        else
-         input += tmp + "\n";
-    }
+         getline(cin, tmp);
+         if (tmp == ss.str()) {
+             break;
+         }
+         else
+           input += tmp + "\n";
+      }
+
     for(int i = 0; i < input.length(); i++){
        if(i > max)
          break;
           a = input.at(i);
           chr = (int) a;
-          core0.setr(0, s_addr++, chr);
+          core0.setr(0, TMP++, chr);
      }
-      	 length = input.length();
-       core0.setr(0, pkg[0], length);
+       TMP = input.length();
+       core0.setr(0, pkg[0], TMP);
    }
 }
 
@@ -357,7 +358,7 @@ void _string(double *pkg) // string @434 32 'this is the string'
  }
  else if(pkg[1] >= 2) {
     IP--;
-    long addr = pkg[0] + 1;
+    TMP = pkg[0] + 1;
     if(!ignore)
         core0.setr(0, pkg[0], pkg[1]);
     string str;
@@ -366,7 +367,7 @@ void _string(double *pkg) // string @434 32 'this is the string'
        str = prog(2, IP++, ""); // get char
        _str = disasm.disassemble(str); // dissasemble char
        if(!ignore)
-          core0.setr(0, addr++, _str);
+          core0.setr(0, TMP++, _str);
    }
  }
  else{
@@ -404,12 +405,12 @@ void _print(double *pkg)
  else if(pkg[0] > 2) {
     IP--;
     IP--;
+    string str;
     for(int i = 0; i < pkg[0]; i++){
-       string str = prog(2, IP++, ""); // get char
-       long _str = disasm.disassemble(str); // dissasemble char
-       c_print(_str); // print char
+       str = prog(2, IP++, ""); // get char
+       TMP = disasm.disassemble(str); // dissasemble char
+       c_print(TMP); // print char
    }
-   cout << std::flush;
  }
  else{
   cout << "CPU print_length_logic err something went wrong while determing the length of the string to print" << endl;
@@ -432,25 +433,25 @@ void c_printf(double _char)
    if(_char == 256){ // reg r#
     reg = true;
     string str = prog(2, IP++, ""); // get char
-    long _str = disasm.disassemble(str); // dissasemble char
+    TMP = disasm.disassemble(str); // dissasemble char
     //cout << "pinting from reg " << _str  << " -1: " << (_str - 1) << " +1: " << (_str + 1)<< endl;
     if(!ignore){
-      if(core0.getr(0, _str) == null)
+      if(core0.getr(0, TMP) == null)
         cout << "null";
       else
-         cout << core0.getr(0, _str);
+         cout << core0.getr(0, TMP);
     }
    }
   else if(_char == 257){ // %c r#
     reg = true;
     string str = prog(2, IP++, ""); // get char
-    long _str = disasm.disassemble(str); // dissasemble char
+    TMP = disasm.disassemble(str); // dissasemble char
     //cout << "pinting from reg " << _str  << " -1: " << (_str - 1) << " +1$
     if(!ignore){
-      if(core0.getr(0, _str) == null)
+      if(core0.getr(0, TMP) == null)
         cout << "null";
       else{
-         char c = core0.getr(0, _str);
+         char c = core0.getr(0, TMP);
          cout << c;
       }
     }
@@ -458,49 +459,49 @@ void c_printf(double _char)
   else if(_char == 258){ // %d r#
     reg = true;
     string str = prog(2, IP++, ""); // get char
-    long _str = disasm.disassemble(str); // dissasemble char
+    TMP = disasm.disassemble(str); // dissasemble char
     //cout << "pinting from reg " << _str  << " -1: " << (_str - 1) << " +1$
     if(!ignore){
-      if(core0.getr(0, _str) == null)
+      if(core0.getr(0, TMP) == null)
         cout << "null";
       else
-         cout << (long) core0.getr(0, _str);
+         cout << (long) core0.getr(0, TMP);
     }
    }
   else if(_char == 259){ // %f r#
     reg = true;
     string str = prog(2, IP++, ""); // get char
-    long _str = disasm.disassemble(str); // dissasemble char
+    TMP = disasm.disassemble(str); // dissasemble char
     //cout << "pinting from reg " << _str  << " -1: " << (_str - 1) << " +1$
     if(!ignore){
-      if(core0.getr(0, _str) == null)
+      if(core0.getr(0, TMP) == null)
         cout << "null";
       else
-         printf("%f",core0.getr(0, _str));
+         printf("%f",core0.getr(0, TMP));
     }
    }
   else if(_char == 260){ // %x r#
     reg = true;
     string str = prog(2, IP++, ""); // get char
-    long _str = disasm.disassemble(str); // dissasemble char
+    TMP = disasm.disassemble(str); // dissasemble char
     //cout << "pinting from reg " << _str  << " -1: " << (_str - 1) << " +1$
     if(!ignore){
-      if(core0.getr(0, _str) == null)
+      if(core0.getr(0, TMP) == null)
         cout << "null";
       else
-        std::cout << "0x" << std::hex << (long) core0.getr(0, _str);
+        std::cout << "0x" << std::hex << (long) core0.getr(0, TMP);
     }
    }
    else if(_char == 261){ // %u r#
     reg = true;
     string str = prog(2, IP++, ""); // get char
-    long _str = disasm.disassemble(str); // dissasemble char
+    TMP = disasm.disassemble(str); // dissasemble char
     //cout << "pinting from reg " << _str  << " -1: " << (_str - 1) << " +1$
     if(!ignore){
-      if(core0.getr(0, _str) == null)
+      if(core0.getr(0, TMP) == null)
         cout << "null";
       else{
-         unsigned num = (long) core0.getr(0, _str);
+         unsigned num = (long) core0.getr(0, TMP);
          cout << num;
       }
     }
@@ -508,94 +509,94 @@ void c_printf(double _char)
   else if(_char == 262){ // %g r#
     reg = true;
     string str = prog(2, IP++, ""); // get char
-    long _str = disasm.disassemble(str); // dissasemble char
+    TMP = disasm.disassemble(str); // dissasemble char
     //cout << "pinting from reg " << _str  << " -1: " << (_str - 1) << " +1$
     if(!ignore){
-      if(core0.getr(0, _str) == null)
+      if(core0.getr(0, TMP) == null)
         cout << "null";
       else
-         printf("%g",core0.getr(0, _str));
+         printf("%g",core0.getr(0, TMP));
     }
    }
   else if(_char == 263){ // %e r#
     reg = true;
     string str = prog(2, IP++, ""); // get char
-    long _str = disasm.disassemble(str); // dissasemble char
+    TMP = disasm.disassemble(str); // dissasemble char
     //cout << "pinting from reg " << _str  << " -1: " << (_str - 1) << " +1$
     if(!ignore){
-      if(core0.getr(0, _str) == null)
+      if(core0.getr(0, TMP) == null)
         cout << "null";
       else
-         printf("%e",core0.getr(0, _str));
+         printf("%e",core0.getr(0, TMP));
     }
    }
   else if(_char == 264){ // %do r#
     reg = true;
     string str = prog(2, IP++, ""); // get char
-    long _str = disasm.disassemble(str); // dissasemble char
+    TMP = disasm.disassemble(str); // dissasemble char
     //cout << "pinting from reg " << _str  << " -1: " << (_str - 1) << " +1$
     if(!ignore){
-      if(core0.getr(0, _str) == null)
+      if(core0.getr(0, TMP) == null)
         cout << "null";
       else
-         printf("%lf",core0.getr(0, _str));
+         printf("%lf",core0.getr(0, TMP));
     }
    }
   else if(_char == 265){ // %lg r#
     reg = true;
     string str = prog(2, IP++, ""); // get char
-    long _str = disasm.disassemble(str); // dissasemble char
+    TMP = disasm.disassemble(str); // dissasemble char
     //cout << "pinting from reg " << _str  << " -1: " << (_str - 1) << " +1$
     if(!ignore){
-      if(core0.getr(0, _str) == null)
+      if(core0.getr(0, TMP) == null)
         cout << "null";
       else
-         printf("%lg",core0.getr(0, _str));
+         printf("%lg",core0.getr(0, TMP));
     }
    }
   else if(_char == 266){ // %le r#
     reg = true;
     string str = prog(2, IP++, ""); // get char
-    long _str = disasm.disassemble(str); // dissasemble char
+    TMP = disasm.disassemble(str); // dissasemble char
     //cout << "pinting from reg " << _str  << " -1: " << (_str - 1) << " +1$
     if(!ignore){
-      if(core0.getr(0, _str) == null)
+      if(core0.getr(0, TMP) == null)
         cout << "null";
       else
-         printf("%le",core0.getr(0, _str));
+         printf("%le",core0.getr(0, TMP));
     }
    }
   else if(_char == 267){ // %bl r#
     reg = true;
     string str = prog(2, IP++, ""); // get char
-    long _str = disasm.disassemble(str); // dissasemble char
+    TMP = disasm.disassemble(str); // dissasemble char
     //cout << "pinting from reg " << _str  << " -1: " << (_str - 1) << " +1$
     if(!ignore){
-      if(core0.getr(0, _str) == null)
+      if(core0.getr(0, TMP) == null)
         cout << "null";
       else{
-         if(core0.getr(0, _str) == 1)
+         if(core0.getr(0, TMP) == 1)
            cout << "true";
-         else if(core0.getr(0, _str) == 0)
+         else if(core0.getr(0, TMP) == 0)
            cout << "false";
          else
-           cout << core0.getr(0, _str);
+           cout << core0.getr(0, TMP);
       }
     }
    }
   else if(_char == 268){ // %s r#
     reg = true;
     string str = prog(2, IP++, ""); // get char
-    long _str = disasm.disassemble(str); // dissasemble char
+    TMP = disasm.disassemble(str); // dissasemble char
     //cout << "pinting from reg " << _str  << " -1: " << (_str - 1) << " +1$
     if(!ignore){
-      if(core0.getr(0, _str) == null)
+      if(core0.getr(0, TMP) == null)
         cout << "null";
       else{
-         long ref = _str + 1;
+         long ref = TMP + 1;
          stringstream ss;
          string message = "";
-         for(int i = 0; i < core0.getr(0, _str); i++){
+         for(int i = 0; i < core0.getr(0, TMP); i++){
              ss << (char) core0.getr(0, ref++) << "";
          }
          message = ss.str();
@@ -610,9 +611,9 @@ void c_printf(double _char)
   else if(_char == 270){ // %col shade
     reg = true;
     string str = prog(2, IP++, ""); // get color shade
-    long _str = disasm.disassemble(str); // dissasemble char
+    TMP = disasm.disassemble(str); // dissasemble char
     SystemColor color;
-    if(color.isColor(core0.getr(0, _str), I2) && !ignore)
+    if(color.isColor(core0.getr(0, TMP), SDX) && !ignore)
       color.changeColor();
    }
   else if((!ignore)) {
@@ -648,11 +649,10 @@ void _printf(double *pkg)
     IP--;
     IP--;
     string str;
-    long _str;
     for(int i = 0; i < pkg[0]; i++){
        str = prog(2, IP++, ""); // get char
-       _str = disasm.disassemble(str); // dissasemble char
-       c_printf(_str); // print char
+       TMP = disasm.disassemble(str); // dissasemble char
+       c_printf(TMP); // print char
    }
    reg = false;
  }
@@ -685,12 +685,12 @@ void loadc(double *pkg)
 void _sleep(double *pkg)
 {
    cout.flush();
-   if(SCX < 0)
-     SCX *= -1;
+   if(SDX < 0)
+     SDX *= -1;
    if((long) pkg[0] == 0)
-       sleep(SCX);
+       sleep(SDX);
    else
-      usleep(SCX * 1000); // sleep for mills
+      usleep(SDX); // sleep for microseconds
 }
 
 void dload(double *pkg)
@@ -969,10 +969,10 @@ void invoke(double *pkg)
        case 0: // os system call
         {
           stringstream ss;
-          long start_addr = SDX + 1; // the command
+          long TMP = SDX + 1; // the command
           char ch;
           for(int i = 0; i < core0.getr(0, SDX); i++){
-             ch = core0.getr(0, start_addr++);
+             ch = core0.getr(0, TMP++);
              if((ch == '\n') || (ch == ' ') || (ch == '\t') || (ch == 10)){ }
              else
                ss << ch;
@@ -995,7 +995,7 @@ void invoke(double *pkg)
        break;
        case 3: // push code to Ram
         {
-         long addr = SFC;
+         TMP = SDX;
          string bin = "";
          stringstream ss1;
          for(long i = SDX + 1; i < (SDX + core0.getr(0, SDX)); i++){
@@ -1012,18 +1012,18 @@ void invoke(double *pkg)
                }
           } // verify is binary
 
-         cout << "setting to addr " << addr << endl; 
-         prog(1, addr, bin);
+         cout << "setting to addr " << TMP << endl; 
+         prog(1, TMP, bin);
         }
        break;
        case 4: // get code from ram
         {
          string bin = prog(2, SDX, "");
          SDX = bin.length();
-          int c = 0;
-          for(long i = SCX; c < bin.length(); i++){
-             core0.setr(0, i, bin.at(c));
-             c++;
+          TMP = 0;
+          for(long i = SCX; TMP < bin.length(); i++){
+             core0.setr(0, i, bin.at(TMP));
+             TMP++;
           }
         }
        break; 
@@ -1046,7 +1046,7 @@ void invoke(double *pkg)
        case 6: // Os Calls for GPIO
            switch( SFC ) {
             case 0:// set dir
-              SCR = GPIODirection(SDX, TMP);
+              SCR = GPIODirection(SDX, SCX);
               if(SCR == -1)
                  EBX = 3;
             break;
@@ -1074,27 +1074,25 @@ void invoke(double *pkg)
           // Set terminal to raw mode
           system("stty raw");
 
-          char input;
           // Wait for single character
-          if(I1 != CHAR){ // do not print char to screen
-            input = getchar();
+          if(SFC != CHAR){ // do not print char to screen
+            SDX = (int) getchar();
             cout << "\b \b" << std::flush;
           }
           else
-            input = getchar();
+            SDX = (int) getchar();
           // Reset terminal to normal "cooked" mode
           system("stty cooked");
-          SDX = (int) input;
         }
       break;
        case 18: // assemble data
         {
           string bin = disasm.assemble(SDX);
           SDX = bin.length();
-          int c = 0;
-          for(long i = SCX; c < bin.length(); i++){
-             core0.setr(0, i, bin.at(c));
-             c++;
+          TMP= 0;
+          for(long i = SCX; TMP < bin.length(); i++){
+             core0.setr(0, i, bin.at(TMP));
+             TMP++;
           }
         }
        break;
@@ -1179,6 +1177,53 @@ void invoke(double *pkg)
         {
           data[0] = pkg[1];
           SCR = io.Write(1,data); // write to a file
+        }
+       break;
+       case 100: // cursor maniputation
+        {
+          stringstream ss;
+          string cursorpos = "";
+          if(SFC == 0){
+             ss << "\033[" << SDX << ";" << SCX << "f";
+             cursorpos = ss.str();
+             cout << cursorpos;
+          }
+          else if(SFC == 1){ // move up N lines
+             ss << "\033[" << SDX << "A";
+             cursorpos = ss.str();
+             cout << cursorpos;
+          }
+           else if(SFC == 2){ // move down N lines
+             ss << "\033[" << SDX << "B";
+             cursorpos = ss.str();
+             cout << cursorpos;
+          }
+           else if(SFC == 3){ // move forward N  colums
+             ss << "\033[" << SDX << "C";
+             cursorpos = ss.str();
+             cout << cursorpos;
+          }
+           else if(SFC == 4){ // move backward N  colums
+             ss << "\033[" << SDX << "D";
+             cursorpos = ss.str();
+             cout << cursorpos;
+          }
+           else if(SFC == 5){ // move to (0,0)
+             cursorpos = "\033[2J";
+             cout << cursorpos;
+          }
+           else if(SFC == 6){ // erase to end of line
+             cursorpos = "\033[K";
+             cout << cursorpos;
+          }
+           else if(SFC == 7){ // save cursor pos
+             cursorpos = "\033[s";
+             cout << cursorpos;
+          }
+           else if(SFC == 8){ // restore cursor pos
+             cursorpos = "\033[u";
+             cout << cursorpos;
+          }
         }
        break;
        case 128:
@@ -1488,10 +1533,10 @@ void inge(double *pkg)
 
 void neg(double *pkg){
     RuntimeException re;
-    if(I1 == INT || I1 == DOUBLE
-           || I1 == SHORT || I1 == FLOAT)
+    if(SFC == INT || SFC == DOUBLE
+           || SFC == SHORT || SFC == FLOAT)
       reg_check_set( pkg[0], (reg_check_ret( pkg[0]) * -1));
-    else if(I1 == BOOL){
+    else if(SFC == BOOL){
         if(reg_check_ret( pkg[0]) == 0)
            reg_check_set( pkg[0], 1);
         else if(reg_check_ret( pkg[0]) == 1)

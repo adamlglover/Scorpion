@@ -45,22 +45,8 @@ scorpion | The Scorpion virtural machine itself runs the (single)generated .b fi
 
 All programs reside in the bin/ directory(version specific).
 
-# Getting Scorpion
-### For linux/Mac
-1. Go to the bin/ folder in the respository and click on the folder with your specific operating system. Then choose your device that is supported.
-2. Download the raw file of scorpion and move scorpion to your /bin folder from your current directory
-
-
-              your-name~:>  mv <your-curr-dir>/scorpion /bin
-              
-3. Scorpion is now ready for use!!
-
-### For windows
-1. Go to the bin/ folder in the respository and click on the folder with your specific operating system. Then choose your device that is supported.
-2. Download the raw file of scorpion.
-3. Go to where Scorpion was downloaded and move the file to any desired location, then copy the path to where it is located.
-4. Go to your system settings and add Scorpion to your path via your system's envirnment variables
-5. Scorpion is now ready for use!!
+# Additional Info
+If you are seeking any additional info on scorpion, please check out my wiki I've created for Scorpion.
 
 
 # How to use

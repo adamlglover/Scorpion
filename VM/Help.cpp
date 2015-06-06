@@ -77,8 +77,11 @@ void handleargs(int argc, const char **args)
         cout << "Unrecognized command line option: " << data << endl;
         exit(1);
      }
-     else  // time for running application
-      return;
+     else{  // time for running application
+        if(mmax < mem)
+            mmax = mem;
+        return;
+     }
 
      if(OPTION == "-help")
         help();

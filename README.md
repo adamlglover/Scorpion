@@ -46,7 +46,7 @@ scorpion | The Scorpion virtural machine itself runs the (single)generated .b fi
 All programs reside in the bin/ directory(version specific).
 
 # Additional Info
-If you are seeking any additional info on scorpion, please check out my wiki I've created for Scorpion.
+If you are seeking any additional info on scorpion, please check out my [wiki](https://github.com/AndroDevcd/Scorpion/wiki) I've created for Scorpion.
 
 
 # How to use

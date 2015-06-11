@@ -10,6 +10,12 @@ extern long l_size;
 extern int flag;
 
 void parse();
+string funcName(string token);
+bool hasString(string *array, string value);
+string typeToString(int type);
+int tokenType(string token);
+bool isDigit(char digit);
+bool isLetter(char letter);
 
 #define nullptr ((void *)0)
 
@@ -42,15 +48,29 @@ int COMMAND = 0, STRING_LITERAL = 1,
 dmap *obj;  // our obj file mapped
 map *labels; // out labels
 long linepos = 0, mapsize;
-stringstream token, fName;
+stringstream token, fName, lastFunc;
 bool instring = false, processedcommand, charLiteral = false;
 bool inclass = false, inmodule = false;
 string tokens[ 4 ];
-int argsize, argoverflow, tpos = 0;
+int argsize, argoverflow, labelOffset = 0, tpos = 0;
+string special = "", member_func = "", WORKING_DIR = "";
 
 int arg1Types[ 6 ];
 int arg2Types[ 6 ];
 int arg3Types[ 6 ];
+
+string instructions[82] = { // native VM instruction code
+            "halt","breakp","rhalt","chalt","add","sub","mult","div","rem","inc",
+            "dec","and","or","xor","not","nand","nor","xnor",
+            "loadi","loadbl","push","return","call","swp","loop",
+            "end","endl","do","mov","rmov","invoke","ilt","igt","ile","ige",
+            "ndo","inlt","ingt","inle","inge","neg","lock","ulock","xreg","clx","rloop",
+            "wloop","endwl","same","nac","sr","sl","r_mv","cpuid","rdtsc",
+            "print","rand_1","rand_2","rand_3","printf","loadc","dload","t_cast",
+            "sload","loadf","rln","rload","ct_int","anum","sleep","cp",
+            "string", "adr", "r_load", "strcp", "e2str", "strcpi", "swi", "array",
+            "aload", "aaload", "throw"
+    };
 
 bool iswhitespace(char ch)
 {
@@ -2330,6 +2350,7 @@ int getbounds(string token)
             arg1Types[5] = ARG_EMPTY;
             arg2Types[5] = ARG_EMPTY;
             arg3Types[5] = ARG_EMPTY;
+            special = "{";
             return 2;
         }
         else if(token == "%Class"){
@@ -2356,6 +2377,7 @@ int getbounds(string token)
             arg1Types[5] = ARG_EMPTY;
             arg2Types[5] = ARG_EMPTY;
             arg3Types[5] = ARG_EMPTY;
+            special = "";
             return 2;
         }
         else {
@@ -2419,7 +2441,7 @@ void add(string token)
 void assemble(string filen, string content)
 {
    cout << "nsc:   assembling file: " << filen << endl;
-   filen.str(""):
+   fName.str("");
    fName << filen;
    if(isempty(content)){
       cout << "nsc:   error: " << filen << ": Is empty\n";
@@ -2491,6 +2513,61 @@ void assemble(string filen, string content)
    parse();
 }
 
+void mapTokens(string token, int tType)
+{
+  cout << "mapping: " << token << " type: " << tType << endl;
+}
+
+bool hasint(int *arry, int val)
+{
+    for(int i = 0; i < sizeof(arry); i++){
+        if(arry[i] == val)
+          return true;
+    }
+   return false;
+}
+
+bool hasExpectedType(int argn, int arg)
+{
+    if(argn == 0)
+      return hasint(arg1Types, arg);
+    if(argn == 1)
+      return hasint(arg2Types, arg);
+    if(argn == 2)
+      return hasint(arg3Types, arg);
+    return false;
+}
+
+int etype(int argn, int index)
+{
+    if(argn == 0)
+      return arg1Types[index];
+    if(argn == 1)
+      return arg2Types[index];
+    if(argn == 2)
+      return arg3Types[index];
+    return UNKNOWN;
+}
+
+bool is_flabel(string label)
+{
+   if(label.at(0) == '.' && label.at(label.size() - 1) == ':'){
+       bool hasLetter = false;
+            for (int i = 1; i < label.size() - 1; i++) {
+                if (!isDigit(label.at(i)) && !(label.at(i) == '_'))
+                    return false;
+                if(isLetter(label.at(i)) && !hasLetter)
+                    hasLetter = true;
+
+            }
+
+           if(!hasLetter)
+               return false;
+           else
+               return true;
+   }
+}
+
 int errline = -1;
 void parse()
 {
@@ -2501,14 +2578,18 @@ void parse()
 
                 for (int i = 0; i < argsize; i++) {
                     // parse arguments
-                    if (hasExpectedType(i, TokenType.type(tokens[i + 1]))) {
-                           mapToken(tokens[i + 1], tokenType(tokens[i + 1]));
+                    if (hasExpectedType(i, tokenType(tokens[i + 1]))) {
+                           if(tokens[0] == "push" && i == 0)
+                              member_func = tokens[i + 1];
+                           mapTokens(tokens[i + 1], tokenType(tokens[i + 1]));
                     } else {
                         Assembler::compile_only = true;
-                        cout << "nsc: " << fName.str() << ":" << linepos << "  fatal error parsing " <<
-                                tokens[i + 1] << " token in file. Expected types <" << typeToString(etype(i, 1)) << "," <<
-                                typeToString(etype(i, 2)) << "," << typeToString(etype(i, 3)) <<
-                                ">, found type <" << typeToString(type(tokens[i + 1])) << ">.");
+                        if(member_func != "!"){
+                           cout << fName.str() << ": In member function " << member_func << ":" << endl;
+                        }
+                        cout << "nsc: " << fName.str() << ":" << linepos << ": error:  expected '" << typeToString(etype(i, 0)) << "' or '" <<
+                                typeToString(etype(i, 1)) << "' or '" << typeToString(etype(i, 2)) <<
+                                "'. Found type \"" << typeToString(tokenType(tokens[i + 1])) << "\".";
                     }
 
                 }
@@ -2519,39 +2600,53 @@ void parse()
                     } else
                        flag = 1;
 
-            } else if(is_flabel(tokens[0])) { // ~func:(this one done manually)
+            } else if(is_flabel(tokens[0])) { // .func:(this one done manually)
 
                     mapTokens("push", COMMAND);
                     mapTokens(funcName(tokens[0]), LABEL);
-                    mapTokens(funcName(tokens[0]) + "_b");
                     mapTokens(funcName(tokens[0]) + "_b", LABEL);
                     mapTokens("", ARG_EMPTY);
-                    lastFunc = tokens[0];
+                    lastFunc.str("");
+                    lastFunc << tokens[0];
+                    member_func = funcName(tokens[0]);
 
             }
-            else if (tokens[0].equals("&&idx_offset:")) // idx offset manipulation
-                    labelOffset += tokens[1]);
-            else if (tokens[0].equals("&&working_dir:")) { // idx offset manipulation
-                String dir = "";
+            else if (tokens[0] == "&&idx_offset:"){ // idx offset manipulation
+                    if(tokenType(tokens[1]) == INTEGER_LITERAL)
+                        labelOffset += atoi(tokens[1].c_str());
+                    else {
+                        Assembler::compile_only = true;
+                        if (errline == -1)
+                           errline = linepos;
+                        if(member_func != "!"){
+                           cout << fName.str() << ": In member function " << member_func << "():" << endl;
+                        }
+                        cout << "nsc: " << fName.str() << ":" << linepos << ": error:  expected integer literal. Found type \""
+                        << typeToString(tokenType(tokens[1])) << "\".";
+                    }
+
+            }
+            else if (tokens[0] == "&&working_dir:") { // idx offset manipulation
+                stringstream dir;
                 for(int i = 1; i < tokens[1].length() - 1; i++)
-                    dir += tokens[1].charAt(i);
-                WORKING_DIR = dir;
+                    dir << tokens[1].at(i);
+                WORKING_DIR = dir.str();
             }
-            else if (tokens[0].equalsIgnoreCase("ret")) { // ret <function>(this one done manually)
+            else if (tokens[0] == "ret") { // ret <function>(this one done manually)
                     mapTokens("return", COMMAND);
-                    mapTokens(funcName(lastFunc), LABEL);
-                    mapTokens("0", LITERAL);
+                    mapTokens(funcName(lastFunc.str()), LABEL);
+                    mapTokens("0", INTEGER_LITERAL);
                     mapTokens("", ARG_EMPTY);
-
+                    member_func = "!";
             }
-            else if (tokens[0].equals("import")) { // import statement
+            else if (tokens[0] == "import") { // import statement
                // skip this shit
             }
             else {
-                Assembler::only_compile = true;
+                Assembler::compile_only = true;
                 if (errline == -1)
                     errline = linepos;
-                cout << "nsc: " << Tokenizer.filen << ":" << Tokenizer.linePos << "  fatal error parsing " << tokens[0] << " token in file. Expected <instruction>.";
+                cout << "nsc: " << fName.str() << ":" << linepos << ": error:  expected instruction before \"" << tokens[0] << "\".";
 
             }
    }
@@ -2562,4 +2657,369 @@ void parse()
         tokens[i] = "";
 }
 
+string funcName(string token) {
+    string name = "";
+    for (int i = 1; i < token.size() - 1; i++) {
+        name += "" + token.at(i);
+    }
+    return name;
+}
+
+
+bool hasString(string *array, string value){
+
+            for(int i = 0; i < sizeof(array); i++){
+
+                if(value == array[i])
+                    return true;
+
+            }
+
+        return false;
+}
+
+string typeToString(int type)
+{
+        if(type == NULLPTR)
+           return "nullptr";
+        else {
+
+            if(type == RESERVED)
+               return "reserved";
+            if(type == SPECIAL)
+               return "special";
+            else if(type == STRING_LITERAL)
+               return "string literal";
+            else if(type == RAM_ADDRESS)
+               return "ram address";
+            else if(type == REGISTER)
+               return "register";
+            else if(type == INTEGER_LITERAL)
+               return "integer";
+            else if(type == HEX_LITERAL)
+               return "hex literal";
+            else if(type == LABEL)
+               return "label";
+            else
+                return "type unknown";
+        }
+}
+
+bool isReserved(token);
+bool isSpecial(token);
+bool isStringLiteral(token);
+bool isRamAddress(token);
+bool isRegister(token);
+bool isIntegerLiteral(token);
+bool isHexLiteral(token);
+bol
+
+int tokenType(string token){ // find type
+        if(token == "null")
+            return NULLPTR;
+        else {
+
+            if(isReserved(token))
+                return RESERVED;
+            if(isSpecial(token))
+                return SPECIAL;
+            else if(isStringLiteral(token))
+                return STRING_LITERAL;
+            else if(isRamAddress(token))
+                return RAM_ADDRESS;
+            else if(isRegister(token))
+                return REGISTER;
+            else if(isIntegerLiteral(token))
+                return INTEGER_LITERAL;
+            else if(isHexLiteral(token))
+                return HEX_LITERAL;
+            else if(isLabel(token))
+                return LABEL;
+            else
+                return UNKNOWN;
+      }
+}
+
+bool isReserved(string token) {
+        if(token == "true" )
+            return true;
+        else if (token == "false")
+            return true;
+        else if (token == "int")
+            return true;
+        else if (token == "bool")
+            return true;
+        else if (token == "char")
+            return true;
+        else if (token == "float")
+            return true;
+        else if (token == "double")
+            return true;
+        else if (token == "short")
+            return true;
+        return false;
+}
+
+bool isSpecial(string token)
+{
+  return (token == special);
+}
+
+bool isStringLiteral(string token) {
+        if(charLiteral){
+            if((token.size() == 3) && (token.at(0) == '\'' && token.at(token.size() - 1) == '\''))
+                return true;
+            else if(((token.size() == 3) && (token.at(0) == '\'' && token.at(token.size() - 1) == '\'')) && (token.at(1) == '/')
+        }
+        else {
+            if (token.at(0) == '\'' && token.at(token.size() - 1) == '\'')
+                return true;
+        }
+        return false;
+}
+
+bool isDigit(char digit)
+{
+  if(digit == '0')
+     return true;
+  else if(digit == '1')
+     return true;
+  else if(digit == '2')
+     return true;
+  else if(digit == '3')
+     return true;
+  else if(digit == '4')
+     return true;
+  else if(digit == '5')
+     return true;
+  else if(digit == '6')
+     return true;
+  else if(digit == '7')
+     return true;
+  else if(digit == '8')
+     return true;
+  else if(digit == '9')
+     return true;
+  return false;
+}
+
+bool isLetter(char letter)
+{
+   return ((((int) letter) >= 65) && ((int) letter) <= 90)) || ((((int) letter) >= 97) && ((int) letter) <= 122));
+}
+
+bool isRamAddress(string token) {
+        if(token.at(0) == '@' || token.at(0) == '*'){
+            for(int i = 1; i < token.size();i++){
+                if(isDigit(token.at(i))) { }
+                else
+                    return false;
+            }
+            return true;
+        }
+        return false;
+}
+
+boolean isRegister(string token) {
+        if(token == "eax")
+            return true;
+        else if(token == "ebx")
+            return true;
+        else if(token == "sdx")
+            return true;
+        else if(token == "bp")
+            return true;
+        else if(token == "exc")
+            return true;
+        else if(token == "ps")
+            return true;
+        else if(token == "lg")
+            return true;
+        else if(token == "lsl")
+            return true;
+        else if(token == "sfc")
+            return true;
+        else if(token == "scx")
+            return true;
+        else if(token == "i1")
+            return true;
+        else if(token == "i2")
+            return true;
+        else if(token == "tmp")
+            return true;
+        else if(token == "ai")
+            return true;
+        else if(token == "ipi")
+            return true;
+        else if(token == "ip")
+            return true;
+        else if(token == "scr")
+            return true;
+        else if(token == "i3")
+            return true;
+        else if(token == "i5")
+            return true;
+        else if(token == "i6")
+            return true;
+        else if(token == "i7")
+            return true;
+        else if(token == "i8")
+            return true;
+        else if(token == "i9")
+            return true;
+        else if(token == "i10")
+            return true;
+        else if(token == "i11")
+            return true;
+        else if(token == "i12")
+            return true;
+        else
+            return false;
+}
+
+bool isIntegerLiteral(string token) {
+        int dotCount;
+        if(token.at(0) == '#'){
+            dotCount = 0;
+            for (int i = 1; i < token.length(); i++) {
+                if (isDigit(token.at(i)) || (token.at(i) == '.')) {
+                    if (token.at(i) == '.') {
+                         flag = 3;
+                         dotCount++;
+                    }
+
+                    if (dotCount > 1)
+                        return false;
+                } else
+                    return false;
+            }
+        }
+        else {
+            dotCount = 0;
+            for (int i = 0; i < token.length(); i++) {
+                if (isDigit(token.at(i)) || (token.at(i) == '.')) {
+                    if (token.at(i) == '.') {
+                         flag = 3;
+                         dotCount++;
+                    }
+
+                    if (dotCount > 1)
+                        return false;
+                } else
+                    return false;
+            }
+        }
+        return true;
+}
+
+bool array(char txt, char *arry)
+{
+   for(int i = 0 i < arry.length(); i++){
+       if(txt == arry[i])
+          return true;
+   }
+  return false;
+}
+
+bool isHexadecimal(String text) {
+
+        char hexDigits[24] = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
+                'a', 'b', 'c', 'd', 'e', 'f', 'A', 'B', 'C', 'D', 'E', 'F', 'x' };
+
+        int hexDigitsCount = 0;
+
+        for (int i = 0; i < text.size(); i++) {
+                if (array(text.at(i), hexDigit)) {
+                    hexDigitsCount++;
+                    break;
+                }
+        }
+
+        return (hexDigitsCount == text.size());
+}
+
+bool isHexLiteral(String token) {
+        if(token.charAt(0) == '0' && token.charAt(1) == 'x') {
+            if (isHexadecimal(token))
+                return true;
+        }
+        return false;
+}
+
+bool isLabel(string token) {
+    bool t1  = false, t2 = false, t3 = false;
+
+   {
+        bool hasLetter = false;
+            for (int i = 0; i < token.size(); i++) {
+                if (!isDigit(token.at(i)) && !(token.at(i) == '_') && !isLetter(token.at(i)) && !(token.at(i) == '.'))
+                    t1 = false;
+                if(isLetter(token.at(i)) && !hasLetter)
+                    hasLetter = true;
+
+            }
+
+           if(!hasLetter)
+               t1 = false;
+           else
+               t1 = true;
+   }
+   {
+      bool hasLetter = false, reachedDot = false;
+            for (int i = 0; i < token.size(); i++) {
+                if(((token.at(i) == '.') && (i == 0)) || ((token.at(i) == '.') && ((i + 1) !< token.size())))
+                    return false;
+
+                if (!isDigit(token.at(i)) && !(token.at(i) == '_') && !isLetter(token.at(i)) && !(token.at(i) == '.'))
+                    t2 = false;
+                if(isLetter(token.at(i)) && !hasLetter)
+                    hasLetter = true;
+                if(token.at(i) == '.' && !reachedDot)
+                    reachedDot = true;
+                else if(token.at(i) == '.' && reachedDot)
+                    reachedDot = false;
+            }
+
+           if(!hasLetter || !reachedDot)
+               t2 = false;
+           else if(hasLetter && reachedDot)
+               t2 = true;
+           else
+               t2 = false;
+   }
+   {
+      bool hasLetter = false, reachedDot = false;
+      int count = 2;
+            for (int i = 0; i < token.size(); i++) {
+                if(((token.at(i) == '.') && (i == 0)) || ((token.at(i) == '.') && ((i + 1) !< token.size())))
+                    return false;
+
+                if (!isDigit(token.at(i)) && !(token.at(i) == '_') && !isLetter(token.at(i)) && !(token.at(i) == '.'))
+                    t3 = false;
+                if(isLetter(token.at(i)) && !hasLetter)
+                    hasLetter = true;
+                if(token.at(i) == '.' && !reachedDot){
+                    reachedDot = true;
+                    count++;
+                }
+                else if(token.at(i) == '.' && !(count >= 2)){
+                    reachedDot = false;
+                    count++;
+                }
+                else
+                 reachedDot = false;
+            }
+
+           if(!hasLetter || !reachedDot)
+               t3 = false;
+           else if(hasLetter && reachedDot)
+               t3 = true;
+           else
+               t3 = false;
+   }
+     if(t1 == true || t2 == true || t3 == true)
+        return true;
+     else
+        return false;
+}
 

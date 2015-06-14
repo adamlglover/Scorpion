@@ -20,6 +20,13 @@ void mapTokens(string token, int tType);
 
 #define nullptr ((void *)0)
 
+struct map {
+    string name;
+    string module;
+    string _class;
+    long index;
+} ;
+
 /* Token types */
 int COMMAND = 0, STRING_LITERAL = 1,
     INTEGER_LITERAL = 2,
@@ -35,16 +42,18 @@ int COMMAND = 0, STRING_LITERAL = 1,
     SPECIAL = 12;
 
 stringstream obj; // our obj file
-lmap *labels; // out labels
-long linepos = 0, mapsize = 0;
+map *labels; // out labels
+long linepos = 0, mapsize;
 stringstream token, fName, lastFunc, member_func;
 bool instring = false, processedcommand, charLiteral = false;
 bool inClass = false, inModule = false;
 string tokens[ 4 ], _module_ = "n/a", _class_ = "n/a";
+string moduleList[ 10000 ];
+string classList[ 10000 ];
 int argsize, argoverflow, tpos = 0;
 long long labelOffset = 0, moduleSize = 0, classSize = 0;;
-string special = "", objFile = "", WORKING_DIR = "";
-long mem_func_declared = 0;
+string special = "", WORKING_DIR = "";
+
 
 int arg1Types[ 6 ];
 int arg2Types[ 6 ];
@@ -73,6 +82,7 @@ bool iswhitespace(char ch)
 
 void umap()
 {
+  delete[] obj;
   delete[] labels;
 }
 
@@ -2367,7 +2377,7 @@ int getbounds(string token)
             arg1Types[5] = ARG_EMPTY;
             arg2Types[5] = ARG_EMPTY;
             arg3Types[5] = ARG_EMPTY;
-            special = "{";
+            special = "";
             return 2;
         }
         else {
@@ -2418,11 +2428,11 @@ void add(string token)
  }
    else{
    
-       if(tpos >= argsize){
+       if(tpos > argsize){
            processedcommand = false;
            tpos = 0;
            parse();
-           //add(token);
+           add(token);
        }
        else
         tokens[ tpos++ ] = token;
@@ -2443,7 +2453,7 @@ void assemble(string filen, string content)
    
    if(flag == 0){
       flag = 1;
-      labels = new (nothrow) lmap[ l_size ];
+      labels = new (nothrow) map[ l_size ];
       if(labels == nullptr){
         cout << "nsc:   error: Could not allocate resources.\nA fatal error has occured: Program will now exit." << endl;
         exit(-1039439);
@@ -2496,7 +2506,7 @@ void assemble(string filen, string content)
             token << content.at(i);
    }
 
-   
+   parse();
    if(inClass || inModule){
      cout << "nsc: " << fName.str() << ":" << linepos << ": error:  expected '}' at end of input." << endl;
    }
@@ -2507,7 +2517,6 @@ void assemble(string filen, string content)
    inClass = false;
    inModule = false;
    instring = false;
-   cout << "obj: \n" << objFile << endl;
 }
 
 string toBinaryString(long dec)
@@ -2695,401 +2704,106 @@ long cmdIndex(string cmd) {
           return -1;
 }
 
-
-long labelNdx = 0; // the current numeric index
-long labelpos = 0;
 int tier(string label)
 {
-    bool t1  = false, t2 = false, t3 = false;
+   bool t1 = false, t2 = false, t3 = false;
+}
 
-    if(!isLetter(label.at(0)))
-        return false;
-   {
+
+long labelNdx = 0; // the current numeric index bool hasLabel(string label) {
+    if(!isLetter(token.at(0)))
+        return false;}
+   { void createLabel(string label) {
         bool hasLetter = false;
-            for (int i = 0; i < label.size(); i++) {
-                if (!isDigit(label.at(i)) && !(label.at(i) == '_') && !isLetter(label.at(i)) && !(label.at(i) == '.'))
+            for (int i = 0; i < token.size(); i++) {}
+                if (!isDigit(token.at(i)) && !(token.at(i) == '_') && !isLetter(token.at(i)) && !(token.at(i) == '.')) void labelIdx(string label) {
                     t1 = false;
-                if(isLetter(label.at(i)) && !hasLetter)
-                    hasLetter = true;
-
-            }
-
-           if(!hasLetter)
-               t1 = false;
-           else
-               t1 = true;
-   }
-   {
-      bool hasLetter = false, reachedDot = false;
-            for (int i = 0; i < label.size(); i++) {
-                if( ( (label.at(i) == '.') && (i == 0) ) || ( (label.at(i) == '.') && !((i + 1) < label.size()) ) )
-                    return false;
-
-                if (!isDigit(label.at(i)) && !(label.at(i) == '_') && !isLetter(label.at(i)) && !(label.at(i) == '.'))
-                    t2 = false;
-                if(isLetter(label.at(i)) && !hasLetter)
-                    hasLetter = true;
-                if(label.at(i) == '.' && !reachedDot)
-                    reachedDot = true;
-                else if(label.at(i) == '.' && reachedDot)
-                    reachedDot = false;
-            }
-
-           if(!hasLetter || !reachedDot)
-               t2 = false;
-           else if(hasLetter && reachedDot)
-               t2 = true;
-           else
-               t2 = false;
-   }
-   {
-      bool hasLetter = false, reachedDot = false;
-      int count = 2;
-            for (int i = 0; i < label.size(); i++) {
-                if(((label.at(i) == '.') && (i == 0)) || ((label.at(i) == '.') && !((i + 1) < label.size())))
-                    return false;
-
-                if (!isDigit(label.at(i)) && !(label.at(i) == '_') && !isLetter(label.at(i)) && !(label.at(i) == '.'))
-                    t3 = false;
-                if(isLetter(label.at(i)) && !hasLetter)
-                    hasLetter = true;
-                if(label.at(i) == '.' && !reachedDot){
-                    reachedDot = true;
-                    count++;
-                }
-                else if(label.at(i) == '.' && !(count >= 2)){
-                    reachedDot = false;
-                    count++;
-                }
-                else
-                 reachedDot = false;
-            }
-
-           if(!hasLetter || !reachedDot)
-               t3 = false;
-           else if(hasLetter && reachedDot)
-               t3 = true;
-           else
-               t3 = false;
-   }
-     if(t1)
-      return 1;
-     else if(t2)
-      return 2;
-     else
-      return 3;
-}
-
-string getpart(string part, string label, int t_size)
-{
-   stringstream out;
-   int count = 0;
-   if(part == "label"){
-       if(t_size == 2){
-         for(int i = 0; i < label.size(); i++){
-             if(count == 1)
-              out << label.at(i);
-
-             if(label.at(i) == '.')
-               count++;
-         }
-        return out.str();
-       }
-       else {
-        for(int i = 0; i < label.size(); i++){
-             if(count == 2)
-              out << label.at(i);
-
-             if(label.at(i) == '.')
-               count++;
-         }
-        return out.str();
-       }
-   }
-   else if(part == "class"){
-       if(t_size == 2){
-          for(int i = 0; i < label.size(); i++){
-             if(label.at(i) == '.')
-               break;
-             else
-              out << label.at(i);
-         }
-        return out.str();
-       }
-       else {
-          for(int i = 0; i < label.size(); i++){
-             if(count == 1)
-              out << label.at(i);
-
-             if(label.at(i) == '.')
-               count++;
-         }
-        return out.str();
-       }
-   }
-   else if(part == "module"){
-      for(int i = 0; i < label.size(); i++){
-             if(label.at(i) == '.')
-               break;
-             else
-              out << label.at(i);
-         }
-        return out.str();
-   }
-}
-
-bool hasClass(string Class)
-{
-  for(int i = 0; i < mapsize; i++){
-       if(labels[i]._class == Class)
-        return true;
-    }
-   return false;
-}
-
-bool hasModule(string Module)
-{
-  for(int i = 0; i < mapsize; i++){
-       if(labels[i].module == Module)
-        return true;
-    }
-   return false;
-}
-
-bool hasLabel(string label)
-{
-  int t_size = tier(label);
-  //cout << "t size: " << t_size << " label: " << label;
-  if(t_size == 1){
-    for(int i = 0; i < mapsize; i++){
-       if((labels[i].name == label) && (labels[i]._class == _class_) && (labels[i].module == _module_))
-        return true;
-    }
-   return false;
-  }
-  else if(t_size == 2){
-    string LABEL = getpart("label", label, 2);
-    string CLASS = getpart("class", label, 2);
-
-    if(!hasClass(CLASS)){
-       Assembler::compile_only = true;
-           if(member_func.str() != "!" && mem_func_declared == 0){
-                cout << fName.str() << ": In member function " << member_func.str() << "():" << endl;
-                mem_func_declared++;
-           }
-          cout << "nsc: " << fName.str() << ":" << linepos << ": error:  class \"" << CLASS << "\" does not exist.";
-    }
-
-    for(int i = 0; i < mapsize; i++){
-       if((labels[i].name == LABEL) && (labels[i]._class == CLASS) && (labels[i].module == _module_))
-        return true;
-    }
-   return false;
-  }
-  else {
-    string LABEL = getpart("label", label, 3);
-    string CLASS = getpart("class", label, 3);
-    string MODULE = getpart("module", label, 3);
-
-    if(!hasClass(CLASS)){
-       Assembler::compile_only = true;
-           if(member_func.str() != "!" && mem_func_declared == 0){
-                cout << fName.str() << ": In member function " << member_func.str() << "():" << endl;
-                mem_func_declared++;
-           }
-          cout << "nsc: " << fName.str() << ":" << linepos << ": error:  class \"" << CLASS << "\" does not exist.";
-    }
-    if(!hasModule(MODULE)){
-       Assembler::compile_only = true;
-           if(member_func.str() != "!" && mem_func_declared == 0){
-                cout << fName.str() << ": In member function " << member_func.str() << "():" << endl;
-                mem_func_declared++;
-           }
-          cout << "nsc: " << fName.str() << ":" << linepos << ": error:  class \"" << MODULE << "\" does not exist.";
-    } 
-
-    for(int i = 0; i < mapsize; i++){
-       if((labels[i].name == LABEL) && (labels[i]._class == CLASS) && (labels[i].module == MODULE))
-        return true;
-    }
-   return false;
-  }
-}
-
-void createLabel(string label)
-{
- int t_size = tier(label);
- if(t_size != 1){
-   Assembler::compile_only = true;
-   if(member_func.str() != "!" && mem_func_declared == 0){
-         cout << fName.str() << ": In member function " << member_func.str() << "():" << endl;
-         mem_func_declared++;
-   }
-     cout << "nsc: " << fName.str() << ":" << linepos << ": error:  failure to access absent label";
-   return;
- }
-
- long idx = labelpos++;
- mapsize++;
- labels[ idx ].name = label;
- labels[ idx ].index = 50 + labelpos + labelOffset;
- labels[ idx ]._class = _class_;
- labels[ idx ].module = _module_;
-}
-
-long labelIdx(string label)
-{
-   int t_size = tier(label);
-  if(t_size == 1){
-    for(int i = 0; i < mapsize; i++){
-       if((labels[i].name == label) && (labels[i]._class == _class_) && (labels[i].module == _module_))
-        return labels[i].index;
-    }
-  }
-  else if(t_size == 2){
-    string LABEL = getpart("label", label, 2);
-    string CLASS = getpart("class", label, 2);
-
-    for(int i = 0; i < mapsize; i++){
-       if((labels[i].name == LABEL) && (labels[i]._class == CLASS) && (labels[i].module == _module_))
-        return labels[i].index;;
-    }
-  }
-  else {
-    string LABEL = getpart("label", label, 3);
-    string CLASS = getpart("class", label, 3);
-    string MODULE = getpart("module", label, 3);
-
-    for(int i = 0; i < mapsize; i++){
-       if((labels[i].name == LABEL) && (labels[i]._class == CLASS) && (labels[i].module == MODULE))
-        return labels[i].index;
-    }
-  }
-  return 2;
-}
-
-long strLen(string str)
-{
-  return 0;
-}
-
-string parseString(string str)
-{
-  return "";
-}
-
-
-string lastcommand = "", strLabel = "";
-int cmdCount = 0;
-/*
-* Used variables for mapping
-* struct map {
-*   string name;
-*   string module;
-*   string _class;
-*   long index;
-* } ;
-*
-* stringstream obj; << this stringstream object will hold our obj file source
-* map *labels;
-*
-* long mapsize;
-* string _module_, _class_;
-* string moduleList[ 10000 ];
-* string classList[ 10000 ];
-*
-* long labelOffset, moduleSize = 0, classSize = 0;;
-*
-*/
-void mapTokens(string token, int tType) // assemble file as we compile it
-{
+                if(isLetter(token.at(i)) && !hasLetter)}
+                    hasLetter = true; string lastcommand = "", strLabel = ""; int cmdCount = 0; /* * Used variables for mapping * struct map { * string name; * 
+string module; * string _class; * long index; * } ; * * stringstream obj; << this stringstream object will hold our obj file source * map *labels; * * long 
+mapsize; * string _module_, _class_; * string moduleList[ 10000 ]; * string classList[ 10000 ]; * * long labelOffset, moduleSize = 0, classSize = 0;; * */ void 
+mapTokens(string token, int tType) // assemble file as we compile it {
   cout << "mapping: " << token << " type: " << typeToString(tType) << endl;
-  cmdCount++;
+            }  cmdCount++;
   if(cmdCount > 20){
-    cmdCount = 0;
-    obj << "\n";
-  }
-
-  if(lastcommand == "class")
-  {
-     _class_ = token;
-     lastcommand = "";
-      return;
-  }
+           if(!hasLetter) cmdCount = 0;
+               t1 = false; obj << "\n";
+           else }
+               t1 = true;
+   }  if(lastcommand == "class")
+   { {
+      bool hasLetter = false, reachedDot = false; _class_ = token;
+            for (int i = 0; i < token.size(); i++) { lastcommand = "";
+                if( ( (token.at(i) == '.') && (i == 0) ) || ( (token.at(i) == '.') && !((i + 1) < token.size()) ) ) return;
+                    return false; }
   else if(lastcommand == "module")
-  {
-    _module_ = token;
-    lastcommand = "";
-    return;
-  }
-  else if(lastcommand == "&&idx_offset:")
-  {
-    long offset = strtol(token.c_str(), NULL, 2);
+                if (!isDigit(token.at(i)) && !(token.at(i) == '_') && !isLetter(token.at(i)) && !(token.at(i) == '.')) {
+                    t2 = false; _module_ = token;
+                if(isLetter(token.at(i)) && !hasLetter) lastcommand = "";
+                    hasLetter = true; return;
+                if(token.at(i) == '.' && !reachedDot) }
+                    reachedDot = true; else if(lastcommand == "&&idx_offset:")
+                else if(token.at(i) == '.' && reachedDot) {
+                    reachedDot = false; std::string::size_type sz;
+            }    long offset = std::stol (token,&sz);
     labelOffset += offset;
-    lastcommand = "";
-    return;
-  }
-  else if((lastcommand == "string") && (tType == LABEL)){
-        lastcommand = "";
-        strLabel = token;
-        return;
-  }
-  else if((lastcommand == "string") && (tType == STRING_LITERAL)) {
-        lastcommand = "";
-        long len = strLen(token);
-        if(!hasLabel(strLabel)){
-            createLabel(strLabel);
-            obj << " " << toBinaryString(labelIdx(strLabel));
-            labelOffset += len;
-            obj << " " << parseString(token);
+           if(!hasLetter || !reachedDot) lastcommand = "";
+               t2 = false; return;
+           else if(hasLetter && reachedDot) }
+               t2 = true; else if((lastCommand == "string") && (tType == LABEL)){
+           else strLabel = token;
+               t2 = false; return;
+   }  }
+  else if((lastCommand == "string") && (tType == STRING_LITERAL)) {
+   { long len = strLen(strLabel);
+      bool hasLetter = false, reachedDot = false; if(!hasLabel(token)){
+      int count = 2; createLabel(strLabel);
+            for (int i = 0; i < token.size(); i++) { obj << " " << labelIdx(strLabel) << " ";
+                if(((token.at(i) == '.') && (i == 0)) || ((token.at(i) == '.') && !((i + 1) < token.size()))) labelOffset += len;
+                    return false; obj << " " << parseString(token) << " ";
         }
         else {
-           Assembler::compile_only = true;
-           if(member_func.str() != "!" && mem_func_declared == 0){
-                cout << fName.str() << ": In member function " << member_func.str() << "():" << endl;
-                mem_func_declared++;
-           }
-          cout << "nsc: " << fName.str() << ":" << linepos << ": error:  string label \"" << strLabel << "\"cannot be reassigned."; 
-        }
-      return;
-  }
-
-  if(tType == COMMAND){
-     lastcommand = token;
-     if(token == "class")
-     { }
-     else if(token == "classclose")
+                if (!isDigit(token.at(i)) && !(token.at(i) == '_') && !isLetter(token.at(i)) && !(token.at(i) == '.')) Assembler::compile_only = true;
+                    t3 = false; if(member_func.str() != "!" && mem_func_declared == 0){
+                if(isLetter(token.at(i)) && !hasLetter) cout << fName.str() << ": In member function " << member_func.str() << "():" << endl;
+                    hasLetter = true; mem_func_declared++;
+                if(token.at(i) == '.' && !reachedDot){ }
+                    reachedDot = true; cout << "nsc: " << fName.str() << ":" << linepos << ": error: string label \"" << strLabel << "\"cannot be reassigned.";
+                    count++; }
+                }      return;
+                else if(token.at(i) == '.' && !(count >= 2)){ }
+                    reachedDot = false;
+                    count++; if(tType == COMMAND){
+                }     lastcommand = token;
+                else if(token == "class")
+                 reachedDot = false; { }
+            }     else if(token == "classclose")
      { _class_ = "n/a"; }
-     else if(token == "module")
-     { }
-     else if(token == "moduleclose")
-     { _module_ = "n/a"; }
-     else if(token == "&&idx_offset:")
-     { }
-     else
-     {
-        long dec = cmdIndex(token);
-        if(dec == -1){
-          obj << " u? ";
+           if(!hasLetter || !reachedDot) else if(token == "module")
+               t3 = false; { }
+           else if(hasLetter && reachedDot) else if(token == "moduleclose")
+               t3 = true; { _module_ = "n/a"; }
+           else else if(token == "&&idx_offset:")
+               t3 = false; { }
+   }     else
+     if(t1 == true || t2 == true || t3 == true) {
+        return true; long dec = cmdIndex(token);
+     else if(dec == -1){
+        return false;          obj << " u? ";
           return;
         }
-        obj << " " << toBinaryString(dec);
-        cout << "command " << token << " idx: " << cmdIndex(token);
+        obj << " " << toBinaryString(dec) << " ";
      }
   }
-  else if(tType == ARG_EMPTY){
-    obj << " " << toBinaryString(0);
-    cout << "mapping {empty}\n";
-  }
+  else if(tType == ARG_EMPTY)
+    obj << << " " << toBinaryString(0) << " ";
   else if(tType == UNKNOWN)
     obj << " u? ";
   else if(tType == NULLPTR){
     long dec = 21937856;
-    obj << " " << toBinaryString(dec);
-    cout << "mapping {null}\n";
+    obj << " " << toBinaryString(dec) << " ";
   }
   else if(tType == REGISTER){
-     cout << "mapping {reg}\n";
           long dec = 0;
 
           if(token == "eax")
@@ -3150,57 +2864,50 @@ void mapTokens(string token, int tType) // assemble file as we compile it
               obj << " u? ";
               return;
           }
-          obj << " " << toBinaryString(dec);
+          obj << " " << toBinaryString(dec) << " ";
      }
-     else if(tType == HEX_LITERAL){
-          cout << "mapping {hex}\n";
-          long hex = strtol(token.c_str(), NULL, 16);
-          obj << " " << toBinaryString(hex);
-     }
+     else if(tType == HEX_LITERAL)
+          obk << " " << toBinaryString(strtol(token, NULL, 16)) << " ";
      else if(tType == RAM_ADDRESS){
-          cout << "mapping {ram}\n";
             stringstream addr;
             for(int i = 1; i < token.size(); i++) {
                 addr << token.at(i);
             }
             std::string::size_type sz;
  
-            string address = addr.str();
-            long adr = strtol(address.c_str(), NULL, 2);
-            obj << " " << toBinaryString(adr);
+            long adr = std::stol (addr.str(),&sz);
+            obj << " " << toBinaryString(adr) << " ";
      }
      else if(tType == RESERVED){
-          cout << "mapping {reserved}\n";
             if(token == "true")
-                obj << " 1";
+                obj << " 1 ";
             else if(token == "false")
-                obj << " 0";
+                obj << " 0 ";
             else if(token == "int")
-                obj << " " << toBinaryString(11); //
+                obj << " " << toBinaryString(11) << " "; //
             else if(token == "float")
-                obj << " " << toBinaryString(16);//16
+                obj << " " << toBinaryString(16) << " ";//16
             else if(token == "char")
-                obj << " " << toBinaryString(13); //13
+                obj << " " << toBinaryString(13) << " "; //13
             else if(token == "double")
-                obj << " " << toBinaryString(12); // 12
+                obj << " " << toBinaryString(12) << " "; // 12
             else if(token == "short")
-                obj << " " << toBinaryString(15); //15
+                obj << " " << toBinaryString(15) << " "; //15
             else if(token == "bool")
-                obj << " " << toBinaryString(14); // 14
+                obj << " " << toBinaryString(14) << " "; // 14
             else
                 obj << " u? ";
      }
      else if(tType == INTEGER_LITERAL){
-            cout << "mapping {int}\n";
             stringstream num1, num2;
             int right = -1;
             int start = 0;
-            if(token.at(0) == '#')
+            if(token.charAt(0) == '#')
                 start++;
             for (int i = start; i < token.length(); i++) {
 
                 if(token.at(i) != '.')
-                   num1 << token.at(i);
+                   num1 << data.at(i);
                 else {
                     right = i + 1;
                     break;
@@ -3211,28 +2918,27 @@ void mapTokens(string token, int tType) // assemble file as we compile it
                 for (int i = right; i < token.length(); i++) {
                     num2 << token.at(i);
                 }
+                 std::string::size_type sz;
 
-                long dec1 = strtol(num1.str().c_str(), NULL, 2);
-                long dec2 = strtol(num2.str().c_str(),NULL, 2);
-                obj << toBinaryString(dec1) << " " << toBinaryString(dec2);
+                long dec1 = std::stol (num1.str(),&sz);
+                long dec2 = std::stol (num2.str(),&sz);
+                obj << toBinaryString(dec1) << " " << toBinaryString(dec2) << " ";
             }
             else {
-                long dec = strtol(num1.str().c_str(), NULL, 2);
-                obj << " " << toBinaryString(dec);
+                std::string::size_type sz;
+                long dec = std::stol (num1.str(),&sz);
+                return Long.toBinaryString(dec);
             }
      }
-     else if(tType == STRING_LITERAL){
-             obj << " " << parseString(token);
-          cout << "mapping {str}\n";
-     }
+     else if(tType == STRING_LITERAL)
+             obj << " " << parseString(data) << " ";
      else if(tType == LABEL){
-        cout << "mapping {lab}\n";
         if(!hasLabel(token)){
             createLabel(token);
-            obj << " " << toBinaryString(labelIdx(strLabel));
+            obj << " " << labelIdx(strLabel) << " ";
         }
         else
-          obj << " " << toBinaryString(labelIdx(strLabel));
+          obj << " " << labelIdx(strLabel) << " ";
      }
 }
 
@@ -3286,7 +2992,7 @@ bool is_flabel(string label)
    }
 }
 
-int errline = -1;
+int errline = -1, mem_func_declared = 0;;
 void parse()
 {
 
@@ -3370,32 +3076,17 @@ void parse()
                 WORKING_DIR = dir.str();
             }
             else if (tokens[0] == "class:") {
-               if(member_func.str() != "!"){
-                    Assembler::compile_only = true;
-                      if (errline == -1)
-                         errline = linepos;
-                    cout << "nsc: " << fName.str() << ":" << linepos << ": error: cannot declare a class in a function." << endl;
-               }
-
                if(!inClass){
                   inClass = true;
-                  if(tokenType(tokens[1]) == LABEL){
-                    mapTokens("class", COMMAND);
-                    mapTokens(tokens[1], LABEL);
-                  }
-                  else {
-                    Assembler::compile_only = true;
-                        if (errline == -1)
-                           errline = linepos;
-                        cout << "nsc: " << fName.str() << ":" << linepos << ": error:  class name must be a label." << endl;
-                  }
+                  mapTokens("class", COMMAND);
+                  mapTokens(tokens[1], LABEL);
                }
                else {
                   Assembler::compile_only = true;
                         if (errline == -1)
                           errline = linepos;
   
-                   cout << "nsc: " << fName.str() << ":" << linepos << ": error:  cannot nest classes." << endl;
+                   cout << "nsc: " << fName.str() << ":" << linepos << ": error:  cannot nest classes " << endl;
                }
                
             }
@@ -3447,7 +3138,6 @@ void parse()
 
   for(int i = 0; i < 4; i++)
         tokens[i] = "";
-  objFile = obj.str();
 }
 
 string funcName(string token) {
@@ -3817,7 +3507,7 @@ bool isLabel(string token) {
    }
      if(t1 == true || t2 == true || t3 == true)
         return true;
-     else // ------------------------------------------------------------
+     else
         return false;
 }
 

@@ -18,28 +18,11 @@
 *
 * Author: Braxton Nunnally
 * Date: 6/1/2015
-*/
+*/ 
+ 
+jh 
+jmkdas
 
-string command 'sudo shutdown -r now'         ; This will represent our console command
 
-.main:
-   adr sdx command
-   invoke 0x0 0                                    ; reboot the raspberry pi
-   ret 
-   
-call main 
-
-halt 
-
-module: ap {
-
-	%Class Dog {
-	   
-	   loadi age 8
-	   
-	}
-
-}
-
-cp age [ap]Dog{age}
+halt
 

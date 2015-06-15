@@ -28,7 +28,7 @@ double binary_decimal(string num) /* Function to convert binary to dec */
           if(bin.at(i) == '1')
             dec += n;
      }*/
-     dec = strtol(num.c_str(), NULL, 0);
+     dec = strtol(num.c_str(), NULL, 2);
   }
     return dec;
 }

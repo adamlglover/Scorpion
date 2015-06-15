@@ -20,20 +20,28 @@
 * Date: 6/1/2015
 */ 
 
+module:  Test {
+
+	class: main {
+	    string msg '/'message/' '
+    	.main:
+		   loadi oi 10
+		   loadbl bl true
+		   dload pi 3.14159642
+		   print 'hello!'
+		   ret
+	}
+
+	class: sys {
+		.run:
+		   call main.main
+		   printf '<str,main.msg>/ndone./n'
+		   
+		   ret 
+	}
+
+}   
+
+call sys.run
+   
 halt
-
-;breakp
-
-;loadi hello 10
-
-string h 'Hello, World!'
-
-/*module: mod {
-   class: mod {
-    loadi hello 5
-   }
-} 
-
-cp hello mod.mod.hello
-*/
-

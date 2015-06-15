@@ -2512,7 +2512,8 @@ void assemble(string filen, string content)
             token << content.at(i);
    }
 
-   parse();
+   if(tokens[0] != "")
+      parse();
    if(inClass || inModule){
      cout << "nsc: " << fName.str() << ":" << linepos << ": error:  expected '}' at end of input." << endl;
    }
@@ -2923,7 +2924,7 @@ bool hasLabel(string label)
                 cout << fName.str() << ": In member function " << member_func.str() << "():" << endl;
                 mem_func_declared++;
            }
-          cout << "nsc: " << fName.str() << ":" << linepos << ": error:  class \"" << CLASS << "\" does not exist.";
+          cout << "nsc: " << fName.str() << ":" << linepos << ": error:  class \"" << CLASS << "\" does not exist.\n";
     }
     if(!hasModule(MODULE)){
        Assembler::compile_only = true;
@@ -2931,7 +2932,7 @@ bool hasLabel(string label)
                 cout << fName.str() << ": In member function " << member_func.str() << "():" << endl;
                 mem_func_declared++;
            }
-          cout << "nsc: " << fName.str() << ":" << linepos << ": error:  class \"" << MODULE << "\" does not exist.";
+          cout << "nsc: " << fName.str() << ":" << linepos << ": error:  module \"" << MODULE << "\" does not exist.\n";
     } 
 
     for(int i = 0; i < mapsize; i++){
@@ -2951,7 +2952,7 @@ void createLabel(string label)
          cout << fName.str() << ": In member function " << member_func.str() << "():" << endl;
          mem_func_declared++;
    }
-     cout << "nsc: " << fName.str() << ":" << linepos << ": error:  failure to access absent label.\n";
+     cout << "nsc: " << fName.str() << ":" << linepos << ": error:  failure to create standalone label.\n";
    return;
  }
 
@@ -3158,7 +3159,7 @@ string parseString(string data)
              stringstream f, d;
              for(int l = i; l < data.size(); i++){ // parse format
                   if(data.at(l) != ',')
-                     f << " " << data.at(l);
+                     f << data.at(l);
                   else
                      break;
                   l++;
@@ -3169,11 +3170,11 @@ string parseString(string data)
              for(int l = i; l < data.size(); i++){ // parse dest
                 if(data.at(l) != '>'){
                      if(isDigit(data.at(l)))
-                         d << " " <<  data.at(l);
+                         d <<  data.at(l);
                      else{
                         for(int r = l; r < data.size(); i++){
                              if(data.at(r) != '>'){
-                                  d << " " <<  data.at(r);
+                                  d <<  data.at(r);
                              }
                              else
                                 break;
@@ -3259,21 +3260,9 @@ void mapTokens(string token, int tType) // assemble file as we compile it
     obj << "\n";
   }
 
-  if(lastcommand == "class")
+  if(lastcommand == "&&idx_offset:")
   {
-     _class_ = token;
-     lastcommand = "";
-      return;
-  }
-  else if(lastcommand == "module")
-  {
-    _module_ = token;
-    lastcommand = "";
-    return;
-  }
-  else if(lastcommand == "&&idx_offset:")
-  {
-    long offset = strtol(token.c_str(), NULL, 2);
+    long offset = strtol(token.c_str(), NULL, 0);
     labelOffset += offset;
     lastcommand = "";
     return;
@@ -3285,7 +3274,6 @@ void mapTokens(string token, int tType) // assemble file as we compile it
   else if((lastcommand == "string") && (tType == STRING_LITERAL)) {
         lastcommand = "";
         long len = strLen(token);
-        cout << "the string " << token << " has a length of " << len << endl;
         if(!hasLabel(strLabel)){
             createLabel(strLabel);
             obj << " " << toBinaryString(labelIdx(strLabel));
@@ -3298,7 +3286,7 @@ void mapTokens(string token, int tType) // assemble file as we compile it
                 cout << fName.str() << ": In member function " << member_func.str() << "():" << endl;
                 mem_func_declared++;
            }
-          cout << "nsc: " << fName.str() << ":" << linepos << ": error:  string label \"" << strLabel << "\"cannot be reassigned."; 
+          cout << "nsc: " << fName.str() << ":" << linepos << ": error:  string label \"" << strLabel << "\"cannot be reassigned.\n"; 
         }
       return;
   }
@@ -3306,15 +3294,15 @@ void mapTokens(string token, int tType) // assemble file as we compile it
   if(tType == COMMAND){
      lastcommand = token;
      if(token == "class")
-     {  }
+     {  return;  }
      else if(token == "classclose")
      { _class_ = "n/a"; }
      else if(token == "module")
-     { }
+     {  return;  }
      else if(token == "moduleclose")
      { _module_ = "n/a"; }
      else if(token == "&&idx_offset:")
-     { }
+     {  return;  }
      else
      {
         long dec = cmdIndex(token);
@@ -3328,8 +3316,9 @@ void mapTokens(string token, int tType) // assemble file as we compile it
   else if(tType == ARG_EMPTY){
     obj << " 0";
   }
-  else if(tType == UNKNOWN)
+  else if(tType == UNKNOWN){
     obj << " u? ";
+  }
   else if(tType == NULLPTR){
     long dec = 21937856;
     obj << " " << toBinaryString(dec);
@@ -3587,8 +3576,10 @@ void parse()
                 }
             }
             else if (tokens[0] == "&&idx_offset:"){ // idx offset manipulation
-                    if(tokenType(tokens[1]) == INTEGER_LITERAL)
-                        mapTokens("idx_offset:", COMMAND);
+                    if(tokenType(tokens[1]) == INTEGER_LITERAL){
+                        mapTokens("&&idx_offset:", COMMAND);
+                        mapTokens(tokens[1], INTEGER_LITERAL);
+                    }
                     else {
                         Assembler::compile_only = true;
                         if (errline == -1)
@@ -3617,10 +3608,16 @@ void parse()
                }
 
                if(!inClass){
-                  inClass = true;
                   if(tokenType(tokens[1]) == LABEL){
-                    _class_ = tokens[1];
-                    cout << "inside class " << tokens[1] << endl;
+                    int t_size = tier(tokens[1]);
+                    if(t_size != 1){
+                       Assembler::compile_only = true;
+                       cout << "nsc: " << fName.str() << ":" << linepos << ": error:  failure to create standalone label.\n";
+                    }
+                    else{
+                      _class_ = tokens[1];
+                      inClass = true;
+                    }
                   }
                   else {
                     Assembler::compile_only = true;
@@ -3639,11 +3636,32 @@ void parse()
                
             }
             else if (tokens[0] == "module:") {
+                if(member_func.str() != "!"){
+                    Assembler::compile_only = true;
+                      if (errline == -1)
+                         errline = linepos;
+                    cout << "nsc: " << fName.str() << ":" << linepos << ": error: cannot declare a module in a function." << endl;
+                }
+              
                if(!inModule){
                   if(!inClass){
-                     inModule = true;
-                     _module_= tokens[1];
-                     cout << "inside module " << tokens[1] << endl;
+                    if(tokenType(tokens[1]) == LABEL){
+                      int t_size = tier(tokens[1]);
+                      if(t_size != 1){
+                         Assembler::compile_only = true;
+                         cout << "nsc: " << fName.str() << ":" << linepos << ": error:  failure to create standalone label.\n";
+                      }
+                      else {
+                        inModule = true;
+                        _module_= tokens[1];
+                      }
+                    }
+                    else {
+                     Assembler::compile_only = true;
+                        if (errline == -1)
+                           errline = linepos;
+                        cout << "nsc: " << fName.str() << ":" << linepos << ": error:  class name must be a label." << endl;
+                    }
                   }
                   else {
                      Assembler::compile_only = true;
@@ -3690,7 +3708,6 @@ void parse()
 
   for(int i = 0; i < 4; i++)
         tokens[i] = "";
-  objFile = obj.str();
 }
 
 string funcName(string token) {

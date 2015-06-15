@@ -8,10 +8,12 @@ using namespace std;
 extern bool isempty(string str);
 extern long l_size;
 extern int flag;
+extern string *objFiles;
 
 void parse();
 string funcName(string token);
 bool hasString(string *array, string value);
+void fOut(const char *filename, string source);
 string typeToString(int type);
 int tokenType(string token);
 bool isDigit(char digit);
@@ -42,7 +44,7 @@ bool instring = false, processedcommand, charLiteral = false;
 bool inClass = false, inModule = false;
 string tokens[ 4 ],  _module_ = "n/a", _class_ = "n/a";
 string lastcommand = "", strLabel = "";
-int argsize, argoverflow, tpos = 0;
+int argsize, argoverflow, tpos = 0, ofCount = 0;
 long long labelOffset = 0, moduleSize = 0, classSize = 0;;
 string special = "", objFile = "", WORKING_DIR = "";
 long mem_func_declared = 0, errline = -1;
@@ -2429,6 +2431,31 @@ void add(string token)
    }
 }
 
+static const char alphanum[] =
+"0123456789"
+"!#$%^&"
+"ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+"abcdefghijklmnopqrstuvwxyz";
+
+int stringLength = sizeof(alphanum) - 1;
+
+char genRandom()
+{
+
+    return alphanum[rand() % stringLength];
+}
+
+string getRandomfIle()
+{
+    stringstream Str;
+    for(unsigned int i = 0; i < 20; ++i)
+    {
+    Str << genRandom();
+
+    }
+    return Str.str();
+}
+
 void assemble(string filen, string content)
 {
    cout << "nsc:   assembling file: " << filen << endl;
@@ -2525,7 +2552,12 @@ void assemble(string filen, string content)
    inModule = false;
    instring = false;
    member_func.str("!");
-   cout << "obj: \n" << objFile << endl;
+   stringstream file;
+   file << "/tmp/" << getRandomfIle() << ".o";
+   fOut(file.str().c_str(), obj.str());
+   objFiles[ ofCount++ ] = file.str();
+   //cout << "\nobj: \n" << obj.str() << endl;
+   obj.str("");
 }
 
 string toBinaryString(long dec)
@@ -2957,6 +2989,10 @@ void createLabel(string label)
  }
 
  long idx = labelpos;
+ if(idx > l_size){
+    cout << "nsc: " << fName.str() << ":" << linepos << ": fatal error:  failuer to create label '" << label << "'.\nProgram will now exit.";
+    exit(-109376521);
+ }
  labelpos++;
  labelNdx++;
  mapsize++;

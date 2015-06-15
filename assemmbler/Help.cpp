@@ -30,6 +30,9 @@ bool file_exists(const char *fileName)
 
 string tostring(const char *file)
 {
+     if(!file_exists(file))
+       return "";
+
      string tmp, content;
 
      ifstream input(file);
@@ -41,6 +44,18 @@ string tostring(const char *file)
          content += "\n";
      }
    return content;
+}
+
+void fOut(const char *filename, string source)
+{
+  ofstream object_file (filename);
+     if (object_file.is_open())
+    {
+       object_file << source;
+       object_file.close();
+    }
+     else
+        cout << "scorpion: fatal err ocured unable to open object file '" << filename << "'!" << endl;
 }
 
 bool isempty(string str)
@@ -198,7 +213,6 @@ void handleargs(int argc, const char **args)
 
         l_size = atoi(data.c_str());
         l_size *= segment;
-        cout << "l_size: " << l_size << endl;
      }
   }
 

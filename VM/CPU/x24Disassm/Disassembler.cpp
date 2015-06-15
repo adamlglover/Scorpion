@@ -3,6 +3,7 @@
 #include <string>
 #include "../core0/runtime_exception.h"
 #include <math.h>
+#include <stdlib.h> 
 #include <iostream>
 using namespace std;
 
@@ -27,7 +28,7 @@ double binary_decimal(string num) /* Function to convert binary to dec */
           if(bin.at(i) == '1')
             dec += n;
      }*/
-     dec = strtol(sun.c_str(), NULL, 0);
+     dec = strtol(num.c_str(), NULL, 0);
   }
     return dec;
 }

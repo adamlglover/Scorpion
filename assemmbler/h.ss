@@ -19,10 +19,21 @@
 * Author: Braxton Nunnally
 * Date: 6/1/2015
 */ 
- 
-jh 
-jmkdas
-
 
 halt
+
+;breakp
+
+;loadi hello 10
+
+string h 'Hello, World!'
+
+/*module: mod {
+   class: mod {
+    loadi hello 5
+   }
+} 
+
+cp hello mod.mod.hello
+*/
 

@@ -40,11 +40,12 @@ long linepos = 0, mapsize = 0;
 stringstream token, fName, lastFunc, member_func;
 bool instring = false, processedcommand, charLiteral = false;
 bool inClass = false, inModule = false;
-string tokens[ 4 ], _module_ = "n/a", _class_ = "n/a";
+string tokens[ 4 ],  _module_ = "n/a", _class_ = "n/a";
+string lastcommand = "", strLabel = "";
 int argsize, argoverflow, tpos = 0;
 long long labelOffset = 0, moduleSize = 0, classSize = 0;;
 string special = "", objFile = "", WORKING_DIR = "";
-long mem_func_declared = 0;
+long mem_func_declared = 0, errline = -1;
 
 int arg1Types[ 6 ];
 int arg2Types[ 6 ];
@@ -2400,7 +2401,6 @@ int getbounds(string token)
 
 void add(string token)
 {
-   
    if(!processedcommand){
        argsize = getbounds(token);
        argoverflow = 3 - argsize;
@@ -2418,11 +2418,11 @@ void add(string token)
  }
    else{
    
-       if(tpos >= argsize){
+       if(tpos > argsize){
            processedcommand = false;
            tpos = 0;
            parse();
-           //add(token);
+           add(token);
        }
        else
         tokens[ tpos++ ] = token;
@@ -2442,6 +2442,7 @@ void assemble(string filen, string content)
    }
    
    if(flag == 0){
+      member_func.str("!");
       flag = 1;
       labels = new (nothrow) lmap[ l_size ];
       if(labels == nullptr){
@@ -2453,8 +2454,20 @@ void assemble(string filen, string content)
    }
 
    for(int i = 0; i < content.length(); i++){
-        if(content.at(i) == '\n')
-                  linepos++;
+
+        /*if((content.at(i) == '}') && inModule){
+           
+           inModule = false;
+           _module_ = "n/a";
+           i++;
+        }
+        else if((content.at(i) == '}') && inClass){
+           inClass = false;
+           _class_ = "n/a";
+           i++;
+        }*/
+          if(content.at(i) == '\n')
+             linepos++;
 
         if((content.at(i) == '\'') && ((content.at(i - 1) != '/'))){
             if(instring)
@@ -2475,6 +2488,8 @@ void assemble(string filen, string content)
                 l++;
             }
           i++;
+          if(content.at(i) == '\n')
+               linepos++;
         }
         else if((content.at(i) == ';')  && !instring){ // single line comment
              for(int l = i; l < content.length(); i++){
@@ -2486,9 +2501,10 @@ void assemble(string filen, string content)
              i++;
         }
         else if((iswhitespace(content.at(i)) || (content.at(i) == ',') || (content.at(i) == '[') || (content.at(i) == ']')) && !instring) { // if <whitespace> -> add new token
+            
             if(token.str() != "") {
                   add(token.str()); // parse data
-                 // cout << "adding token: " << t << " pos: " << tpos << endl << std::flush;
+               //   cout << "adding token: " << token.str() << " pos: " << tpos << endl << std::flush;
                   token.str("");
               }
          }
@@ -2496,23 +2512,26 @@ void assemble(string filen, string content)
             token << content.at(i);
    }
 
-   
+   parse();
    if(inClass || inModule){
      cout << "nsc: " << fName.str() << ":" << linepos << ": error:  expected '}' at end of input." << endl;
    }
-   linepos = 0;
+    linepos = 0;
    token.str("");
    processedcommand = false;
    tpos = 0;
    inClass = false;
    inModule = false;
    instring = false;
+   member_func.str("!");
    cout << "obj: \n" << objFile << endl;
 }
 
 string toBinaryString(long dec)
 {
-    long number;
+     if(dec == 0)
+      return "0";
+     int number;
      string bin;
      char holder = ' ';
      number = dec;
@@ -2700,24 +2719,28 @@ long labelNdx = 0; // the current numeric index
 long labelpos = 0;
 int tier(string label)
 {
-    bool t1  = false, t2 = false, t3 = false;
+    bool t1  = true, t2 = true, t3 = true;
 
     if(!isLetter(label.at(0)))
         return false;
    {
         bool hasLetter = false;
             for (int i = 0; i < label.size(); i++) {
-                if (!isDigit(label.at(i)) && !(label.at(i) == '_') && !isLetter(label.at(i)) && !(label.at(i) == '.'))
+                if ((!isDigit(label.at(i)) && !(label.at(i) == '_') && !isLetter(label.at(i))) || (label.at(i) == '.'))
                     t1 = false;
                 if(isLetter(label.at(i)) && !hasLetter)
                     hasLetter = true;
 
             }
 
+        if(!t1){ }
+        else {
            if(!hasLetter)
                t1 = false;
            else
                t1 = true;
+          if(t1) return 1;
+        }
    }
    {
       bool hasLetter = false, reachedDot = false;
@@ -2735,16 +2758,20 @@ int tier(string label)
                     reachedDot = false;
             }
 
+       if(!t2){ }
+       else {
            if(!hasLetter || !reachedDot)
                t2 = false;
            else if(hasLetter && reachedDot)
                t2 = true;
            else
                t2 = false;
+           if(t2) return 2;
+       }
    }
    {
       bool hasLetter = false, reachedDot = false;
-      int count = 2;
+      int count = 0;
             for (int i = 0; i < label.size(); i++) {
                 if(((label.at(i) == '.') && (i == 0)) || ((label.at(i) == '.') && !((i + 1) < label.size())))
                     return false;
@@ -2757,27 +2784,27 @@ int tier(string label)
                     reachedDot = true;
                     count++;
                 }
-                else if(label.at(i) == '.' && !(count >= 2)){
-                    reachedDot = false;
+                else if(label.at(i) == '.' && (count < 2)){
                     count++;
+                    reachedDot = true;
                 }
-                else
-                 reachedDot = false;
+                else if(label.at(i) == '.' && (count >= 2))
+                    reachedDot = false;
+
             }
 
+         if(!t3){ }
+         else {
            if(!hasLetter || !reachedDot)
                t3 = false;
            else if(hasLetter && reachedDot)
                t3 = true;
            else
                t3 = false;
+           if(t3) return 3;
+         }
    }
-     if(t1)
       return 1;
-     else if(t2)
-      return 2;
-     else
-      return 3;
 }
 
 string getpart(string part, string label, int t_size)
@@ -2797,7 +2824,7 @@ string getpart(string part, string label, int t_size)
        }
        else {
         for(int i = 0; i < label.size(); i++){
-             if(count == 2)
+             if(count == 2 && label.at(i) != '.')
               out << label.at(i);
 
              if(label.at(i) == '.')
@@ -2818,7 +2845,7 @@ string getpart(string part, string label, int t_size)
        }
        else {
           for(int i = 0; i < label.size(); i++){
-             if(count == 1)
+             if(count == 1 && label.at(i) != '.')
               out << label.at(i);
 
              if(label.at(i) == '.')
@@ -2859,7 +2886,6 @@ bool hasModule(string Module)
 bool hasLabel(string label)
 {
   int t_size = tier(label);
-  //cout << "t size: " << t_size << " label: " << label;
   if(t_size == 1){
     for(int i = 0; i < mapsize; i++){
        if((labels[i].name == label) && (labels[i]._class == _class_) && (labels[i].module == _module_))
@@ -2877,11 +2903,11 @@ bool hasLabel(string label)
                 cout << fName.str() << ": In member function " << member_func.str() << "():" << endl;
                 mem_func_declared++;
            }
-          cout << "nsc: " << fName.str() << ":" << linepos << ": error:  class \"" << CLASS << "\" does not exist.";
+          cout << "nsc: " << fName.str() << ":" << linepos << ": error:  class \"" << CLASS << "\" does not exist.\n";
     }
 
     for(int i = 0; i < mapsize; i++){
-       if((labels[i].name == LABEL) && (labels[i]._class == CLASS) && (labels[i].module == _module_))
+       if((labels[i].name == LABEL) && (labels[i]._class == CLASS))
         return true;
     }
    return false;
@@ -2925,14 +2951,16 @@ void createLabel(string label)
          cout << fName.str() << ": In member function " << member_func.str() << "():" << endl;
          mem_func_declared++;
    }
-     cout << "nsc: " << fName.str() << ":" << linepos << ": error:  failure to access absent label";
+     cout << "nsc: " << fName.str() << ":" << linepos << ": error:  failure to access absent label.\n";
    return;
  }
 
- long idx = labelpos++;
+ long idx = labelpos;
+ labelpos++;
+ labelNdx++;
  mapsize++;
  labels[ idx ].name = label;
- labels[ idx ].index = 50 + labelpos + labelOffset;
+ labels[ idx ].index = 50 + labelNdx + labelOffset;
  labels[ idx ]._class = _class_;
  labels[ idx ].module = _module_;
 }
@@ -2941,18 +2969,19 @@ long labelIdx(string label)
 {
    int t_size = tier(label);
   if(t_size == 1){
-    for(int i = 0; i < mapsize; i++){
-       if((labels[i].name == label) && (labels[i]._class == _class_) && (labels[i].module == _module_))
+    for(int i = 0; i < mapsize; i++){ 
+      if((labels[i].name == label) && (labels[i]._class == _class_) && (labels[i].module == _module_))
         return labels[i].index;
     }
+   return 0;
   }
   else if(t_size == 2){
     string LABEL = getpart("label", label, 2);
     string CLASS = getpart("class", label, 2);
 
     for(int i = 0; i < mapsize; i++){
-       if((labels[i].name == LABEL) && (labels[i]._class == CLASS) && (labels[i].module == _module_))
-        return labels[i].index;;
+       if((labels[i].name == LABEL) && (labels[i]._class == CLASS))
+        return labels[i].index;
     }
   }
   else {
@@ -2968,18 +2997,239 @@ long labelIdx(string label)
   return 2;
 }
 
-long strLen(string str)
+long strLen(string data)
 {
-  return 0;
+  long length = 0;
+  for(int i = 1; i < data.size() - 1; i++){
+      char a = data.at(i);
+      if(a == '/'){
+            i++;
+            length++;
+      }
+      else if(a == '<'){
+          if(lastcommand == "print"){
+                 Assembler::compile_only = true;
+               if(member_func.str() != "!" && mem_func_declared == 0){
+                  cout << fName.str() << ": In member function " << member_func.str() << "():" << endl;
+                  mem_func_declared++;
+               }
+            cout << "nsc: " << fName.str() << ":" << linepos << ": error:  cannot have format code with <> format specifier in \"print\" statement(use printf).\n";
+          }
+          else if(lastcommand == "string"){
+                 Assembler::compile_only = true;
+               if(member_func.str() != "!" && mem_func_declared == 0){
+                  cout << fName.str() << ": In member function " << member_func.str() << "():" << endl;
+                  mem_func_declared++;
+               }
+            cout << "nsc: " << fName.str() << ":" << linepos << ": error:  cannot have format code with <> format specifier in 'string' instruction(use printf)\n";
+          }
+
+                i++;
+                length++;
+                for(int l = i; l < data.length(); i++){ // parse format
+                    if(data.at(l) != '>'){}
+                    else
+                        break;
+                    l++;
+                }
+            }
+            else if(a == '\n'){
+                  Assembler::compile_only = true;
+               if(member_func.str() != "!" && mem_func_declared == 0){
+                  cout << fName.str() << ": In member function " << member_func.str() << "():" << endl;
+                  mem_func_declared++;
+               }
+                  cout << "nsc: " << fName.str() << ":" << linepos << ": error:  cannot insert a \\n in a string\n";
+            }
+            else {
+                length++;
+            }
+     }
+     if(lastcommand == "loadc" && (length > 1)){
+            Assembler::compile_only = true;
+               if(member_func.str() != "!" && mem_func_declared == 0){
+                  cout << fName.str() << ": In member function " << member_func.str() << "():" << endl;
+                  mem_func_declared++;
+               }
+            cout << "nsc: " << fName.str() << ":" << linepos << ": error:  cannot have more than 1 character for 'loadc' instruction.\n";
+     }
+     if(lastcommand == "rln" && (length > 1)){
+         Assembler::compile_only = true;
+               if(member_func.str() != "!" && mem_func_declared == 0){
+                  cout << fName.str() << ": In member function " << member_func.str() << "():" << endl;
+                  mem_func_declared++;
+               }
+            cout << "nsc: " << fName.str() << ":" << linepos << ": error:  cannot have more than 1 character for 'rln' instruction.\n";
+     } 
+    return length;
 }
 
-string parseString(string str)
+long toForm(string format) {
+        if(format == "v")
+            return 256;
+        else if(format == "c")
+            return 257;
+        else if(format == "d")
+            return 258;
+        else if(format == "f")
+            return 259;
+        else if(format == "x")
+            return 260;
+        else if(format == "u")
+            return 261;
+        else if(format == "g")
+            return 262;
+        else if(format == "e")
+            return 263;
+        else if(format == "do")
+            return 264;
+        else if(format == "lg")
+            return 265;
+        else if(format == "le")
+            return 266;
+        else if(format == "bl")
+            return 267;
+        else if(format == "str")
+            return 268;
+        else if(format == "col")
+            return 270;
+        else {
+            Assembler::compile_only = true;
+               if(member_func.str() != "!" && mem_func_declared == 0){
+                  cout << fName.str() << ": In member function " << member_func.str() << "():" << endl;
+                  mem_func_declared++;
+               }
+            cout << "nsc: " << fName.str() << ":" << linepos << ": error:  unidentified print format '" << format << "'\n";
+            return 0;
+       }
+    }
+
+    char parseExcape(char c) {
+        if(c == '\'')
+            return '\'';
+        else if(c == 'n')
+            return '\n';
+        else if(c == 't')
+            return '\t';
+        else if(c == '<')
+            return '<'; //for printf
+        else if(c == 's')
+            return '/';
+        else if(c == 'b')
+            return '\b';
+        else if(c == 'f')
+            return '\f';
+        else if(c == 'r')
+            return '\r';
+        else if(c == '&')
+            return '&';
+        else {
+            Assembler::compile_only = true;
+               if(member_func.str() != "!" && mem_func_declared == 0){
+                  cout << fName.str() << ": In member function " << member_func.str() << "():" << endl;
+                  mem_func_declared++;
+               }
+            cout << "nsc: " << fName.str() << ":" << linepos << ": error:  unknown excape sequence: " << c << endl; 
+           return '&';
+       }
+    }
+
+string parseString(string data)
 {
-  return "";
+  stringstream bin;
+  long dec = 0;
+  for(int i = 1; i < data.size() - 1; i++){
+       char a = data.at(i);
+       if(a == '/'){
+           i++;
+           a = parseExcape(data.at(i));
+           if(a == '&')
+                dec = 269;
+           else
+                dec = a;
+           if(dec == '#')
+                bin << "";
+           else
+                bin << " " << toBinaryString(dec);
+       }
+       else if(a == '<'){
+             i++;
+             long format, dest;
+             stringstream f, d;
+             for(int l = i; l < data.size(); i++){ // parse format
+                  if(data.at(l) != ',')
+                     f << " " << data.at(l);
+                  else
+                     break;
+                  l++;
+             }
+
+             bool setData = true;
+             i++;
+             for(int l = i; l < data.size(); i++){ // parse dest
+                if(data.at(l) != '>'){
+                     if(isDigit(data.at(l)))
+                         d << " " <<  data.at(l);
+                     else{
+                        for(int r = l; r < data.size(); i++){
+                             if(data.at(r) != '>'){
+                                  d << " " <<  data.at(r);
+                             }
+                             else
+                                break;
+                             r++;
+                        }
+
+                        if(hasLabel(d.str())) { // first test if is label
+                             long index = labelIdx(d.str());
+                                format = toForm(f.str());
+                                dest = index;
+                                bin << " " << toBinaryString(format) << " " << toBinaryString(dest);
+                                setData = false;
+                                break;
+                            }
+                            else {
+                               Assembler::compile_only = true;
+                               if(member_func.str() != "!" && mem_func_declared == 0){
+                                  cout << fName.str() << ": In member function " << member_func.str() << "():" << endl;
+                                  mem_func_declared++;
+                               }
+                                cout << "nsc: " << fName.str() << ":" << linepos << ": error:  char must me a number or label in string literal" << endl;
+                            }
+                       }
+
+                    }
+                    else
+                        break;
+                    l++;
+                }
+
+                if(setData) {
+                    format = toForm(f.str());
+                    dest = atoi(d.str().c_str());
+                    bin << " " << toBinaryString(format) << " " << toBinaryString(dest);
+                }
+            }
+            else if(a == '\n'){
+                Assembler::compile_only = true;
+                  if(member_func.str() != "!" && mem_func_declared == 0){
+                      cout << fName.str() << ": In member function " << member_func.str() << "():" << endl;
+                      mem_func_declared++;
+                  }
+                   cout << "nsc: " << fName.str() << ":" << linepos << ": error:  cannot insert a \\n in a string" << endl;
+            }
+            else {
+                dec = a;
+                bin << " " <<  toBinaryString(dec);
+            }
+        }
+
+  stringstream binstring;
+  binstring <<  " " << toBinaryString(strLen(data)) << " " << bin.str();
+  return binstring.str();
 }
 
 
-string lastcommand = "", strLabel = "";
 int cmdCount = 0;
 /*
 * Used variables for mapping
@@ -3003,7 +3253,6 @@ int cmdCount = 0;
 */
 void mapTokens(string token, int tType) // assemble file as we compile it
 {
-  cout << "mapping: " << token << " type: " << typeToString(tType) << endl;
   cmdCount++;
   if(cmdCount > 20){
     cmdCount = 0;
@@ -3030,13 +3279,13 @@ void mapTokens(string token, int tType) // assemble file as we compile it
     return;
   }
   else if((lastcommand == "string") && (tType == LABEL)){
-        lastcommand = "";
         strLabel = token;
         return;
   }
   else if((lastcommand == "string") && (tType == STRING_LITERAL)) {
         lastcommand = "";
         long len = strLen(token);
+        cout << "the string " << token << " has a length of " << len << endl;
         if(!hasLabel(strLabel)){
             createLabel(strLabel);
             obj << " " << toBinaryString(labelIdx(strLabel));
@@ -3057,7 +3306,7 @@ void mapTokens(string token, int tType) // assemble file as we compile it
   if(tType == COMMAND){
      lastcommand = token;
      if(token == "class")
-     { }
+     {  }
      else if(token == "classclose")
      { _class_ = "n/a"; }
      else if(token == "module")
@@ -3074,22 +3323,18 @@ void mapTokens(string token, int tType) // assemble file as we compile it
           return;
         }
         obj << " " << toBinaryString(dec);
-        cout << "command " << token << " idx: " << cmdIndex(token);
      }
   }
   else if(tType == ARG_EMPTY){
-    obj << " " << toBinaryString(0);
-    cout << "mapping {empty}\n";
+    obj << " 0";
   }
   else if(tType == UNKNOWN)
     obj << " u? ";
   else if(tType == NULLPTR){
     long dec = 21937856;
     obj << " " << toBinaryString(dec);
-    cout << "mapping {null}\n";
   }
   else if(tType == REGISTER){
-     cout << "mapping {reg}\n";
           long dec = 0;
 
           if(token == "eax")
@@ -3153,12 +3398,10 @@ void mapTokens(string token, int tType) // assemble file as we compile it
           obj << " " << toBinaryString(dec);
      }
      else if(tType == HEX_LITERAL){
-          cout << "mapping {hex}\n";
           long hex = strtol(token.c_str(), NULL, 16);
           obj << " " << toBinaryString(hex);
      }
      else if(tType == RAM_ADDRESS){
-          cout << "mapping {ram}\n";
             stringstream addr;
             for(int i = 1; i < token.size(); i++) {
                 addr << token.at(i);
@@ -3170,7 +3413,6 @@ void mapTokens(string token, int tType) // assemble file as we compile it
             obj << " " << toBinaryString(adr);
      }
      else if(tType == RESERVED){
-          cout << "mapping {reserved}\n";
             if(token == "true")
                 obj << " 1";
             else if(token == "false")
@@ -3191,7 +3433,6 @@ void mapTokens(string token, int tType) // assemble file as we compile it
                 obj << " u? ";
      }
      else if(tType == INTEGER_LITERAL){
-            cout << "mapping {int}\n";
             stringstream num1, num2;
             int right = -1;
             int start = 0;
@@ -3212,27 +3453,25 @@ void mapTokens(string token, int tType) // assemble file as we compile it
                     num2 << token.at(i);
                 }
 
-                long dec1 = strtol(num1.str().c_str(), NULL, 2);
-                long dec2 = strtol(num2.str().c_str(),NULL, 2);
-                obj << toBinaryString(dec1) << " " << toBinaryString(dec2);
+                long dec1 = strtol(num1.str().c_str(), NULL, 0);
+                long dec2 = strtol(num2.str().c_str(),NULL, 0);
+                obj << " " << toBinaryString(dec1) << " " << toBinaryString(dec2);
             }
             else {
-                long dec = strtol(num1.str().c_str(), NULL, 2);
+                long dec = strtol(num1.str().c_str(), NULL, 0);
                 obj << " " << toBinaryString(dec);
             }
      }
      else if(tType == STRING_LITERAL){
              obj << " " << parseString(token);
-          cout << "mapping {str}\n";
      }
      else if(tType == LABEL){
-        cout << "mapping {lab}\n";
         if(!hasLabel(token)){
             createLabel(token);
-            obj << " " << toBinaryString(labelIdx(strLabel));
+            obj << " " << toBinaryString(labelIdx(token));
         }
         else
-          obj << " " << toBinaryString(labelIdx(strLabel));
+          obj << " " << toBinaryString(labelIdx(token));
      }
 }
 
@@ -3286,11 +3525,11 @@ bool is_flabel(string label)
    }
 }
 
-int errline = -1;
 void parse()
 {
 
-   if(errline == -1) {
+   if((errline == -1) || (linepos > errline)) {
+     errline = -1;
      if (hasString(instructions, tokens[0])) { // is command
                     mapTokens(tokens[0], COMMAND);
 
@@ -3340,11 +3579,11 @@ void parse()
             else if (tokens[0] == "}"){
                  if(inClass){
                    inClass = false;
-                   mapTokens("classclose", COMMAND);
+                   _class_ = "n/a";
                  }
                  else if(inModule){
                    inModule = false;
-                   mapTokens("moduleclose", COMMAND);
+                   _module_ = "n/a";
                 }
             }
             else if (tokens[0] == "&&idx_offset:"){ // idx offset manipulation
@@ -3380,8 +3619,8 @@ void parse()
                if(!inClass){
                   inClass = true;
                   if(tokenType(tokens[1]) == LABEL){
-                    mapTokens("class", COMMAND);
-                    mapTokens(tokens[1], LABEL);
+                    _class_ = tokens[1];
+                    cout << "inside class " << tokens[1] << endl;
                   }
                   else {
                     Assembler::compile_only = true;
@@ -3403,8 +3642,8 @@ void parse()
                if(!inModule){
                   if(!inClass){
                      inModule = true;
-                     mapTokens("module", COMMAND);
-                     mapTokens(tokens[1], LABEL);
+                     _module_= tokens[1];
+                     cout << "inside module " << tokens[1] << endl;
                   }
                   else {
                      Assembler::compile_only = true;
@@ -3438,6 +3677,10 @@ void parse()
                 Assembler::compile_only = true;
                 if (errline == -1)
                     errline = linepos;
+                if(member_func.str() != "!" && mem_func_declared == 0){
+                   cout << fName.str() << ": In member function " << member_func.str() << "():" << endl;
+                   mem_func_declared++;
+                }
                 cout << "nsc: " << fName.str() << ":" << linepos << ": error:  expected instruction before \"" << tokens[0] << "\"." << endl;
 
             }

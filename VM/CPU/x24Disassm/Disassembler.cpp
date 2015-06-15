@@ -21,12 +21,13 @@ double binary_decimal(string num) /* Function to convert binary to dec */
   if(bin.length() > 1024)
        bin_overload(bin);
   else {
-     for(int i = bin.length() - 1; i > -1; i--)
+    /* for(int i = bin.length() - 1; i > -1; i--)
      {
           n = pow(2,exp++);
           if(bin.at(i) == '1')
             dec += n;
-     }
+     }*/
+     dec = strtol(sun.c_str(), NULL, 0);
   }
     return dec;
 }

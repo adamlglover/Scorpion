@@ -697,10 +697,8 @@ int Gate::route(double instr, double r1,double r2, double r3)
        default:
          if(!ignore){
              cout << "Segmentation Fault" << endl;
-             stringstream ss;
-             ss << "unknown command '" << instr << "' at {IP:" << _cpu.GetVirturalAddress() << "}. Shutting Down System...";
-             RuntimeException re;
-             re.introduce("CPULogicException", ss.str());
+             EBX = 1;
+             p_exit();
          }
         break;
    }

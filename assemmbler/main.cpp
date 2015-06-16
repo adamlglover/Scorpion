@@ -14,8 +14,8 @@ extern int fsize;
 extern string *sourceFiles, *objFiles, fOutput;
 extern string tostring(const char *file);
 extern void assemble(string filen, string content);
-extern void umap();
 extern void fOut(const char *filename, string source);
+extern void umap();
 
 void help();
 void handleargs(int, const char **f);
@@ -38,7 +38,7 @@ int main(int argc, const char **file)
      for(int i = 0; i < fsize; i++)
      {
        stringstream ss;
-       ss << tostring(objFiles[i].c_str()) << tostring(fOutput.c_str());
+       ss << tostring(objFiles[i].c_str()) << "\n" << tostring(fOutput.c_str());
        fOut(fOutput.c_str(), ss.str());
      }
   }

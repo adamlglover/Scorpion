@@ -7,11 +7,11 @@
 * users
 */
 
-&&working_dir: 'C:\Users\Braxton\Desktop\examples\v5\ScorpionProjects\Security\src\' ; set the general working dir
+&&working_dir: '/home/pi/Desktop/GitHub/Scorpion/examples/v5/ScorpionProjects/Security/src' ; set the general working dir
 
 loadi SEAL_RETURN 0
 
-import 'firewall.ss'
+import '/firewall.ss'
 
 .seal:  ;seal the program 
   print 'This program is password protected/n'

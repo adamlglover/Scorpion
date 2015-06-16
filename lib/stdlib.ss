@@ -1,3 +1,3 @@
-import <GPIO/*>
-import <util/*>
+import <scorpion/io/*>
+import <scorpion/lang/*>
 

@@ -14,6 +14,8 @@ string v_stage = "beta";
 #define NUM_OPTIONS 5
 string args[ NUM_OPTIONS ];
 
+#define nullptr ((void *)0)
+
 string OPTION = "";
 bool has_output_file = false;
 string fOutput = "";
@@ -171,8 +173,11 @@ void handleargs(int argc, const char **args)
            fOutput = "out.b";
 
         fsize = argc - i;
+//        cout << "filesize: " << fsize << endl;
         sourceFiles = new string[ argc - i ];
         objFiles = new string[ argc - i ];
+        if(objFiles == nullptr || sourceFiles == nullptr)
+           cout << "err" << endl;
         for(int x = i; i < argc; x++ ) {
             sourceFiles[idx++] = args[x];
             i++;

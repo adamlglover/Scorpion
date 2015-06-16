@@ -20,25 +20,23 @@
 * Date: 6/1/2015
 */ 
 
-extern m1
-extern m2
- 
-loadi h 10 
- 
-.m1:
-   print 'm1/n'
-   ret 
+extern Mod.M1.m1
+extern Mod.M1.m2
 
-.m2: 
-   print 'm2/n'
-   ret   
-   
-call m1
-call m2   
+import '/home/pi/Desktop/GitHub/Scorpion/assemmbler/part.ss'
 
-call m1 
-call m1 
-call m1 
-call m1 
-call m1 
-call m1 
+module: Mod {
+  class: M1 {
+    .m1:
+      print 'm1/n'
+      ret
+
+     .m2:
+       print 'm2/n'
+       ret
+  }
+}
+
+call Mod.M1.m1
+call Mod.M1.m2
+

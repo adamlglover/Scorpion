@@ -1,4 +1,4 @@
-import <util/time>
+;import 'util/time'
 string password 'fe2ab7dee93'
 loadi usr_passwd 0                            ; will be our passwd string for later
 &&idx_offset: 500
@@ -117,16 +117,8 @@ loadi noColor 38
 	   call handleFault 
 	   breakp
 	   rmov sdx SEAL_RETURN
-	   cp take_measures take_measures_b      ; preserve method
+	   cp take_measures take_measuresb      ; preserve method
 	   invoke 0xA 0 
    end
    ret    
 
-&&rm_label: ref
-&&rm_label: KEY 
-&&rm_label: ENTER   
-&&rm_label: has_key
-&&rm_label: is_enter
-&&rm_label: has_key_b
-&&rm_label: PASSWD_SIZE
-&&rm_label: MAX_PASSWD_SIZE

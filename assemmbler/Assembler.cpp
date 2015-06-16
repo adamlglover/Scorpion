@@ -14,6 +14,8 @@ void parse();
 string funcName(string token);
 bool hasString(string *array, string value);
 void fOut(const char *filename, string source);
+bool file_exists(const char *fileName);
+string tostring(const char *file);
 string typeToString(int type);
 int tokenType(string token);
 bool isDigit(char digit);
@@ -41,11 +43,11 @@ lmap *labels; // out labels
 long linepos = 0, mapsize = 0;
 stringstream token, fName, lastFunc, member_func;
 bool instring = false, processedcommand, charLiteral = false;
-bool inClass = false, inModule = false;
+bool inClass = false, inModule = false, reset = false;
 string tokens[ 4 ],  _module_ = "n/a", _class_ = "n/a";
 string lastcommand = "", strLabel = "";
 int argsize, argoverflow, tpos = 0, ofCount = 0;
-long long labelOffset = 0;
+long long labelOffset = 0, iNest = 0;
 string special = "", objFile = "", WORKING_DIR = "";
 long mem_func_declared = 0, errline = -1;
 
@@ -1728,7 +1730,7 @@ int getbounds(string token)
             arg3Types[1] = ARG_EMPTY;   
 
             arg1Types[2] = LABEL;
-            arg2Types[2] = INTEGER_LITERAL;
+            arg2Types[2] = RESERVED;
             arg3Types[2] = ARG_EMPTY;   
 
             arg1Types[3] = ARG_EMPTY;
@@ -2165,29 +2167,29 @@ int getbounds(string token)
         }
         else if(token == "strcpi"){      
             arg1Types[0] = LABEL;
-            arg2Types[0] = ARG_EMPTY;
-            arg3Types[0] = ARG_EMPTY;   
+            arg2Types[0] = LABEL;
+            arg3Types[0] = LABEL;
 
             arg1Types[1] = RAM_ADDRESS;
-            arg2Types[1] = ARG_EMPTY;
-            arg3Types[1] = ARG_EMPTY;   
+            arg2Types[1] = RAM_ADDRESS;
+            arg3Types[1] = RAM_ADDRESS;
 
             arg1Types[2] = REGISTER;
             arg2Types[2] = ARG_EMPTY;
-            arg3Types[2] = ARG_EMPTY;   
+            arg3Types[2] = ARG_EMPTY;
 
             arg1Types[3] = ARG_EMPTY;
             arg2Types[3] = ARG_EMPTY;
-            arg3Types[3] = ARG_EMPTY;   
+            arg3Types[3] = ARG_EMPTY;
 
             arg1Types[4] = ARG_EMPTY;
             arg2Types[4] = ARG_EMPTY;
-            arg3Types[4] = ARG_EMPTY;   
+            arg3Types[4] = ARG_EMPTY;
 
             arg1Types[5] = ARG_EMPTY;
             arg2Types[5] = ARG_EMPTY;
-            arg3Types[5] = ARG_EMPTY;   
-            return 1;
+            arg3Types[5] = ARG_EMPTY;
+            return 3;
         }
         else if(token == "swi"){    
             arg1Types[0] = ARG_EMPTY;
@@ -2484,7 +2486,7 @@ string getRandomfIle()
 
 void assemble(string filen, string content)
 {
-   cout << "nsc:   assembling file: " << filen << endl;
+//   cout << "nsc:   assembling file: " << filen << endl;
 
    fName.str("");
    fName << filen;
@@ -2566,23 +2568,29 @@ void assemble(string filen, string content)
 
    if(tokens[0] != "")
       parse();
+
    if(inClass || inModule){
+     Assembler::compile_only = true;
      cout << "nsc: " << fName.str() << ":" << linepos << ": error:  expected '}' at end of input." << endl;
    }
-    linepos = 0;
-   token.str("");
-   processedcommand = false;
-   tpos = 0;
-   inClass = false;
-   inModule = false;
-   instring = false;
-   member_func.str("!");
-   stringstream file;
-   file << "/tmp/" << getRandomfIle() << ".o";
-   fOut(file.str().c_str(), obj.str());
-   objFiles[ ofCount++ ] = file.str();
+
+   if(reset){
+      linepos = 0;
+
+     token.str("");
+     processedcommand = false;
+     tpos = 0;
+     inClass = false;
+     inModule = false;
+     instring = false;
+     member_func.str("!");
+     stringstream file;
+     file << "/tmp/" << getRandomfIle() << ".o";
+     fOut(file.str().c_str(), obj.str());
+     objFiles[ ofCount++ ] = file.str();
 //   cout << "\nobj: \n" << obj.str() << endl;
-   obj.str("");
+     obj.str("");
+   }
 }
 
 string toBinaryString(long dec)
@@ -3315,6 +3323,7 @@ int cmdCount = 0;
 */
 void mapTokens(string token, int tType) // assemble file as we compile it
 {
+//  cout << "mapping " << token << " type: " << typeToString(tType) << endl;
   cmdCount++;
   if(cmdCount > 20){
     cmdCount = 0;
@@ -3576,6 +3585,11 @@ bool is_flabel(string label)
    }
 }
 
+long linepos_b, tpos_b;
+string token_b, member_func_b, fName_b;
+bool processedcommand_b;
+bool inClass_b, inModule_b, instring_b;
+
 void parse()
 {
 
@@ -3632,20 +3646,32 @@ void parse()
             else if(tokens[0] == "extern") {
                   if(tokenType(tokens[1]) == LABEL){
                     int t_size = tier(tokens[1]);
-                    if(t_size != 1){
-                       Assembler::compile_only = true;
-                       cout << "nsc: " << fName.str() << ":" << linepos << ": error:  failure to create standalone label.\n";
+                    string c = _class_, m = _module_, LABEL = "";
+                    if(t_size == 2){
+                        LABEL = getpart("label", tokens[1], 2);
+                        string CLASS = getpart("class", tokens[1], 2);
+                        _class_ = CLASS;
                     }
-                    else{
-                          if(!hasLabel(tokens[1])){
-                             createLabel(tokens[1]);
+                    else if(t_size == 3){
+                        LABEL = getpart("label", tokens[1], 3);
+                        string CLASS = getpart("class", tokens[1], 3);
+                        string MOD = getpart("module", tokens[1], 3);
+                        _class_ = CLASS;
+                        _module_ = MOD;
+                    }
+                    else
+                      LABEL = tokens[1];
+
+                          if(!hasLabel(LABEL)){
+                             createLabel(LABEL);
                              stringstream back_t;
-                             back_t << tokens[1] << "b";
+                             back_t << LABEL << "b";
                              if(!hasLabel(back_t.str()))
                                createLabel(back_t.str());
                           }
 		          else { }
-                    }
+                    _class_ = c;
+                    _module_ = m;
                  }
                  else {
                    Assembler::compile_only = true;
@@ -3776,7 +3802,75 @@ void parse()
                     mem_func_declared = 0;
             }
             else if (tokens[0] == "import") { // import statement
-               // skip this shit
+                    stringstream file;
+                    if(tokenType(tokens[1]) == STRING_LITERAL){
+                           file << WORKING_DIR;
+                       for(int i = 1; i < tokens[1].size() - 1; i++)
+                           file << tokens[1].at(i);
+
+                         if(file_exists(file.str().c_str())){
+                             if(iNest == 0){
+                              long linepos_b = linepos;
+                              long tpos_b = tpos;
+                              string token_b  = token.str();
+                              string member_func_b =  member_func.str(); 
+                              string fName_b =  fName.str();
+                              bool processedcommand_b = processedcommand;
+                              bool inClass_b  = inClass;
+                              bool inModule_b = inModule;
+                              bool instring_b  = instring;
+                           }
+                        
+			      iNest++;
+                              linepos = 0;
+                              token.str("");
+                              processedcommand = false;
+                              tpos = 0;
+                              inClass = false;
+                              inModule = false;
+                              instring = false;
+                              member_func.str("!");
+                              reset = false;
+                              assemble(file.str(), tostring(file.str().c_str()));
+                              iNest--;
+                              
+                              if(iNest == 0)
+                               reset = true;
+                              linepos = linepos_b;
+                              token.str("");
+                              token << token_b;
+                              processedcommand = processedcommand_b;
+                              tpos = tpos_b;
+                              inClass = inClass_b;
+                              inModule = inModule_b;
+                              instring = instring_b;
+                              member_func.str("!");
+                              fName.str("");
+                              fName << fName_b;
+                              member_func << member_func_b;
+                         }
+                         else {
+                           Assembler::compile_only = true;
+                           if (errline == -1)
+                              errline = linepos;
+                           if(member_func.str() != "!" && mem_func_declared == 0){
+                              cout << fName.str() << ": In member function " << member_func.str() << "():" << endl;
+                              mem_func_declared++;
+                           }
+                            cout << "nsc: " << fName.str() << ":" << linepos << ": error:  file included: \"" << file.str() << "\" does not exist.\nCompilation terminated.\n";
+                           errline = linepos * 100000;
+                         }
+                    }
+                    else {
+                        Assembler::compile_only = true;
+                       if (errline == -1)
+                          errline = linepos;
+                       if(member_func.str() != "!" && mem_func_declared == 0){
+                           cout << fName.str() << ": In member function " << member_func.str() << "():" << endl;
+                           mem_func_declared++;
+                       }
+                        cout << "nsc: " << fName.str() << ":" << linepos << ": error:  could not include file, expected string literal.\n";
+                    }
             }
             else {
                 Assembler::compile_only = true;
@@ -3808,7 +3902,7 @@ string funcName(string token) {
 
 bool hasString(string *array, string value){
 
-            for(int i = 0; i < 81; i++){
+            for(int i = 0; i < 82; i++){
 
                 if(value == array[i])
                     return true;

@@ -39,9 +39,3 @@ dload SECS 0.000
    ret
 	
 	
-   /* Assembler commands */
-   &&rm_label: time_before
-   &&rm_label: delay_time
-   &&rm_label: delay_time_b
-   &&rm_label: time
-	

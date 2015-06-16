@@ -22,3 +22,8 @@ import 'firewall.ss'
   call take_measures
   ret
 
+ call seal
+
+halt 
+ 
+  

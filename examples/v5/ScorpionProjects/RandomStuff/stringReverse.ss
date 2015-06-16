@@ -1,4 +1,3 @@
-
 loadi input 259
 &&idx_offset: 259
 
@@ -11,11 +10,17 @@ loadi input 259
    adr ref input         ; get ptr address to input variable 
    mov i3 0              ; Custom for loop
    add ref ref input     ; start at end of string
+   r_mv ip backTrack
    ilt i3 input          ; for(int i = 0; i < input.length; i++)
        rload _char ref
 	   printf '<c,_char>'
 	   dec ref 
        inc i3 
+	   rmov sdx backTrack
+	   invoke 0xA 0 
    end 
    ret
 
+   call main 
+   
+   halt

@@ -20,28 +20,25 @@
 * Date: 6/1/2015
 */ 
 
-module:  Test {
+extern m1
+extern m2
+ 
+loadi h 10 
+ 
+.m1:
+   print 'm1/n'
+   ret 
 
-	class: main {
-	    string msg '/'message/' '
-    	.main:
-		   loadi oi 10
-		   loadbl bl true
-		   dload pi 3.14159642
-		   print 'hello!'
-		   ret
-	}
-
-	class: sys {
-		.run:
-		   call main.main
-		   printf '<str,main.msg>/ndone./n'
-		   
-		   ret 
-	}
-
-}   
-
-call sys.run
+.m2: 
+   print 'm2/n'
+   ret   
    
-halt
+call m1
+call m2   
+
+call m1 
+call m1 
+call m1 
+call m1 
+call m1 
+call m1 

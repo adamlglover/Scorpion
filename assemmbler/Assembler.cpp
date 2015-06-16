@@ -45,7 +45,7 @@ bool inClass = false, inModule = false;
 string tokens[ 4 ],  _module_ = "n/a", _class_ = "n/a";
 string lastcommand = "", strLabel = "";
 int argsize, argoverflow, tpos = 0, ofCount = 0;
-long long labelOffset = 0, moduleSize = 0, classSize = 0;;
+long long labelOffset = 0;
 string special = "", objFile = "", WORKING_DIR = "";
 long mem_func_declared = 0, errline = -1;
 
@@ -1555,7 +1555,7 @@ int getbounds(string token)
             arg1Types[5] = ARG_EMPTY;
             arg2Types[5] = ARG_EMPTY;
             arg3Types[5] = ARG_EMPTY;   
-            if(Assembler::compile_only)
+            if(!Assembler::compile_only)
                 flag = 3;
             return 1;
         }
@@ -1661,7 +1661,7 @@ int getbounds(string token)
             arg1Types[5] = ARG_EMPTY;
             arg2Types[5] = ARG_EMPTY;
             arg3Types[5] = ARG_EMPTY;   
-            if(Assembler::compile_only)
+            if(!Assembler::compile_only)
                  flag = 3;
             return 1;
         }
@@ -2003,7 +2003,7 @@ int getbounds(string token)
             arg1Types[5] = ARG_EMPTY;
             arg2Types[5] = ARG_EMPTY;
             arg3Types[5] = ARG_EMPTY;   
-            if(Assembler::compile_only)
+            if(!Assembler::compile_only)
                 flag = 3;
             return 2;
         }
@@ -2373,6 +2373,32 @@ int getbounds(string token)
             special = "{";
             return 2;
         }
+        else if(token == "extern"){
+            arg1Types[0] = LABEL;
+            arg2Types[0] = ARG_EMPTY;
+            arg3Types[0] = ARG_EMPTY;
+
+            arg1Types[1] = LABEL;
+            arg2Types[1] = ARG_EMPTY;
+            arg3Types[1] = ARG_EMPTY;
+
+            arg1Types[2] = LABEL;
+            arg2Types[2] = ARG_EMPTY;
+            arg3Types[2] = ARG_EMPTY;
+
+            arg1Types[3] = ARG_EMPTY;
+            arg2Types[3] = ARG_EMPTY;
+            arg3Types[3] = ARG_EMPTY;
+
+            arg1Types[4] = ARG_EMPTY;
+            arg2Types[4] = ARG_EMPTY;
+            arg3Types[4] = ARG_EMPTY;
+
+            arg1Types[5] = ARG_EMPTY;
+            arg2Types[5] = ARG_EMPTY;
+            arg3Types[5] = ARG_EMPTY;
+            return 1;
+        }
         else {
             arg1Types[0] = UNKNOWN;
             arg2Types[0] = UNKNOWN;
@@ -2525,7 +2551,6 @@ void assemble(string filen, string content)
                  l++;
              }
              linepos++;
-             i++;
         }
         else if((iswhitespace(content.at(i)) || (content.at(i) == ',') || (content.at(i) == '[') || (content.at(i) == ']')) && !instring) { // if <whitespace> -> add new token
             
@@ -2556,7 +2581,7 @@ void assemble(string filen, string content)
    file << "/tmp/" << getRandomfIle() << ".o";
    fOut(file.str().c_str(), obj.str());
    objFiles[ ofCount++ ] = file.str();
-   //cout << "\nobj: \n" << obj.str() << endl;
+//   cout << "\nobj: \n" << obj.str() << endl;
    obj.str("");
 }
 
@@ -3310,6 +3335,7 @@ void mapTokens(string token, int tType) // assemble file as we compile it
   else if((lastcommand == "string") && (tType == STRING_LITERAL)) {
         lastcommand = "";
         long len = strLen(token);
+        //cout << "string " << token << " length: " << len << endl;
         if(!hasLabel(strLabel)){
             createLabel(strLabel);
             obj << " " << toBinaryString(labelIdx(strLabel));
@@ -3593,13 +3619,38 @@ void parse()
 
                     mapTokens("push", COMMAND);
                     mapTokens(funcName(tokens[0]), LABEL);
-                    mapTokens(funcName(tokens[0]) + "_b", LABEL);
+                    stringstream back_t;
+                    back_t << funcName(tokens[0]) << "b";
+                    mapTokens(back_t.str(), LABEL);
                     mapTokens("", ARG_EMPTY);
                     lastFunc.str("");
-                    lastFunc << tokens[0];
+                    lastFunc << funcName(tokens[0]);
                     member_func.str("");
                     member_func << funcName(tokens[0]);
 
+            }
+            else if(tokens[0] == "extern") {
+                  if(tokenType(tokens[1]) == LABEL){
+                    int t_size = tier(tokens[1]);
+                    if(t_size != 1){
+                       Assembler::compile_only = true;
+                       cout << "nsc: " << fName.str() << ":" << linepos << ": error:  failure to create standalone label.\n";
+                    }
+                    else{
+                          if(!hasLabel(tokens[1])){
+                             createLabel(tokens[1]);
+                             stringstream back_t;
+                             back_t << tokens[1] << "b";
+                             if(!hasLabel(back_t.str()))
+                               createLabel(back_t.str());
+                          }
+		          else { }
+                    }
+                 }
+                 else {
+                   Assembler::compile_only = true;
+                   cout << "nsc: " << fName.str() << ":" << linepos << ": error: expected label for function predefinition.\n";
+                 }
             }
             else if (tokens[0] == "}"){
                  if(inClass){
@@ -3613,8 +3664,8 @@ void parse()
             }
             else if (tokens[0] == "&&idx_offset:"){ // idx offset manipulation
                     if(tokenType(tokens[1]) == INTEGER_LITERAL){
-                        mapTokens("&&idx_offset:", COMMAND);
-                        mapTokens(tokens[1], INTEGER_LITERAL);
+                      //  mapTokens("&&idx_offset:", COMMAND);
+                        labelOffset += strtol(tokens[1].c_str(),NULL, 0);
                     }
                     else {
                         Assembler::compile_only = true;
@@ -3717,7 +3768,7 @@ void parse()
             }
             else if (tokens[0] == "ret") { // ret <function>(this one done manually)
                     mapTokens("return", COMMAND);
-                    mapTokens(funcName(lastFunc.str()), LABEL);
+                    mapTokens(lastFunc.str(), LABEL);
                     mapTokens("0", INTEGER_LITERAL);
                     mapTokens("", ARG_EMPTY);
                     member_func.str("");

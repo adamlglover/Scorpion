@@ -14,27 +14,21 @@
 *  limitations under the License.
 *
 * main.ss
-* Reboot the Raspberry Pi
+* Print a greeting message
+* to the console.
 *
 * Author: Braxton Nunnally
-* Date: 6/1/2015
+* Date: 6/15/2015
 */
 
-string command 'sudo shutdown -r now'         ; This will represent our console command
-
-.main:
-   adr sdx command
-   invoke 0x0 0                                    ; reboot the raspberry pi
-   ret 
-   
-call main 
-
-halt 
-
-%Class Dog {
-   
-   loadi age 8
-   
+class: Main {
+   string greeting 'Hello, World!' ; Create a greeting message
+   .main:                               ; Our main function
+      printf '<str,greeting>'         ; print message
+      ret
 }
 
-cp age Dog{age}
+ call Main.main                        ; call main method from class
+ 
+ halt 
+ 

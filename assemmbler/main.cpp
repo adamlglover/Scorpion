@@ -34,10 +34,11 @@ int main(int argc, const char **file)
 
   umap();
   if(!Assembler::compile_only){ // link and generate binary file
+     fOut(fOutput.c_str(), "");
      for(int i = 0; i < fsize; i++)
      {
        stringstream ss;
-       ss << tostring(fOutput.c_str()) << tostring(objFiles[i].c_str());
+       ss << tostring(objFiles[i].c_str()) << tostring(fOutput.c_str());
        fOut(fOutput.c_str(), ss.str());
      }
   }

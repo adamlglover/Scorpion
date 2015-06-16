@@ -696,7 +696,7 @@ int Gate::route(double instr, double r1,double r2, double r3)
        break;
        default:
          if(!ignore){
-             cout << "Segmentation Fault" << endl;
+             cout << "\nSegmentation Fault" << endl;
              EBX = 1;
              p_exit();
          }

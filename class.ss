@@ -1,4 +1,4 @@
-import 'lib/scorpion/lang/Boolean.ss'
+import <scorpion/lang/Boolean>
 
 /*extern VirtualMachineStack.stackValue
 extern VirtualMachineStack.push

@@ -93,7 +93,7 @@ module: scorpion_io {
 		* the pin. When this happens, the pin's direction will not be set, therefore denying all
 		* I/O requests.
 		*/
-		.gpio_export:
+		.export:
 			rmov sdx PIN
 			mov sfc 2
 			invoke 0x6 0  
@@ -106,7 +106,7 @@ module: scorpion_io {
 		* If the specified pin is not exported, an error(that's not fatal) will occur. In 
 		* order to perform an I/O request to a pin, the DIR must be set.
 		*/
-		.gpio_direction:
+		.direction:
 			rmov sdx PIN
 			rmov scx DIR
 			mov sfc 0
@@ -120,7 +120,7 @@ module: scorpion_io {
 		*
 		* For information on high and low voltage signals, see "GPIO/signal"
 		*/	
-		.gpio_write:    
+		.write:    
 			rmov sdx PIN
 			rmov scx SIG
 			mov sfc 1
@@ -134,7 +134,7 @@ module: scorpion_io {
 		*
 		* For information on high and low voltage signals, see "GPIO/signal"
 		*/		
-		.gpio_read:           
+		.read:           
 			rmov sdx PIN
 			mov sfc 0
 			invoke 0x5 0
@@ -159,10 +159,11 @@ module: scorpion_io {
 		* If you experience any errors, please check the log "/usr/share/scorpion/log.txt"
 		* and you will most likely figure out what's wrong. 
 		*/	
-		.gpio_unexport:
+		.unexport:
 			rmov sdx PIN
 			mov sfc 1
 			invoke 0x6 0     
 			ret
 	
-	
+   }	
+}

@@ -69,7 +69,7 @@ module: scorpion_lang {
 		   cp str strLen
 		   loadi i 0           ; for(int i = 0; i < str.len; i++)
 		   r_mv ip for 
-		   ile i[strLen]      ; str += str.at(i);
+		   ilt i[strLen]      ; str += str.at(i);
 		        rload ch strPtr
 				r_load ref ch
 				inc ref 
@@ -85,8 +85,9 @@ module: scorpion_lang {
 	       cp scorpion_lang.String.strPtr scorpion_lang.VirtualMachineStack.stackValue                   ; set ptr addr to the string var we want to create
 		   call scorpion_lang.String.assignString               ; create a string from the ref var
 		   
-		   ige index strLen
-		         string excpn_ 'IndexOutOfBounds exception'
+		   ; printf 'str <str,str> index <v,index> len <v,strLen>'
+		   inlt index strLen
+		         string excpn_ 'IndexOutOfBoundsException'
 				 string msg_ 'String char at(): index >= length'
 		        throw excpn_ msg_
 		   end 

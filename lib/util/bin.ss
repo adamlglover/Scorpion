@@ -6,6 +6,8 @@
 * binary number of a given element
 */
 
+class: Binary {
+
 /*
 * BIN_START is used to signify the start address
 * of the binary string.
@@ -34,7 +36,6 @@ loadi BIN_NUM 0
 * encoder/decoder
 */
 .d_bin: 
-   r_mv ip d_bin_b
    rmov sdx BIN_START
    rmov scx BIN_LENGTH
    invoke 0x13 0 
@@ -45,10 +46,11 @@ loadi BIN_NUM 0
 * e_bin is a function used to encode an element into a binary string.
 */   
 .e_bin:
-   r_mv ip e_bin_b
    rmov sdx BIN_NUM
    rmov scx BIN_START
+   inc scx
    invoke 0x12 0
    r_mv sdx BIN_LENGTH   
+   r_load BIN_START BIN_LENGTH
    ret
-
+}

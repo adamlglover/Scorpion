@@ -48,7 +48,7 @@ string tokens[ 4 ],  _module_ = "n/a", _class_ = "n/a";
 string lastcommand = "", strLabel = "";
 int argsize, argoverflow, tpos = 0, ofCount = 0;
 long long labelOffset = 0, iNest = 0;
-string special = "", objFile = "", WORKING_DIR = "";
+string special = "", objFile = "";
 long mem_func_declared = 0, errline = -1;
 
 int arg1Types[ 6 ];
@@ -2087,32 +2087,6 @@ int getbounds(string token)
             arg3Types[5] = ARG_EMPTY;   
             return 1;
         }
-        else if(token == "&&working_dir:"){    
-            arg1Types[0] = STRING_LITERAL;
-            arg2Types[0] = ARG_EMPTY;
-            arg3Types[0] = ARG_EMPTY;   
-
-            arg1Types[1] = STRING_LITERAL;
-            arg2Types[1] = ARG_EMPTY;
-            arg3Types[1] = ARG_EMPTY;   
-
-            arg1Types[2] = STRING_LITERAL;
-            arg2Types[2] = ARG_EMPTY;
-            arg3Types[2] = ARG_EMPTY;   
-
-            arg1Types[3] = ARG_EMPTY;
-            arg2Types[3] = ARG_EMPTY;
-            arg3Types[3] = ARG_EMPTY;   
-
-            arg1Types[4] = ARG_EMPTY;
-            arg2Types[4] = ARG_EMPTY;
-            arg3Types[4] = ARG_EMPTY;   
-
-            arg1Types[5] = ARG_EMPTY;
-            arg2Types[5] = ARG_EMPTY;
-            arg3Types[5] = ARG_EMPTY;   
-            return 1;
-        }
         else if(token == "strcp"){    
             arg1Types[0] = LABEL;
             arg2Types[0] = LABEL;
@@ -3295,7 +3269,12 @@ string parseString(string data)
         }
 
   stringstream binstring;
-  binstring <<  " " << toBinaryString(strLen(data)) << " " << bin.str();
+  if(!charLiteral)
+      binstring <<  " " << toBinaryString(strLen(data)) << " " << bin.str();
+  else {
+      binstring << " " << bin.str();
+      charLiteral = false;
+  }
   return binstring.str();
 }
 
@@ -3706,12 +3685,6 @@ void parse()
                     }
 
             }
-            else if (tokens[0] == "&&working_dir:") { // idx offset manipulation
-                stringstream dir;
-                for(int i = 1; i < tokens[1].length() - 1; i++)
-                    dir << tokens[1].at(i);
-                WORKING_DIR = dir.str();
-            }
             else if (tokens[0] == "class:") {
                if(member_func.str() != "!"){
                     Assembler::compile_only = true;
@@ -3803,10 +3776,13 @@ void parse()
             }
             else if (tokens[0] == "import") { // import statement
                     stringstream file;
-                    if(tokenType(tokens[1]) == STRING_LITERAL){
-                           file << WORKING_DIR;
+                    if((tokenType(tokens[1]) == STRING_LITERAL) || ((tokens[1].at(0) == '<') && (tokens[1].at(tokens[1].size() - 1) == '>'))){
+                          if((tokens[1].at(0) == '<') && (tokens[1].at(tokens[1].size() - 1) == '>'))
+                             file << "/usr/share/scorpion/lib/";
                        for(int i = 1; i < tokens[1].size() - 1; i++)
                            file << tokens[1].at(i);
+                          if((tokens[1].at(0) == '<') && (tokens[1].at(tokens[1].size() - 1) == '>'))
+                             file << ".ss";
 
                          if(file_exists(file.str().c_str())){
                              if(iNest == 0){
@@ -3834,8 +3810,10 @@ void parse()
                               assemble(file.str(), tostring(file.str().c_str()));
                               iNest--;
                               
-                              if(iNest == 0)
+                              if(iNest == 0){
                                reset = true;
+                               iNest = 0;
+                              }
                               linepos = linepos_b;
                               token.str("");
                               token << token_b;
@@ -4007,7 +3985,7 @@ bool isStringLiteral(string token) {
         if(charLiteral){
             if((token.size() == 3) && (token.at(0) == '\'' && token.at(token.size() - 1) == '\''))
                 return true;
-            else if(((token.size() == 3) && (token.at(0) == '\'' && token.at(token.size() - 1) == '\'')) && (token.at(1) == '/'))
+            else if(((token.size() == 4) && (token.at(0) == '\'' && token.at(token.size() - 1) == '\'')) && (token.at(1) == '/'))
                 return true;
         }
         else {

@@ -3569,6 +3569,10 @@ string token_b, member_func_b, fName_b;
 bool processedcommand_b;
 bool inClass_b, inModule_b, instring_b;
 
+long linepos_2_b, tpos_2_b;
+string token_2_b, member_func_2_b, fName_2_b;
+bool processedcommand_2_b;
+bool inClass_2_b, inModule_2_b, instring_2_b;
 void parse()
 {
 
@@ -3786,15 +3790,26 @@ void parse()
 
                          if(file_exists(file.str().c_str())){
                              if(iNest == 0){
-                              long linepos_b = linepos;
-                              long tpos_b = tpos;
-                              string token_b  = token.str();
-                              string member_func_b =  member_func.str(); 
-                              string fName_b =  fName.str();
-                              bool processedcommand_b = processedcommand;
-                              bool inClass_b  = inClass;
-                              bool inModule_b = inModule;
-                              bool instring_b  = instring;
+                              linepos_b = linepos;
+                              tpos_b = tpos;
+                              token_b  = token.str();
+                              member_func_b =  member_func.str(); 
+                              fName_b =  fName.str();
+                              processedcommand_b = processedcommand;
+                              inClass_b  = inClass;
+                              inModule_b = inModule;
+                              instring_b  = instring;
+                           }
+                           else {
+                              linepos_2_b = linepos;
+                              tpos_2_b = tpos;
+                              token_2_b  = token.str();
+                              member_func_2_b =  member_func.str();
+                              fName_2_b =  fName.str();
+                              processedcommand_2_b = processedcommand;
+                              inClass_2_b  = inClass;
+                              inModule_2_b = inModule;
+                              instring_2_b  = instring;
                            }
                         
 			      iNest++;
@@ -3810,10 +3825,10 @@ void parse()
                               assemble(file.str(), tostring(file.str().c_str()));
                               iNest--;
                               
-                              if(iNest == 0){
+                            if(iNest == 0){
                                reset = true;
                                iNest = 0;
-                              }
+                              
                               linepos = linepos_b;
                               token.str("");
                               token << token_b;
@@ -3826,6 +3841,21 @@ void parse()
                               fName.str("");
                               fName << fName_b;
                               member_func << member_func_b;
+                            }
+                            else {
+                              linepos = linepos_2_b;
+                              token.str("");
+                              token << token_2_b;
+                              processedcommand = processedcommand_2_b;
+                              tpos = tpos_2_b;
+                              inClass = inClass_2_b;
+                              inModule = inModule_2_b;
+                              instring = instring_2_b;
+                              member_func.str("!");
+                              fName.str("");
+                              fName << fName_2_b;
+                              member_func << member_func_2_b;
+                            }
                          }
                          else {
                            Assembler::compile_only = true;

@@ -37,3 +37,4 @@ class: sys {
 
 call sys.start_
 
+halt

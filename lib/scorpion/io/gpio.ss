@@ -118,7 +118,7 @@ module: scorpion_io {
 		* Specifically, sending a high or low voltage digital signal to a 
 		* GPIO pin.
 		*
-		* For information on high and low voltage signals, see "GPIO/signal"
+		* For information on high and low voltage signals, see "scorpion/io/signal"
 		*/	
 		.write:    
 			rmov sdx PIN
@@ -132,7 +132,7 @@ module: scorpion_io {
 		* Specifically, recieving a high or low voltage digital signal from a 
 		* GPIO pin.
 		*
-		* For information on high and low voltage signals, see "GPIO/signal"
+		* For information on high and low voltage signals, see "scorpion/io/signal"
 		*/		
 		.read:           
 			rmov sdx PIN

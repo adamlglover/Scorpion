@@ -24,7 +24,7 @@
 * Date: 6/16/2015
 */
 module: scorpion_io {
-    class: gpio_signal {
+    class: signal {
 
 		/*
 		* IN is used for setting the 

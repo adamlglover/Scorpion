@@ -5,7 +5,7 @@
 * This library module holds a simple function
 * for delaying time
 */
-
+class: time {
 /*
 * SECS is used for determining how long will the 
 * delay function wait before continuing execution
@@ -38,4 +38,4 @@ dload SECS 0.000
    endwl delay_time delay_time_b
    ret
 	
-	
+}	

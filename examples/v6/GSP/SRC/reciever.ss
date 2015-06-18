@@ -36,7 +36,7 @@ class: Main {
 	  r_mv ip for 
 	  ilt i[packets] ; recieve 10 data packets
 	       call GSP.Recieve
-	       print 'recieved payload:  <v,GSP.PAYLOAD_MASK>/n'
+	       print 'recieved payload:  <v,GSP.SP32_PAYLOAD_MASK>/n'
 		   inc i
 		   rmov sdx for 
 		   invoke 0xA 0 

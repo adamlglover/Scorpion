@@ -138,7 +138,7 @@ module: scorpion_io {
 			rmov sdx PIN
 			mov sfc 0
 			invoke 0x5 0
-			rmov scr SIG
+			r_mv scr SIG
 			ret	
 
 		/*

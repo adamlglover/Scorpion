@@ -601,12 +601,13 @@ class: Analog {
 			 cp gpio.SIG signal.ON
 			 cp gpio.PIN GSP.CO
 			 call gpio.write            ; sig input ready   
-             loadbl SEND_PAYLOAD true			 
+             loadbl SEND_PAYLOAD true	
+             loadi gpio.SIG 0
              wloop SEND_PAYLOAD SEND_PAYLOADb
 					cp gpio.PIN GSP.CN
 			        call gpio.read
 					same isReady gpio.SIG[signal.ON] ; have the recieve device recieved the signal
-					printf 'gpio.SIG = <v,gpio.SIG>/n'
+					;printf 'gpio.SIG = <v,gpio.SIG> : <v,signal.ON>/n'
 					do isReady
 					    cp gpio.SIG signal.OFF
 						cp gpio.PIN GSP.CO

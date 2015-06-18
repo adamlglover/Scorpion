@@ -530,7 +530,7 @@ class: Analog {
 				  cp gpio.PIN GSP.CO
 			  	  call gpio.write
                   loadi time.SECS 0.015 ; sleep for 15 ms				  
-				  call delay 
+				  call time.delay 
 			      cp gpio.SIG signal.OFF
 				  cp gpio.PIN GSP.CO
 			  	  call gpio.write
@@ -552,7 +552,7 @@ class: Analog {
 						cp gpio.PIN GSP.CO
 						call gpio.write 
                         loadi time.SECS 0.015 ; sleep for 15 ms				  
-				        call delay 
+				        call time.delay 
 					    loadbl SEND_PAYLOAD false     ; ready to send bits 
 					end 
 			 endwl  GET_PAYLOAD GET_PAYLOADb

@@ -441,6 +441,8 @@ int Gate::route(double instr, double r1,double r2, double r3)
        }
        if(!ignore)
           endwl(pkg);
+       else if(pass)
+          endwl(pkg);
 	break;
        case 61:
        if(debugging && !ignore)

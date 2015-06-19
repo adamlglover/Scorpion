@@ -25,7 +25,7 @@
 * Date: 6/16/2015
 */
 module: scorpion_io {
-    class: gpio {
+    class: GPIO {
 		/*
 		* PIN is used for specifying which pin to 
 		* import/export or to send a signal to.

@@ -35,6 +35,8 @@
 
 #include <stdio.h>
 #include <time.h>
+#include <sys/time.h>
+#include <unistd.h>
 #include <iostream>
 #include "../../var.h"
 #include "core0.h"
@@ -52,7 +54,6 @@ using namespace std;
 long EAX, TMP, IP, EBX, SDX, SFC, SCX, BP, EXC, PS, LG, LSL, I1, I2, SCR, AI, IPI, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12;
 
 clock_t tStart;
-clock_s t_clock;
 bool _0Halted, pass = false, scmnd = false,
      ignore = false, if_ignore = false,
      waiting = false, debugging = false,
@@ -61,6 +62,7 @@ int passed_if = 0;
 
 long *id;
 long auto_ipi;
+long long cycles = 0;
 long IPH, IPL;
 void fetch();
 void execute();
@@ -312,7 +314,7 @@ void C0::Reset()
   I12  = 0;
   SCR = 0; // system call i/o response code
 
-  t_clock.cycles = 0;
+  cycles = 0;
 
   id =  new long[ 4 ];
   id[0] = 8008; // processor id
@@ -352,13 +354,13 @@ void C0::Halt()
   I11  = 0;
   I1  = 0;
   SCR = 0;
+  cycles = 0;
 }
 
 Ram _Ram;
 /* Methods used to easily talk to the ram */
 double C0::getr(short cell_switch, long _addr)
 {
-     t_clock.cycles++;
      _Ram.CB = 2; // E
      _Ram.addr((long) _addr, false);
      _Ram.cell(cell_switch);
@@ -368,7 +370,6 @@ double C0::getr(short cell_switch, long _addr)
 
 void C0::setr(short cell_switch, long _addr, double data)
 {
-    t_clock.cycles++;
     _Ram.CB = 1; // S
     _Ram.addr((long) _addr, false);
     _Ram.cell(cell_switch);
@@ -387,18 +388,42 @@ double C0::GetTime()
   return (double)(clock() - tStart)/CLOCKS_PER_SEC;
 }
 
+struct timeval ustart, uend;
+
+unsigned long long utime, useconds;
+
+unsigned long long C0::Get_UTime()
+{
+    gettimeofday(&uend, NULL);
+    useconds = uend.tv_usec - ustart.tv_usec;
+
+    utime = useconds;
+    return utime;
+}
+
+void C0::resetTime()
+{
+  tStart = clock();
+}
+
+void C0::reset_UTime()
+{
+  gettimeofday(&ustart, NULL);
+}
+
 void C0::Interrupt(double offset)
 {
     if(_0Halted){
        _0Halted = false;
        core0.Reset();
     }
+    if(offset < 0)
+      offset *= -1;
      IP = (long) offset;
 }
 
 string prog(int set_enable, long index, string data)
 {
-
   if(index < L1_Cache_Size)
     return L1_ICache[ index ]; // super fast instruction fetching
   else {
@@ -416,7 +441,7 @@ extern long offset;
 void fetch()
 {
    if(AI != 0){
-      if((t_clock.cycles % AI) == 0){
+      if((cycles % AI) == 0){
          auto_ipi = IP; // store previous ip pos
          IP = IPI;    // tell cpu to scamper off and do something random(usually used in multitasking)
       }
@@ -425,7 +450,8 @@ void fetch()
    memstat = _Ram.prog_status(IP);
    if(memstat == Ram::DONE){
       C0 core;
-      printf("Time taken: %.3fs\n", (double) core.GetTime());
+      printf("Time taken: %.3fs ", (double) core.GetTime());
+      cout << "(" << core0.Get_UTime() << ")\n";
       p_exit();
    }
    else if(memstat == Ram::RUNNING){
@@ -452,7 +478,7 @@ void execute() // The Decode process is inside the execute method(for performanc
     }
     else if(_0Halted)
        return;
-    t_clock.cycles++;
+    cycles++;
 
    gate.route(disasm.disassemble(i1), disasm.disassemble(i2), disasm.disassemble(i3), disasm.disassemble(i4));
 }
@@ -460,6 +486,7 @@ void execute() // The Decode process is inside the execute method(for performanc
 void C0::run0()
 {
  tStart = clock();
+ gettimeofday(&ustart, NULL);
  while(System::Running)
        fetch();
 }

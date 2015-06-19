@@ -24,7 +24,6 @@
 * Date: 6/16/2015
 */
 
-
 module: scorpion_lang {
 
    class: String {
@@ -44,6 +43,11 @@ module: scorpion_lang {
 	   * Hold the length of a string refrence 
 	   */
 	   loadi strLen 0
+	   
+	   /*
+	   * The max length for coppying a string 
+	   */
+	   loadi MaxLen 0 
 	   
 	   /*
 	   * The max length that the string can hold
@@ -82,8 +86,8 @@ module: scorpion_lang {
 		   
 		.at:
            call scorpion_lang.VirtualMachineStack.pop
-	       cp scorpion_lang.String.strPtr scorpion_lang.VirtualMachineStack.stackValue                   ; set ptr addr to the string var we want to create
-		   call scorpion_lang.String.assignString               ; create a string from the ref var
+	       cp strPtr scorpion_lang.VirtualMachineStack.stackValue                   ; set ptr addr to the string var we want to create
+		   call assignString               ; create a string from the ref var
 		   
 		   ; printf 'str <str,str> index <v,index> len <v,strLen>'
 		   inlt index strLen
@@ -109,5 +113,37 @@ module: scorpion_lang {
 		   cp scorpion_lang.VirtualMachineStack.stackValue chr
 		   call scorpion_lang.VirtualMachineStack.push
            ret 		
+		   
+	    .strcpy:                     ; string strcpy(string ref_string, string assign_string);
+		   call scorpion_lang.VirtualMachineStack.pop
+	       cp strPtr scorpion_lang.VirtualMachineStack.stackValue                ; set ptr addr to the string var we want to create
+		   cp ref_string scorpion_lang.VirtualMachineStack.stackValue           ; copy ptr value
+		   call assignString               ; create a string from the ref var
+		   cp ref_string_len strLen
+		   call scorpion_lang.VirtualMachineStack.pop
+	       cp assign_string scorpion_lang.VirtualMachineStack.stackValue   
+           rload MaxLen assign_string   
+		   inlt strLen[MaxLen]
+		         print 'String:  error: ref_string.length > assign_string.length/n'
+				 return strcpy 1 
+		   end 
+		           
+           r_load assign_string strLen
+		   loadi i 0
+		   cp ref assign_string
+		   adr str_ref str 
+		   inc str_ref
+		   inc ref 
+		   r_mv ip for
+		   ilt i[strLen]
+		        rload ref_char str_ref 
+				r_load ref ref_char
+				inc ref 
+				inc i
+				inc str_ref
+		        rmov sdx for
+                invoke 0xA 0 				
+		   end 
+		   ret 
    }
 }

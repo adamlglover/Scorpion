@@ -100,7 +100,7 @@ void sl(double *pkg)
 
 void rdtsc() // Read Time Stamp Counter
 {
-   EAX = t_clock.cycles; // store total clock ticks since last startup
+   SDX = cycles; // store total clock ticks since last startup
 }
 
 void cpuid()

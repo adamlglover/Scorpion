@@ -43,7 +43,7 @@ module: scorpion_lang {
 		/*
 		* stackPtr will hold the ptr address to the 
 		* stack to set and or get data from the stack.
-		*/
+		*/	
 		loadi stackPtr 1                    ;  = -1
 		
 		/*
@@ -70,8 +70,8 @@ module: scorpion_lang {
 		.create_stack:
 		   array stack STACK_SIZE double                     ; we create an integer stack that will hold all our data
 		   &&idx_offset: 5000
-		   mov sfc int
-		   neg stackPtr
+		   dec stackPtr
+		   dec stackPtr
 		   cp STACK_MAX STACK_SIZE
 		   loadbl STACK_CREATED true
 		   ret
@@ -84,23 +84,33 @@ module: scorpion_lang {
 			   string msg 'failed to add more data to the stack'  
 			   throw ecpn msg
 		   end
+		;   printf 'pushing <v,stackValue> on stack lvl <v,stackPtr>/n'
 		   aload stack stackPtr stackValue
 		   ret
 		   
 		.pop:
-		   dec stackPtr
-		   dec stackHeight
-		   ige stackPtr ZERO 
+		;   printf 'poping <v,stackValue> on stack lvl <v,stackPtr>/n'
+		  loadi one 1 
+		  ige stackPtr[one]
 			   aaload stack stackPtr stackValue
+		       dec stackPtr
+			   return pop 1
+		  end 
+		   ige stackPtr[ZERO] 
+			   aaload stack stackPtr stackValue
+		       dec stackHeight
+		       dec stackPtr
 		   end 
-		   ilt stackPtr ZERO
+		   ilt stackPtr[ZERO] 
 		       loadi stackHeight 0
 			   loadi stackPtr 1
-			   mov sfc int
-			   neg stackPtr
+			   dec stackPtr
+			   dec stackPtr
 		   end 
+		;   printf 'poping <v,stackValue> on stack lvl <v,stackPtr>/n'
 		   ret 
 
+		   
    }
 
 }

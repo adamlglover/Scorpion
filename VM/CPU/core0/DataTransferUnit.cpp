@@ -1233,8 +1233,23 @@ void invoke(double *pkg)
           SystemColor color;
           SCR = color.getSystemColorInfo((int) SDX);
        break;
-       case 250: // get total internal time the cpu has been running(in secs)
-          core0.setr(0, SDX, core0.GetTime());
+       case 250: // get total internal time the cpu has been running(in secs | nanosecs)
+        {
+          switch( SFC ) {
+            case 0:
+              core0.setr(0, SDX, core0.GetTime());
+            break;
+            case 1:
+              core0.setr(0, SDX, core0.Get_UTime());
+            break;
+            case 2:
+              core0.resetTime();
+            break;
+            case 3:
+              core0.reset_UTime();
+            break;
+          }
+        }
        break;
        default:
        stringstream ss;

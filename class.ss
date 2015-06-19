@@ -24,6 +24,15 @@ class: Main {
 	 call String.at
      call VirtualMachineStack.pop
 	 printf 'string: <str,str> at(2): <c,VirtualMachineStack.stackValue>/n'
+
+	 string msg 'Hello'
+	 string msg2 'Help'
+	 adr VirtualMachineStack.stackValue msg
+	 call VirtualMachineStack.push
+	 adr VirtualMachineStack.stackValue msg2 
+	 call VirtualMachineStack.push
+	 call String.strcpy 
+	 printf 'string msg = "<str,msg>";'
      ret
 }
 

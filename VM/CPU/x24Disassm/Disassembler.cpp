@@ -17,10 +17,8 @@ void bin_overload(string binary)
 
 double binary_decimal(string num) /* Function to convert binary to dec */
 {
-  double dec = 0, n = 1, exp = 0;
-  string bin = num;
-  if(bin.length() > 1024)
-       bin_overload(bin);
+  if(num.length() > 1024)
+       bin_overload(num);
   else {
     /* for(int i = bin.length() - 1; i > -1; i--)
      {
@@ -28,9 +26,9 @@ double binary_decimal(string num) /* Function to convert binary to dec */
           if(bin.at(i) == '1')
             dec += n;
      }*/
-     dec = strtol(num.c_str(), NULL, 2);
+     return strtol(num.c_str(), NULL, 2);
   }
-    return dec;
+    return 0;
 }
 
 string decimal_binary(long num) /* Function to convert dec to binary */

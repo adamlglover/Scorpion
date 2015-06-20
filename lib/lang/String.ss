@@ -57,7 +57,7 @@ module: scorpion_lang {
 	   /*
 	   * Our internal string to hold a value
 	   */
-	   loadi str 0 &&idx_offset: 10000
+	   loadi base_string 0 &&idx_offset: 10000
 	   
 	   
 	   .assignString:
@@ -68,12 +68,12 @@ module: scorpion_lang {
 				string msg 'string size too large!'
 				throw excpn msg
 		   end 
-		   adr ref str
+		   adr ref base_string
 		   inc ref
-		   cp str strLen
-		   loadi i 0           ; for(int i = 0; i < str.len; i++)
+		   cp base_string strLen
+		   loadi i 0           ; for(int i = 0; i < base_string.len; i++)
 		   r_mv ip for 
-		   ilt i[strLen]      ; str += str.at(i);
+		   ilt i[strLen]      ; base_string += base_string.at(i);
 		        rload ch strPtr
 				r_load ref ch
 				inc ref 
@@ -89,18 +89,18 @@ module: scorpion_lang {
 	       cp strPtr scorpion_lang.VirtualMachineStack.stackValue                   ; set ptr addr to the string var we want to create
 		   call assignString               ; create a string from the ref var
 		   
-		   ; printf 'str <str,str> index <v,index> len <v,strLen>'
+		   ; printf 'base_string <base_string,base_string> index <v,index> len <v,strLen>'
 		   inlt index strLen
 		         string excpn_ 'IndexOutOfBoundsException'
 				 string msg_ 'String char at(): index >= length'
 		        throw excpn_ msg_
 		   end 
 		   loadi chr 0
-		   adr ref str
+		   adr ref base_string
 		   inc ref
 		   loadi i 0          
 		   r_mv ip for 
-		   ile i[index]      ; return str.at(index);
+		   ile i[index]      ; return base_string.at(index);
 		        same atChar i[index]
                 do atChar            ; are we at the requested index?
                    rload chr ref    ; get char
@@ -131,7 +131,7 @@ module: scorpion_lang {
            r_load assign_string strLen
 		   loadi i 0
 		   cp ref assign_string
-		   adr str_ref str 
+		   adr str_ref base_string 
 		   inc str_ref
 		   inc ref 
 		   r_mv ip for

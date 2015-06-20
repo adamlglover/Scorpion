@@ -34,6 +34,7 @@ bool isgenuine = false;
    }
 
    string p;
+   extern string PROG;
    void tostring(const char *name)
    {
       string tmp;
@@ -43,8 +44,8 @@ bool isgenuine = false;
      while(!input.eof()) {
          tmp = "";
          getline(input, tmp);
-         p += tmp;
-         p += "\n";
+         PROG += tmp;
+         PROG += "\n";
      }
     }
 
@@ -74,10 +75,7 @@ bool isgenuine = false;
         const char *name = bridge.c_str();
         if(file_exists(name)){
            tostring(name);
-        if(hassyntax(p)){
-            Program App;
-            App.Save(p);
-            p = "";
+        if(hassyntax(PROG)){
             isgenuine = true;
             prog_name = file;
         }

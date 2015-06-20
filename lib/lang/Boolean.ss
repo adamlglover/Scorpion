@@ -24,8 +24,8 @@
 * Date: 6/16/2015
 */
 
-import '/home/pi/Desktop/GitHub/Scorpion/lib/scorpion/lang/VirtualMachineStack.ss'
-import '/home/pi/Desktop/GitHub/Scorpion/lib/scorpion/lang/String.ss'
+import <lang/VirtualMachineStack>
+import <lang/String>
 
 module: scorpion_lang {
 
@@ -91,13 +91,13 @@ module: scorpion_lang {
 			    cp scorpion_lang.String.strPtr scorpion_lang.VirtualMachineStack.stackValue                   ; set ptr addr to the string var we want to create
 			   call scorpion_lang.String.assignString               ; create a string from the ref var
 			   
-			   strcpi scorpion_lang.VirtualMachineStack.stackValue  scorpion_lang.String.str,true_s
+			   strcpi scorpion_lang.VirtualMachineStack.stackValue  scorpion_lang.String.base_string,true_s
 			   do scorpion_lang.VirtualMachineStack.stackValue
 				   call scorpion_lang.VirtualMachineStack.push
 				   return toBool 1 
 			   end
 			   
-			   strcpi scorpion_lang.VirtualMachineStack.stackValue scorpion_lang.String.str,false_s
+			   strcpi scorpion_lang.VirtualMachineStack.stackValue scorpion_lang.String.base_string,false_s
 			   do scorpion_lang.VirtualMachineStack.stackValue
 				   call scorpion_lang.VirtualMachineStack.push
 				   return toBool 1 

@@ -1,4 +1,4 @@
-import <scorpion/io/*>
-import <scorpion/lang/*>
+import <io/*>
+import <lang/*>
 import <util/*>
 

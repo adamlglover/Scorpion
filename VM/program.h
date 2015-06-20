@@ -6,7 +6,6 @@ void p_exit();
 
  class Program {
          public:
-           void Save(string);
  	   void Run();
 	   void Runnable(bool);
 	   void Main();

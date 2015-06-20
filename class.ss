@@ -1,4 +1,4 @@
-import <scorpion/lang/Boolean>
+import <lang/Boolean>
 
 /*extern VirtualMachineStack.stackValue
 extern VirtualMachineStack.push
@@ -46,4 +46,5 @@ class: sys {
 
 call sys.start_
 
-halt
+
+

@@ -74,12 +74,6 @@ long L1_ICache_length = 1024000;// to be used else where
 #define L1_Cache_Size 1024000 // 1024kb L1 Instruction Cache
 string L1_ICache[ L1_Cache_Size ];
 
-/* Instruction Set 4 */
-   string i1 = "";
-   string i2 = "";
-   string i3 = "";
-   string i4 = "";
-
 extern string *program;
 extern long SIZE;
 void ucache()
@@ -438,7 +432,9 @@ string prog(int set_enable, long index, string data)
 
 int memstat;
 extern long offset;
-void fetch()
+Gate gate;
+double instruction;
+void fetch() // Ive managed to smush the fetch, decode, execute cycle into one method
 {
    if(AI != 0){
       if((cycles % AI) == 0){
@@ -455,32 +451,25 @@ void fetch()
       p_exit();
    }
    else if(memstat == Ram::RUNNING){
-      i1          = prog(2, IP++, "");
-      i2          = prog(2, IP++, "");
-      i3          = prog(2, IP++, "");
-      i4          = prog(2, IP++, "");
-      execute();
+      instruction = disasm.disassemble(prog(2, IP++, ""));
+      if(_0Halted && (instruction == 35)) {
+         if(ignore)
+           ignore = false;
+        gate.route( instruction, disasm.disassemble(prog(2, IP++, "")),
+                     disasm.disassemble(prog(2, IP++, "")), disasm.disassemble(prog(2, IP++, "")));
+      }
+      else if(_0Halted)
+         return;
+      cycles++;
+
+      gate.route(instruction, disasm.disassemble(prog(2, IP++, "")),
+                     disasm.disassemble(prog(2, IP++, "")), disasm.disassemble(prog(2, IP++, "")));
       return;
    }
    else {
     RuntimeException re;
     re.introduce("ProgramStateUndetectableException","hardware faliure: cannot determine the current state of the program");
    }
-}
-
-Gate gate;
-void execute() // The Decode process is inside the execute method(for performance concerns)
-{
-    if(_0Halted && (disasm.disassemble(i1) == 35)) {
-      if(ignore)
-        ignore = false;
-        gate.route(disasm.disassemble(i1), disasm.disassemble(i2), disasm.disassemble(i3), disasm.disassemble(i4));
-    }
-    else if(_0Halted)
-       return;
-    cycles++;
-
-   gate.route(disasm.disassemble(i1), disasm.disassemble(i2), disasm.disassemble(i3), disasm.disassemble(i4));
 }
 
 void C0::run0()

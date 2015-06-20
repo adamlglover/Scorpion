@@ -96,7 +96,7 @@ module: util {
 				 sub time time,time_before
 				 ige time USECS
 					 loadbl delay_time false
-					 return delay 1
+					 return udelay 1
 				 end
 		   endwl delay_time delay_time_b
         ret 		

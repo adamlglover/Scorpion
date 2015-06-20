@@ -224,9 +224,7 @@ int main( int argc, const char **file )
      exit(-1039439);
   }
 
-  status = mkdir("/usr/share/scorpion", S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);
-  status = mkdir("/usr/share/scorpion/disks", S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);
-  status = mkdir("/usr/share/scorpion/lib/src", S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);
+  status = mkdir("/usr/share/scorpion/lib", S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);
 
   x86_log.prepare(VERBOSE,true);
 

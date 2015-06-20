@@ -8,7 +8,7 @@ using namespace std;
 /*
 * Scorpion VM Info
 */
-string Version = "0.0.19_15";
+string Version = "0.0.19_19";
 string v_stage = "beta";
 
 
@@ -102,6 +102,10 @@ void handleargs(int argc, const char **args)
            segment = 1000;
            data = trim(data);
         }
+        else if(data.at(data.length() - 1) == 'm'){ // mb
+           segment = 1000000;
+           data = trim(data);
+        }
         else if(data.at(data.length() - 1) == 'g'){ // gb
            segment = 1000000 * 1000;
            data = trim(data);
@@ -128,6 +132,10 @@ void handleargs(int argc, const char **args)
            segment = 1000;
            data = trim(data);
         }
+        else if(data.at(data.length() - 1) == 'm'){ // mb
+           segment = 1000000;
+           data = trim(data);
+        }
         else if(data.at(data.length() - 1) == 'g'){ // gb
            segment = 1000000 * 1000;
            data = trim(data);
@@ -141,9 +149,8 @@ void handleargs(int argc, const char **args)
         if(mmax < mem)
             mmax = mem;
      }
-     else if(OPTION == "-db"){
+     else if(OPTION == "-db")
         debugging = true;
-     }
      else if(OPTION == "-pstd:"){
         i++;
         arg_start++;
@@ -155,6 +162,10 @@ void handleargs(int argc, const char **args)
         }
         else if(data.at(data.length() - 1) == 'k'){ // kb
            segment = 1000;
+           data = trim(data);
+        }
+        else if(data.at(data.length() - 1) == 'm'){ // mb
+           segment = 1000000;
            data = trim(data);
         }
         else if(data.at(data.length() - 1) == 'g'){ // gb

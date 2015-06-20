@@ -28,23 +28,24 @@ using namespace std;
 string PROG = "";
 bool runnable = false;
 void x24Shutdown();
-void Program::Save(string prog)
-{
-   PROG = prog;
-}
 
 void Program::Runnable(bool run)
 {
     runnable = run;
 }
 
+void p_exit();
+
 void Program::Run()
 {
   CPU cpu;
  if(runnable)
      cpu.Run();
- else
+ else {
   cout << "scorpion: fatal err: something went wrong wile attempting to run the program." << endl;
+  EBX = -109336740;
+  p_exit();
+ }
  runnable = false;
 }
 

@@ -59,6 +59,15 @@ extern string i4;
 
 void getinput();
 
+string getClock()
+{
+  stringstream clock_speed;
+
+  double clock = 1000000 / core0.GetTime();
+  clock_speed << clock << "Khz";
+  return clock_speed.str();
+}
+
 void listen()
 {
    cout << "\033[0;34m" << "\n>>>    " << "\033[0m";
@@ -69,9 +78,13 @@ void listen()
      debug_help();
    else if(command == "?"){
      stringstream ss;
-     ss << "[" << disasm.disassemble(i2) << ", " <<  disasm.disassemble(i3) << ", " << disasm.disassemble(i4) << "]";
+     ss << "[" << disasm.disassemble(prog(2, IP - 3, "")) << ", " <<  disasm.disassemble(prog(2, IP - 2, "")) << ", " << disasm.disassemble(prog(2, IP - 1, "")) << "]";
      string args = ss.str();
-     printf(".addr: 0x%08X    %s %s", addrr, instr.c_str(), args.c_str());
+     printf(".addr: 0x%08X    %s %s\n", addrr, instr.c_str(), args.c_str());
+     cout << ".clock-speed: " << getClock() << endl;
+     cout << ".exe-time(sec): " << core0.GetTime() << endl;
+     cout << ".exe-time(usec): " << core0.Get_UTime() << endl;
+     cout << ".cycles: " << cycles << endl;
      debugger(addrr, instr);
    }
    else if(command == "n" || command == "next")

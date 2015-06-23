@@ -33,6 +33,8 @@
 #include <stdio.h>
 #include <iostream>
 #include <unistd.h>
+#include <math.h>
+#include <stdlib.h>
 #include <fstream>
 #include <time.h>
 using namespace std;
@@ -42,61 +44,79 @@ extern string prog_args;
 extern int arg_c;
 extern short DEBUG_STATE;
 
-void loadi(double *pkg)
+void loadi()
 {
-   if(pkg[1] == 21937856)
-     core0.setr(0, pkg[0], null);
+   double p0 = strtol(prog(2, IP++, "").c_str(), NULL, 2);
+   double p1 = strtol(prog(2, IP++, "").c_str(), NULL, 2);
+   IP++;
+   if(p1 == 21937856)
+     core0.setr(0, p0, null);
    else
-     core0.setr(0, pkg[0], (long) pkg[1]);
+     core0.setr(0, p0, (long) p1);
 }
 
-void rload(double *pkg)
+void rload()
 {
-    TMP = core0.getr(0, pkg[1]);
-    double reg = core0.getr(0, TMP);
-    core0.setr(0, pkg[0], reg);
+   double p0 = strtol(prog(2, IP++, "").c_str(), NULL, 2);
+   double p1 = strtol(prog(2, IP++, "").c_str(), NULL, 2);
+   IP++;
+   TMP = core0.getr(0, p1);
+   double reg = core0.getr(0, TMP);
+   core0.setr(0, p0, reg);
 }
 
-void r_load(double *pkg)
+void r_load()
 {
-    TMP = core0.getr(0, pkg[0]);
-    core0.setr(0, TMP, core0.getr(0, pkg[1]));
+   double p0 = strtol(prog(2, IP++, "").c_str(), NULL, 2);
+   double p1 = strtol(prog(2, IP++, "").c_str(), NULL, 2);
+   IP++;
+   TMP = core0.getr(0, p0);
+   core0.setr(0, TMP, core0.getr(0, p1));
 }
 
-void cp(double *pkg)
+void cp()
 {
-   core0.setr(0, pkg[0], core0.getr(0, pkg[1]));
+   double p0 = strtol(prog(2, IP++, "").c_str(), NULL, 2);
+   double p1 = strtol(prog(2, IP++, "").c_str(), NULL, 2);
+   IP++;
+   core0.setr(0, p0, core0.getr(0, p1));
 }
 
 
 
-void array(double *pkg) // array numbers sdx int
+void array() // array numbers sdx int
 {
-   if(pkg[1] == 0){
+   double p0 = strtol(prog(2, IP++, "").c_str(), NULL, 2);
+   double p1 = strtol(prog(2, IP++, "").c_str(), NULL, 2);
+   double p2 = strtol(prog(2, IP++, "").c_str(), NULL, 2);
+   if(p1 == 0){
       SCR = -5;
       return;
    }   
-   core0.setr(0, pkg[0], (int) reg_check_ret(pkg[1])); // check type
-   if(pkg[2] == INT || pkg[2] == BOOL || pkg[2] == CHAR || pkg[2] == FLOAT || pkg[2] == DOUBLE || pkg[2] == SHORT) { }
+   core0.setr(0, p0, (int) reg_check_ret(p1)); // check type
+   if(p2 == INT || p2 == BOOL || p2 == CHAR || p2 == FLOAT || p2 == DOUBLE || p2 == SHORT) { }
    else {
    	RuntimeException re;
    	stringstream ss;
-   	ss << pkg[2];
+   	ss << p2;
    	re.introduce("ArrayTypeNotFoundException", "the specified array type: " + ss.str() + " was not found");
    }
-   core0.setr(0, (pkg[0] + 1), pkg[2]);
+   core0.setr(0, (p0 + 1), p2);
    
-   TMP = pkg[0] + 2;
-   for(int i = 0; i < pkg[1]; i++)
+   TMP = p0 + 2;
+   for(int i = 0; i < p1; i++)
        core0.setr(0, TMP++, 0);
 }
 
 int tibool( bool val );
 long _char(long);
-void aload(double *pkg) // aload numbers sdx i4
+void aload() // aload numbers sdx i4
 {
-   long length = (long) core0.getr(0, pkg[0]);
-   long index = (long) reg_check_ret(pkg[1]);
+   double p0 = strtol(prog(2, IP++, "").c_str(), NULL, 2);
+   double p1 = strtol(prog(2, IP++, "").c_str(), NULL, 2);
+   double p2 = strtol(prog(2, IP++, "").c_str(), NULL, 2);
+   long length = (long) core0.getr(0, p0);
+   long index = (long) reg_check_ret(p1);
    if(index >= length){
    	RuntimeException re;
    	stringstream ss, ss1;
@@ -105,22 +125,22 @@ void aload(double *pkg) // aload numbers sdx i4
    	re.introduce("ArrayLengthOutOfBoundsException", "index >= length;  could not access array at index[" + ss.str() + "] length is: " + ss1.str());
    }
    
-   long addr = pkg[0] + 2;
+   long addr = p0 + 2;
    addr += index;
-   TMP  = (long) core0.getr(0, pkg[0] + 1);
+   TMP  = (long) core0.getr(0, p0 + 1);
 
    if(TMP == INT)
-       core0.setr(0, addr, (long) reg_check_ret(pkg[2]));
+       core0.setr(0, addr, (long) reg_check_ret(p2));
    else if(TMP == SHORT)
-       core0.setr(0, addr, (int) reg_check_ret(pkg[2]));
+       core0.setr(0, addr, (int) reg_check_ret(p2));
    else if(TMP == DOUBLE)
-       core0.setr(0, addr, (double) reg_check_ret(pkg[2]));
+       core0.setr(0, addr, (double) reg_check_ret(p2));
    else if(TMP == FLOAT)
-       core0.setr(0, addr, (float) reg_check_ret(pkg[2]));
+       core0.setr(0, addr, (float) reg_check_ret(p2));
    else if(TMP == BOOL)
-       core0.setr(0, addr, tibool(reg_check_ret(pkg[2])) );
+       core0.setr(0, addr, tibool(reg_check_ret(p2)) );
    else if(TMP == CHAR)
-       core0.setr(0, addr,  _char((long) reg_check_ret(pkg[2])));
+       core0.setr(0, addr,  _char((long) reg_check_ret(p2)));
    else {
         RuntimeException re;
         stringstream ss;
@@ -129,10 +149,13 @@ void aload(double *pkg) // aload numbers sdx i4
    }
 }
 
-void aaload(double *pkg) // aaload numbers 0 num1
+void aaload() // aaload numbers 0 num1
 {
-   long length = (long) core0.getr(0, pkg[0]);
-   long index = (long) reg_check_ret(pkg[1]);
+   double p0 = strtol(prog(2, IP++, "").c_str(), NULL, 2);
+   double p1 = strtol(prog(2, IP++, "").c_str(), NULL, 2);
+   double p2 = strtol(prog(2, IP++, "").c_str(), NULL, 2);
+   long length = (long) core0.getr(0, p0);
+   long index = (long) reg_check_ret(p1);
    if(index >= length){
    	RuntimeException re;
    	stringstream ss, ss1;
@@ -141,14 +164,15 @@ void aaload(double *pkg) // aaload numbers 0 num1
    	re.introduce("ArrayLengthOutOfBoundsException", "index >= length;  could not access array at index[" + ss.str() + "] length is: " + ss1.str());
    }
    
-   TMP = pkg[0] + 2;
+   TMP = p0 + 2;
    TMP += index;
-   reg_check_set(pkg[2], core0.getr(0, TMP));
+   reg_check_set(p2, core0.getr(0, TMP));
 }
 
 extern void sfinterrupt();
-void swi(double *pkg)
+void swi()
 {
+   IP += 3;
    long ip = IP;
    long run_for = SDX;
    IP = SCX;
@@ -159,22 +183,25 @@ void swi(double *pkg)
 }
 
 int tibool(bool val);
-void strcp(double *pkg)
+void strcp()
 {
+   double p0 = strtol(prog(2, IP++, "").c_str(), NULL, 2);
+   double p1 = strtol(prog(2, IP++, "").c_str(), NULL, 2);
+   double p2 = strtol(prog(2, IP++, "").c_str(), NULL, 2);
    stringstream ss, ss1;
-   TMP = pkg[1] + 1; // string 1
+   TMP = p1 + 1; // string 1
    char ch;
-   for(int i = 0; i < core0.getr(0, pkg[1]); i++){
+   for(int i = 0; i < core0.getr(0, p1); i++){
         ch = core0.getr(0, TMP++);
         ss << ch;
    }
 
-   TMP = pkg[2] + 1; // string 2
-   for(int i = 0; i < core0.getr(0, pkg[2]); i++){
+   TMP = p2 + 1; // string 2
+   for(int i = 0; i < core0.getr(0, p2); i++){
          ch = core0.getr(0, TMP++);
          ss1 << ch;
    }
-    reg_check_set( pkg[0], tibool(ss.str() == ss1.str()));
+    reg_check_set( p0, tibool(ss.str() == ss1.str()));
 }
 
 bool iequals(const string& a, const string& b)
@@ -188,27 +215,31 @@ bool iequals(const string& a, const string& b)
     return true;
 }
 
-void strcpi(double *pkg)
+void strcpi()
 {
+   double p0 = strtol(prog(2, IP++, "").c_str(), NULL, 2);
+   double p1 = strtol(prog(2, IP++, "").c_str(), NULL, 2);
+   double p2 = strtol(prog(2, IP++, "").c_str(), NULL, 2);
    stringstream ss, ss1;
-   TMP = pkg[1] + 1; // string 1
+   TMP = p1 + 1; // string 1
    char ch;
-   for(int i = 0; i < core0.getr(0, pkg[1]); i++){
+   for(int i = 0; i < core0.getr(0, p1); i++){
         ch = core0.getr(0, TMP++);
         ss << ch;
    }
 
-   TMP = pkg[2] + 1; // string 2
-   for(int i = 0; i < core0.getr(0, pkg[2]); i++){
+   TMP = p2 + 1; // string 2
+   for(int i = 0; i < core0.getr(0, p2); i++){
          ch = core0.getr(0, TMP++);
          ss1 << ch;
    }
 
-    reg_check_set( pkg[0], tibool(iequals(ss.str(),ss1.str())));
+    reg_check_set( p0, tibool(iequals(ss.str(),ss1.str())));
 }
 
-void e2str(double *pkg)
+void e2str()
 {
+   IP += 3;
    stringstream ss;
    ss << core0.getr(0, SDX);
    string num = ss.str();
@@ -220,28 +251,34 @@ void e2str(double *pkg)
      core0.setr(0, SCX, num.length());
 }
 
-void sload(double *pkg)
+void sload()
 {
-   if(pkg[1] == 21937856)
-     core0.setr(0, pkg[0], null);
+   double p0 = strtol(prog(2, IP++, "").c_str(), NULL, 2);
+   double p1 = strtol(prog(2, IP++, "").c_str(), NULL, 2);
+   IP++;
+   if(p1 == 21937856)
+     core0.setr(0, p0, null);
    else
-     core0.setr(0, pkg[0], (int) pkg[1]);
+     core0.setr(0, p0, (int) p1);
 }
 
-void _throw(double *pkg)
+void _throw()
 {
+   double p0 = strtol(prog(2, IP++, "").c_str(), NULL, 2);
+   double p1 = strtol(prog(2, IP++, "").c_str(), NULL, 2);
+   IP++;
    stringstream ss, ss1;
-   TMP = pkg[0] + 1; // the exception
+   TMP = p0 + 1; // the exception
      char ch;
-     for(int i = 0; i < core0.getr(0, pkg[0]); i++){
+     for(int i = 0; i < core0.getr(0, p0); i++){
         ch = core0.getr(0, TMP++);
         if((ch == '\n') || (ch == ' ') || (ch == '\t') || (ch == 10)){ }
         else
           ss << ch;
      }
 
-     TMP = pkg[1] + 1; // the msg
-     for(int i = 0; i < core0.getr(0, pkg[1]); i++){
+     TMP = p1 + 1; // the msg
+     for(int i = 0; i < core0.getr(0, p1); i++){
          ch = core0.getr(0, TMP++);
          ss1 << ch;
      }
@@ -250,59 +287,72 @@ void _throw(double *pkg)
       re.introduce(ss.str(), ss1.str());
 }
 
-void adr(double *pkg)
+void adr()
 {
-   reg_check_set( pkg[0], (long) pkg[1]);
+   double p0 = strtol(prog(2, IP++, "").c_str(), NULL, 2);
+   double p1 = strtol(prog(2, IP++, "").c_str(), NULL, 2);
+   IP++;
+   reg_check_set( p0, (long) p1);
 }
 
-void ct_int(double *pkg)
+void ct_int()
 {
-   char a = core0.getr(0, pkg[1]);
+   double p0 = strtol(prog(2, IP++, "").c_str(), NULL, 2);
+   double p1 = strtol(prog(2, IP++, "").c_str(), NULL, 2);
+   IP++;
+   char a = core0.getr(0, p1);
    if(a == '0')
-    core0.setr(0, pkg[0], 0);
+    core0.setr(0, p0, 0);
    else if (a == '1')
-    core0.setr(0, pkg[0], 1);
+    core0.setr(0, p0, 1);
    else if (a == '2')
-    core0.setr(0, pkg[0], 2);
+    core0.setr(0, p0, 2);
    else if (a == '3')
-    core0.setr(0, pkg[0], 3);
+    core0.setr(0, p0, 3);
    else if (a == '4')
-    core0.setr(0, pkg[0], 4);
+    core0.setr(0, p0, 4);
    else if (a == '5')
-    core0.setr(0, pkg[0], 5);
+    core0.setr(0, p0, 5);
    else if (a == '6')
-    core0.setr(0, pkg[0], 6);
+    core0.setr(0, p0, 6);
    else if (a == '7')
-    core0.setr(0, pkg[0], 7);
+    core0.setr(0, p0, 7);
    else if (a == '8')
-    core0.setr(0, pkg[0], 8);
+    core0.setr(0, p0, 8);
    else if (a == '9')
-    core0.setr(0, pkg[0], 9);
+    core0.setr(0, p0, 9);
    else
-    core0.setr(0, pkg[0], 0);
+    core0.setr(0, p0, 0);
 }
 
-void anum(double *pkg)
+void anum()
 {
+   double p0 = strtol(prog(2, IP++, "").c_str(), NULL, 2);
+   double p1 = strtol(prog(2, IP++, "").c_str(), NULL, 2);
+   IP++;
    stringstream ss;
-   ss << core0.getr(0, pkg[0]) << core0.getr(0, pkg[1]);
+   ss << core0.getr(0, p0) << core0.getr(0, p1);
    string num = ss.str();
 
    if(SFC == SHORT || SFC == INT)
-     core0.setr(0, pkg[0], atoi(num.c_str()));
+     core0.setr(0, p0, atoi(num.c_str()));
    else if(SFC == DOUBLE || SFC == FLOAT)
-     core0.setr(0, pkg[0], atof(num.c_str()));
+     core0.setr(0, p0, atof(num.c_str()));
    else {
       EBX = 2;
       lg.w("System", "warning: canot assignn decimal value to not integer and or float data types");
    }
 }
 
-void rln(double *pkg)//  length, start addr, excape  char, 
+void rln()//  length, start addr, excape  char, 
 {
-   TMP = (long) pkg[0] + 1;
-   long max = core0.getr(0, pkg[0]);
-   if(pkg[1] == 10){ // excape char = \n
+   
+   double p0 = strtol(prog(2, IP++, "").c_str(), NULL, 2);
+   double p1 = strtol(prog(2, IP++, "").c_str(), NULL, 2);
+   IP++;
+   TMP = (long) p0 + 1;
+   long max = core0.getr(0, p0);
+   if(p1 == 10){ // excape char = \n
      string input = "";
      getline(cin, input);
      char a;
@@ -315,12 +365,12 @@ void rln(double *pkg)//  length, start addr, excape  char,
           core0.setr(0, TMP++, chr);
      }
        TMP = input.length();
-       core0.setr(0, pkg[0], TMP);
+       core0.setr(0, p0, TMP);
    }
    else {
      string input = "", tmp = "";
      Ram ram;
-     char a = pkg[1];
+     char a = p1;
      int chr;
      stringstream ss;
      ss << a;
@@ -341,29 +391,28 @@ void rln(double *pkg)//  length, start addr, excape  char,
           core0.setr(0, TMP++, chr);
      }
        TMP = input.length();
-       core0.setr(0, pkg[0], TMP);
+       core0.setr(0, p0, TMP);
    }
 }
 
-void loadc(double *pkg);
-void _string(double *pkg) // string @434 32 'this is the string'
+void _string() // string @434 32 'this is the string'
 {
- if(pkg[1] <= 0){}
- else if(pkg[1] == 1){
-   core0.setr(0, pkg[0], 1);
-   double *pckg;
-   pckg[0] == pkg[0] + 1;
-   pckg[1] == pkg[2];
-   loadc(pckg);
+   double p0 = strtol(prog(2, IP++, "").c_str(), NULL, 2);
+   double p1 = strtol(prog(2, IP++, "").c_str(), NULL, 2);
+   double p2 = strtol(prog(2, IP++, "").c_str(), NULL, 2);
+ if(p1 <= 0){}
+ else if(p1 == 1){
+   core0.setr(0, p0, 1);
+   core0.setr(0, p0 + 1, p2);
  }
- else if(pkg[1] >= 2) {
+ else if(p1 >= 2) {
     IP--;
-    TMP = pkg[0] + 1;
+    TMP = p0 + 1;
     if(!ignore)
-        core0.setr(0, pkg[0], pkg[1]);
+        core0.setr(0, p0, p1);
     string str;
     long _str;
-    for(int i = 0; i < (long) pkg[1]; i++){
+    for(int i = 0; i < (long) p1; i++){
        str = prog(2, IP++, ""); // get char
        _str = disasm.disassemble(str); // dissasemble char
        if(!ignore)
@@ -380,6 +429,8 @@ void _string(double *pkg) // string @434 32 'this is the string'
 char _ostream;
 void c_print(double _char)
 {
+  if(ignore)
+   return;
     if(_char == 269)
          cout << std::flush;
     else{
@@ -388,25 +439,29 @@ void c_print(double _char)
     }
 }
 
-void _print(double *pkg)
+void _print()
 { 
- if(pkg[0] <= 0){
+ 
+   double p0 = strtol(prog(2, IP++, "").c_str(), NULL, 2);
+   double p1 = strtol(prog(2, IP++, "").c_str(), NULL, 2);
+   double p2 = strtol(prog(2, IP++, "").c_str(), NULL, 2);
+ if(p0 <= 0){
     IP--;
     IP--;
  }
- else if(pkg[0] == 1){
+ else if(p0 == 1){
    IP--;
-   c_print(pkg[1]);
+   c_print(p1);
  }
- else if(pkg[0] == 2){
-   c_print(pkg[1]);
-   c_print(pkg[2]);
+ else if(p0 == 2){
+   c_print(p1);
+   c_print(p2);
  }
- else if(pkg[0] > 2) {
+ else if(p0 > 2) {
     IP--;
     IP--;
     string str;
-    for(int i = 0; i < pkg[0]; i++){
+    for(int i = 0; i < p0; i++){
        str = prog(2, IP++, ""); // get char
        TMP = disasm.disassemble(str); // dissasemble char
        c_print(TMP); // print char
@@ -625,6 +680,7 @@ void c_printf(double _char)
 extern string prog_data;
 void c_update()
 {
+  IP += 3;
   Ram r;
   string instr;
   for(int i = 0; i < L1_ICache_length; i++){
@@ -639,17 +695,21 @@ void c_update()
   }
 }
 
-void _printf(double *pkg)
+void _printf()
 {
- if(pkg[0] <= 0){
+ 
+   double p0 = strtol(prog(2, IP++, "").c_str(), NULL, 2);
+   IP++;
+   IP++;
+ if(p0 <= 0){
    IP--;
    IP--;
  }
- else if(pkg[0] >= 1) {
+ else if(p0 >= 1) {
     IP--;
     IP--;
     string str;
-    for(int i = 0; i < pkg[0]; i++){
+    for(int i = 0; i < p0; i++){
        str = prog(2, IP++, ""); // get char
        TMP = disasm.disassemble(str); // dissasemble char
        c_printf(TMP); // print char
@@ -665,9 +725,12 @@ void _printf(double *pkg)
 
 
 int ibool(long);
-void loadbl(double *pkg)
+void loadbl()
 {
-   core0.setr(0, pkg[0], ibool( (long) pkg[1]));
+   double p0 = strtol(prog(2, IP++, "").c_str(), NULL, 2);
+   double p1 = strtol(prog(2, IP++, "").c_str(), NULL, 2);
+   IP++;
+   core0.setr(0, p0, ibool( (long) p1));
 }
 
 long _char(long _ch)
@@ -677,283 +740,305 @@ long _char(long _ch)
   return chr;
 }
 
-void loadc(double *pkg)
+void loadc()
 {
-   core0.setr(0, pkg[0], _char((long) pkg[1]));
+   double p0 = strtol(prog(2, IP++, "").c_str(), NULL, 2);
+   double p1 = strtol(prog(2, IP++, "").c_str(), NULL, 2);
+   IP++;
+   core0.setr(0, p0, _char((long) p1));
 }
 
-void _sleep(double *pkg)
+void _sleep()
 {
+   
+   double p0 = strtol(prog(2, IP++, "").c_str(), NULL, 2);
+   IP++;
+   IP++;
    cout.flush();
    if(SDX < 0)
      SDX *= -1;
-   if((long) pkg[0] == 0)
+   if((long) p0 == 0)
        sleep(SDX);
    else
       usleep(SDX); // sleep for microseconds
 }
 
-void dload(double *pkg)
+void dload()
 {
+   double p0 = strtol(prog(2, IP++, "").c_str(), NULL, 2);
+   double p1 = strtol(prog(2, IP++, "").c_str(), NULL, 2);
+   double p2 = strtol(prog(2, IP++, "").c_str(), NULL, 2);
    stringstream ss;
-   ss << pkg[1] << "." << pkg[2];
+   ss << p1 << "." << p2;
    string dec = ss.str();
    if(atof(dec.c_str()) == 21937856.0)
-      core0.setr(0, pkg[0], null);
+      core0.setr(0, p0, null);
    else
-      core0.setr(0, pkg[0], (double) atof(dec.c_str()));
+      core0.setr(0, p0, (double) atof(dec.c_str()));
 }
 
-void loadf(double *pkg)
+void loadf()
 {
+   double p0 = strtol(prog(2, IP++, "").c_str(), NULL, 2);
+   double p1 = strtol(prog(2, IP++, "").c_str(), NULL, 2);
+   double p2 = strtol(prog(2, IP++, "").c_str(), NULL, 2);
    stringstream ss;
-   ss << pkg[1] << "." << pkg[2];
+   ss << p1 << "." << p2;
    string dec = ss.str();
    if(atof(dec.c_str()) == 21937856)
-      core0.setr(0, pkg[0], null);
+      core0.setr(0, p0, null);
    else
-      core0.setr(0, pkg[0], (float) atof(dec.c_str()));
+      core0.setr(0, p0, (float) atof(dec.c_str()));
 }
 
-void mov(double *pkg)
+void mov()
 {
-      switch( (long) pkg[0] )
+   double p0 = strtol(prog(2, IP++, "").c_str(), NULL, 2);
+   double p1 = strtol(prog(2, IP++, "").c_str(), NULL, 2);
+   IP++;
+      switch( (long) p0 )
       {
           case 21:
-	    EBX = pkg[1];
+	    EBX = p1;
            break;
   	   case 22:
-	    SDX = pkg[1];
+	    SDX = p1;
            break;
 	   case 23:
-	    BP = pkg[1];
+	    BP = p1;
            break;
  	   case 24:
-	    EXC = pkg[1];
+	    EXC = p1;
            break;
 	   case 25:
 	    PS = 0;
            break;
 	   case 26:
-	    LG = pkg[1];
+	    LG = p1;
            break;
   	   case 27:
-	    LSL = pkg[1];
+	    LSL = p1;
            break;
            case 28:
-	    SFC = pkg[1];
+	    SFC = p1;
            break;
            case 29:
-            SCX = pkg[1];
+            SCX = p1;
            break;
            case 30:
-            I1 = pkg[1];
+            I1 = p1;
            break;
            case 31:
-            I2 = pkg[1];
+            I2 = p1;
            break;
            case 32:
-            TMP = pkg[1];
+            TMP = p1;
            break;
            case 33:
-	    AI = pkg[1];
+	    AI = p1;
            break;
            case 34:
-            IPI = pkg[1];
+            IPI = p1;
 	   break;
            case 37:
-            I3 = pkg[1];
+            I3 = p1;
            break;
            case 38:
-            I4 = pkg[1];
+            I4 = p1;
            break;
            case 39:
-            I5 = pkg[1];
+            I5 = p1;
            break;
            case 40:
-            I6 = pkg[1];
+            I6 = p1;
            break;
            case 41:
-            I7 = pkg[1];
+            I7 = p1;
            break;
            case 42:
-            I8 = pkg[1];
+            I8 = p1;
            break;
            case 43:
-            I9 = pkg[1];
+            I9 = p1;
            break;
            case 44:
-            I10 = pkg[1];
+            I10 = p1;
            break;
            case 45:
-            I11 = pkg[1];
+            I11 = p1;
            break;
            case 46:
-            I12 = pkg[1];
+            I12 = p1;
            break;
       }
 }
 
-void r_mv(double *pkg)
+void r_mv()
 {
-      switch( (long) pkg[0] )
+   double p0 = strtol(prog(2, IP++, "").c_str(), NULL, 2);
+   double p1 = strtol(prog(2, IP++, "").c_str(), NULL, 2);
+   IP++;
+      switch( (long) p0 )
       {
           case 21:
-             core0.setr(0, pkg[1], EBX);
+             core0.setr(0, p1, EBX);
            break;
            case 22:
-             core0.setr(0, pkg[1], SDX);
+             core0.setr(0, p1, SDX);
            break;
            case 23:
-             core0.setr(0, pkg[1], BP);
+             core0.setr(0, p1, BP);
            break;
            case 24:
-             core0.setr(0, pkg[1], EXC);
+             core0.setr(0, p1, EXC);
            break;
            case 25:
-             core0.setr(0, pkg[1], PS);
+             core0.setr(0, p1, PS);
            break;
            case 26:
-             core0.setr(0, pkg[1], LG);
+             core0.setr(0, p1, LG);
            break;
            case 27:
-             core0.setr(0, pkg[1], LSL);
+             core0.setr(0, p1, LSL);
            break;
            case 28:
-                core0.setr(0, pkg[1], SFC);
+                core0.setr(0, p1, SFC);
            break;
            case 29:
-                core0.setr(0, pkg[1], SCX);
+                core0.setr(0, p1, SCX);
            break;
            case 30:
-                core0.setr(0, pkg[1], I1);
+                core0.setr(0, p1, I1);
            break;
            case 31:
-                core0.setr(0, pkg[1], I2);
+                core0.setr(0, p1, I2);
            break;
            case 32:
-                core0.setr(0, pkg[1], TMP);
+                core0.setr(0, p1, TMP);
            break;
            case 36:
-                core0.setr(0, pkg[1], SCR);
+                core0.setr(0, p1, SCR);
            break;
            case 20:
-                core0.setr(0, pkg[1], EAX);
+                core0.setr(0, p1, EAX);
            break;
            case 35:
-                core0.setr(0, pkg[1], IP);
+                core0.setr(0, p1, IP);
            break;
            case 33:
-		core0.setr(0, pkg[1], AI);
+		core0.setr(0, p1, AI);
    	   break;
   	   case 34:
-                core0.setr(0, pkg[1], IPI);
+                core0.setr(0, p1, IPI);
 	   break;
            case 37:
-                core0.setr(0, pkg[1], I3);
+                core0.setr(0, p1, I3);
            break;
            case 38:
-                core0.setr(0, pkg[1], I4);
+                core0.setr(0, p1, I4);
            break;
            case 39:
-                core0.setr(0, pkg[1], I5);
+                core0.setr(0, p1, I5);
            break;
            case 40:
-                core0.setr(0, pkg[1], I6);
+                core0.setr(0, p1, I6);
            break;
            case 41:
-                core0.setr(0, pkg[1], I7);
+                core0.setr(0, p1, I7);
            break;
            case 42:
-                core0.setr(0, pkg[1], I8);
+                core0.setr(0, p1, I8);
            break;
            case 43:
-                core0.setr(0, pkg[1], I9);
+                core0.setr(0, p1, I9);
            break;
            case 44:
-                core0.setr(0, pkg[1], I10);
+                core0.setr(0, p1, I10);
            break;
            case 45:
-                core0.setr(0, pkg[1], I11);
+                core0.setr(0, p1, I11);
            break;
            case 46:
-                core0.setr(0, pkg[1], I12);
+                core0.setr(0, p1, I12);
            break;
       }
 }
 
-void rmov(double *pkg)
+void rmov()
 {
-     switch( (long) pkg[0] )
+   double p0 = strtol(prog(2, IP++, "").c_str(), NULL, 2);
+   double p1 = strtol(prog(2, IP++, "").c_str(), NULL, 2);
+   IP++;
+     switch( (long) p0 )
      {
           case 21:
-               EBX = (long) reg_check_ret( pkg[1]);
+               EBX = (long) reg_check_ret( p1);
            break;
            case 22:
-               SDX = (long) reg_check_ret( pkg[1]);
+               SDX = (long) reg_check_ret( p1);
            break;
            case 23:
-               BP = (long) reg_check_ret( pkg[1]);
+               BP = (long) reg_check_ret( p1);
            break;
            case 24:
-               EXC = (long) reg_check_ret( pkg[1]);
+               EXC = (long) reg_check_ret( p1);
            break;
            case 26:
-               LG = (long) reg_check_ret( pkg[1]);
+               LG = (long) reg_check_ret( p1);
            break;
            case 27:
-              LSL =  (long) reg_check_ret( pkg[1]);
+              LSL =  (long) reg_check_ret( p1);
             break;
            case 28:
-               SFC = (long) reg_check_ret( pkg[1]);
+               SFC = (long) reg_check_ret( p1);
            break;
            case 29:
-               SCX = (long) reg_check_ret( pkg[1]);
+               SCX = (long) reg_check_ret( p1);
            break;
            case 30:
-               I1 = (long) reg_check_ret( pkg[1]);
+               I1 = (long) reg_check_ret( p1);
            break;
            case 31:
-               I2 = (long) reg_check_ret( pkg[1]);
+               I2 = (long) reg_check_ret( p1);
            break;
            case 32:
-               TMP = (long) reg_check_ret( pkg[1]);
+               TMP = (long) reg_check_ret( p1);
             break;
            case 33:
-              AI = (long) reg_check_ret( pkg[1]);
+              AI = (long) reg_check_ret( p1);
            break;
            case 34:
-              IPI = (long) reg_check_ret( pkg[1]);
+              IPI = (long) reg_check_ret( p1);
            break;
            case 37:
-               I3 = (long) reg_check_ret( pkg[1]);
+               I3 = (long) reg_check_ret( p1);
            break;
            case 38:
-               I4 = (long) reg_check_ret( pkg[1]);
+               I4 = (long) reg_check_ret( p1);
            break;
            case 39:
-               I5 = (long) reg_check_ret( pkg[1]);
+               I5 = (long) reg_check_ret( p1);
            break;
            case 40:
-               I6 = (long) reg_check_ret( pkg[1]);
+               I6 = (long) reg_check_ret( p1);
            break;
            case 41:
-               I7 = (long) reg_check_ret( pkg[1]);
+               I7 = (long) reg_check_ret( p1);
            break;
            case 42:
-               I8 = (long) reg_check_ret( pkg[1]);
+               I8 = (long) reg_check_ret( p1);
            break;
            case 43:
-               I9 = (long) reg_check_ret( pkg[1]);
+               I9 = (long) reg_check_ret( p1);
            break;
            case 44:
-               I10 = (long) reg_check_ret( pkg[1]);
+               I10 = (long) reg_check_ret( p1);
            break;
            case 45:
-               I11 = (long) reg_check_ret( pkg[1]);
+               I11 = (long) reg_check_ret( p1);
            break;
            case 46:
-               I12 = (long) reg_check_ret( pkg[1]);
+               I12 = (long) reg_check_ret( p1);
            break;
      }
 }
@@ -962,9 +1047,12 @@ void rmov(double *pkg)
 extern long SIZE;
 extern int alloc(bool free, long size);
 extern void ucache();
-void invoke(double *pkg)
+void invoke()
 {
-     switch((long) pkg[0] )
+   double p0 = strtol(prog(2, IP++, "").c_str(), NULL, 2);
+   double p1 = strtol(prog(2, IP++, "").c_str(), NULL, 2);
+   IP++;
+     switch((long) p0 )
      {
        case 0: // os system call
         {
@@ -991,7 +1079,7 @@ void invoke(double *pkg)
        break;
        case 2:
          Ram rm;
-         SCR = rm.info(pkg[1]);
+         SCR = rm.info(p1);
        break;
        case 3: // push code to Ram
         {
@@ -1153,15 +1241,15 @@ void invoke(double *pkg)
              ss1 << ch;
           }
 
-          if(pkg[1] <= 2)
+          if(p1 <= 2)
            lg.v(ss.str(), ss1.str());
-          else if(pkg[1] == 3)
+          else if(p1 == 3)
            lg.d(ss.str(), ss1.str());
-          else if(pkg[1] == 4)
+          else if(p1 == 4)
            lg.i(ss.str(), ss1.str());
-          else if(pkg[1] == 5)
+          else if(p1 == 5)
            lg.w(ss.str(), ss1.str());
-          else if(pkg[1] == 6)
+          else if(p1 == 6)
            lg.e(ss.str(), ss1.str());
           else
            lg.a(ss.str(), ss1.str());
@@ -1169,13 +1257,13 @@ void invoke(double *pkg)
        break;
        case 50: // read to a file
         {
-          data[0] = pkg[1];
+          data[0] = p1;
           SCR = io.Read(1,data); // read to a file
         }
        break;
        case 51: // write to a file
         {
-          data[0] = pkg[1];
+          data[0] = p1;
           SCR = io.Write(1,data); // write to a file
         }
        break;
@@ -1253,7 +1341,7 @@ void invoke(double *pkg)
        break;
        default:
        stringstream ss;
-       ss << pkg[0];
+       ss << p0;
        RuntimeException re;
        re.introduce("IllegalSystemCallExcpetion", "code is not a system call [" + ss.str() + "]");
        break;
@@ -1261,28 +1349,35 @@ void invoke(double *pkg)
 }
 
 Ram r;
-void lock(double *pkg)
+void lock()
 {
-      if(core0.getr(3, pkg[0]) == 0)
-         core0.setr(2, pkg[0], core0.getr(0, pkg[0]));
+   double p0 = strtol(prog(2, IP++, "").c_str(), NULL, 2);
+   IP++;
+   IP++;
+      if(core0.getr(3, p0) == 0)
+         core0.setr(2, p0, core0.getr(0, p0));
       else {
        stringstream ss;
-       ss << pkg[0];
+       ss << p0;
        lg.v("System","warning: ram lock err cannot lock excluded address into ram #{" + ss.str() + "}");
        EBX = 2;
       }
 }
 
-void xreg(double *pkg)
+void xreg()
 {
-     if(core0.getr(3, pkg[0]) == 0)
-        core0.setr(3, pkg[0], 1);
-     else if(core0.getr(3, pkg[0]) == 1)
-        core0.setr(3, pkg[0], 0);
+   double p0 = strtol(prog(2, IP++, "").c_str(), NULL, 2);
+   IP++;
+   IP++;
+     if(core0.getr(3, p0) == 0)
+        core0.setr(3, p0, 1);
+     else if(core0.getr(3, p0) == 1)
+        core0.setr(3, p0, 0);
 }
 
-void clx(double *pkg)
+void clx()
 {
+    IP += 3;
      for(int i = 0; i < r.info(0); i++)
         core0.setr(3, i, 0);
 }
@@ -1295,40 +1390,52 @@ int tibool(bool val)
       return 0;
 }
 
-void same(double *pkg)
+void same()
 {
-   reg_check_set( pkg[0], tibool(reg_check_ret( pkg[1]) == reg_check_ret( pkg[2])));
+   double p0 = strtol(prog(2, IP++, "").c_str(), NULL, 2);
+   double p1 = strtol(prog(2, IP++, "").c_str(), NULL, 2);
+   double p2 = strtol(prog(2, IP++, "").c_str(), NULL, 2);
+   reg_check_set( p0, tibool(reg_check_ret( p1) == reg_check_ret( p2)));
 }
 
-void ulock(double *pkg)
+void ulock()
 {
-   if(core0.getr(3, pkg[0]) == 0)
-      core0.setr(0, pkg[0], core0.getr(2, pkg[0]));
+   double p0 = strtol(prog(2, IP++, "").c_str(), NULL, 2);
+   IP++;
+   IP++;
+   if(core0.getr(3, p0) == 0)
+      core0.setr(0, p0, core0.getr(2, p0));
 }
 
-void push(double *pkg)
+void push()
 {
+   double p0 = strtol(prog(2, IP++, "").c_str(), NULL, 2);
+   IP++;
+   IP++;
   RuntimeException x;
    if(!inFunc){
     inFunc = true;
-    core0.setr(0, pkg[0], IP);
+    core0.setr(0, p0, IP);
     ignore = true;
    }
    else
       x.introduce("FunctionCallException", "cannot initalize a function inside another function!");
 }
 
-void _return(double *pkg)
+void _return()
 {
+   double p0 = strtol(prog(2, IP++, "").c_str(), NULL, 2);
+   double p1 = strtol(prog(2, IP++, "").c_str(), NULL, 2);
+   IP++;
     inFunc = false;
     RuntimeException re;
-    if(ignore && pkg[1] == 0)
+    if(ignore && p1 == 0)
        ignore = false;
-    else if(ignore && pkg[1] == 1) // skip
+    else if(ignore && p1 == 1) // skip
        inFunc = true;
     else {
-       IP = (long) core0.getr(0, pkg[0]);
-       core0.setr(0, pkg[0], core0.getr(0, pkg[0] + 1));
+       IP = (long) core0.getr(0, p0);
+       core0.setr(0, p0, core0.getr(0, p0 + 1));
        if(DEBUG_STATE == 0x54)
        {
            debugging = true;
@@ -1336,49 +1443,64 @@ void _return(double *pkg)
     }
 }
 
-void call(double *pkg)
+void call()
 {
+   double p0 = strtol(prog(2, IP++, "").c_str(), NULL, 2);
+   IP++;
+   IP++;
     in_func = true;
     TMP = IP;
-    IP = (long) core0.getr(0,  pkg[0]);
-    core0.setr(0, pkg[0], TMP);
-    core0.setr(0, pkg[0] + 1, IP);
+    IP = (long) core0.getr(0,  p0);
+    core0.setr(0, p0, TMP);
+    core0.setr(0, p0 + 1, IP);
     inFunc = true;
 }
 
-void swp(double *pkg)
+void swp()
 {
-     TMP = core0.getr(0, pkg[0]);
-     core0.setr(0, pkg[0], core0.getr(0, pkg[1]));
-     core0.setr(0, pkg[1], TMP);
+   double p0 = strtol(prog(2, IP++, "").c_str(), NULL, 2);
+   double p1 = strtol(prog(2, IP++, "").c_str(), NULL, 2);
+   IP++;
+     TMP = core0.getr(0, p0);
+     core0.setr(0, p0, core0.getr(0, p1));
+     core0.setr(0, p1, TMP);
 }
 
-void loop(double *pkg)
+void loop()
 {
+   double p0 = strtol(prog(2, IP++, "").c_str(), NULL, 2);
+   double p1 = strtol(prog(2, IP++, "").c_str(), NULL, 2);
+   double p2 = strtol(prog(2, IP++, "").c_str(), NULL, 2);
      in_loop = true;
-     core0.setr(0, pkg[1], pkg[2]);
-     core0.setr(0, pkg[0], IP);
+     core0.setr(0, p1, p2);
+     core0.setr(0, p0, IP);
      waiting = true;
 }
 
-void wloop(double *pkg)
+void wloop()
 {
-    if(core0.getr(0, pkg[0]) == 1)
-       core0.setr(0, pkg[1], IP);
+   double p0 = strtol(prog(2, IP++, "").c_str(), NULL, 2);
+   double p1 = strtol(prog(2, IP++, "").c_str(), NULL, 2);
+   IP++;
+    if(core0.getr(0, p0) == 1)
+       core0.setr(0, p1, IP);
     else {
        pass = true;  // do not run the contents in the loop
        ignore = true;
     }
 }
 
-void endwl(double *pkg)
+void endwl()
 {
+   double p0 = strtol(prog(2, IP++, "").c_str(), NULL, 2);
+   double p1 = strtol(prog(2, IP++, "").c_str(), NULL, 2);
+   IP++;
   if(pass){
      ignore = false;
      pass = false;
   }
-  else if(!ignore && (core0.getr(0, pkg[0]) == 1)){ // loop again
-       IP = core0.getr(0, pkg[1]);
+  else if(!ignore && (core0.getr(0, p0) == 1)){ // loop again
+       IP = core0.getr(0, p1);
        if(DEBUG_STATE == 0x55)
        {
            debugging = true;
@@ -1386,15 +1508,19 @@ void endwl(double *pkg)
    }
 }
 
-void rloop(double *pkg)
+void rloop()
 {
-    core0.setr(0, pkg[0], IP);
-    core0.setr(0, pkg[1], core0.getr(0, pkg[2]));
+   double p0 = strtol(prog(2, IP++, "").c_str(), NULL, 2);
+   double p1 = strtol(prog(2, IP++, "").c_str(), NULL, 2);
+   double p2 = strtol(prog(2, IP++, "").c_str(), NULL, 2);
+    core0.setr(0, p0, IP);
+    core0.setr(0, p1, core0.getr(0, p2));
     waiting = true;
 }
 
 void end() // for do
 {
+  IP += 3;
   if((passed_if > 0) && if_ignore){
       passed_if--;
       return;
@@ -1405,11 +1531,14 @@ void end() // for do
   }
 }
 
-void endl(double *pkg)
+void endl()
 {
+   double p0 = strtol(prog(2, IP++, "").c_str(), NULL, 2);
+   double p1 = strtol(prog(2, IP++, "").c_str(), NULL, 2);
+   IP++;
    if(waiting){
-      core0.setr(0, pkg[1], (core0.getr(0, pkg[1]) - 1));
-    if(core0.getr(0, pkg[1]) <= 0){
+      core0.setr(0, p1, (core0.getr(0, p1) - 1));
+    if(core0.getr(0, p1) <= 0){
       waiting = false;
       if(DEBUG_STATE == 0x55)
       {
@@ -1417,145 +1546,182 @@ void endl(double *pkg)
       }
     }
     else {
-      IP = core0.getr(0, pkg[0]);
+      IP = core0.getr(0, p0);
    }
   }
 }
 
-void _do(double *pkg)
+void _do()
 {
-   if(reg_check_ret( pkg[0]) == 1){}
+   double p0 = strtol(prog(2, IP++, "").c_str(), NULL, 2);
+   IP++;
+   IP++;
+   if(reg_check_ret( p0) == 1){}
    else {
      if_ignore = true;
      ignore = true;
    }
 }
 
-void ilt(double *pkg)
+void ilt()
 {
-   if(reg_check_ret(pkg[0]) < reg_check_ret( pkg[1])){}
+   double p0 = strtol(prog(2, IP++, "").c_str(), NULL, 2);
+   double p1 = strtol(prog(2, IP++, "").c_str(), NULL, 2);
+   IP++;
+   if(reg_check_ret(p0) < reg_check_ret( p1)){}
    else {
      if_ignore = true;
      ignore = true;
    }
 }
 
-void igt(double *pkg)
+void igt()
 {
-   if(reg_check_ret( pkg[0]) > reg_check_ret( pkg[1])){}
+   double p0 = strtol(prog(2, IP++, "").c_str(), NULL, 2);
+   double p1 = strtol(prog(2, IP++, "").c_str(), NULL, 2);
+   IP++;
+   if(reg_check_ret( p0) > reg_check_ret( p1)){}
    else {
      if_ignore = true;
      ignore = true;
    }
 }
 
-void ile(double *pkg)
+void ile()
 {
-   if(reg_check_ret( pkg[0]) <= reg_check_ret( pkg[1])){}
+   double p0 = strtol(prog(2, IP++, "").c_str(), NULL, 2);
+   double p1 = strtol(prog(2, IP++, "").c_str(), NULL, 2);
+   IP++;
+   if(reg_check_ret( p0) <= reg_check_ret( p1)){}
    else {
      if_ignore = true;
      ignore = true;
    }
 }
 
-void ige(double *pkg)
+void ige()
 {
-   if(reg_check_ret( pkg[0]) >= reg_check_ret( pkg[1])){}
+   double p0 = strtol(prog(2, IP++, "").c_str(), NULL, 2);
+   double p1 = strtol(prog(2, IP++, "").c_str(), NULL, 2);
+   IP++;
+   if(reg_check_ret( p0) >= reg_check_ret( p1)){}
    else {
      if_ignore = true;
      ignore = true;
    }
 }
 
-void ndo(double *pkg)
+void ndo()
 {
-   if(reg_check_ret( pkg[0]) == 0){}
+   double p0 = strtol(prog(2, IP++, "").c_str(), NULL, 2);
+   IP++;
+   IP++;
+   if(reg_check_ret( p0) == 0){}
    else {
      if_ignore = true;
      ignore = true;
    }
 }
 
-void inlt(double *pkg)
+void inlt()
 {
-   if(!(reg_check_ret( pkg[0]) < reg_check_ret( pkg[1]))){}
+   double p0 = strtol(prog(2, IP++, "").c_str(), NULL, 2);
+   double p1 = strtol(prog(2, IP++, "").c_str(), NULL, 2);
+   IP++;
+   if(!(reg_check_ret( p0) < reg_check_ret( p1))){}
    else {
      if_ignore = true;
      ignore = true;
    }
 }
 
-void ingt(double *pkg)
+void ingt()
 {
-   if(!(reg_check_ret( pkg[0]) > reg_check_ret( pkg[1]))){}
+   double p0 = strtol(prog(2, IP++, "").c_str(), NULL, 2);
+   double p1 = strtol(prog(2, IP++, "").c_str(), NULL, 2);
+   IP++;
+   if(!(reg_check_ret( p0) > reg_check_ret( p1))){}
    else {
      if_ignore = true;
      ignore = true;
    }
 }
 
-void t_cast(double *pkg)
+void t_cast()
 {
+   double p0 = strtol(prog(2, IP++, "").c_str(), NULL, 2);
+   double p1 = strtol(prog(2, IP++, "").c_str(), NULL, 2);
+   IP++;
      RuntimeException re;
-     switch( (long) pkg[1] ){
+     switch( (long) p1 ){
         case 0: // short
-            core0.setr(0, pkg[0], (int) core0.getr(0, pkg[0]));
+            core0.setr(0, p0, (int) core0.getr(0, p0));
         break;
         case 1: // int
-            core0.setr(0, pkg[0], (long) core0.getr(0, pkg[0]));
+            core0.setr(0, p0, (long) core0.getr(0, p0));
         break;
         case 2: //  float
-            core0.setr(0, pkg[0], (float) core0.getr(0, pkg[0]));
+            core0.setr(0, p0, (float) core0.getr(0, p0));
         break;
         case 3: // double
-	    core0.setr(0, pkg[0], (double) core0.getr(0, pkg[0]));
+	    core0.setr(0, p0, (double) core0.getr(0, p0));
         break;
         case 4: // char
          {
-            char ch = core0.getr(0, pkg[0]);
+            char ch = core0.getr(0, p0);
             int c = ch;
-            core0.setr(0, pkg[0], c);
+            core0.setr(0, p0, c);
          }
         break;
         case 5: // bool
-            core0.setr(0, pkg[0], ibool(core0.getr(0, pkg[0])));
+            core0.setr(0, p0, ibool(core0.getr(0, p0)));
         break;
         default: // err
         stringstream ss;
-        ss << "the specified cast value [" << pkg[1] << "] is not a valid arg[double(3),float(2),int(1),short(0)]";
+        ss << "the specified cast value [" << p1 << "] is not a valid arg[double(3),float(2),int(1),short(0)]";
         re.introduce("UnknownCastException", ss.str());
          break;
     }
 }
 
-void inle(double *pkg)
+void inle()
 {
-   if(!(reg_check_ret( pkg[0]) <= reg_check_ret( pkg[1]))){}
+   double p0 = strtol(prog(2, IP++, "").c_str(), NULL, 2);
+   double p1 = strtol(prog(2, IP++, "").c_str(), NULL, 2);
+   IP++;
+   if(!(reg_check_ret( p0) <= reg_check_ret( p1))){}
    else {
      if_ignore = true;
      ignore = true;
    }
 }
 
-void inge(double *pkg)
+void inge()
 {
-   if(!(reg_check_ret( pkg[0]) >= reg_check_ret( pkg[1]))){}
+   double p0 = strtol(prog(2, IP++, "").c_str(), NULL, 2);
+   double p1 = strtol(prog(2, IP++, "").c_str(), NULL, 2);
+   IP++;
+   if(!(reg_check_ret( p0) >= reg_check_ret( p1))){}
    else {
      if_ignore = true;
      ignore = true;
    }
 }
 
-void neg(double *pkg){
+void neg(){
+
+   double p0 = strtol(prog(2, IP++, "").c_str(), NULL, 2);
+   IP++;
+   IP++;
     RuntimeException re;
     if(SFC == INT || SFC == DOUBLE
            || SFC == SHORT || SFC == FLOAT)
-      reg_check_set( pkg[0], (reg_check_ret( pkg[0]) * -1));
+      reg_check_set( p0, (reg_check_ret( p0) * -1));
     else if(SFC == BOOL){
-        if(reg_check_ret( pkg[0]) == 0)
-           reg_check_set( pkg[0], 1);
-        else if(reg_check_ret( pkg[0]) == 1)
-           reg_check_set( pkg[0], 0);
+        if(reg_check_ret( p0) == 0)
+           reg_check_set( p0, 1);
+        else if(reg_check_ret( p0) == 1)
+           reg_check_set( p0, 0);
     }
     else
        re.introduce("UnsatisfiedTypeException","must specify correct type to be inverted");

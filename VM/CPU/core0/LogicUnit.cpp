@@ -18,6 +18,9 @@
 #include "cpuf.h"
 #include "runtime_exception.h"
 #include <sstream>
+#include <math.h>
+#include <stdlib.h>
+using namespace std;
 
 long _xor(int,int);
 long _or(int,int);
@@ -95,72 +98,93 @@ int ibool(long num)
 }
 
 
-void nand_l(double *pkg)
+void nand_l()
 {
-   if(pkg[0] == 20)
-       EAX = _nand(ibool(pkg[1]),ibool(pkg[2]));
+   double p0 = strtol(prog(2, IP++, "").c_str(), NULL, 2);
+   double p1 = strtol(prog(2, IP++, "").c_str(), NULL, 2);
+   double p2 = strtol(prog(2, IP++, "").c_str(), NULL, 2);
+   if(p0 == 20)
+       EAX = _nand(ibool(p1),ibool(p2));
    else
    {
-       reg_check_set( pkg[0], _nand(ibool(reg_check_ret(pkg[1])),ibool(reg_check_ret(pkg[2]))));
+       reg_check_set( p0, _nand(ibool(reg_check_ret(p1)),ibool(reg_check_ret(p2))));
    }
 }
 
-void nor_l(double *pkg)
+void nor_l()
 {
-   if(pkg[0] == 20)
-     EAX = _nor(ibool(pkg[1]),ibool(pkg[2]));
+   double p0 = strtol(prog(2, IP++, "").c_str(), NULL, 2);
+   double p1 = strtol(prog(2, IP++, "").c_str(), NULL, 2);
+   double p2 = strtol(prog(2, IP++, "").c_str(), NULL, 2);
+   if(p0 == 20)
+     EAX = _nor(ibool(p1),ibool(p2));
    else
    {
-       reg_check_set(pkg[0], _nor(ibool(reg_check_ret(pkg[1])),ibool(reg_check_ret(pkg[2]))));
+       reg_check_set(p0, _nor(ibool(reg_check_ret(p1)),ibool(reg_check_ret(p2))));
    }
 }
 
-void xnor_l(double *pkg)
+void xnor_l()
 {
-   if(pkg[0] == 20)
-       EAX = _xnor(ibool(pkg[1]),ibool(pkg[2]));
+   double p0 = strtol(prog(2, IP++, "").c_str(), NULL, 2);
+   double p1 = strtol(prog(2, IP++, "").c_str(), NULL, 2);
+   double p2 = strtol(prog(2, IP++, "").c_str(), NULL, 2);
+   if(p0 == 20)
+       EAX = _xnor(ibool(p1),ibool(p2));
    else 
    {
-       reg_check_set(pkg[0], _xnor(ibool(reg_check_ret( pkg[1])),ibool(reg_check_ret( pkg[2]))));
+       reg_check_set(p0, _xnor(ibool(reg_check_ret( p1)),ibool(reg_check_ret( p2))));
    }
 }
 
-void and_l(double *pkg)
+void and_l()
 {
-   if(pkg[0] == 20)
-      EAX = _and(ibool(pkg[1]),ibool(pkg[2]));
+   double p0 = strtol(prog(2, IP++, "").c_str(), NULL, 2);
+   double p1 = strtol(prog(2, IP++, "").c_str(), NULL, 2);
+   double p2 = strtol(prog(2, IP++, "").c_str(), NULL, 2);
+   if(p0 == 20)
+      EAX = _and(ibool(p1),ibool(p2));
    else
    {
-      reg_check_set( pkg[0], _and(ibool(reg_check_ret(pkg[1])),ibool(reg_check_ret(pkg[2]))));
+      reg_check_set( p0, _and(ibool(reg_check_ret(p1)),ibool(reg_check_ret(p2))));
    }
 }
 
-void or_l(double *pkg)
+void or_l()
 {
-   if(pkg[0] == 20)
-     EAX = _or(ibool(pkg[1]),ibool(pkg[2]));
+   double p0 = strtol(prog(2, IP++, "").c_str(), NULL, 2);
+   double p1 = strtol(prog(2, IP++, "").c_str(), NULL, 2);
+   double p2 = strtol(prog(2, IP++, "").c_str(), NULL, 2);
+   if(p0 == 20)
+     EAX = _or(ibool(p1),ibool(p2));
    else
    {
-      reg_check_set( pkg[0], _or(ibool(reg_check_ret( pkg[1])),ibool(reg_check_ret( pkg[2]))));
+      reg_check_set( p0, _or(ibool(reg_check_ret( p1)),ibool(reg_check_ret( p2))));
    }
 }
 
-void xor_l(double *pkg)
+void xor_l()
 {
-   if(pkg[0] == 20)
-      EAX = _xor(ibool(pkg[1]),ibool(pkg[2]));
+   double p0 = strtol(prog(2, IP++, "").c_str(), NULL, 2);
+   double p1 = strtol(prog(2, IP++, "").c_str(), NULL, 2);
+   double p2 = strtol(prog(2, IP++, "").c_str(), NULL, 2);
+   if(p0 == 20)
+      EAX = _xor(ibool(p1),ibool(p2));
    else 
    {
-       reg_check_set(pkg[0], _xor(ibool(reg_check_ret(pkg[1])),ibool(reg_check_ret(pkg[2]))));
+       reg_check_set(p0, _xor(ibool(reg_check_ret(p1)),ibool(reg_check_ret(p2))));
    }
 }
 
-void not_l(double *pkg)
+void not_l()
 {
-   if(pkg[0] == 20)
-      EAX = _not(ibool(pkg[1]));
+   double p0 = strtol(prog(2, IP++, "").c_str(), NULL, 2);
+   double p1 = strtol(prog(2, IP++, "").c_str(), NULL, 2);
+   IP++;
+   if(p0 == 20)
+      EAX = _not(ibool(p1));
    else
    {
-        reg_check_set( pkg[0], _not(ibool(reg_check_ret(pkg[0]))));
+        reg_check_set( p0, _not(ibool(reg_check_ret(p0))));
    }
 }

@@ -1,19 +1,19 @@
 #ifndef ALU
 #define ALU
 
-void add(double *pckg);
-void sub(double *pckg);
-void mult(double *pckg);
-void div(double *pckg);
-void rem(double *pckg);
-void inc(double *pckg);
-void dec(double *pckg);
-void sl(double *pckg);
-void sr(double *pckg);
+void add();
+void sub();
+void mult();
+void div();
+void rem();
+void inc();
+void dec();
+void sl();
+void sr();
 void cpuid();
 void rdtsc();
-void rand_1(double *pckg);
-void rand_2(double *pckg);
-void rand_3(double *pckg);
+void rand_1();
+void rand_2();
+void rand_3();
 
 #endif

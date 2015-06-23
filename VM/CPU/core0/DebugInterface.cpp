@@ -83,7 +83,6 @@ void listen()
      printf(".addr: 0x%08X    %s %s\n", addrr, instr.c_str(), args.c_str());
      cout << ".clock-speed: " << getClock() << endl;
      cout << ".exe-time(sec): " << core0.GetTime() << endl;
-     cout << ".exe-time(usec): " << core0.Get_UTime() << endl;
      cout << ".cycles: " << cycles << endl;
      debugger(addrr, instr);
    }

@@ -3,7 +3,7 @@
 
 class Gate {
       public:
-        int route(double,double,double,double);
+        void route(double);
 
 };
 

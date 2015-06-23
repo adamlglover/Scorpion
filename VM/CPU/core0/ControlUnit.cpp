@@ -35,6 +35,8 @@
 
 #include <stdio.h>
 #include <time.h>
+#include <math.h>
+#include <stdlib.h>
 #include <sys/time.h>
 #include <unistd.h>
 #include <iostream>
@@ -447,23 +449,19 @@ void fetch() // Ive managed to smush the fetch, decode, execute cycle into one m
    if(memstat == Ram::DONE){
       C0 core;
       printf("Time taken: %.3fs ", (double) core.GetTime());
-      cout << "(" << core0.Get_UTime() << ")\n";
       p_exit();
    }
-   else if(memstat == Ram::RUNNING){
-      instruction = disasm.disassemble(prog(2, IP++, ""));
+   else if(memstat == Ram::RUNNING){ // strtol(prog(2, IP++, "").c_str(), NULL, 2)
+      instruction = strtol(prog(2, IP++, "").c_str(), NULL, 2);
       if(_0Halted && (instruction == 35)) {
          if(ignore)
            ignore = false;
-        gate.route( instruction, disasm.disassemble(prog(2, IP++, "")),
-                     disasm.disassemble(prog(2, IP++, "")), disasm.disassemble(prog(2, IP++, "")));
+        gate.route( instruction );
       }
       else if(_0Halted)
          return;
       cycles++;
-
-      gate.route(instruction, disasm.disassemble(prog(2, IP++, "")),
-                     disasm.disassemble(prog(2, IP++, "")), disasm.disassemble(prog(2, IP++, "")));
+        gate.route( instruction );
       return;
    }
    else {

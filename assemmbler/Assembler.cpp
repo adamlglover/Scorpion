@@ -83,2324 +83,905 @@ void umap()
 
 int getbounds(string token)
 {
-    if(token == "halt"){
-            arg1Types[0] = ARG_EMPTY;
-            arg2Types[0] = ARG_EMPTY;
-            arg3Types[0] = ARG_EMPTY;
-
-            arg1Types[1] = ARG_EMPTY;
-            arg2Types[1] = ARG_EMPTY;
-            arg3Types[1] = ARG_EMPTY;   
-
-            arg1Types[2] = ARG_EMPTY;
-            arg2Types[2] = ARG_EMPTY;
-            arg3Types[2] = ARG_EMPTY;   
-
-
-            arg1Types[3] = ARG_EMPTY;
-            arg2Types[3] = ARG_EMPTY;
-            arg3Types[3] = ARG_EMPTY;   
-
-            arg1Types[4] = ARG_EMPTY;
-            arg2Types[4] = ARG_EMPTY;
-            arg3Types[4] = ARG_EMPTY;   
-
-            arg1Types[5] = ARG_EMPTY;
-            arg2Types[5] = ARG_EMPTY;
-            arg3Types[5] = ARG_EMPTY;   
-            return 0;
-        }
-        else if(token == "breakp"){
-            arg1Types[0] = ARG_EMPTY;
-            arg2Types[0] = ARG_EMPTY;
-            arg3Types[0] = ARG_EMPTY;   
-
-            arg1Types[1] = ARG_EMPTY;
-            arg2Types[1] = ARG_EMPTY;
-            arg3Types[1] = ARG_EMPTY;   
-
-            arg1Types[2] = ARG_EMPTY;
-            arg2Types[2] = ARG_EMPTY;
-            arg3Types[2] = ARG_EMPTY;   
-
-
-            arg1Types[3] = ARG_EMPTY;
-            arg2Types[3] = ARG_EMPTY;
-            arg3Types[3] = ARG_EMPTY;   
-
-            arg1Types[4] = ARG_EMPTY;
-            arg2Types[4] = ARG_EMPTY;
-            arg3Types[4] = ARG_EMPTY;   
-
-            arg1Types[5] = ARG_EMPTY;
-            arg2Types[5] = ARG_EMPTY;
-            arg3Types[5] = ARG_EMPTY;   
-            return 0;
-        }
-        else if(token == "rhalt"){
-            arg1Types[0] = ARG_EMPTY;
-            arg2Types[0] = ARG_EMPTY;
-            arg3Types[0] = ARG_EMPTY;   
-
-            arg1Types[1] = ARG_EMPTY;
-            arg2Types[1] = ARG_EMPTY;
-            arg3Types[1] = ARG_EMPTY;   
-
-            arg1Types[2] = ARG_EMPTY;
-            arg2Types[2] = ARG_EMPTY;
-            arg3Types[2] = ARG_EMPTY;   
-
-
-            arg1Types[3] = ARG_EMPTY;
-            arg2Types[3] = ARG_EMPTY;
-            arg3Types[3] = ARG_EMPTY;   
-
-            arg1Types[4] = ARG_EMPTY;
-            arg2Types[4] = ARG_EMPTY;
-            arg3Types[4] = ARG_EMPTY;   
-
-            arg1Types[5] = ARG_EMPTY;
-            arg2Types[5] = ARG_EMPTY;
-            arg3Types[5] = ARG_EMPTY;   
-            return 0;
-        }
-        else if(token == "chalt"){
-            arg1Types[0] = ARG_EMPTY;
-            arg2Types[0] = ARG_EMPTY;
-            arg3Types[0] = ARG_EMPTY;   
-
-            arg1Types[1] = ARG_EMPTY;
-            arg2Types[1] = ARG_EMPTY;
-            arg3Types[1] = ARG_EMPTY;   
-
-            arg1Types[2] = ARG_EMPTY;
-            arg2Types[2] = ARG_EMPTY;
-            arg3Types[2] = ARG_EMPTY;   
-
-
-            arg1Types[3] = ARG_EMPTY;
-            arg2Types[3] = ARG_EMPTY;
-            arg3Types[3] = ARG_EMPTY;   
-
-            arg1Types[4] = ARG_EMPTY;
-            arg2Types[4] = ARG_EMPTY;
-            arg3Types[4] = ARG_EMPTY;   
-
-            arg1Types[5] = ARG_EMPTY;
-            arg2Types[5] = ARG_EMPTY;
-            arg3Types[5] = ARG_EMPTY;   
-            return 0;
-        }
-        else if(token == "add"){
-            arg1Types[0] = RAM_ADDRESS;
-            arg2Types[0] = RAM_ADDRESS;
-            arg3Types[0] = RAM_ADDRESS;   
-
-            arg1Types[1] = LABEL;
-            arg2Types[1] = LABEL;
-            arg3Types[1] = LABEL;   
-
-            arg1Types[2] = REGISTER;
-            arg2Types[2] = INTEGER_LITERAL;
-            arg3Types[2] = INTEGER_LITERAL;   
-
-
-            arg1Types[3] = ARG_EMPTY;
-            arg2Types[3] = ARG_EMPTY;
-            arg3Types[3] = ARG_EMPTY;   
-
-            arg1Types[4] = ARG_EMPTY;
-            arg2Types[4] = ARG_EMPTY;
-            arg3Types[4] = ARG_EMPTY;   
-
-            arg1Types[5] = ARG_EMPTY;
-            arg2Types[5] = REGISTER;
-            arg3Types[5] = REGISTER;   
-            return 3;
-        //    System.out.println("adding etypes for add";
-        }
-        else if(token == "sub"){
-            arg1Types[0] = RAM_ADDRESS;
-            arg2Types[0] = RAM_ADDRESS;
-            arg3Types[0] = RAM_ADDRESS;   
-
-            arg1Types[1] = LABEL;
-            arg2Types[1] = LABEL;
-            arg3Types[1] = LABEL;   
-
-            arg1Types[2] = REGISTER;
-            arg2Types[2] = INTEGER_LITERAL;
-            arg3Types[2] = INTEGER_LITERAL;   
-
-
-            arg1Types[3] = ARG_EMPTY;
-            arg2Types[3] = ARG_EMPTY;
-            arg3Types[3] = ARG_EMPTY;   
-
-            arg1Types[4] = ARG_EMPTY;
-            arg2Types[4] = ARG_EMPTY;
-            arg3Types[4] = ARG_EMPTY;   
-
-            arg1Types[5] = ARG_EMPTY;
-            arg2Types[5] = REGISTER;
-            arg3Types[5] = REGISTER;   
-            return 3;
-        }
-        else if(token == "mult"){
-            arg1Types[0] = RAM_ADDRESS;
-            arg2Types[0] = RAM_ADDRESS;
-            arg3Types[0] = RAM_ADDRESS;   
-
-            arg1Types[1] = LABEL;
-            arg2Types[1] = LABEL;
-            arg3Types[1] = LABEL;   
-
-            arg1Types[2] = REGISTER;
-            arg2Types[2] = INTEGER_LITERAL;
-            arg3Types[2] = INTEGER_LITERAL;   
-
-
-            arg1Types[3] = ARG_EMPTY;
-            arg2Types[3] = ARG_EMPTY;
-            arg3Types[3] = ARG_EMPTY;   
-
-            arg1Types[4] = ARG_EMPTY;
-            arg2Types[4] = ARG_EMPTY;
-            arg3Types[4] = ARG_EMPTY;   
-
-            arg1Types[5] = ARG_EMPTY;
-            arg2Types[5] = REGISTER;
-            arg3Types[5] = REGISTER;   
-            return 3;
-        }
-        else if(token == "div"){
-            arg1Types[0] = RAM_ADDRESS;
-            arg2Types[0] = RAM_ADDRESS;
-            arg3Types[0] = RAM_ADDRESS;   
-
-            arg1Types[1] = LABEL;
-            arg2Types[1] = LABEL;
-            arg3Types[1] = LABEL;   
-
-            arg1Types[2] = REGISTER;
-            arg2Types[2] = INTEGER_LITERAL;
-            arg3Types[2] = INTEGER_LITERAL;   
-
-
-            arg1Types[3] = ARG_EMPTY;
-            arg2Types[3] = ARG_EMPTY;
-            arg3Types[3] = ARG_EMPTY;   
-
-            arg1Types[4] = ARG_EMPTY;
-            arg2Types[4] = ARG_EMPTY;
-            arg3Types[4] = ARG_EMPTY;   
-
-            arg1Types[5] = ARG_EMPTY;
-            arg2Types[5] = REGISTER;
-            arg3Types[5] = REGISTER;   
-            return 3;
-        }
-        else if(token == "rem") {
-            arg1Types[0] = RAM_ADDRESS;
-            arg2Types[0] = RAM_ADDRESS;
-            arg3Types[0] = RAM_ADDRESS;   
-
-            arg1Types[1] = LABEL;
-            arg2Types[1] = LABEL;
-            arg3Types[1] = LABEL;   
-
-            arg1Types[2] = REGISTER;
-            arg2Types[2] = INTEGER_LITERAL;
-            arg3Types[2] = INTEGER_LITERAL;   
-
-
-            arg1Types[3] = ARG_EMPTY;
-            arg2Types[3] = ARG_EMPTY;
-            arg3Types[3] = ARG_EMPTY;   
-
-            arg1Types[4] = ARG_EMPTY;
-            arg2Types[4] = ARG_EMPTY;
-            arg3Types[4] = ARG_EMPTY;   
-
-            arg1Types[5] = ARG_EMPTY;
-            arg2Types[5] = REGISTER;
-            arg3Types[5] = REGISTER;   
-            return 3;
-        }
-        else if(token == "inc"){
-            arg1Types[0] = RAM_ADDRESS;
-            arg2Types[0] = ARG_EMPTY;
-            arg3Types[0] = ARG_EMPTY;   
-
-            arg1Types[1] = LABEL;
-            arg2Types[1] = ARG_EMPTY;
-            arg3Types[1] = ARG_EMPTY;   
-
-            arg1Types[2] = REGISTER;
-            arg2Types[2] = ARG_EMPTY;
-            arg3Types[2] = ARG_EMPTY;   
-
-
-            arg1Types[3] = ARG_EMPTY;
-            arg2Types[3] = ARG_EMPTY;
-            arg3Types[3] = ARG_EMPTY;   
-
-            arg1Types[4] = ARG_EMPTY;
-            arg2Types[4] = ARG_EMPTY;
-            arg3Types[4] = ARG_EMPTY;   
-
-            arg1Types[5] = ARG_EMPTY;
-            arg2Types[5] = ARG_EMPTY;
-            arg3Types[5] = ARG_EMPTY;   
-            return 1;
-        }
-        else if(token == "dec"){
-            arg1Types[0] = RAM_ADDRESS;
-            arg2Types[0] = ARG_EMPTY;
-            arg3Types[0] = ARG_EMPTY;   
-
-            arg1Types[1] = LABEL;
-            arg2Types[1] = ARG_EMPTY;
-            arg3Types[1] = ARG_EMPTY;   
-
-            arg1Types[2] = REGISTER;
-            arg2Types[2] = ARG_EMPTY;
-            arg3Types[2] = ARG_EMPTY;   
-
-            arg1Types[3] = ARG_EMPTY;
-            arg2Types[3] = ARG_EMPTY;
-            arg3Types[3] = ARG_EMPTY;   
-
-            arg1Types[4] = ARG_EMPTY;
-            arg2Types[4] = ARG_EMPTY;
-            arg3Types[4] = ARG_EMPTY;   
-
-            arg1Types[5] = ARG_EMPTY;
-            arg2Types[5] = ARG_EMPTY;
-            arg3Types[5] = ARG_EMPTY;   
-            return 1;
-        }
-        else if(token == "and"){
-            arg1Types[0] = RAM_ADDRESS;
-            arg2Types[0] = RAM_ADDRESS;
-            arg3Types[0] = RAM_ADDRESS;   
-
-            arg1Types[1] = LABEL;
-            arg2Types[1] = LABEL;
-            arg3Types[1] = LABEL;   
-
-            arg1Types[2] = REGISTER;
-            arg2Types[2] = INTEGER_LITERAL;
-            arg3Types[2] = INTEGER_LITERAL;   
-
-            arg1Types[3] = ARG_EMPTY;
-            arg2Types[3] = ARG_EMPTY;
-            arg3Types[3] = ARG_EMPTY;   
-
-            arg1Types[4] = ARG_EMPTY;
-            arg2Types[4] = ARG_EMPTY;
-            arg3Types[4] = ARG_EMPTY;   
-
-            arg1Types[5] = ARG_EMPTY;
-            arg2Types[5] = REGISTER;
-            arg3Types[5] = REGISTER;   
-            return 3;
-        }
-        else if(token == "or"){
-            arg1Types[0] = RAM_ADDRESS;
-            arg2Types[0] = RAM_ADDRESS;
-            arg3Types[0] = RAM_ADDRESS;   
-
-            arg1Types[1] = LABEL;
-            arg2Types[1] = LABEL;
-            arg3Types[1] = LABEL;   
-
-
-            arg1Types[2] = REGISTER;
-            arg2Types[2] = INTEGER_LITERAL;
-            arg3Types[2] = INTEGER_LITERAL;   
-
-            arg1Types[3] = ARG_EMPTY;
-            arg2Types[3] = ARG_EMPTY;
-            arg3Types[3] = ARG_EMPTY;   
-
-            arg1Types[4] = ARG_EMPTY;
-            arg2Types[4] = ARG_EMPTY;
-            arg3Types[4] = ARG_EMPTY;   
-
-            arg1Types[5] = ARG_EMPTY;
-            arg2Types[5] = REGISTER;
-            arg3Types[5] = REGISTER;   
-            return 3;
-        }
-        else if(token == "xor"){
-            arg1Types[0] = RAM_ADDRESS;
-            arg2Types[0] = RAM_ADDRESS;
-            arg3Types[0] = RAM_ADDRESS;   
-
-            arg1Types[1] = LABEL;
-            arg2Types[1] = LABEL;
-            arg3Types[1] = LABEL;   
-
-
-            arg1Types[2] = REGISTER;
-            arg2Types[2] = INTEGER_LITERAL;
-            arg3Types[2] = INTEGER_LITERAL;   
-
-            arg1Types[3] = ARG_EMPTY;
-            arg2Types[3] = ARG_EMPTY;
-            arg3Types[3] = ARG_EMPTY;   
-
-            arg1Types[4] = ARG_EMPTY;
-            arg2Types[4] = ARG_EMPTY;
-            arg3Types[4] = ARG_EMPTY;   
-
-            arg1Types[5] = ARG_EMPTY;
-            arg2Types[5] = REGISTER;
-            arg3Types[5] = REGISTER;   
-            return 3;
-        }
-        else if(token == "not"){
-            arg1Types[0] = RAM_ADDRESS;
-            arg2Types[0] = ARG_EMPTY;
-            arg3Types[0] = ARG_EMPTY;   
-
-            arg1Types[1] = LABEL;
-            arg2Types[1] = ARG_EMPTY;
-            arg3Types[1] = ARG_EMPTY;   
-
-            arg1Types[2] = REGISTER;
-            arg2Types[2] = ARG_EMPTY;
-            arg3Types[2] = ARG_EMPTY;
-
-            arg1Types[3] = ARG_EMPTY;
-            arg2Types[3] = ARG_EMPTY;
-            arg3Types[3] = ARG_EMPTY;   
-
-            arg1Types[4] = ARG_EMPTY;
-            arg2Types[4] = ARG_EMPTY;
-            arg3Types[4] = ARG_EMPTY;   
-
-            arg1Types[5] = ARG_EMPTY;
-            arg2Types[5] = ARG_EMPTY;
-            arg3Types[5] = ARG_EMPTY;   
-            return 1;
-        }
-        else if(token == "nand"){
-            arg1Types[0] = RAM_ADDRESS;
-            arg2Types[0] = RAM_ADDRESS;
-            arg3Types[0] = RAM_ADDRESS;   
-
-            arg1Types[1] = LABEL;
-            arg2Types[1] = LABEL;
-            arg3Types[1] = LABEL;   
-
-
-            arg1Types[2] = REGISTER;
-            arg2Types[2] = INTEGER_LITERAL;
-            arg3Types[2] = INTEGER_LITERAL;   
-
-            arg1Types[3] = ARG_EMPTY;
-            arg2Types[3] = ARG_EMPTY;
-            arg3Types[3] = ARG_EMPTY;   
-
-            arg1Types[4] = ARG_EMPTY;
-            arg2Types[4] = ARG_EMPTY;
-            arg3Types[4] = ARG_EMPTY;   
-
-            arg1Types[5] = ARG_EMPTY;
-            arg2Types[5] = REGISTER;
-            arg3Types[5] = REGISTER;   
-            return 3;
-        }
-        else if(token == "nor"){
-            arg1Types[0] = RAM_ADDRESS;
-            arg2Types[0] = RAM_ADDRESS;
-            arg3Types[0] = RAM_ADDRESS;   
-
-            arg1Types[1] = LABEL;
-            arg2Types[1] = LABEL;
-            arg3Types[1] = LABEL;   
-
-
-            arg1Types[2] = REGISTER;
-            arg2Types[2] = INTEGER_LITERAL;
-            arg3Types[2] = INTEGER_LITERAL;   
-
-            arg1Types[3] = ARG_EMPTY;
-            arg2Types[3] = ARG_EMPTY;
-            arg3Types[3] = ARG_EMPTY;   
-
-            arg1Types[4] = ARG_EMPTY;
-            arg2Types[4] = ARG_EMPTY;
-            arg3Types[4] = ARG_EMPTY;   
-
-            arg1Types[5] = ARG_EMPTY;
-            arg2Types[5] = REGISTER;
-            arg3Types[5] = REGISTER;   
-            return 3;
-        }
-        else if(token == "xnor"){
-            arg1Types[0] = RAM_ADDRESS;
-            arg2Types[0] = RAM_ADDRESS;
-            arg3Types[0] = RAM_ADDRESS;   
-
-            arg1Types[1] = LABEL;
-            arg2Types[1] = LABEL;
-            arg3Types[1] = LABEL;   
-
-
-            arg1Types[2] = REGISTER;
-            arg2Types[2] = INTEGER_LITERAL;
-            arg3Types[2] = INTEGER_LITERAL;   
-
-            arg1Types[3] = ARG_EMPTY;
-            arg2Types[3] = ARG_EMPTY;
-            arg3Types[3] = ARG_EMPTY;   
-
-            arg1Types[4] = ARG_EMPTY;
-            arg2Types[4] = ARG_EMPTY;
-            arg3Types[4] = ARG_EMPTY;   
-
-            arg1Types[5] = ARG_EMPTY;
-            arg2Types[5] = REGISTER;
-            arg3Types[5] = REGISTER;   
-            return 3;
-        }
-        else if(token == "loadi") {
-            arg1Types[0] = RAM_ADDRESS;
-            arg2Types[0] = INTEGER_LITERAL;
-            arg3Types[0] = ARG_EMPTY;   
-
-            arg1Types[1] = LABEL;
-            arg2Types[1] = HEX_LITERAL;
-            arg3Types[1] = ARG_EMPTY;   
-
-            arg1Types[2] = RAM_ADDRESS;
-            arg2Types[2] = NULLPTR;
-            arg3Types[2] = ARG_EMPTY;   
-
-
-            arg1Types[3] = ARG_EMPTY;
-            arg2Types[3] = ARG_EMPTY;
-            arg3Types[3] = ARG_EMPTY;   
-
-            arg1Types[4] = ARG_EMPTY;
-            arg2Types[4] = ARG_EMPTY;
-            arg3Types[4] = ARG_EMPTY;   
-
-            arg1Types[5] = ARG_EMPTY;
-            arg2Types[5] = ARG_EMPTY;
-            arg3Types[5] = ARG_EMPTY;   
-            return 2;
-        }
-        else if(token == "loadbl"){
-            arg1Types[0] = RAM_ADDRESS;
-            arg2Types[0] = INTEGER_LITERAL;
-            arg3Types[0] = ARG_EMPTY;   
-
-            arg1Types[1] = LABEL;
-            arg2Types[1] = INTEGER_LITERAL;
-            arg3Types[1] = ARG_EMPTY;   
-
-            arg1Types[2] = LABEL;
-            arg2Types[2] = RESERVED;
-            arg3Types[2] = ARG_EMPTY;   
-
-
-            arg1Types[3] = ARG_EMPTY;
-            arg2Types[3] = ARG_EMPTY;
-            arg3Types[3] = ARG_EMPTY;   
-
-            arg1Types[4] = ARG_EMPTY;
-            arg2Types[4] = ARG_EMPTY;
-            arg3Types[4] = ARG_EMPTY;   
-
-            arg1Types[5] = ARG_EMPTY;
-            arg2Types[5] = ARG_EMPTY;
-            arg3Types[5] = ARG_EMPTY;   
-            return 2;
-        }
-        else if(token == "push"){
+    for(int i = 0; i < 6; i++)
+    {
+        arg1Types[i] = ARG_EMPTY;
+        arg2Types[i] = ARG_EMPTY;
+        arg3Types[i] = ARG_EMPTY;
+    }
+
+    if( token == "halt" ||
+        token == "breakp" ||
+        token == "rhalt" ||
+        token == "chalt" ||
+        token == "end" ||
+        token == "clx" ||
+        token == "nac" ||
+        token == "cpuid" ||
+        token == "rdtsc" ||
+        token == "rand_1" ||
+        token == "rand_2" ||
+        token == "rand_3" ||
+        token == "e2str" ||
+        token == "swi"
+    )
+    {
+        // Handles all empty cases, which were done with
+        //   the initialize loop
+        return 0;
+    }
+    else if(token == "add"){
+        arg1Types[0] = RAM_ADDRESS;
+        arg2Types[0] = RAM_ADDRESS;
+        arg3Types[0] = RAM_ADDRESS;   
+
+        arg1Types[1] = LABEL;
+        arg2Types[1] = LABEL;
+        arg3Types[1] = LABEL;   
+
+        arg1Types[2] = REGISTER;
+        arg2Types[2] = INTEGER_LITERAL;
+        arg3Types[2] = INTEGER_LITERAL;   
+
+        arg2Types[5] = REGISTER;
+        arg3Types[5] = REGISTER;   
+        return 3;
+    //    System.out.println("adding etypes for add";
+    }
+    else if(token == "sub"){
+        arg1Types[0] = RAM_ADDRESS;
+        arg2Types[0] = RAM_ADDRESS;
+        arg3Types[0] = RAM_ADDRESS;   
+
+        arg1Types[1] = LABEL;
+        arg2Types[1] = LABEL;
+        arg3Types[1] = LABEL;   
+
+        arg1Types[2] = REGISTER;
+        arg2Types[2] = INTEGER_LITERAL;
+        arg3Types[2] = INTEGER_LITERAL;   
+
+        arg2Types[5] = REGISTER;
+        arg3Types[5] = REGISTER;   
+        return 3;
+    }
+    else if(token == "mult"){
+        arg1Types[0] = RAM_ADDRESS;
+        arg2Types[0] = RAM_ADDRESS;
+        arg3Types[0] = RAM_ADDRESS;   
+
+        arg1Types[1] = LABEL;
+        arg2Types[1] = LABEL;
+        arg3Types[1] = LABEL;   
+
+        arg1Types[2] = REGISTER;
+        arg2Types[2] = INTEGER_LITERAL;
+        arg3Types[2] = INTEGER_LITERAL;   
+
+        arg2Types[5] = REGISTER;
+        arg3Types[5] = REGISTER;   
+        return 3;
+    }
+    else if(token == "div"){
+        arg1Types[0] = RAM_ADDRESS;
+        arg2Types[0] = RAM_ADDRESS;
+        arg3Types[0] = RAM_ADDRESS;   
+
+        arg1Types[1] = LABEL;
+        arg2Types[1] = LABEL;
+        arg3Types[1] = LABEL;   
+
+        arg1Types[2] = REGISTER;
+        arg2Types[2] = INTEGER_LITERAL;
+        arg3Types[2] = INTEGER_LITERAL;   
+
+        arg2Types[5] = REGISTER;
+        arg3Types[5] = REGISTER;   
+        return 3;
+    }
+    else if(token == "rem") {
+        arg1Types[0] = RAM_ADDRESS;
+        arg2Types[0] = RAM_ADDRESS;
+        arg3Types[0] = RAM_ADDRESS;   
+
+        arg1Types[1] = LABEL;
+        arg2Types[1] = LABEL;
+        arg3Types[1] = LABEL;   
+
+        arg1Types[2] = REGISTER;
+        arg2Types[2] = INTEGER_LITERAL;
+        arg3Types[2] = INTEGER_LITERAL;   
+
+        arg2Types[5] = REGISTER;
+        arg3Types[5] = REGISTER;   
+        return 3;
+    }
+    else if(token == "inc"){
+        arg1Types[0] = RAM_ADDRESS;
+
+        arg1Types[1] = LABEL;
+
+        arg1Types[2] = REGISTER;
+        return 1;
+    }
+    else if(token == "dec"){
+        arg1Types[0] = RAM_ADDRESS;
+
+        arg1Types[1] = LABEL;
+
+        arg1Types[2] = REGISTER;
+        return 1;
+    }
+    else if(token == "and"){
+        arg1Types[0] = RAM_ADDRESS;
+        arg2Types[0] = RAM_ADDRESS;
+        arg3Types[0] = RAM_ADDRESS;   
+
+        arg1Types[1] = LABEL;
+        arg2Types[1] = LABEL;
+        arg3Types[1] = LABEL;   
+
+        arg1Types[2] = REGISTER;
+        arg2Types[2] = INTEGER_LITERAL;
+        arg3Types[2] = INTEGER_LITERAL;
+
+        arg2Types[5] = REGISTER;
+        arg3Types[5] = REGISTER;   
+        return 3;
+    }
+    else if(token == "or"){
+        arg1Types[0] = RAM_ADDRESS;
+        arg2Types[0] = RAM_ADDRESS;
+        arg3Types[0] = RAM_ADDRESS;   
+
+        arg1Types[1] = LABEL;
+        arg2Types[1] = LABEL;
+        arg3Types[1] = LABEL;   
+
+
+        arg1Types[2] = REGISTER;
+        arg2Types[2] = INTEGER_LITERAL;
+        arg3Types[2] = INTEGER_LITERAL;   
+
+        arg2Types[5] = REGISTER;
+        arg3Types[5] = REGISTER;   
+        return 3;
+    }
+    else if(token == "xor"){
+        arg1Types[0] = RAM_ADDRESS;
+        arg2Types[0] = RAM_ADDRESS;
+        arg3Types[0] = RAM_ADDRESS;   
+
+        arg1Types[1] = LABEL;
+        arg2Types[1] = LABEL;
+        arg3Types[1] = LABEL;   
+
+
+        arg1Types[2] = REGISTER;
+        arg2Types[2] = INTEGER_LITERAL;
+        arg3Types[2] = INTEGER_LITERAL;   
+
+        arg2Types[5] = REGISTER;
+        arg3Types[5] = REGISTER;   
+        return 3;
+    }
+    else if(token == "not"){
+        arg1Types[0] = RAM_ADDRESS;
+
+        arg1Types[1] = LABEL;
+
+        arg1Types[2] = REGISTER;
+        return 1;
+    }
+    else if(token == "nand"){
+        arg1Types[0] = RAM_ADDRESS;
+        arg2Types[0] = RAM_ADDRESS;
+        arg3Types[0] = RAM_ADDRESS;   
+
+        arg1Types[1] = LABEL;
+        arg2Types[1] = LABEL;
+        arg3Types[1] = LABEL;   
+
+
+        arg1Types[2] = REGISTER;
+        arg2Types[2] = INTEGER_LITERAL;
+        arg3Types[2] = INTEGER_LITERAL;   
+
+        arg2Types[5] = REGISTER;
+        arg3Types[5] = REGISTER;   
+        return 3;
+    }
+    else if(token == "nor"){
+        arg1Types[0] = RAM_ADDRESS;
+        arg2Types[0] = RAM_ADDRESS;
+        arg3Types[0] = RAM_ADDRESS;   
+
+        arg1Types[1] = LABEL;
+        arg2Types[1] = LABEL;
+        arg3Types[1] = LABEL;   
+
+
+        arg1Types[2] = REGISTER;
+        arg2Types[2] = INTEGER_LITERAL;
+        arg3Types[2] = INTEGER_LITERAL;   
+
+        arg2Types[5] = REGISTER;
+        arg3Types[5] = REGISTER;   
+        return 3;
+    }
+    else if(token == "xnor"){
+        arg1Types[0] = RAM_ADDRESS;
+        arg2Types[0] = RAM_ADDRESS;
+        arg3Types[0] = RAM_ADDRESS;   
+
+        arg1Types[1] = LABEL;
+        arg2Types[1] = LABEL;
+        arg3Types[1] = LABEL;   
+
+
+        arg1Types[2] = REGISTER;
+        arg2Types[2] = INTEGER_LITERAL;
+        arg3Types[2] = INTEGER_LITERAL;   
+
+        arg2Types[5] = REGISTER;
+        arg3Types[5] = REGISTER;   
+        return 3;
+    }
+    else if(token == "loadi") {
+        arg1Types[0] = RAM_ADDRESS;
+        arg2Types[0] = INTEGER_LITERAL;
+
+        arg1Types[1] = LABEL;
+        arg2Types[1] = HEX_LITERAL;
+
+        arg1Types[2] = RAM_ADDRESS;
+        arg2Types[2] = NULLPTR;
+
+        return 2;
+    }
+    else if(token == "loadbl"){
+        arg1Types[0] = RAM_ADDRESS;
+        arg2Types[0] = INTEGER_LITERAL;
+
+        arg1Types[1] = LABEL;
+        arg2Types[1] = INTEGER_LITERAL;
+
+        arg1Types[2] = LABEL;
+        arg2Types[2] = RESERVED;
+
+
+        return 2;
+    }
+    else if(token == "push"){
+        arg1Types[0] = LABEL;
+        arg2Types[0] = LABEL;
+
+        arg1Types[1] = LABEL;
+        arg2Types[1] = LABEL;
+
+        arg1Types[2] = LABEL;
+        arg2Types[2] = LABEL;
+        return 2;
+    }
+    else if(token == "return"){
+        arg1Types[0] = LABEL;
+        arg2Types[0] = INTEGER_LITERAL;
+
+        arg1Types[1] = LABEL;
+        arg2Types[1] = INTEGER_LITERAL;
+
+        arg1Types[2] = LABEL;
+        arg2Types[2] = INTEGER_LITERAL; 
+        return 2;
+    }
+    else if(token == "call"){
+        arg1Types[0] = RAM_ADDRESS;
+
+        arg1Types[1] = LABEL;
+
+
+        arg1Types[2] = LABEL; 
+        return 1;
+    }
+    else if(token == "swp"){
+        arg1Types[0] = RAM_ADDRESS;
+        arg2Types[0] = RAM_ADDRESS;
+
+        arg1Types[1] = LABEL;
+        arg2Types[1] = LABEL;
+
+        arg1Types[2] = LABEL;
+        arg2Types[2] = LABEL;
+        return 2;
+    }
+    else if(token == "loop"){
+        arg1Types[0] = RAM_ADDRESS;
+        arg2Types[0] = RAM_ADDRESS;
+        arg3Types[0] = INTEGER_LITERAL;   
+
+        arg1Types[1] = LABEL;
+        arg2Types[1] = LABEL;
+        arg3Types[1] = INTEGER_LITERAL;   
+
+        arg1Types[2] = LABEL;
+        arg2Types[2] = LABEL;
+        arg3Types[2] = INTEGER_LITERAL;   
+
+        return 3;
+    }
+    else if(token == "endl"){
+        arg1Types[0] = RAM_ADDRESS;
+        arg2Types[0] = RAM_ADDRESS;
+
+        arg1Types[1] = LABEL;
+        arg2Types[1] = LABEL;
+
+        arg1Types[2] = LABEL;
+        arg2Types[2] = LABEL;
+        return 2;
+    }
+    else if(token == "do"){
+        arg1Types[0] = RAM_ADDRESS;
+
+        arg1Types[1] = REGISTER;
+
+        arg1Types[2] = LABEL;
+        return 1;
+    }
+    else if(token == "mov"){
+        arg1Types[0] = REGISTER;
+        arg2Types[0] = INTEGER_LITERAL;
+
+        arg1Types[1] = REGISTER;
+        arg2Types[1] = HEX_LITERAL;
+
+        arg1Types[2] = REGISTER;
+        arg2Types[2] = HEX_LITERAL;
+
+        arg2Types[3] = RESERVED;
+        return 2;
+    }
+    else if(token == "rmov"){
+        arg1Types[0] = REGISTER;
+        arg2Types[0] = RAM_ADDRESS;
+
+        arg1Types[1] = REGISTER;
+        arg2Types[1] = LABEL;
+
+        arg1Types[2] = REGISTER;
+        arg2Types[2] = REGISTER; 
+        return 2;
+    }
+    else if(token == "invoke"){
+        arg1Types[0] = HEX_LITERAL;
+        arg2Types[0] = INTEGER_LITERAL;
+
+        arg1Types[1] = HEX_LITERAL;
+        arg2Types[1] = INTEGER_LITERAL;
+
+        arg1Types[2] = HEX_LITERAL;
+        arg2Types[2] = INTEGER_LITERAL;
+        return 2;
+    }
+    else if(token == "ilt"){
+        arg1Types[0] = RAM_ADDRESS;
+        arg2Types[0] = RAM_ADDRESS;
+
+        arg1Types[1] = LABEL;
+        arg2Types[1] = LABEL;
+
+        arg1Types[2] = REGISTER;
+        arg2Types[2] = REGISTER; 
+        return 2;
+    }
+    else if(token == "igt"){
+        arg1Types[0] = RAM_ADDRESS;
+        arg2Types[0] = RAM_ADDRESS;
+
+        arg1Types[1] = LABEL;
+        arg2Types[1] = LABEL;
+
+        arg1Types[2] = REGISTER;
+        arg2Types[2] = REGISTER; 
+        return 2;
+    }
+    else if(token == "ige"){
+        arg1Types[0] = RAM_ADDRESS;
+        arg2Types[0] = RAM_ADDRESS;
+
+        arg1Types[1] = LABEL;
+        arg2Types[1] = LABEL;
+
+        arg1Types[2] = REGISTER;
+        arg2Types[2] = REGISTER;
+        return 2;
+    }
+    else if(token == "ile"){
+        arg1Types[0] = RAM_ADDRESS;
+        arg2Types[0] = RAM_ADDRESS;
+
+        arg1Types[1] = LABEL;
+        arg2Types[1] = LABEL;
+
+        arg1Types[2] = REGISTER;
+        arg2Types[2] = REGISTER;
+        return 2;
+    }
+    else if(token == "ndo"){
+        arg1Types[0] = RAM_ADDRESS;
+
+        arg1Types[1] = LABEL;
+
+        arg1Types[2] = REGISTER;
+        return 1;
+    }
+    else if(token == "inlt"){
+        arg1Types[0] = RAM_ADDRESS;
+        arg2Types[0] = RAM_ADDRESS;
+
+        arg1Types[1] = LABEL;
+        arg2Types[1] = LABEL;
+
+        arg1Types[2] = REGISTER;
+        arg2Types[2] = REGISTER;
+        return 2;
+    }
+    else if(token == "ingt"){
+        arg1Types[0] = RAM_ADDRESS;
+        arg2Types[0] = RAM_ADDRESS;
+
+        arg1Types[1] = LABEL;
+        arg2Types[1] = LABEL;
+
+        arg1Types[2] = REGISTER;
+        arg2Types[2] = REGISTER;
+        return 2;
+    }
+    else if(token == "inle"){
+        arg1Types[0] = RAM_ADDRESS;
+        arg2Types[0] = RAM_ADDRESS;
+
+        arg1Types[1] = LABEL;
+        arg2Types[1] = LABEL;
+
+        arg1Types[2] = REGISTER;
+        arg2Types[2] = REGISTER;
+        return 2;
+    }
+    else if(token == "inge"){
+        arg1Types[0] = RAM_ADDRESS;
+        arg2Types[0] = RAM_ADDRESS;
+
+        arg1Types[1] = LABEL;
+        arg2Types[1] = LABEL;
+
+        arg1Types[2] = REGISTER;
+        arg2Types[2] = REGISTER; 
+        return 2;
+    }
+    else if(token == "neg"){
+        arg1Types[0] = RAM_ADDRESS;   
+
+        arg1Types[1] = LABEL;   
+
+        arg1Types[2] = REGISTER;            
+        return 1;
+    }
+    else if(token == "lock"){
+        arg1Types[0] = RAM_ADDRESS;   
+
+        arg1Types[1] = LABEL;   
+
+        arg1Types[2] = LABEL;            
+        return 1;
+    }
+    else if(token == "ulock"){
+        arg1Types[0] = RAM_ADDRESS;   
+
+        arg1Types[1] = LABEL;   
+
+        arg1Types[2] = LABEL;            
+        return 1;
+    }
+    else if(token == "xreg"){
+        arg1Types[0] = RAM_ADDRESS;   
+
+        arg1Types[1] = LABEL;   
+
+        arg1Types[2] = LABEL;            
+        return 1;
+    }
+    else if(token == "rloop"){
+        arg1Types[0] = RAM_ADDRESS;
+        arg2Types[0] = RAM_ADDRESS;
+        arg3Types[0] = RAM_ADDRESS;   
+
+        arg1Types[1] = LABEL;
+        arg2Types[1] = LABEL;
+        arg3Types[1] = LABEL;   
+
+        arg1Types[2] = LABEL;
+        arg2Types[2] = LABEL;
+        arg3Types[2] = LABEL;            
+        return 3;
+    }
+    else if(token == "wloop"){
+        arg1Types[0] = RAM_ADDRESS;
+        arg2Types[0] = RAM_ADDRESS;   
+
+        arg1Types[1] = LABEL;
+        arg2Types[1] = LABEL;   
+
+        arg1Types[2] = LABEL;
+        arg2Types[2] = LABEL;            
+        return 2;
+    }
+    else if(token == "endwl"){
+        arg1Types[0] = RAM_ADDRESS;
+        arg2Types[0] = RAM_ADDRESS;   
+
+        arg1Types[1] = LABEL;
+        arg2Types[1] = LABEL;   
+
+        arg1Types[2] = LABEL;
+        arg2Types[2] = LABEL;            
+        return 2;
+    }
+    else if(token == "same"){
+        arg1Types[0] = RAM_ADDRESS;
+        arg2Types[0] = RAM_ADDRESS;
+        arg3Types[0] = RAM_ADDRESS;   
+
+        arg1Types[1] = REGISTER;
+        arg2Types[1] = REGISTER;
+        arg3Types[1] = REGISTER;   
+
+        arg1Types[2] = LABEL;
+        arg2Types[2] = LABEL;
+        arg3Types[2] = LABEL;            
+        return 3;
+    }
+    else if(token == "sr"){
+        arg1Types[0] = RAM_ADDRESS;   
+
+        arg1Types[1] = LABEL;   
+
+        arg1Types[2] = REGISTER;            
+        return 1;
+    }
+    else if(token == "sl"){
+        arg1Types[0] = RAM_ADDRESS;   
+
+        arg1Types[1] = LABEL;   
+
+        arg1Types[2] = REGISTER;            
+        return 1;
+    }
+    else if(token == "r_mv"){
+        arg1Types[0] = REGISTER;
+        arg2Types[0] = RAM_ADDRESS;   
+
+        arg1Types[1] = REGISTER;
+        arg2Types[1] = LABEL;   
+
+        arg1Types[2] = REGISTER;
+        arg2Types[2] = LABEL;            
+        return 2;
+    }
+    else if(token == "print"){
+        arg1Types[0] = STRING_LITERAL;   
+
+        arg1Types[1] = STRING_LITERAL;   
+
+        arg1Types[2] = STRING_LITERAL;            
+        if(Assembler::compile_only)
+            flag = 3;
+        return 1;
+    }
+    else if(token == "printf"){
+        arg1Types[0] = STRING_LITERAL;   
+
+        arg1Types[1] = STRING_LITERAL;   
+
+        arg1Types[2] = STRING_LITERAL;            
+        if(Assembler::compile_only)
+             flag = 3;
+        return 1;
+    }
+    else if(token == "loadc"){
+        arg1Types[0] = RAM_ADDRESS;
+        arg2Types[0] = INTEGER_LITERAL;   
+
+        arg1Types[1] = LABEL;
+        arg2Types[1] = INTEGER_LITERAL;   
+
+        arg1Types[2] = LABEL;
+        arg2Types[2] = STRING_LITERAL;            
+        charLiteral = true;
+        return 2;
+    }
+    else if(token == "dload"){
+        arg1Types[0] = RAM_ADDRESS;
+        arg2Types[0] = INTEGER_LITERAL;   
+
+        arg1Types[1] = LABEL;
+        arg2Types[1] = INTEGER_LITERAL;   
+
+        arg1Types[2] = LABEL;
+        arg2Types[2] = NULLPTR;            
+        return 2;
+    }
+    else if(token == "t_cast"){
+        arg1Types[0] = RAM_ADDRESS;
+        arg2Types[0] = INTEGER_LITERAL;   
+
+        arg1Types[1] = LABEL;
+        arg2Types[1] = INTEGER_LITERAL;   
+
+        arg1Types[2] = LABEL;
+        arg2Types[2] = INTEGER_LITERAL;            
+        return 2;
+    }
+    else if(token == "sload"){
+        arg1Types[0] = RAM_ADDRESS;
+        arg2Types[0] = INTEGER_LITERAL;   
+
+        arg1Types[1] = LABEL;
+        arg2Types[1] = HEX_LITERAL;   
+
+        arg1Types[2] = LABEL;
+        arg2Types[2] = NULLPTR;            
+        return 2;
+    }
+    else if(token == "loadf"){
+        arg1Types[0] = RAM_ADDRESS;
+        arg2Types[0] = INTEGER_LITERAL;   
+
+        arg1Types[1] = LABEL;
+        arg2Types[1] = INTEGER_LITERAL;   
+
+        arg1Types[2] = LABEL;
+        arg2Types[2] = NULLPTR;            
+        return 2;
+    }
+    else if(token == "rln"){
+        arg1Types[0] = RAM_ADDRESS;
+        arg2Types[0] = STRING_LITERAL;   
+
+        arg1Types[1] = LABEL;
+        arg2Types[1] = INTEGER_LITERAL;   
+
+        arg1Types[2] = RAM_ADDRESS;
+        arg2Types[2] = STRING_LITERAL;            
+        charLiteral = true;
+        return 2;
+    }
+    else if(token == "rload"){
+        arg1Types[0] = RAM_ADDRESS;
+        arg2Types[0] = RAM_ADDRESS;   
+
+        arg1Types[1] = LABEL;
+        arg2Types[1] = LABEL;   
+
+        arg1Types[2] = LABEL;
+        arg2Types[2] = LABEL;            
+        return 2;
+    }
+    else if(token == "ct_int"){
+        arg1Types[0] = RAM_ADDRESS;
+        arg2Types[0] = RAM_ADDRESS;   
+
+        arg1Types[1] = LABEL;
+        arg2Types[1] = LABEL;   
+
+        arg1Types[2] = RAM_ADDRESS;
+        arg2Types[2] = RAM_ADDRESS;            
+        return 2;
+    }
+    else if(token == "anum"){
+        arg1Types[0] = RAM_ADDRESS;
+        arg2Types[0] = RAM_ADDRESS;   
+
+        arg1Types[1] = LABEL;
+        arg2Types[1] = LABEL;   
+
+        arg1Types[2] = RAM_ADDRESS;
+        arg2Types[2] = RAM_ADDRESS;            
+        return 2;
+    }
+    else if(token == "sleep"){
+        arg1Types[0] = INTEGER_LITERAL;   
+
+        arg1Types[1] = INTEGER_LITERAL;   
+
+        arg1Types[2] = INTEGER_LITERAL;            
+        return 1;
+    }
+    else if(token == "cp"){
+        arg1Types[0] = RAM_ADDRESS;
+        arg2Types[0] = RAM_ADDRESS;   
+
+        arg1Types[1] = LABEL;
+        arg2Types[1] = LABEL;   
+
+        arg1Types[2] = LABEL;
+        arg2Types[2] = LABEL;            
+        return 2;
+    }
+    else if(token == "import"){
+        arg1Types[0] = STRING_LITERAL;   
+
+        arg1Types[1] = STRING_LITERAL;   
+
+        arg1Types[2] = STRING_LITERAL;            
+        return 1;
+    }
+    else if(token == "string"){
+        arg1Types[0] = RAM_ADDRESS;
+        arg2Types[0] = STRING_LITERAL;   
+
+        arg1Types[1] = LABEL;
+        arg2Types[1] = STRING_LITERAL;   
+
+        arg1Types[2] = RAM_ADDRESS;
+        arg2Types[2] = STRING_LITERAL;            
+        if(Assembler::compile_only)
+            flag = 3;
+        return 2;
+    }
+    else if(token == "adr"){
+        arg1Types[0] = LABEL;
+        arg2Types[0] = LABEL;   
+
+        arg1Types[1] = LABEL;
+        arg2Types[1] = LABEL;   
+
+        arg1Types[2] = REGISTER;
+        arg2Types[2] = RAM_ADDRESS;            
+        return 2;
+    }
+    else if(token == "r_load"){
+        arg1Types[0] = LABEL;
+        arg2Types[0] = LABEL;   
+
+        arg1Types[1] = LABEL;
+        arg2Types[1] = LABEL;   
+
+        arg1Types[2] = RAM_ADDRESS;
+        arg2Types[2] = RAM_ADDRESS;            
+        return 2;
+    }
+    else if(token == "&&idx_offset:"){  
+        arg1Types[0] = INTEGER_LITERAL;   
+
+        arg1Types[1] = INTEGER_LITERAL;   
+
+        arg1Types[2] = INTEGER_LITERAL;            
+        return 1;
+    }
+    else if(token == "&&working_dir:"){    
+        arg1Types[0] = STRING_LITERAL;   
+
+        arg1Types[1] = STRING_LITERAL;   
+
+        arg1Types[2] = STRING_LITERAL;            
+        return 1;
+    }
+    else if(token == "strcp"){    
+        arg1Types[0] = LABEL;
+        arg2Types[0] = LABEL;
+        arg3Types[0] = LABEL;   
+
+        arg1Types[1] = RAM_ADDRESS;
+        arg2Types[1] = RAM_ADDRESS;
+        arg3Types[1] = RAM_ADDRESS;   
+
+        arg1Types[2] = REGISTER;            
+        return 3;
+    }
+    else if(token == "strcpi"){      
+        arg1Types[0] = LABEL;   
+
+        arg1Types[1] = RAM_ADDRESS;   
+
+        arg1Types[2] = REGISTER;            
+        return 1;
+    }
+    else if(token == "array"){      // array values 5 int
+        arg1Types[0] = LABEL;
+        arg2Types[0] = REGISTER;
+        arg3Types[0] = RESERVED;   
+
+        arg1Types[1] = LABEL;
+        arg2Types[1] = RAM_ADDRESS;
+        arg3Types[1] = RESERVED;   
+
+        arg1Types[2] = LABEL;
+        arg2Types[2] = LABEL;
+        arg3Types[2] = INTEGER_LITERAL;            
+        return 3;
+    }
+    else if(token == "aload"){      // aload numbers 0 value
+        arg1Types[0] = LABEL;
+        arg2Types[0] = REGISTER;
+        arg3Types[0] = RAM_ADDRESS;   
+
+        arg1Types[1] = LABEL;
+        arg2Types[1] = RAM_ADDRESS;
+        arg3Types[1] = REGISTER;   
+
+        arg1Types[2] = LABEL;
+        arg2Types[2] = LABEL;
+        arg3Types[2] = LABEL;            
+        return 3;
+    }
+    else if(token == "aaload"){      // aaload numbers 0 value
+        arg1Types[0] = LABEL;
+        arg2Types[0] = RAM_ADDRESS;
+        arg3Types[0] = RAM_ADDRESS;   
+
+        arg1Types[1] = LABEL;
+        arg2Types[1] = REGISTER;
+        arg3Types[1] = REGISTER;   
+
+        arg1Types[2] = LABEL;
+        arg2Types[2] = LABEL;
+        arg3Types[2] = LABEL;            
+        return 3;
+    }
+    else if(token == "throw"){ 
+        arg1Types[0] = LABEL;
+        arg2Types[0] = RAM_ADDRESS;   
+
+        arg1Types[1] = LABEL;
+        arg2Types[1] = RAM_ADDRESS;   
+
+        arg1Types[2] = LABEL;
+        arg2Types[2] = LABEL;            
+        return 2;
+    }
+    else if(token == "module:"){
+        arg1Types[0] = LABEL;
+        arg2Types[0] = SPECIAL;
+
+        arg1Types[1] = RAM_ADDRESS;
+        arg2Types[1] = SPECIAL;
+
+        arg1Types[2] = LABEL;
+        arg2Types[2] = SPECIAL;
+        special = "{";
+        return 2;
+    }
+    else if(token == "class:"){
+        arg1Types[0] = LABEL;
+        arg2Types[0] = SPECIAL;
+
+        arg1Types[1] = RAM_ADDRESS;
+        arg2Types[1] = SPECIAL;
+
+        arg1Types[2] = LABEL;
+        arg2Types[2] = SPECIAL;
+        special = "";
+        return 2;
+    }
+    else if(token == "extern"){
             arg1Types[0] = LABEL;
-            arg2Types[0] = LABEL;
-            arg3Types[0] = ARG_EMPTY;   
 
             arg1Types[1] = LABEL;
-            arg2Types[1] = LABEL;
-            arg3Types[1] = ARG_EMPTY;   
 
             arg1Types[2] = LABEL;
-            arg2Types[2] = LABEL;
-            arg3Types[2] = ARG_EMPTY;   
-
-            arg1Types[3] = ARG_EMPTY;
-            arg2Types[3] = ARG_EMPTY;
-            arg3Types[3] = ARG_EMPTY;   
-
-            arg1Types[4] = ARG_EMPTY;
-            arg2Types[4] = ARG_EMPTY;
-            arg3Types[4] = ARG_EMPTY;   
-
-            arg1Types[5] = ARG_EMPTY;
-            arg2Types[5] = ARG_EMPTY;
-            arg3Types[5] = ARG_EMPTY;   
-            return 2;
-        }
-        else if(token == "return"){
-            arg1Types[0] = LABEL;
-            arg2Types[0] = INTEGER_LITERAL;
-            arg3Types[0] = ARG_EMPTY;   
-
-            arg1Types[1] = LABEL;
-            arg2Types[1] = INTEGER_LITERAL;
-            arg3Types[1] = ARG_EMPTY;   
-
-            arg1Types[2] = LABEL;
-            arg2Types[2] = INTEGER_LITERAL;
-            arg3Types[2] = ARG_EMPTY;   
-
-            arg1Types[3] = ARG_EMPTY;
-            arg2Types[3] = ARG_EMPTY;
-            arg3Types[3] = ARG_EMPTY;   
-
-            arg1Types[4] = ARG_EMPTY;
-            arg2Types[4] = ARG_EMPTY;
-            arg3Types[4] = ARG_EMPTY;   
-
-            arg1Types[5] = ARG_EMPTY;
-            arg2Types[5] = ARG_EMPTY;
-            arg3Types[5] = ARG_EMPTY;   
-            return 2;
-        }
-        else if(token == "call"){
-            arg1Types[0] = RAM_ADDRESS;
-            arg2Types[0] = ARG_EMPTY;
-            arg3Types[0] = ARG_EMPTY;   
-
-            arg1Types[1] = LABEL;
-            arg2Types[1] = ARG_EMPTY;
-            arg3Types[1] = ARG_EMPTY;   
-
-
-            arg1Types[2] = LABEL;
-            arg2Types[2] = ARG_EMPTY;
-            arg3Types[2] = ARG_EMPTY;   
-
-            arg1Types[3] = ARG_EMPTY;
-            arg2Types[3] = ARG_EMPTY;
-            arg3Types[3] = ARG_EMPTY;   
-
-            arg1Types[4] = ARG_EMPTY;
-            arg2Types[4] = ARG_EMPTY;
-            arg3Types[4] = ARG_EMPTY;   
-
-            arg1Types[5] = ARG_EMPTY;
-            arg2Types[5] = ARG_EMPTY;
-            arg3Types[5] = ARG_EMPTY;   
             return 1;
         }
-        else if(token == "swp"){
-            arg1Types[0] = RAM_ADDRESS;
-            arg2Types[0] = RAM_ADDRESS;
-            arg3Types[0] = ARG_EMPTY;   
-
-            arg1Types[1] = LABEL;
-            arg2Types[1] = LABEL;
-            arg3Types[1] = ARG_EMPTY;   
-
-            arg1Types[2] = LABEL;
-            arg2Types[2] = LABEL;
-            arg3Types[2] = ARG_EMPTY;   
-
-
-            arg1Types[3] = ARG_EMPTY;
-            arg2Types[3] = ARG_EMPTY;
-            arg3Types[3] = ARG_EMPTY;   
-
-            arg1Types[4] = ARG_EMPTY;
-            arg2Types[4] = ARG_EMPTY;
-            arg3Types[4] = ARG_EMPTY;   
-
-            arg1Types[5] = ARG_EMPTY;
-            arg2Types[5] = ARG_EMPTY;
-            arg3Types[5] = ARG_EMPTY;   
-            return 2;
-        }
-        else if(token == "loop"){
-            arg1Types[0] = RAM_ADDRESS;
-            arg2Types[0] = RAM_ADDRESS;
-            arg3Types[0] = INTEGER_LITERAL;   
-
-            arg1Types[1] = LABEL;
-            arg2Types[1] = LABEL;
-            arg3Types[1] = INTEGER_LITERAL;   
-
-            arg1Types[2] = LABEL;
-            arg2Types[2] = LABEL;
-            arg3Types[2] = INTEGER_LITERAL;   
-
-            arg1Types[3] = ARG_EMPTY;
-            arg2Types[3] = ARG_EMPTY;
-            arg3Types[3] = ARG_EMPTY;   
-
-            arg1Types[4] = ARG_EMPTY;
-            arg2Types[4] = ARG_EMPTY;
-            arg3Types[4] = ARG_EMPTY;   
-
-            arg1Types[5] = ARG_EMPTY;
-            arg2Types[5] = ARG_EMPTY;
-            arg3Types[5] = ARG_EMPTY;   
-            return 3;
-        }
-        else if(token == "end"){
-            arg1Types[0] = ARG_EMPTY;
-            arg2Types[0] = ARG_EMPTY;
-            arg3Types[0] = ARG_EMPTY;   
-
-            arg1Types[1] = ARG_EMPTY;
-            arg2Types[1] = ARG_EMPTY;
-            arg3Types[1] = ARG_EMPTY;   
-
-            arg1Types[2] = ARG_EMPTY;
-            arg2Types[2] = ARG_EMPTY;
-            arg3Types[2] = ARG_EMPTY;   
-
-            arg1Types[3] = ARG_EMPTY;
-            arg2Types[3] = ARG_EMPTY;
-            arg3Types[3] = ARG_EMPTY;   
-
-            arg1Types[4] = ARG_EMPTY;
-            arg2Types[4] = ARG_EMPTY;
-            arg3Types[4] = ARG_EMPTY;   
-
-            arg1Types[5] = ARG_EMPTY;
-            arg2Types[5] = ARG_EMPTY;
-            arg3Types[5] = ARG_EMPTY;   
-            return 0;
-        }
-        else if(token == "endl"){
-            arg1Types[0] = RAM_ADDRESS;
-            arg2Types[0] = RAM_ADDRESS;
-            arg3Types[0] = ARG_EMPTY;   
-
-            arg1Types[1] = LABEL;
-            arg2Types[1] = LABEL;
-            arg3Types[1] = ARG_EMPTY;   
-
-            arg1Types[2] = LABEL;
-            arg2Types[2] = LABEL;
-            arg3Types[2] = ARG_EMPTY;   
-
-            arg1Types[3] = ARG_EMPTY;
-            arg2Types[3] = ARG_EMPTY;
-            arg3Types[3] = ARG_EMPTY;   
-
-            arg1Types[4] = ARG_EMPTY;
-            arg2Types[4] = ARG_EMPTY;
-            arg3Types[4] = ARG_EMPTY;   
-
-            arg1Types[5] = ARG_EMPTY;
-            arg2Types[5] = ARG_EMPTY;
-            arg3Types[5] = ARG_EMPTY;   
-            return 2;
-        }
-        else if(token == "do"){
-            arg1Types[0] = RAM_ADDRESS;
-            arg2Types[0] = ARG_EMPTY;
-            arg3Types[0] = ARG_EMPTY;   
-
-            arg1Types[1] = REGISTER;
-            arg2Types[1] = ARG_EMPTY;
-            arg3Types[1] = ARG_EMPTY;   
-
-            arg1Types[2] = LABEL;
-            arg2Types[2] = ARG_EMPTY;
-            arg3Types[2] = ARG_EMPTY;   
-
-            arg1Types[3] = ARG_EMPTY;
-            arg2Types[3] = ARG_EMPTY;
-            arg3Types[3] = ARG_EMPTY;   
-
-            arg1Types[4] = ARG_EMPTY;
-            arg2Types[4] = ARG_EMPTY;
-            arg3Types[4] = ARG_EMPTY;   
-
-            arg1Types[5] = ARG_EMPTY;
-            arg2Types[5] = ARG_EMPTY;
-            arg3Types[5] = ARG_EMPTY;   
-            return 1;
-        }
-        else if(token == "mov"){
-            arg1Types[0] = REGISTER;
-            arg2Types[0] = INTEGER_LITERAL;
-            arg3Types[0] = ARG_EMPTY;   
-
-            arg1Types[1] = REGISTER;
-            arg2Types[1] = HEX_LITERAL;
-            arg3Types[1] = ARG_EMPTY;   
-
-            arg1Types[2] = REGISTER;
-            arg2Types[2] = HEX_LITERAL;
-            arg3Types[2] = ARG_EMPTY;   
-
-            arg1Types[3] = ARG_EMPTY;
-            arg2Types[3] = RESERVED;
-            arg3Types[3] = ARG_EMPTY;   
-
-            arg1Types[4] = ARG_EMPTY;
-            arg2Types[4] = ARG_EMPTY;
-            arg3Types[4] = ARG_EMPTY;   
-
-            arg1Types[5] = ARG_EMPTY;
-            arg2Types[5] = ARG_EMPTY;
-            arg3Types[5] = ARG_EMPTY;   
-            return 2;
-        }
-        else if(token == "rmov"){
-            arg1Types[0] = REGISTER;
-            arg2Types[0] = RAM_ADDRESS;
-            arg3Types[0] = ARG_EMPTY;   
-
-            arg1Types[1] = REGISTER;
-            arg2Types[1] = LABEL;
-            arg3Types[1] = ARG_EMPTY;   
-
-            arg1Types[2] = REGISTER;
-            arg2Types[2] = REGISTER;
-            arg3Types[2] = ARG_EMPTY;   
-
-            arg1Types[3] = ARG_EMPTY;
-            arg2Types[3] = ARG_EMPTY;
-            arg3Types[3] = ARG_EMPTY;   
-
-            arg1Types[4] = ARG_EMPTY;
-            arg2Types[4] = ARG_EMPTY;
-            arg3Types[4] = ARG_EMPTY;   
-
-            arg1Types[5] = ARG_EMPTY;
-            arg2Types[5] = ARG_EMPTY;
-            arg3Types[5] = ARG_EMPTY;   
-            return 2;
-        }
-        else if(token == "invoke"){
-            arg1Types[0] = HEX_LITERAL;
-            arg2Types[0] = INTEGER_LITERAL;
-            arg3Types[0] = ARG_EMPTY;   
-
-            arg1Types[1] = HEX_LITERAL;
-            arg2Types[1] = INTEGER_LITERAL;
-            arg3Types[1] = ARG_EMPTY;   
-
-            arg1Types[2] = HEX_LITERAL;
-            arg2Types[2] = INTEGER_LITERAL;
-            arg3Types[2] = ARG_EMPTY;   
-
-            arg1Types[3] = ARG_EMPTY;
-            arg2Types[3] = ARG_EMPTY;
-            arg3Types[3] = ARG_EMPTY;   
-
-            arg1Types[4] = ARG_EMPTY;
-            arg2Types[4] = ARG_EMPTY;
-            arg3Types[4] = ARG_EMPTY;   
-
-            arg1Types[5] = ARG_EMPTY;
-            arg2Types[5] = ARG_EMPTY;
-            arg3Types[5] = ARG_EMPTY;   
-            return 2;
-        }
-        else if(token == "ilt"){
-            arg1Types[0] = RAM_ADDRESS;
-            arg2Types[0] = RAM_ADDRESS;
-            arg3Types[0] = ARG_EMPTY;   
-
-            arg1Types[1] = LABEL;
-            arg2Types[1] = LABEL;
-            arg3Types[1] = ARG_EMPTY;   
-
-            arg1Types[2] = REGISTER;
-            arg2Types[2] = REGISTER;
-            arg3Types[2] = ARG_EMPTY;   
-
-            arg1Types[3] = ARG_EMPTY;
-            arg2Types[3] = ARG_EMPTY;
-            arg3Types[3] = ARG_EMPTY;   
-
-            arg1Types[4] = ARG_EMPTY;
-            arg2Types[4] = ARG_EMPTY;
-            arg3Types[4] = ARG_EMPTY;   
-
-            arg1Types[5] = ARG_EMPTY;
-            arg2Types[5] = ARG_EMPTY;
-            arg3Types[5] = ARG_EMPTY;   
-            return 2;
-        }
-        else if(token == "igt"){
-            arg1Types[0] = RAM_ADDRESS;
-            arg2Types[0] = RAM_ADDRESS;
-            arg3Types[0] = ARG_EMPTY;   
-
-            arg1Types[1] = LABEL;
-            arg2Types[1] = LABEL;
-            arg3Types[1] = ARG_EMPTY;   
-
-            arg1Types[2] = REGISTER;
-            arg2Types[2] = REGISTER;
-            arg3Types[2] = ARG_EMPTY;   
-
-            arg1Types[3] = ARG_EMPTY;
-            arg2Types[3] = ARG_EMPTY;
-            arg3Types[3] = ARG_EMPTY;   
-
-            arg1Types[4] = ARG_EMPTY;
-            arg2Types[4] = ARG_EMPTY;
-            arg3Types[4] = ARG_EMPTY;   
-
-            arg1Types[5] = ARG_EMPTY;
-            arg2Types[5] = ARG_EMPTY;
-            arg3Types[5] = ARG_EMPTY;   
-            return 2;
-        }
-        else if(token == "ige"){
-            arg1Types[0] = RAM_ADDRESS;
-            arg2Types[0] = RAM_ADDRESS;
-            arg3Types[0] = ARG_EMPTY;   
-
-            arg1Types[1] = LABEL;
-            arg2Types[1] = LABEL;
-            arg3Types[1] = ARG_EMPTY;   
-
-            arg1Types[2] = REGISTER;
-            arg2Types[2] = REGISTER;
-            arg3Types[2] = ARG_EMPTY;   
-
-            arg1Types[3] = ARG_EMPTY;
-            arg2Types[3] = ARG_EMPTY;
-            arg3Types[3] = ARG_EMPTY;   
-
-            arg1Types[4] = ARG_EMPTY;
-            arg2Types[4] = ARG_EMPTY;
-            arg3Types[4] = ARG_EMPTY;   
-
-            arg1Types[5] = ARG_EMPTY;
-            arg2Types[5] = ARG_EMPTY;
-            arg3Types[5] = ARG_EMPTY;   
-            return 2;
-        }
-        else if(token == "ile"){
-            arg1Types[0] = RAM_ADDRESS;
-            arg2Types[0] = RAM_ADDRESS;
-            arg3Types[0] = ARG_EMPTY;   
-
-            arg1Types[1] = LABEL;
-            arg2Types[1] = LABEL;
-            arg3Types[1] = ARG_EMPTY;   
-
-            arg1Types[2] = REGISTER;
-            arg2Types[2] = REGISTER;
-            arg3Types[2] = ARG_EMPTY;   
-
-            arg1Types[3] = ARG_EMPTY;
-            arg2Types[3] = ARG_EMPTY;
-            arg3Types[3] = ARG_EMPTY;   
-
-            arg1Types[4] = ARG_EMPTY;
-            arg2Types[4] = ARG_EMPTY;
-            arg3Types[4] = ARG_EMPTY;   
-
-            arg1Types[5] = ARG_EMPTY;
-            arg2Types[5] = ARG_EMPTY;
-            arg3Types[5] = ARG_EMPTY;   
-            return 2;
-        }
-        else if(token == "ndo"){
-            arg1Types[0] = RAM_ADDRESS;
-            arg2Types[0] = ARG_EMPTY;
-            arg3Types[0] = ARG_EMPTY;   
-
-            arg1Types[1] = LABEL;
-            arg2Types[1] = ARG_EMPTY;
-            arg3Types[1] = ARG_EMPTY;   
-
-            arg1Types[2] = REGISTER;
-            arg2Types[2] = ARG_EMPTY;
-            arg3Types[2] = ARG_EMPTY;   
-
-            arg1Types[3] = ARG_EMPTY;
-            arg2Types[3] = ARG_EMPTY;
-            arg3Types[3] = ARG_EMPTY;   
-
-            arg1Types[4] = ARG_EMPTY;
-            arg2Types[4] = ARG_EMPTY;
-            arg3Types[4] = ARG_EMPTY;   
-
-            arg1Types[5] = ARG_EMPTY;
-            arg2Types[5] = ARG_EMPTY;
-            arg3Types[5] = ARG_EMPTY;   
-            return 1;
-        }
-        else if(token == "inlt"){
-            arg1Types[0] = RAM_ADDRESS;
-            arg2Types[0] = RAM_ADDRESS;
-            arg3Types[0] = ARG_EMPTY;   
-
-            arg1Types[1] = LABEL;
-            arg2Types[1] = LABEL;
-            arg3Types[1] = ARG_EMPTY;   
-
-            arg1Types[2] = REGISTER;
-            arg2Types[2] = REGISTER;
-            arg3Types[2] = ARG_EMPTY;   
-
-            arg1Types[3] = ARG_EMPTY;
-            arg2Types[3] = ARG_EMPTY;
-            arg3Types[3] = ARG_EMPTY;   
-
-            arg1Types[4] = ARG_EMPTY;
-            arg2Types[4] = ARG_EMPTY;
-            arg3Types[4] = ARG_EMPTY;   
-
-            arg1Types[5] = ARG_EMPTY;
-            arg2Types[5] = ARG_EMPTY;
-            arg3Types[5] = ARG_EMPTY;   
-            return 2;
-        }
-        else if(token == "ingt"){
-            arg1Types[0] = RAM_ADDRESS;
-            arg2Types[0] = RAM_ADDRESS;
-            arg3Types[0] = ARG_EMPTY;   
-
-            arg1Types[1] = LABEL;
-            arg2Types[1] = LABEL;
-            arg3Types[1] = ARG_EMPTY;   
-
-            arg1Types[2] = REGISTER;
-            arg2Types[2] = REGISTER;
-            arg3Types[2] = ARG_EMPTY;   
-
-            arg1Types[3] = ARG_EMPTY;
-            arg2Types[3] = ARG_EMPTY;
-            arg3Types[3] = ARG_EMPTY;   
-
-            arg1Types[4] = ARG_EMPTY;
-            arg2Types[4] = ARG_EMPTY;
-            arg3Types[4] = ARG_EMPTY;   
-
-            arg1Types[5] = ARG_EMPTY;
-            arg2Types[5] = ARG_EMPTY;
-            arg3Types[5] = ARG_EMPTY;   
-            return 2;
-        }
-        else if(token == "inle"){
-            arg1Types[0] = RAM_ADDRESS;
-            arg2Types[0] = RAM_ADDRESS;
-            arg3Types[0] = ARG_EMPTY;   
-
-            arg1Types[1] = LABEL;
-            arg2Types[1] = LABEL;
-            arg3Types[1] = ARG_EMPTY;   
-
-            arg1Types[2] = REGISTER;
-            arg2Types[2] = REGISTER;
-            arg3Types[2] = ARG_EMPTY;   
-
-            arg1Types[3] = ARG_EMPTY;
-            arg2Types[3] = ARG_EMPTY;
-            arg3Types[3] = ARG_EMPTY;   
-
-            arg1Types[4] = ARG_EMPTY;
-            arg2Types[4] = ARG_EMPTY;
-            arg3Types[4] = ARG_EMPTY;   
-
-            arg1Types[5] = ARG_EMPTY;
-            arg2Types[5] = ARG_EMPTY;
-            arg3Types[5] = ARG_EMPTY;   
-            return 2;
-        }
-        else if(token == "inge"){
-            arg1Types[0] = RAM_ADDRESS;
-            arg2Types[0] = RAM_ADDRESS;
-            arg3Types[0] = ARG_EMPTY;   
-
-            arg1Types[1] = LABEL;
-            arg2Types[1] = LABEL;
-            arg3Types[1] = ARG_EMPTY;   
-
-            arg1Types[2] = REGISTER;
-            arg2Types[2] = REGISTER;
-            arg3Types[2] = ARG_EMPTY;   
-
-            arg1Types[3] = ARG_EMPTY;
-            arg2Types[3] = ARG_EMPTY;
-            arg3Types[3] = ARG_EMPTY;   
-
-            arg1Types[4] = ARG_EMPTY;
-            arg2Types[4] = ARG_EMPTY;
-            arg3Types[4] = ARG_EMPTY;   
-
-            arg1Types[5] = ARG_EMPTY;
-            arg2Types[5] = ARG_EMPTY;
-            arg3Types[5] = ARG_EMPTY;   
-            return 2;
-        }
-        else if(token == "neg"){
-            arg1Types[0] = RAM_ADDRESS;
-            arg2Types[0] = ARG_EMPTY;
-            arg3Types[0] = ARG_EMPTY;   
-
-            arg1Types[1] = LABEL;
-            arg2Types[1] = ARG_EMPTY;
-            arg3Types[1] = ARG_EMPTY;   
-
-            arg1Types[2] = REGISTER;
-            arg2Types[2] = ARG_EMPTY;
-            arg3Types[2] = ARG_EMPTY;   
-
-            arg1Types[3] = ARG_EMPTY;
-            arg2Types[3] = ARG_EMPTY;
-            arg3Types[3] = ARG_EMPTY;   
-
-            arg1Types[4] = ARG_EMPTY;
-            arg2Types[4] = ARG_EMPTY;
-            arg3Types[4] = ARG_EMPTY;   
-
-            arg1Types[5] = ARG_EMPTY;
-            arg2Types[5] = ARG_EMPTY;
-            arg3Types[5] = ARG_EMPTY;   
-            return 1;
-        }
-        else if(token == "lock"){
-            arg1Types[0] = RAM_ADDRESS;
-            arg2Types[0] = ARG_EMPTY;
-            arg3Types[0] = ARG_EMPTY;   
-
-            arg1Types[1] = LABEL;
-            arg2Types[1] = ARG_EMPTY;
-            arg3Types[1] = ARG_EMPTY;   
-
-            arg1Types[2] = LABEL;
-            arg2Types[2] = ARG_EMPTY;
-            arg3Types[2] = ARG_EMPTY;   
-
-            arg1Types[3] = ARG_EMPTY;
-            arg2Types[3] = ARG_EMPTY;
-            arg3Types[3] = ARG_EMPTY;   
-
-            arg1Types[4] = ARG_EMPTY;
-            arg2Types[4] = ARG_EMPTY;
-            arg3Types[4] = ARG_EMPTY;   
-
-            arg1Types[5] = ARG_EMPTY;
-            arg2Types[5] = ARG_EMPTY;
-            arg3Types[5] = ARG_EMPTY;   
-            return 1;
-        }
-        else if(token == "ulock"){
-            arg1Types[0] = RAM_ADDRESS;
-            arg2Types[0] = ARG_EMPTY;
-            arg3Types[0] = ARG_EMPTY;   
-
-            arg1Types[1] = LABEL;
-            arg2Types[1] = ARG_EMPTY;
-            arg3Types[1] = ARG_EMPTY;   
-
-            arg1Types[2] = LABEL;
-            arg2Types[2] = ARG_EMPTY;
-            arg3Types[2] = ARG_EMPTY;   
-
-            arg1Types[3] = ARG_EMPTY;
-            arg2Types[3] = ARG_EMPTY;
-            arg3Types[3] = ARG_EMPTY;   
-
-            arg1Types[4] = ARG_EMPTY;
-            arg2Types[4] = ARG_EMPTY;
-            arg3Types[4] = ARG_EMPTY;   
-
-            arg1Types[5] = ARG_EMPTY;
-            arg2Types[5] = ARG_EMPTY;
-            arg3Types[5] = ARG_EMPTY;   
-            return 1;
-        }
-        else if(token == "xreg"){
-            arg1Types[0] = RAM_ADDRESS;
-            arg2Types[0] = ARG_EMPTY;
-            arg3Types[0] = ARG_EMPTY;   
-
-            arg1Types[1] = LABEL;
-            arg2Types[1] = ARG_EMPTY;
-            arg3Types[1] = ARG_EMPTY;   
-
-            arg1Types[2] = LABEL;
-            arg2Types[2] = ARG_EMPTY;
-            arg3Types[2] = ARG_EMPTY;   
-
-            arg1Types[3] = ARG_EMPTY;
-            arg2Types[3] = ARG_EMPTY;
-            arg3Types[3] = ARG_EMPTY;   
-
-            arg1Types[4] = ARG_EMPTY;
-            arg2Types[4] = ARG_EMPTY;
-            arg3Types[4] = ARG_EMPTY;   
-
-            arg1Types[5] = ARG_EMPTY;
-            arg2Types[5] = ARG_EMPTY;
-            arg3Types[5] = ARG_EMPTY;   
-            return 1;
-        }
-        else if(token == "clx"){
-            arg1Types[0] = ARG_EMPTY;
-            arg2Types[0] = ARG_EMPTY;
-            arg3Types[0] = ARG_EMPTY;   
-
-            arg1Types[1] = ARG_EMPTY;
-            arg2Types[1] = ARG_EMPTY;
-            arg3Types[1] = ARG_EMPTY;   
-
-            arg1Types[2] = ARG_EMPTY;
-            arg2Types[2] = ARG_EMPTY;
-            arg3Types[2] = ARG_EMPTY;   
-
-            arg1Types[3] = ARG_EMPTY;
-            arg2Types[3] = ARG_EMPTY;
-            arg3Types[3] = ARG_EMPTY;   
-
-            arg1Types[4] = ARG_EMPTY;
-            arg2Types[4] = ARG_EMPTY;
-            arg3Types[4] = ARG_EMPTY;   
-
-            arg1Types[5] = ARG_EMPTY;
-            arg2Types[5] = ARG_EMPTY;
-            arg3Types[5] = ARG_EMPTY;   
-            return 0;
-        }
-        else if(token == "rloop"){
-            arg1Types[0] = RAM_ADDRESS;
-            arg2Types[0] = RAM_ADDRESS;
-            arg3Types[0] = RAM_ADDRESS;   
-
-            arg1Types[1] = LABEL;
-            arg2Types[1] = LABEL;
-            arg3Types[1] = LABEL;   
-
-            arg1Types[2] = LABEL;
-            arg2Types[2] = LABEL;
-            arg3Types[2] = LABEL;   
-
-            arg1Types[3] = ARG_EMPTY;
-            arg2Types[3] = ARG_EMPTY;
-            arg3Types[3] = ARG_EMPTY;   
-
-            arg1Types[4] = ARG_EMPTY;
-            arg2Types[4] = ARG_EMPTY;
-            arg3Types[4] = ARG_EMPTY;   
-
-            arg1Types[5] = ARG_EMPTY;
-            arg2Types[5] = ARG_EMPTY;
-            arg3Types[5] = ARG_EMPTY;   
-            return 3;
-        }
-        else if(token == "wloop"){
-            arg1Types[0] = RAM_ADDRESS;
-            arg2Types[0] = RAM_ADDRESS;
-            arg3Types[0] = ARG_EMPTY;   
-
-            arg1Types[1] = LABEL;
-            arg2Types[1] = LABEL;
-            arg3Types[1] = ARG_EMPTY;   
-
-            arg1Types[2] = LABEL;
-            arg2Types[2] = LABEL;
-            arg3Types[2] = ARG_EMPTY;   
-
-            arg1Types[3] = ARG_EMPTY;
-            arg2Types[3] = ARG_EMPTY;
-            arg3Types[3] = ARG_EMPTY;   
-
-            arg1Types[4] = ARG_EMPTY;
-            arg2Types[4] = ARG_EMPTY;
-            arg3Types[4] = ARG_EMPTY;   
-
-            arg1Types[5] = ARG_EMPTY;
-            arg2Types[5] = ARG_EMPTY;
-            arg3Types[5] = ARG_EMPTY;   
-            return 2;
-        }
-        else if(token == "endwl"){
-            arg1Types[0] = RAM_ADDRESS;
-            arg2Types[0] = RAM_ADDRESS;
-            arg3Types[0] = ARG_EMPTY;   
-
-            arg1Types[1] = LABEL;
-            arg2Types[1] = LABEL;
-            arg3Types[1] = ARG_EMPTY;   
-
-            arg1Types[2] = LABEL;
-            arg2Types[2] = LABEL;
-            arg3Types[2] = ARG_EMPTY;   
-
-            arg1Types[3] = ARG_EMPTY;
-            arg2Types[3] = ARG_EMPTY;
-            arg3Types[3] = ARG_EMPTY;   
-
-            arg1Types[4] = ARG_EMPTY;
-            arg2Types[4] = ARG_EMPTY;
-            arg3Types[4] = ARG_EMPTY;   
-
-            arg1Types[5] = ARG_EMPTY;
-            arg2Types[5] = ARG_EMPTY;
-            arg3Types[5] = ARG_EMPTY;   
-            return 2;
-        }
-        else if(token == "same"){
-            arg1Types[0] = RAM_ADDRESS;
-            arg2Types[0] = RAM_ADDRESS;
-            arg3Types[0] = RAM_ADDRESS;   
-
-            arg1Types[1] = REGISTER;
-            arg2Types[1] = REGISTER;
-            arg3Types[1] = REGISTER;   
-
-            arg1Types[2] = LABEL;
-            arg2Types[2] = LABEL;
-            arg3Types[2] = LABEL;   
-
-            arg1Types[3] = ARG_EMPTY;
-            arg2Types[3] = ARG_EMPTY;
-            arg3Types[3] = ARG_EMPTY;   
-
-            arg1Types[4] = ARG_EMPTY;
-            arg2Types[4] = ARG_EMPTY;
-            arg3Types[4] = ARG_EMPTY;   
-
-            arg1Types[5] = ARG_EMPTY;
-            arg2Types[5] = ARG_EMPTY;
-            arg3Types[5] = ARG_EMPTY;   
-            return 3;
-        }
-        else if(token == "nac"){
-            arg1Types[0] = ARG_EMPTY;
-            arg2Types[0] = ARG_EMPTY;
-            arg3Types[0] = ARG_EMPTY;   
-
-            arg1Types[1] = ARG_EMPTY;
-            arg2Types[1] = ARG_EMPTY;
-            arg3Types[1] = ARG_EMPTY;   
-
-            arg1Types[2] = ARG_EMPTY;
-            arg2Types[2] = ARG_EMPTY;
-            arg3Types[2] = ARG_EMPTY;   
-
-            arg1Types[3] = ARG_EMPTY;
-            arg2Types[3] = ARG_EMPTY;
-            arg3Types[3] = ARG_EMPTY;   
-
-            arg1Types[4] = ARG_EMPTY;
-            arg2Types[4] = ARG_EMPTY;
-            arg3Types[4] = ARG_EMPTY;   
-
-            arg1Types[5] = ARG_EMPTY;
-            arg2Types[5] = ARG_EMPTY;
-            arg3Types[5] = ARG_EMPTY;   
-            return 0;
-        }
-        else if(token == "sr"){
-            arg1Types[0] = RAM_ADDRESS;
-            arg2Types[0] = ARG_EMPTY;
-            arg3Types[0] = ARG_EMPTY;   
-
-            arg1Types[1] = LABEL;
-            arg2Types[1] = ARG_EMPTY;
-            arg3Types[1] = ARG_EMPTY;   
-
-            arg1Types[2] = REGISTER;
-            arg2Types[2] = ARG_EMPTY;
-            arg3Types[2] = ARG_EMPTY;   
-
-            arg1Types[3] = ARG_EMPTY;
-            arg2Types[3] = ARG_EMPTY;
-            arg3Types[3] = ARG_EMPTY;   
-
-            arg1Types[4] = ARG_EMPTY;
-            arg2Types[4] = ARG_EMPTY;
-            arg3Types[4] = ARG_EMPTY;   
-
-            arg1Types[5] = ARG_EMPTY;
-            arg2Types[5] = ARG_EMPTY;
-            arg3Types[5] = ARG_EMPTY;   
-            return 1;
-        }
-        else if(token == "sl"){
-            arg1Types[0] = RAM_ADDRESS;
-            arg2Types[0] = ARG_EMPTY;
-            arg3Types[0] = ARG_EMPTY;   
-
-            arg1Types[1] = LABEL;
-            arg2Types[1] = ARG_EMPTY;
-            arg3Types[1] = ARG_EMPTY;   
-
-            arg1Types[2] = REGISTER;
-            arg2Types[2] = ARG_EMPTY;
-            arg3Types[2] = ARG_EMPTY;   
-
-            arg1Types[3] = ARG_EMPTY;
-            arg2Types[3] = ARG_EMPTY;
-            arg3Types[3] = ARG_EMPTY;   
-
-            arg1Types[4] = ARG_EMPTY;
-            arg2Types[4] = ARG_EMPTY;
-            arg3Types[4] = ARG_EMPTY;   
-
-            arg1Types[5] = ARG_EMPTY;
-            arg2Types[5] = ARG_EMPTY;
-            arg3Types[5] = ARG_EMPTY;   
-            return 1;
-        }
-        else if(token == "r_mv"){
-            arg1Types[0] = REGISTER;
-            arg2Types[0] = RAM_ADDRESS;
-            arg3Types[0] = ARG_EMPTY;   
-
-            arg1Types[1] = REGISTER;
-            arg2Types[1] = LABEL;
-            arg3Types[1] = ARG_EMPTY;   
-
-            arg1Types[2] = REGISTER;
-            arg2Types[2] = LABEL;
-            arg3Types[2] = ARG_EMPTY;   
-
-            arg1Types[3] = ARG_EMPTY;
-            arg2Types[3] = ARG_EMPTY;
-            arg3Types[3] = ARG_EMPTY;   
-
-            arg1Types[4] = ARG_EMPTY;
-            arg2Types[4] = ARG_EMPTY;
-            arg3Types[4] = ARG_EMPTY;   
-
-            arg1Types[5] = ARG_EMPTY;
-            arg2Types[5] = ARG_EMPTY;
-            arg3Types[5] = ARG_EMPTY;   
-            return 2;
-        }
-        else if(token == "cpuid"){
-            arg1Types[0] = ARG_EMPTY;
-            arg2Types[0] = ARG_EMPTY;
-            arg3Types[0] = ARG_EMPTY;   
-
-            arg1Types[1] = ARG_EMPTY;
-            arg2Types[1] = ARG_EMPTY;
-            arg3Types[1] = ARG_EMPTY;   
-
-            arg1Types[2] = ARG_EMPTY;
-            arg2Types[2] = ARG_EMPTY;
-            arg3Types[2] = ARG_EMPTY;   
-
-            arg1Types[3] = ARG_EMPTY;
-            arg2Types[3] = ARG_EMPTY;
-            arg3Types[3] = ARG_EMPTY;   
-
-            arg1Types[4] = ARG_EMPTY;
-            arg2Types[4] = ARG_EMPTY;
-            arg3Types[4] = ARG_EMPTY;   
-
-            arg1Types[5] = ARG_EMPTY;
-            arg2Types[5] = ARG_EMPTY;
-            arg3Types[5] = ARG_EMPTY;   
-            return 0;
-        }
-        else if(token == "rdtsc"){
-            arg1Types[0] = ARG_EMPTY;
-            arg2Types[0] = ARG_EMPTY;
-            arg3Types[0] = ARG_EMPTY;   
-
-            arg1Types[1] = ARG_EMPTY;
-            arg2Types[1] = ARG_EMPTY;
-            arg3Types[1] = ARG_EMPTY;   
-
-            arg1Types[2] = ARG_EMPTY;
-            arg2Types[2] = ARG_EMPTY;
-            arg3Types[2] = ARG_EMPTY;   
-
-            arg1Types[3] = ARG_EMPTY;
-            arg2Types[3] = ARG_EMPTY;
-            arg3Types[3] = ARG_EMPTY;   
-
-            arg1Types[4] = ARG_EMPTY;
-            arg2Types[4] = ARG_EMPTY;
-            arg3Types[4] = ARG_EMPTY;   
-
-            arg1Types[5] = ARG_EMPTY;
-            arg2Types[5] = ARG_EMPTY;
-            arg3Types[5] = ARG_EMPTY;   
-            return 0;
-        }
-        else if(token == "print"){
-            arg1Types[0] = STRING_LITERAL;
-            arg2Types[0] = ARG_EMPTY;
-            arg3Types[0] = ARG_EMPTY;   
-
-            arg1Types[1] = STRING_LITERAL;
-            arg2Types[1] = ARG_EMPTY;
-            arg3Types[1] = ARG_EMPTY;   
-
-            arg1Types[2] = STRING_LITERAL;
-            arg2Types[2] = ARG_EMPTY;
-            arg3Types[2] = ARG_EMPTY;   
-
-            arg1Types[3] = ARG_EMPTY;
-            arg2Types[3] = ARG_EMPTY;
-            arg3Types[3] = ARG_EMPTY;   
-
-            arg1Types[4] = ARG_EMPTY;
-            arg2Types[4] = ARG_EMPTY;
-            arg3Types[4] = ARG_EMPTY;   
-
-            arg1Types[5] = ARG_EMPTY;
-            arg2Types[5] = ARG_EMPTY;
-            arg3Types[5] = ARG_EMPTY;   
-            if(!Assembler::compile_only)
-                flag = 3;
-            return 1;
-        }
-        else if(token == "rand_1"){
-            arg1Types[0] = ARG_EMPTY;
-            arg2Types[0] = ARG_EMPTY;
-            arg3Types[0] = ARG_EMPTY;   
-
-            arg1Types[1] = ARG_EMPTY;
-            arg2Types[1] = ARG_EMPTY;
-            arg3Types[1] = ARG_EMPTY;   
-
-            arg1Types[2] = ARG_EMPTY;
-            arg2Types[2] = ARG_EMPTY;
-            arg3Types[2] = ARG_EMPTY;   
-
-            arg1Types[3] = ARG_EMPTY;
-            arg2Types[3] = ARG_EMPTY;
-            arg3Types[3] = ARG_EMPTY;   
-
-            arg1Types[4] = ARG_EMPTY;
-            arg2Types[4] = ARG_EMPTY;
-            arg3Types[4] = ARG_EMPTY;   
-
-            arg1Types[5] = ARG_EMPTY;
-            arg2Types[5] = ARG_EMPTY;
-            arg3Types[5] = ARG_EMPTY;   
-            return 0;
-        }
-        else if(token == "rand_2"){
-            arg1Types[0] = ARG_EMPTY;
-            arg2Types[0] = ARG_EMPTY;
-            arg3Types[0] = ARG_EMPTY;   
-
-            arg1Types[1] = ARG_EMPTY;
-            arg2Types[1] = ARG_EMPTY;
-            arg3Types[1] = ARG_EMPTY;   
-
-            arg1Types[2] = ARG_EMPTY;
-            arg2Types[2] = ARG_EMPTY;
-            arg3Types[2] = ARG_EMPTY;   
-
-            arg1Types[3] = ARG_EMPTY;
-            arg2Types[3] = ARG_EMPTY;
-            arg3Types[3] = ARG_EMPTY;   
-
-            arg1Types[4] = ARG_EMPTY;
-            arg2Types[4] = ARG_EMPTY;
-            arg3Types[4] = ARG_EMPTY;   
-
-            arg1Types[5] = ARG_EMPTY;
-            arg2Types[5] = ARG_EMPTY;
-            arg3Types[5] = ARG_EMPTY;   
-            return 0;
-        }
-        else if(token == "rand_3"){
-            arg1Types[0] = ARG_EMPTY;
-            arg2Types[0] = ARG_EMPTY;
-            arg3Types[0] = ARG_EMPTY;   
-
-            arg1Types[1] = ARG_EMPTY;
-            arg2Types[1] = ARG_EMPTY;
-            arg3Types[1] = ARG_EMPTY;   
-
-            arg1Types[2] = ARG_EMPTY;
-            arg2Types[2] = ARG_EMPTY;
-            arg3Types[2] = ARG_EMPTY;   
-
-            arg1Types[3] = ARG_EMPTY;
-            arg2Types[3] = ARG_EMPTY;
-            arg3Types[3] = ARG_EMPTY;   
-
-            arg1Types[4] = ARG_EMPTY;
-            arg2Types[4] = ARG_EMPTY;
-            arg3Types[4] = ARG_EMPTY;   
-
-            arg1Types[5] = ARG_EMPTY;
-            arg2Types[5] = ARG_EMPTY;
-            arg3Types[5] = ARG_EMPTY;   
-            return 0;
-        }
-        else if(token == "printf"){
-            arg1Types[0] = STRING_LITERAL;
-            arg2Types[0] = ARG_EMPTY;
-            arg3Types[0] = ARG_EMPTY;   
-
-            arg1Types[1] = STRING_LITERAL;
-            arg2Types[1] = ARG_EMPTY;
-            arg3Types[1] = ARG_EMPTY;   
-
-            arg1Types[2] = STRING_LITERAL;
-            arg2Types[2] = ARG_EMPTY;
-            arg3Types[2] = ARG_EMPTY;   
-
-            arg1Types[3] = ARG_EMPTY;
-            arg2Types[3] = ARG_EMPTY;
-            arg3Types[3] = ARG_EMPTY;   
-
-            arg1Types[4] = ARG_EMPTY;
-            arg2Types[4] = ARG_EMPTY;
-            arg3Types[4] = ARG_EMPTY;   
-
-            arg1Types[5] = ARG_EMPTY;
-            arg2Types[5] = ARG_EMPTY;
-            arg3Types[5] = ARG_EMPTY;   
-            if(!Assembler::compile_only)
-                 flag = 3;
-            return 1;
-        }
-        else if(token == "loadc"){
-            arg1Types[0] = RAM_ADDRESS;
-            arg2Types[0] = INTEGER_LITERAL;
-            arg3Types[0] = ARG_EMPTY;   
-
-            arg1Types[1] = LABEL;
-            arg2Types[1] = INTEGER_LITERAL;
-            arg3Types[1] = ARG_EMPTY;   
-
-            arg1Types[2] = LABEL;
-            arg2Types[2] = STRING_LITERAL;
-            arg3Types[2] = ARG_EMPTY;   
-
-            arg1Types[3] = ARG_EMPTY;
-            arg2Types[3] = ARG_EMPTY;
-            arg3Types[3] = ARG_EMPTY;   
-
-            arg1Types[4] = ARG_EMPTY;
-            arg2Types[4] = ARG_EMPTY;
-            arg3Types[4] = ARG_EMPTY;   
-
-            arg1Types[5] = ARG_EMPTY;
-            arg2Types[5] = ARG_EMPTY;
-            arg3Types[5] = ARG_EMPTY;   
-            charLiteral = true;
-            return 2;
-        }
-        else if(token == "dload"){
-            arg1Types[0] = RAM_ADDRESS;
-            arg2Types[0] = INTEGER_LITERAL;
-            arg3Types[0] = ARG_EMPTY;   
-
-            arg1Types[1] = LABEL;
-            arg2Types[1] = INTEGER_LITERAL;
-            arg3Types[1] = ARG_EMPTY;   
-
-            arg1Types[2] = LABEL;
-            arg2Types[2] = NULLPTR;
-            arg3Types[2] = ARG_EMPTY;   
-
-            arg1Types[3] = ARG_EMPTY;
-            arg2Types[3] = ARG_EMPTY;
-            arg3Types[3] = ARG_EMPTY;   
-
-            arg1Types[4] = ARG_EMPTY;
-            arg2Types[4] = ARG_EMPTY;
-            arg3Types[4] = ARG_EMPTY;   
-
-            arg1Types[5] = ARG_EMPTY;
-            arg2Types[5] = ARG_EMPTY;
-            arg3Types[5] = ARG_EMPTY;   
-            return 2;
-        }
-        else if(token == "t_cast"){
-            arg1Types[0] = RAM_ADDRESS;
-            arg2Types[0] = INTEGER_LITERAL;
-            arg3Types[0] = ARG_EMPTY;   
-
-            arg1Types[1] = LABEL;
-            arg2Types[1] = INTEGER_LITERAL;
-            arg3Types[1] = ARG_EMPTY;   
-
-            arg1Types[2] = LABEL;
-            arg2Types[2] = RESERVED;
-            arg3Types[2] = ARG_EMPTY;   
-
-            arg1Types[3] = ARG_EMPTY;
-            arg2Types[3] = ARG_EMPTY;
-            arg3Types[3] = ARG_EMPTY;   
-
-            arg1Types[4] = ARG_EMPTY;
-            arg2Types[4] = ARG_EMPTY;
-            arg3Types[4] = ARG_EMPTY;   
-
-            arg1Types[5] = ARG_EMPTY;
-            arg2Types[5] = ARG_EMPTY;
-            arg3Types[5] = ARG_EMPTY;   
-            return 2;
-        }
-        else if(token == "sload"){
-            arg1Types[0] = RAM_ADDRESS;
-            arg2Types[0] = INTEGER_LITERAL;
-            arg3Types[0] = ARG_EMPTY;   
-
-            arg1Types[1] = LABEL;
-            arg2Types[1] = HEX_LITERAL;
-            arg3Types[1] = ARG_EMPTY;   
-
-            arg1Types[2] = LABEL;
-            arg2Types[2] = NULLPTR;
-            arg3Types[2] = ARG_EMPTY;   
-
-            arg1Types[3] = ARG_EMPTY;
-            arg2Types[3] = ARG_EMPTY;
-            arg3Types[3] = ARG_EMPTY;   
-
-            arg1Types[4] = ARG_EMPTY;
-            arg2Types[4] = ARG_EMPTY;
-            arg3Types[4] = ARG_EMPTY;   
-
-            arg1Types[5] = ARG_EMPTY;
-            arg2Types[5] = ARG_EMPTY;
-            arg3Types[5] = ARG_EMPTY;   
-            return 2;
-        }
-        else if(token == "loadf"){
-            arg1Types[0] = RAM_ADDRESS;
-            arg2Types[0] = INTEGER_LITERAL;
-            arg3Types[0] = ARG_EMPTY;   
-
-            arg1Types[1] = LABEL;
-            arg2Types[1] = INTEGER_LITERAL;
-            arg3Types[1] = ARG_EMPTY;   
-
-            arg1Types[2] = LABEL;
-            arg2Types[2] = NULLPTR;
-            arg3Types[2] = ARG_EMPTY;   
-
-            arg1Types[3] = ARG_EMPTY;
-            arg2Types[3] = ARG_EMPTY;
-            arg3Types[3] = ARG_EMPTY;   
-
-            arg1Types[4] = ARG_EMPTY;
-            arg2Types[4] = ARG_EMPTY;
-            arg3Types[4] = ARG_EMPTY;   
-
-            arg1Types[5] = ARG_EMPTY;
-            arg2Types[5] = ARG_EMPTY;
-            arg3Types[5] = ARG_EMPTY;   
-            return 2;
-        }
-        else if(token == "rln"){
-            arg1Types[0] = RAM_ADDRESS;
-            arg2Types[0] = STRING_LITERAL;
-            arg3Types[0] = ARG_EMPTY;   
-
-            arg1Types[1] = LABEL;
-            arg2Types[1] = INTEGER_LITERAL;
-            arg3Types[1] = ARG_EMPTY;   
-
-            arg1Types[2] = RAM_ADDRESS;
-            arg2Types[2] = STRING_LITERAL;
-            arg3Types[2] = ARG_EMPTY;   
-
-            arg1Types[3] = ARG_EMPTY;
-            arg2Types[3] = ARG_EMPTY;
-            arg3Types[3] = ARG_EMPTY;   
-
-            arg1Types[4] = ARG_EMPTY;
-            arg2Types[4] = ARG_EMPTY;
-            arg3Types[4] = ARG_EMPTY;   
-
-            arg1Types[5] = ARG_EMPTY;
-            arg2Types[5] = ARG_EMPTY;
-            arg3Types[5] = ARG_EMPTY;   
-            charLiteral = true;
-            return 2;
-        }
-        else if(token == "rload"){
-            arg1Types[0] = RAM_ADDRESS;
-            arg2Types[0] = RAM_ADDRESS;
-            arg3Types[0] = ARG_EMPTY;   
-
-            arg1Types[1] = LABEL;
-            arg2Types[1] = LABEL;
-            arg3Types[1] = ARG_EMPTY;   
-
-            arg1Types[2] = LABEL;
-            arg2Types[2] = LABEL;
-            arg3Types[2] = ARG_EMPTY;   
-
-            arg1Types[3] = ARG_EMPTY;
-            arg2Types[3] = ARG_EMPTY;
-            arg3Types[3] = ARG_EMPTY;   
-
-            arg1Types[4] = ARG_EMPTY;
-            arg2Types[4] = ARG_EMPTY;
-            arg3Types[4] = ARG_EMPTY;   
-
-            arg1Types[5] = ARG_EMPTY;
-            arg2Types[5] = ARG_EMPTY;
-            arg3Types[5] = ARG_EMPTY;   
-            return 2;
-        }
-        else if(token == "ct_int"){
-            arg1Types[0] = RAM_ADDRESS;
-            arg2Types[0] = RAM_ADDRESS;
-            arg3Types[0] = ARG_EMPTY;   
-
-            arg1Types[1] = LABEL;
-            arg2Types[1] = LABEL;
-            arg3Types[1] = ARG_EMPTY;   
-
-            arg1Types[2] = RAM_ADDRESS;
-            arg2Types[2] = RAM_ADDRESS;
-            arg3Types[2] = ARG_EMPTY;   
-
-            arg1Types[3] = ARG_EMPTY;
-            arg2Types[3] = ARG_EMPTY;
-            arg3Types[3] = ARG_EMPTY;   
-
-            arg1Types[4] = ARG_EMPTY;
-            arg2Types[4] = ARG_EMPTY;
-            arg3Types[4] = ARG_EMPTY;   
-
-            arg1Types[5] = ARG_EMPTY;
-            arg2Types[5] = ARG_EMPTY;
-            arg3Types[5] = ARG_EMPTY;   
-            return 2;
-        }
-        else if(token == "anum"){
-            arg1Types[0] = RAM_ADDRESS;
-            arg2Types[0] = RAM_ADDRESS;
-            arg3Types[0] = ARG_EMPTY;   
-
-            arg1Types[1] = LABEL;
-            arg2Types[1] = LABEL;
-            arg3Types[1] = ARG_EMPTY;   
-
-            arg1Types[2] = RAM_ADDRESS;
-            arg2Types[2] = RAM_ADDRESS;
-            arg3Types[2] = ARG_EMPTY;   
-
-            arg1Types[3] = ARG_EMPTY;
-            arg2Types[3] = ARG_EMPTY;
-            arg3Types[3] = ARG_EMPTY;   
-
-            arg1Types[4] = ARG_EMPTY;
-            arg2Types[4] = ARG_EMPTY;
-            arg3Types[4] = ARG_EMPTY;   
-
-            arg1Types[5] = ARG_EMPTY;
-            arg2Types[5] = ARG_EMPTY;
-            arg3Types[5] = ARG_EMPTY;   
-            return 2;
-        }
-        else if(token == "sleep"){
-            arg1Types[0] = INTEGER_LITERAL;
-            arg2Types[0] = ARG_EMPTY;
-            arg3Types[0] = ARG_EMPTY;   
-
-            arg1Types[1] = INTEGER_LITERAL;
-            arg2Types[1] = ARG_EMPTY;
-            arg3Types[1] = ARG_EMPTY;   
-
-            arg1Types[2] = INTEGER_LITERAL;
-            arg2Types[2] = ARG_EMPTY;
-            arg3Types[2] = ARG_EMPTY;   
-
-            arg1Types[3] = ARG_EMPTY;
-            arg2Types[3] = ARG_EMPTY;
-            arg3Types[3] = ARG_EMPTY;   
-
-            arg1Types[4] = ARG_EMPTY;
-            arg2Types[4] = ARG_EMPTY;
-            arg3Types[4] = ARG_EMPTY;   
-
-            arg1Types[5] = ARG_EMPTY;
-            arg2Types[5] = ARG_EMPTY;
-            arg3Types[5] = ARG_EMPTY;   
-            return 1;
-        }
-        else if(token == "cp"){
-            arg1Types[0] = RAM_ADDRESS;
-            arg2Types[0] = RAM_ADDRESS;
-            arg3Types[0] = ARG_EMPTY;   
-
-            arg1Types[1] = LABEL;
-            arg2Types[1] = LABEL;
-            arg3Types[1] = ARG_EMPTY;   
-
-            arg1Types[2] = LABEL;
-            arg2Types[2] = LABEL;
-            arg3Types[2] = ARG_EMPTY;   
-
-            arg1Types[3] = ARG_EMPTY;
-            arg2Types[3] = ARG_EMPTY;
-            arg3Types[3] = ARG_EMPTY;   
-
-            arg1Types[4] = ARG_EMPTY;
-            arg2Types[4] = ARG_EMPTY;
-            arg3Types[4] = ARG_EMPTY;   
-
-            arg1Types[5] = ARG_EMPTY;
-            arg2Types[5] = ARG_EMPTY;
-            arg3Types[5] = ARG_EMPTY;   
-            return 2;
-        }
-        else if(token == "import"){
-            arg1Types[0] = STRING_LITERAL;
-            arg2Types[0] = ARG_EMPTY;
-            arg3Types[0] = ARG_EMPTY;   
-
-            arg1Types[1] = STRING_LITERAL;
-            arg2Types[1] = ARG_EMPTY;
-            arg3Types[1] = ARG_EMPTY;   
-
-            arg1Types[2] = STRING_LITERAL;
-            arg2Types[2] = ARG_EMPTY;
-            arg3Types[2] = ARG_EMPTY;   
-
-            arg1Types[3] = ARG_EMPTY;
-            arg2Types[3] = ARG_EMPTY;
-            arg3Types[3] = ARG_EMPTY;   
-
-            arg1Types[4] = ARG_EMPTY;
-            arg2Types[4] = ARG_EMPTY;
-            arg3Types[4] = ARG_EMPTY;   
-
-            arg1Types[5] = ARG_EMPTY;
-            arg2Types[5] = ARG_EMPTY;
-            arg3Types[5] = ARG_EMPTY;   
-            return 1;
-        }
-        else if(token == "string"){
-            arg1Types[0] = RAM_ADDRESS;
-            arg2Types[0] = STRING_LITERAL;
-            arg3Types[0] = ARG_EMPTY;   
-
-            arg1Types[1] = LABEL;
-            arg2Types[1] = STRING_LITERAL;
-            arg3Types[1] = ARG_EMPTY;   
-
-            arg1Types[2] = RAM_ADDRESS;
-            arg2Types[2] = STRING_LITERAL;
-            arg3Types[2] = ARG_EMPTY;   
-
-            arg1Types[3] = ARG_EMPTY;
-            arg2Types[3] = ARG_EMPTY;
-            arg3Types[3] = ARG_EMPTY;   
-
-            arg1Types[4] = ARG_EMPTY;
-            arg2Types[4] = ARG_EMPTY;
-            arg3Types[4] = ARG_EMPTY;   
-
-            arg1Types[5] = ARG_EMPTY;
-            arg2Types[5] = ARG_EMPTY;
-            arg3Types[5] = ARG_EMPTY;   
-            if(!Assembler::compile_only)
-                flag = 3;
-            return 2;
-        }
-        else if(token == "adr"){
-            arg1Types[0] = LABEL;
-            arg2Types[0] = LABEL;
-            arg3Types[0] = ARG_EMPTY;   
-
-            arg1Types[1] = LABEL;
-            arg2Types[1] = LABEL;
-            arg3Types[1] = ARG_EMPTY;   
-
-            arg1Types[2] = REGISTER;
-            arg2Types[2] = RAM_ADDRESS;
-            arg3Types[2] = ARG_EMPTY;   
-
-            arg1Types[3] = ARG_EMPTY;
-            arg2Types[3] = ARG_EMPTY;
-            arg3Types[3] = ARG_EMPTY;   
-
-            arg1Types[4] = ARG_EMPTY;
-            arg2Types[4] = ARG_EMPTY;
-            arg3Types[4] = ARG_EMPTY;   
-
-            arg1Types[5] = ARG_EMPTY;
-            arg2Types[5] = ARG_EMPTY;
-            arg3Types[5] = ARG_EMPTY;   
-            return 2;
-        }
-        else if(token == "r_load"){
-            arg1Types[0] = LABEL;
-            arg2Types[0] = LABEL;
-            arg3Types[0] = ARG_EMPTY;   
-
-            arg1Types[1] = LABEL;
-            arg2Types[1] = LABEL;
-            arg3Types[1] = ARG_EMPTY;   
-
-            arg1Types[2] = RAM_ADDRESS;
-            arg2Types[2] = RAM_ADDRESS;
-            arg3Types[2] = ARG_EMPTY;   
-
-            arg1Types[3] = ARG_EMPTY;
-            arg2Types[3] = ARG_EMPTY;
-            arg3Types[3] = ARG_EMPTY;   
-
-            arg1Types[4] = ARG_EMPTY;
-            arg2Types[4] = ARG_EMPTY;
-            arg3Types[4] = ARG_EMPTY;   
-
-            arg1Types[5] = ARG_EMPTY;
-            arg2Types[5] = ARG_EMPTY;
-            arg3Types[5] = ARG_EMPTY;   
-            return 2;
-        }
-        else if(token == "&&idx_offset:"){  
-            arg1Types[0] = INTEGER_LITERAL;
-            arg2Types[0] = ARG_EMPTY;
-            arg3Types[0] = ARG_EMPTY;   
-
-            arg1Types[1] = INTEGER_LITERAL;
-            arg2Types[1] = ARG_EMPTY;
-            arg3Types[1] = ARG_EMPTY;   
-
-            arg1Types[2] = INTEGER_LITERAL;
-            arg2Types[2] = ARG_EMPTY;
-            arg3Types[2] = ARG_EMPTY;   
-
-            arg1Types[3] = ARG_EMPTY;
-            arg2Types[3] = ARG_EMPTY;
-            arg3Types[3] = ARG_EMPTY;   
-
-            arg1Types[4] = ARG_EMPTY;
-            arg2Types[4] = ARG_EMPTY;
-            arg3Types[4] = ARG_EMPTY;   
-
-            arg1Types[5] = ARG_EMPTY;
-            arg2Types[5] = ARG_EMPTY;
-            arg3Types[5] = ARG_EMPTY;   
-            return 1;
-        }
-        else if(token == "strcp"){    
-            arg1Types[0] = LABEL;
-            arg2Types[0] = LABEL;
-            arg3Types[0] = LABEL;   
-
-            arg1Types[1] = RAM_ADDRESS;
-            arg2Types[1] = RAM_ADDRESS;
-            arg3Types[1] = RAM_ADDRESS;   
-
-            arg1Types[2] = REGISTER;
-            arg2Types[2] = ARG_EMPTY;
-            arg3Types[2] = ARG_EMPTY;   
-
-            arg1Types[3] = ARG_EMPTY;
-            arg2Types[3] = ARG_EMPTY;
-            arg3Types[3] = ARG_EMPTY;   
-
-            arg1Types[4] = ARG_EMPTY;
-            arg2Types[4] = ARG_EMPTY;
-            arg3Types[4] = ARG_EMPTY;   
-
-            arg1Types[5] = ARG_EMPTY;
-            arg2Types[5] = ARG_EMPTY;
-            arg3Types[5] = ARG_EMPTY;   
-            return 3;
-        }
-        else if(token == "e2str"){    
-            arg1Types[0] = ARG_EMPTY;
-            arg2Types[0] = ARG_EMPTY;
-            arg3Types[0] = ARG_EMPTY;   
-
-            arg1Types[1] = ARG_EMPTY;
-            arg2Types[1] = ARG_EMPTY;
-            arg3Types[1] = ARG_EMPTY;   
-
-            arg1Types[2] = ARG_EMPTY;
-            arg2Types[2] = ARG_EMPTY;
-            arg3Types[2] = ARG_EMPTY;   
-
-            arg1Types[3] = ARG_EMPTY;
-            arg2Types[3] = ARG_EMPTY;
-            arg3Types[3] = ARG_EMPTY;   
-
-            arg1Types[4] = ARG_EMPTY;
-            arg2Types[4] = ARG_EMPTY;
-            arg3Types[4] = ARG_EMPTY;   
-
-            arg1Types[5] = ARG_EMPTY;
-            arg2Types[5] = ARG_EMPTY;
-            arg3Types[5] = ARG_EMPTY;   
-            return 0;
-        }
-        else if(token == "strcpi"){      
-            arg1Types[0] = LABEL;
-            arg2Types[0] = LABEL;
-            arg3Types[0] = LABEL;
-
-            arg1Types[1] = RAM_ADDRESS;
-            arg2Types[1] = RAM_ADDRESS;
-            arg3Types[1] = RAM_ADDRESS;
-
-            arg1Types[2] = REGISTER;
-            arg2Types[2] = ARG_EMPTY;
-            arg3Types[2] = ARG_EMPTY;
-
-            arg1Types[3] = ARG_EMPTY;
-            arg2Types[3] = ARG_EMPTY;
-            arg3Types[3] = ARG_EMPTY;
-
-            arg1Types[4] = ARG_EMPTY;
-            arg2Types[4] = ARG_EMPTY;
-            arg3Types[4] = ARG_EMPTY;
-
-            arg1Types[5] = ARG_EMPTY;
-            arg2Types[5] = ARG_EMPTY;
-            arg3Types[5] = ARG_EMPTY;
-            return 3;
-        }
-        else if(token == "swi"){    
-            arg1Types[0] = ARG_EMPTY;
-            arg2Types[0] = ARG_EMPTY;
-            arg3Types[0] = ARG_EMPTY;   
-
-            arg1Types[1] = ARG_EMPTY;
-            arg2Types[1] = ARG_EMPTY;
-            arg3Types[1] = ARG_EMPTY;   
-
-            arg1Types[2] = ARG_EMPTY;
-            arg2Types[2] = ARG_EMPTY;
-            arg3Types[2] = ARG_EMPTY;   
-
-            arg1Types[3] = ARG_EMPTY;
-            arg2Types[3] = ARG_EMPTY;
-            arg3Types[3] = ARG_EMPTY;   
-
-            arg1Types[4] = ARG_EMPTY;
-            arg2Types[4] = ARG_EMPTY;
-            arg3Types[4] = ARG_EMPTY;   
-
-            arg1Types[5] = ARG_EMPTY;
-            arg2Types[5] = ARG_EMPTY;
-            arg3Types[5] = ARG_EMPTY;   
-            return 0;
-        }
-        else if(token == "array"){      // array values 5 int
-            arg1Types[0] = LABEL;
-            arg2Types[0] = REGISTER;
-            arg3Types[0] = RESERVED;   
-
-            arg1Types[1] = LABEL;
-            arg2Types[1] = RAM_ADDRESS;
-            arg3Types[1] = RESERVED;   
-
-            arg1Types[2] = LABEL;
-            arg2Types[2] = LABEL;
-            arg3Types[2] = INTEGER_LITERAL;   
-
-            arg1Types[3] = ARG_EMPTY;
-            arg2Types[3] = ARG_EMPTY;
-            arg3Types[3] = ARG_EMPTY;   
-
-            arg1Types[4] = ARG_EMPTY;
-            arg2Types[4] = ARG_EMPTY;
-            arg3Types[4] = ARG_EMPTY;   
-
-            arg1Types[5] = ARG_EMPTY;
-            arg2Types[5] = ARG_EMPTY;
-            arg3Types[5] = ARG_EMPTY;   
-            return 3;
-        }
-        else if(token == "aload"){      // aload numbers 0 value
-            arg1Types[0] = LABEL;
-            arg2Types[0] = REGISTER;
-            arg3Types[0] = RAM_ADDRESS;   
-
-            arg1Types[1] = LABEL;
-            arg2Types[1] = RAM_ADDRESS;
-            arg3Types[1] = REGISTER;   
-
-            arg1Types[2] = LABEL;
-            arg2Types[2] = LABEL;
-            arg3Types[2] = LABEL;   
-
-            arg1Types[3] = ARG_EMPTY;
-            arg2Types[3] = ARG_EMPTY;
-            arg3Types[3] = ARG_EMPTY;   
-
-            arg1Types[4] = ARG_EMPTY;
-            arg2Types[4] = ARG_EMPTY;
-            arg3Types[4] = ARG_EMPTY;   
-
-            arg1Types[5] = ARG_EMPTY;
-            arg2Types[5] = ARG_EMPTY;
-            arg3Types[5] = ARG_EMPTY;   
-            return 3;
-        }
-        else if(token == "aaload"){      // aaload numbers 0 value
-            arg1Types[0] = LABEL;
-            arg2Types[0] = RAM_ADDRESS;
-            arg3Types[0] = RAM_ADDRESS;   
-
-            arg1Types[1] = LABEL;
-            arg2Types[1] = REGISTER;
-            arg3Types[1] = REGISTER;   
-
-            arg1Types[2] = LABEL;
-            arg2Types[2] = LABEL;
-            arg3Types[2] = LABEL;   
-
-            arg1Types[3] = ARG_EMPTY;
-            arg2Types[3] = ARG_EMPTY;
-            arg3Types[3] = ARG_EMPTY;   
-
-            arg1Types[4] = ARG_EMPTY;
-            arg2Types[4] = ARG_EMPTY;
-            arg3Types[4] = ARG_EMPTY;   
-
-            arg1Types[5] = ARG_EMPTY;
-            arg2Types[5] = ARG_EMPTY;
-            arg3Types[5] = ARG_EMPTY;   
-            return 3;
-        }
-        else if(token == "throw"){ 
-            arg1Types[0] = LABEL;
-            arg2Types[0] = RAM_ADDRESS;
-            arg3Types[0] = ARG_EMPTY;   
-
-            arg1Types[1] = LABEL;
-            arg2Types[1] = RAM_ADDRESS;
-            arg3Types[1] = ARG_EMPTY;   
-
-            arg1Types[2] = LABEL;
-            arg2Types[2] = LABEL;
-            arg3Types[2] = ARG_EMPTY;   
-
-            arg1Types[3] = ARG_EMPTY;
-            arg2Types[3] = ARG_EMPTY;
-            arg3Types[3] = ARG_EMPTY;   
-
-            arg1Types[4] = ARG_EMPTY;
-            arg2Types[4] = ARG_EMPTY;
-            arg3Types[4] = ARG_EMPTY;   
-
-            arg1Types[5] = ARG_EMPTY;
-            arg2Types[5] = ARG_EMPTY;
-            arg3Types[5] = ARG_EMPTY;   
-            return 2;
-        }
-        else if(token == "module:"){
-            arg1Types[0] = LABEL;
-            arg2Types[0] = SPECIAL;
-            arg3Types[0] = ARG_EMPTY;
-
-            arg1Types[1] = RAM_ADDRESS;
-            arg2Types[1] = SPECIAL;
-            arg3Types[1] = ARG_EMPTY;
-
-            arg1Types[2] = LABEL;
-            arg2Types[2] = SPECIAL;
-            arg3Types[2] = ARG_EMPTY;
-
-            arg1Types[3] = ARG_EMPTY;
-            arg2Types[3] = ARG_EMPTY;
-            arg3Types[3] = ARG_EMPTY;
-
-            arg1Types[4] = ARG_EMPTY;
-            arg2Types[4] = ARG_EMPTY;
-            arg3Types[4] = ARG_EMPTY;
-
-            arg1Types[5] = ARG_EMPTY;
-            arg2Types[5] = ARG_EMPTY;
-            arg3Types[5] = ARG_EMPTY;
-            special = "{";
-            return 2;
-        }
-        else if(token == "class:"){
-            arg1Types[0] = LABEL;
-            arg2Types[0] = SPECIAL;
-            arg3Types[0] = ARG_EMPTY;
-
-            arg1Types[1] = RAM_ADDRESS;
-            arg2Types[1] = SPECIAL;
-            arg3Types[1] = ARG_EMPTY;
-
-            arg1Types[2] = LABEL;
-            arg2Types[2] = SPECIAL;
-            arg3Types[2] = ARG_EMPTY;
-
-            arg1Types[3] = ARG_EMPTY;
-            arg2Types[3] = ARG_EMPTY;
-            arg3Types[3] = ARG_EMPTY;
-
-            arg1Types[4] = ARG_EMPTY;
-            arg2Types[4] = ARG_EMPTY;
-            arg3Types[4] = ARG_EMPTY;
-
-            arg1Types[5] = ARG_EMPTY;
-            arg2Types[5] = ARG_EMPTY;
-            arg3Types[5] = ARG_EMPTY;
-            special = "{";
-            return 2;
-        }
-        else if(token == "extern"){
-            arg1Types[0] = LABEL;
-            arg2Types[0] = ARG_EMPTY;
-            arg3Types[0] = ARG_EMPTY;
-
-            arg1Types[1] = LABEL;
-            arg2Types[1] = ARG_EMPTY;
-            arg3Types[1] = ARG_EMPTY;
-
-            arg1Types[2] = LABEL;
-            arg2Types[2] = ARG_EMPTY;
-            arg3Types[2] = ARG_EMPTY;
-
-            arg1Types[3] = ARG_EMPTY;
-            arg2Types[3] = ARG_EMPTY;
-            arg3Types[3] = ARG_EMPTY;
-
-            arg1Types[4] = ARG_EMPTY;
-            arg2Types[4] = ARG_EMPTY;
-            arg3Types[4] = ARG_EMPTY;
-
-            arg1Types[5] = ARG_EMPTY;
-            arg2Types[5] = ARG_EMPTY;
-            arg3Types[5] = ARG_EMPTY;
-            return 1;
-        }
-        else {
-            arg1Types[0] = UNKNOWN;
-            arg2Types[0] = UNKNOWN;
-            arg3Types[0] = UNKNOWN;   
-
-            arg1Types[1] = UNKNOWN;
-            arg2Types[1] = UNKNOWN;
-            arg3Types[1] = UNKNOWN;   
-
-            arg1Types[2] = UNKNOWN;
-            arg2Types[2] = UNKNOWN;
-            arg3Types[2] = UNKNOWN;   
-
-            arg1Types[3] = UNKNOWN;
-            arg2Types[3] = UNKNOWN;
-            arg3Types[3] = UNKNOWN;   
-
-            arg1Types[4] = UNKNOWN;
-            arg2Types[4] = UNKNOWN;
-            arg3Types[4] = UNKNOWN;   
-
-            arg1Types[5] = UNKNOWN;
-            arg2Types[5] = UNKNOWN;
-            arg3Types[5] = UNKNOWN;   
-            return 0;
-        }
+    else {
+
+        for(int i = 0; i < 6; i++)
+        {
+            arg1Types[i] = UNKNOWN;
+            arg2Types[i] = UNKNOWN;
+            arg3Types[i] = UNKNOWN;  
+        }
+        return 0;
+    }
 }
 
 void add(string token)

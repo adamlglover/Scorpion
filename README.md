@@ -6,7 +6,7 @@ Scorpion is a dynamic bare metal programming language supporting various program
 - Fast
 - Exception Handling(soon to come)
 - Portable(Cross compatible between linux/windows Operating Systems.)
-- Extreemly low level
+- Extremely low level
 - Dynamic module and internal structure
 
 # Supported Devices
@@ -22,7 +22,7 @@ Scorpion is a dynamic bare metal programming language supporting various program
 (coming soon)
 
 # How it works
-Scorpion represents a miniture system that lives on your computers ram and can be programmed to do anything from processing a text file, to sending a signal to physical hardware on a device. Depending on the size of accessable memory on a specific device might affect the power and performance of how fast scorpion runs on that device. Sorpion's runtime enviornment consits of a Virtural machine that virturalizes all the physical hardware on the device it is running on to be programmed. This VM allows for scorpion source code to be portable considering that the only thing that changes is the hardware access. Below is an example of running a scorpion program on 2 different operating systems.
+Scorpion represents a miniature system that lives on your computer's ram and can be programmed to do anything from processing a text file to sending a signal to physical hardware on a device. The size of accessible memory on a specific device might affect the power and performance of how fast Scorpion runs on that device. Scorpion's runtime environment consists of a Virtual machine that virtualizes all the physical hardware on the device it is running on to be programmed. This VM allows for scorpion source code to be portable considering that the only thing that changes is the hardware access. Below is an example of running a scorpion program on 2 different operating systems.
 
 ![alt tag](https://github.com/AndroDevcd/Scorpion/blob/master/diagrams/platfom_execution.png)
 
@@ -31,17 +31,17 @@ The vm will have an organized process for executing code. Below is a simple repr
 
 ![alt tag](https://github.com/AndroDevcd/Scorpion/blob/master/diagrams/Scorpion.png)
 
-In order to run programs in scorpion, you need to use nsc(Native Scorpion Compiler) to compile your source code down to binary format. During the compilation process nsc will add the included library modules, built-in function, as well as any custom defined modules that you have created to your project. After this process is completed, nsc will generate a binary file that is fully executableby the Scorpion Virtural Machine. When the file is given to the VM, it will be verified for any unusal elements inside the file then executed by the virtural hardware.
+In order to run programs in scorpion, you need to use nsc(Native Scorpion Compiler) to compile your source code down to binary format. During the compilation process, nsc will add the included library modules, built-in function, as well as any custom defined modules that you have created to your project. After this process is completed, nsc will generate a binary file that is fully executable by the Scorpion Virtual Machine. When the file is given to the VM, it will first be verified for any unusual elements inside the file, then executed by the virtual hardware.
 
 
 
 # Programs
-Based on the specifications defined, for everthing to work there are a total of 2 programs needed to run scorpion source code.
+Based on the specifications defined, for everything to work there are a total of 2 programs needed to run scorpion source code.
 
 Name | Description
 ---- | -----------
 nsc | (Native Scorpion Compiler) translates the assembly code to binary format.
-scorpion | The Scorpion virtural machine itself runs the (single)generated .b file as the entire program.
+scorpion | The Scorpion virtual machine itself runs the (single)generated .b file as the entire program.
 
 All programs reside in the bin/ directory(version specific).
 
@@ -50,14 +50,14 @@ If you are seeking any additional info on scorpion, please check out my [wiki](h
 
 
 # How to use
-To use these programs you will have to folow the restrictions I have provoded. So far I only have the specifications for the vm(currently i only write programs in direct 'machine code').
+To use these programs you will have to follow the restrictions I have provided. So far I only have the specifications for the vm(currently I only write programs in direct 'machine code').
 In the console type:
 
       $  sudo scorpion file [args...]
  
-You do not have to type the .b extention of the file(program) to run the program(if you do, an error will be thrown).
-The vm can only take a single binary file that has all the instructions needed to run your program. The vm will also print out in real-time a log of data that represents what the system is doing at that point in time. this file will be located in '/usr/share/scorpion/log.txt'. NOTE: If you have superuser access to all your files and or is logged in as root you do not need to type sudo before "scorpion". Any system configs you will be having will go under the file '/usr/share/svm/system.conf'(not yet implemented).
+You do not have to type the .b extension of the file(program) to run the program(if you do, an error will be thrown).
+The vm can only take a single binary file that has all the instructions needed to run your program. The vm will also print out in real-time a log of data that represents what the system is doing at that point in time. This file will be located in '/usr/share/scorpion/log.txt'. NOTE: If you have superuser access to all your files and or is logged in as root you do not need to type sudo before "scorpion". Any system configs you will be having will go under the file '/usr/share/svm/system.conf'(not yet implemented).
 
 # Contributing
- If you have any questions concerns about the Scorpion programming language, you can email me at braxtonnunnally@gmail.com. However if you would like to help in the development of the Scorpion programming language, simply fork the repository and send me a pull request. All pull requests will be carefully evaluated and tested before accepting. 
+ If you have any questions about the Scorpion programming language, you can email me at braxtonnunnally@gmail.com. However if you would like to help in the development of the Scorpion programming language, simply fork the repository and send me a pull request. All pull requests will be carefully evaluated and tested before accepting.
 

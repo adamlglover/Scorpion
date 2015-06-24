@@ -70,7 +70,7 @@ module: scorpion_io {
 		*   ~0v = 0
 		* ~3.5v = 1
 		*/
-		loadi ON 1
+		loadi HIGH 1
 
 		/*
 		* OFF represents a digital low voltage signal 
@@ -81,6 +81,6 @@ module: scorpion_io {
 		* blocks off sending a signal to the pin and it results 
 		* as the digital signal 0.
 		*/
-		loadi OFF 0 
+		loadi LOW 0 
    }
 }

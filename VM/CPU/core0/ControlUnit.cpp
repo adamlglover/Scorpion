@@ -477,8 +477,6 @@ void fetch() // Ive managed to smush the fetch, decode, execute cycle into one m
 
 void C0::run0()
 {
- tStart = clock();
- gettimeofday(&ustart, NULL);
  while(System::Running)
        fetch();
 }

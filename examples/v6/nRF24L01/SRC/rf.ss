@@ -22,8 +22,20 @@
 * Date: 6/15/2015
 */ 
 
-import <scorpion/io/gpio>
-import <scorpion/io/signal>
+; NRF    Raspberry Pi
+; 1  GND      GND
+; 2  VCC      3.3v
+; 3  CE       4  out
+; 4  CSN      5  out
+; 5  SCK      13 out
+; 6  MOSI     11 out
+; 7  MISO     12 in
+; 8  IRQ      2  in
+
+import <io/gpio>
+import <io/signal>
+import <util/time>
+import 'SPI.ss'
 
 extern Analog.send          ; predefine Analog send() finction
 extern Analog.DATA          ; predefine Analog int Data; label
@@ -32,52 +44,81 @@ class: Rf {
 
      /* ------------( Declare Constant Pin Numbers  )------------ */
      
-	 loadi CE 4               ; Enables RX or TX mode
-	 loadi CSN 2              ; SPI chip select
-	 loadi MOSI 17            ; Master slave data in
-	 loadi MISO 15            ; Master slave data out
-	 loadi SCK 18             ; SPI clock
+	 loadi CE 4              ; Enables RX or TX mode
+	 loadi CSN 5             ; SPI chip select
+	 loadi MOSI 10           ; Master slave data in
+	 loadi MISO 9            ; Master slave data out
+	 loadi SCK 11            ; SPI clock
+	 loadi IRQ 2             ; Interrupt pin
 	 
-	 
+         ; 5 bit array
+         loadi size 5
+         array data_in size bool
+
+         loadbl data2 false
+         loadbl data3 false
 	 /* ----------( Set up data pins )----------  */
-     .pin_setup:
+     .NRF_Init:
+            loadi Time.SECS 100
+            call Time.delay
 	    cp gpio.PIN CE
-		call gpio.export
+  	    call gpio.export
 	    cp gpio.PIN CSN
-		call gpio.export
+	    call gpio.export
 	    cp gpio.PIN MOSI
-		call gpio.export
+	    call gpio.export
 	    cp gpio.PIN MISO
-		call gpio.export
+            call gpio.export
 	    cp gpio.PIN SCK
-		call gpio.export
+	    call gpio.export
+  	    cp gpio.PIN IRQ
+            call gpio.export
+	
+	    cp gpio.PIN CE
+	    cp gpio.DIR gpio_signal.OUT
+            call gpio.direction
+	    cp gpio.PIN CSN
+	    call gpio.direction
+	    cp gpio.PIN MOSI
+	    call gpio.direction
+	    cp gpio.PIN SCK
+	    call gpio.direction
+	    cp gpio.DIR gpio_signal.IN
+	    cp gpio.PIN MISO
+            call gpio.direction
+            cp gpio.PIN IRQ
+            call gpio.direction
+	    ptint 'NRF Pins Initalized/n/&'
+            cp SPI.BITORDER SPI.MSBFIRST
+            call SPI.setBitOrder
+            cp SPI.DMODE SPI.SPI_MODE0
+            call SPI.setDataMode
+            cp SPI.CLOCK SPI.SPI_CLOCK_DIV2
+            call SPI.setClockDivider
+            
+            cp GPIO.PIN CE
+            cp CPIO.SIG signal.HIGH
+            call GPIO.write
+            cp GPIO.PIN CSN
+            call GPIO.write
+            call SPI.begin
+            print 'NRF Ready/n/&'
+            ret 
 		
+    .NRF_Shutdown:
 	    cp gpio.PIN CE
-		cp gpio.DIR gpio_signal.OUT
-		call gpio.direction
+	    call gpio.unexport
 	    cp gpio.PIN CSN
-		call gpio.direction
+	    call gpio.unexport
 	    cp gpio.PIN MOSI
-		call gpio.direction
-	    cp gpio.PIN SCK
-		call gpio.direction
-		cp gpio.DIR gpio_signal.IN
+	    call gpio.unexport
 	    cp gpio.PIN MISO
-		call gpio.direction
-	    ret 
-		
-    .pin_destroy:
-	    cp gpio.PIN CE
-		call gpio.unexport
-	    cp gpio.PIN CSN
-		call gpio.unexport
-	    cp gpio.PIN MOSI
-		call gpio.unexport
-	    cp gpio.PIN MISO
-		call gpio.unexport
+	    call gpio.unexport
 	    cp gpio.PIN SCK
-		call gpio.unexport
-		ret 	
+	    call gpio.unexport
+            cp gpio.PIN IRQ
+            call gpio.unexport
+	    ret 	
 		   
 		.enableTX:
 		   cp gpio.PIN CE

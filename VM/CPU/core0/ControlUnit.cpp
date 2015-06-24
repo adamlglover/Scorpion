@@ -319,6 +319,8 @@ void C0::Reset()
   id[3] = 315; // Production date
 
   _sys_color_init();
+  core0.reset_UTime();
+  core0.resetTime();
 }
 
 void C0::Halt()
@@ -381,7 +383,7 @@ int C0::GetVirturalAddress()
 
 double C0::GetTime()
 {
-  return (double)(clock() - tStart)/CLOCKS_PER_SEC;
+  return ((double)((double) clock() - tStart)/CLOCKS_PER_SEC);
 }
 
 struct timeval ustart, uend;
@@ -391,7 +393,9 @@ unsigned long long utime, useconds;
 unsigned long long C0::Get_UTime()
 {
     gettimeofday(&uend, NULL);
-    useconds = uend.tv_usec - ustart.tv_usec;
+    gettimeofday(&uend, NULL);
+    gettimeofday(&uend, NULL);
+    useconds = (uend.tv_usec - ustart.tv_usec) + 1;
 
     utime = useconds;
     return utime;
@@ -449,6 +453,7 @@ void fetch() // Ive managed to smush the fetch, decode, execute cycle into one m
    if(memstat == Ram::DONE){
       C0 core;
       printf("Time taken: %.3fs ", (double) core.GetTime());
+      cout << "(" << core.Get_UTime() << ")" << endl;
       p_exit();
    }
    else if(memstat == Ram::RUNNING){ // strtol(prog(2, IP++, "").c_str(), NULL, 2)

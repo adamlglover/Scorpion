@@ -31,10 +31,3 @@ call main
 
 halt 
 
-%Class Dog {
-   
-   loadi age 8
-   
-}
-
-cp age Dog{age}

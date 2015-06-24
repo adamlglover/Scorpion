@@ -215,7 +215,7 @@ void Ram::prog_wipe()
 
 int Ram::prog_status(long instrptr)
 {
-  if((instrptr + 1) > SIZE)
+  if(((instrptr + 1) > SIZE) || ((instrptr + 1) == SIZE))
     return Ram::DONE;
   else if((instrptr + 1) < SIZE)
     return Ram::RUNNING;

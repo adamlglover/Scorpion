@@ -78,7 +78,7 @@ void listen()
      debug_help();
    else if(command == "?"){
      stringstream ss;
-     ss << "[" << disasm.disassemble(prog(2, IP - 3, "")) << ", " <<  disasm.disassemble(prog(2, IP - 2, "")) << ", " << disasm.disassemble(prog(2, IP - 1, "")) << "]";
+     ss << "[" << disasm.disassemble(prog(2, IP + 1, "")) << ", " <<  disasm.disassemble(prog(2, IP + 2, "")) << ", " << disasm.disassemble(prog(2, IP + 3, "")) << "]";
      string args = ss.str();
      printf(".addr: 0x%08X    %s %s\n", addrr, instr.c_str(), args.c_str());
      cout << ".clock-speed: " << getClock() << endl;

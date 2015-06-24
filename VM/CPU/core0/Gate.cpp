@@ -838,7 +838,7 @@ void Gate::route(double instr)
        break;
        default:
          if(!ignore){
-             cout << "\nSegmentation Fault" << endl;
+             cout << "Segmentation Fault" << endl;
              EBX = 1;
              p_exit();
          }

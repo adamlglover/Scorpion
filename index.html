@@ -29,17 +29,14 @@
       <div class="inner clearfix">
         <section id="main-content">
           <pre><code>class: HelloClass {
-    string greeting 'Hello, World!'
+    loadi size 1
+    array msg size char
     .main:
-      loadi i 0
-      loadi max 5
-      r_mv ip for
-      ilt i[max]
-          print '&lt;str,greeting&gt;/n'
-          inc i
-          rmov sdx for
-          invoke 0xA 0
-      end 
+      loadc num_char '1'
+      loadi idx 0
+      aload msg idx num_char
+      aaload msg idx value
+      print 'char msg[0] = &lt;c,value&gt;' 
       ret
 }
 
